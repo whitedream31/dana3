@@ -1,0 +1,384 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+770
+510
+240
+
+shared.css required
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0;
+	font: normal small Verdana, Arial, Helvetica, sans-serif;
+	color: #959595;
+}
+
+h1, h2, h3 {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color: #385B88;
+}
+
+h2 {
+	background: url(images/img6.gif) repeat-x left bottom;
+	padding-bottom: 10px;
+	margin-bottom: .8em;
+	font-size: 2em;
+	font-weight: normal;
+}
+
+h3 {
+	margin-bottom: 1em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font: Verdana, Arial, Helvetica, sans-serif;
+  font-size: medium;
+  font-weight: bold;
+}
+
+p, blockquote, ul, ol {
+	margin-bottom: 1.4em;
+	line-height: 1.8em;
+	text-align: justify;
+}
+
+p {
+}
+
+blockquote {
+	margin-left: 2em;
+	margin-right: 2em;
+	font-style: italic;
+}
+
+ul {
+	margin-left: 3em;
+}
+
+ul li {
+}
+
+ol {
+	margin-left: 3em;
+}
+
+ol li {
+}
+
+a {
+	text-decoration: none;
+	color: #E08934;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+img {
+}
+
+/* Boxed Style */
+
+.boxed {
+}
+
+.boxed .title {
+	padding: 0px 0 0 10px;
+	background: url(images/img03.gif) no-repeat left center;
+	border-bottom: 1px solid #D6D5D5;
+	font-size: 1.4em;
+}
+
+.boxed .content {
+	padding: 10px;
+}
+
+
+/* Logo */
+
+#logo {
+	width: 770px;
+	height: 140px;
+	margin: 0 auto;
+	background: url(images/img02.gif) no-repeat 0 665px;
+}
+
+#logo h1 {
+	padding: 46px 0 0 0px;
+}
+
+#logo h1 a {
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 30px;
+}
+
+#logo h1 i {
+	text-transform: lowercase;
+	letter-spacing: -3px;
+	font: italic normal 48px Georgia, "Times New Roman", Times, serif;
+	color: #385B88;
+}
+
+#logo h2 {
+	padding: 0 0 0 2px;
+	text-transform: lowercase;
+	font-size: 1em;
+}
+
+#logo a {
+}
+
+/* Content */
+
+#content {
+	width: 770px;
+	margin: 0 auto;
+}
+
+/* Content > Main */
+
+#main {
+	float: right;
+	width: 510px;
+	margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+/* Content > Main > Welcome */
+
+#welcome {
+}
+
+/* Content > Main > Example */
+
+#example {
+}
+
+/* Content > Sidebar */
+
+#sidebar {
+	float: left;
+	width: 240px;
+}
+
+#sidebar h3 {
+	margin-bottom: 2em;
+  margin-top: 4em;
+  line-height: normal;
+  background: none;
+	font-size: 2em;
+}
+
+/* Content > Sidebar > Login */
+
+#login {
+}
+
+#login form {
+}
+
+#login fieldset {
+	border: none;
+}
+
+#login legend {
+	display: none;
+}
+
+#login label {
+	font-size: x-small;
+	font-weight: bold;
+}
+
+#login input {
+	margin-bottom: 5px;
+	padding: 2px 5px;
+	border: 1px solid #385B88;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+#inputtext1, #inputtext2 {
+	color: #385B88;
+}
+
+#inputsubmit1 {
+	background: #385B88;
+	color: #FFFFFF;
+}
+
+/* Content > Sidebar > Menu */
+
+#menu {
+	margin-bottom: 30px;
+	border-bottom: 4px solid #EBEBEB;
+}
+
+#menu ul {
+	margin: 0;
+	list-style: none;
+	line-height: normal;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	display: block;
+	padding: 10px 0 10px 24px;
+	border-top: 1px solid #EBEBEB;
+	color: #E08934;
+}
+
+#menu a:hover, #menu .active a {
+	background: #EBEEF3;
+	text-decoration: none;
+	font-weight: bold;
+	color: #385B88;
+}
+
+/* Content > Sidebar > Updates*/
+
+#updates {
+}
+
+#updates ul {
+	margin: 0;
+	list-style: none;
+}
+
+#updates h3 {
+	margin: 0;
+	font: bold x-small Verdana, Arial, Helvetica, sans-serif;
+}
+
+#updates p {
+	margin-bottom: 1.4em;
+	font-size: smaller;
+	line-height: normal;
+}
+
+/* Content > Sidebar > Partners*/
+
+#partners {
+}
+
+#partners .content {
+	padding: 10px 0;
+}
+
+#partners ul {
+	margin: 0;
+	border-bottom: 1px solid #D1BC5C;
+	list-style: none;
+	line-height: normal;
+}
+
+#partners li {
+	padding: 10px;
+	border-top: 1px solid #D1BC5C;
+}
+
+/** CONTACT */
+
+.contact {
+  margin: 20px 20px 20px 20px;
+}
+
+.contact label {
+  float: none;
+  display: block;
+  color: #3F4C6B;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #B2B7C4;
+  color: #000000;
+  font-weight: normal;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	padding: 20px 50px;
+	width: 770px;
+	margin: 0 auto;
+	background: #EAEAEA url(images/img6.gif) repeat-x left top;
+}
+
+#footer p {
+	width: 770px;
+	margin: 0 auto;
+	font-size: x-small;
+}
+
+/* Footer > Legal */
+
+#legal {
+}
+
+/* Footer > Links */
+
+#links {
+}
+
+
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 510px;
+  font-weight: normal;
+  font-size: 14px;
+	color: #000000;
+}
+
+#productlistheader div, #productlistfooter div, #galleryfooter div {
+	background: url(images/img6.gif) repeat-x left bottom;
+  padding: 2px 0px 2px 0px;
+  margin: 5px 0 5px 0;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #3F4C6B;
+}
+
+.gallery {
+	color: #000000;
+  display: block;
+  border: medium;
+  border-color: black;
+  width: 500px;
+  padding: 2px 5px 2px 5px;
+  margin: 5px 0 5px 0;
+}
+
+.gallery ul img {
+  border: 3px solid #385B88;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #3F4C6B;
+}
+
+.advert {
+	width: 770px;
+}
+
+.advert a {
+	width: 770px;
+}

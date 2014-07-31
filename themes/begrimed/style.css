@@ -1,0 +1,439 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+960
+670
+240
+
+shared.css required
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #534616;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	padding: 0;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: normal;
+	color: #534616;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+h2 {
+	font-size: 1.8em;
+}
+
+h3 {
+	font-size: 1.6em;
+}
+
+p, ul, ol {
+	margin-top: 0;
+	line-height: 180%;
+}
+
+ul, ol {
+}
+
+a {
+	text-decoration: none;
+	color: #534616;
+}
+
+a:hover {
+}
+
+#pagewrapper {
+	background: #F9F0CF url(images/img01.jpg) repeat-x left top;
+}
+
+#wrapper {
+	width: 960px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+/* Header */
+
+#header {
+	width: 960px;
+	height: 110px;
+	margin: 0 auto;
+}
+
+/* Logo */
+
+#logo {
+	float: left;
+	height: 65px;
+	margin: 0;
+	padding-top: 20px;
+	color: #FFFFFF;
+}
+
+#logo h1, #logo p {
+	margin: 0;
+	padding: 0;
+}
+
+#logo h1 {
+	float: left;
+	letter-spacing: -1px;
+	text-transform: lowercase;
+	font-size: 2.6em;
+}
+
+#logo p {
+	float: left;
+	margin: 0;
+	padding: 12px 0 0 10px;
+	font: normal 14px Georgia, "Times New Roman", Times, serif;
+	font-style: italic;
+} 
+
+#logo a {
+	border: none;
+	background: none;
+	text-decoration: none;
+}
+
+/* Search */
+
+#search {
+	float: right;
+	width: 300px;
+	height: 110px;
+	padding: 0;
+}
+
+#search form {
+	height: 41px;
+	margin: 0;
+	padding: 10px 0 0 20px;
+}
+
+#search fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#search-text {
+	width: 195px;
+	padding: 5px 5px 4px 5px;
+	border: 1px solid #DEDEDE;
+	background: #FFFFFF;
+	text-transform: lowercase;
+	font: normal 11px Arial, Helvetica, sans-serif;
+	color: #703522;
+}
+
+#search-submit {
+	width: 50px;
+	height: 25px;
+}
+
+/* Menu */
+
+#menu {
+	width: 960px;
+	height: 38px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0px 0px 0px 25px;
+	list-style: none;
+	line-height: normal;
+}
+
+#menu li {
+	float: left;
+	height: 38px;
+}
+
+#menu a {
+	display: block;
+	margin-right: 3px;
+	padding: 17px 30px 7px 30px;
+	background: url(images/img02.jpg)  no-repeat right 18px;
+	text-decoration: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	color: #FFFFFF;
+	border: none;
+}
+
+#menu a:hover, #menu .active a {
+}
+
+#menu .active a {
+	font-weight: bold;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+/* Page */
+
+#page {
+	width: 960px;
+	margin: 0 auto;
+	padding: 50px 0px 0px 0px;
+}
+
+#page-bgtop {
+}
+
+#page-bgbtm {
+}
+
+/* Content */
+
+#content {
+	float: right;
+	width: 670px;
+	padding: 0;
+}
+
+.post {
+	margin-bottom: 25px;
+	padding: 10px 10px 10px 10px;
+	background: #FFFFFF;
+	border: 1px solid #D6E6CC;
+}
+
+.post-bgtop {
+}
+
+.post-bgbtm {
+}
+
+.post .title {
+	height: 38px;
+	margin-bottom: 10px;
+	padding: 12px 0 0 20px;
+	background: #D6E6CC;
+	border: 1px solid #D6E6CC;
+	letter-spacing: -.5px;
+	color: #FFFFFF;
+}
+
+.post .title a {
+	color: #48390E;
+	border: none;
+}
+
+.post .meta {
+	padding-bottom: 5px;
+	padding-left: 20px;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: italic;
+}
+
+.post .meta a {
+}
+
+.post .entry {
+	padding: 0px 20px 20px 20px;
+	padding-bottom: 20px;
+	text-align: justify;
+}
+
+.links {
+	display: block;
+	width: 100px;
+	height: 20px;
+	margin-top: 20px;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-weight:  bold;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: left;
+	width: 240px;
+	padding: 0px;
+	color: #787878;
+}
+
+#sidebar ul {
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin: 0;
+	padding: 0;
+}
+
+#sidebar li ul {
+}
+
+#sidebar .box {
+	margin-bottom: 30px;
+	padding: 0px; /* 20px 20px 20px; */
+	background: #F4FAF0;
+	border-left: 1px solid #D6E6CC;
+	border-right: 1px solid #D6E6CC;
+	border-bottom: 1px solid #D6E6CC;
+}
+
+#sidebar li li {
+	line-height: 35px;
+	border-bottom: 1px dashed #D1D1D1;
+	padding: 5px;
+}
+
+#sidebar li li span {
+	display: block;
+	margin-top: -20px;
+	padding: 0;
+	font-size: 11px;
+	font-style: italic;
+}
+
+#sidebar h2 {
+	height: 38px;
+	padding: 12px 0 0 20px;
+	background: #D6E6CC;
+	border: 1px solid #D6E6CC;
+	letter-spacing: -.5px;
+	color: #48390E;
+}
+
+#sidebar h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#sidebar p {
+	margin: 0 0px;
+	padding: 0px 20px 20px 20px;
+	text-align: justify;
+}
+
+#sidebar a {
+	border: none;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+/* Calendar */
+
+#calendar {
+}
+
+#calendar_wrap {
+	padding: 20px;
+}
+
+#calendar table {
+	width: 100%;
+}
+
+#calendar tbody td {
+	text-align: center;
+}
+
+#calendar #next {
+	text-align: right;
+}
+
+/** CONTACT */
+
+.contact {
+  margin: 20px 20px 20px 20px;
+}
+
+.contact label {
+  float: none;
+  display: block;
+  color: #3F4C6B;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #B2B7C4;
+  color: #000000;
+  font-weight: normal;
+}
+
+/* Footer */
+
+#footer {
+	width: 960px;
+	height: 64px;
+	margin: 0 auto;
+	background: url(images/img03.jpg) no-repeat left top;
+	padding: 0px 0 15px 0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#footer p {
+	margin: 0;
+	padding-top: 6px;
+	line-height: normal;
+	font-size: 12px;
+	text-align: center;
+}
+
+#footer a {
+	font-weight: bold;
+}
+
+
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  font-size: 14px;
+	background: #D6E6CC;
+	color: #000000;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #787878;
+}
+
+.gallery ul img {
+  border: 3px solid #666666;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #972296;
+}
+
+.advert {
+	width: 960px;
+}
+
+.advert a {
+	width: 960px;
+}

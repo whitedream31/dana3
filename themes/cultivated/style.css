@@ -1,0 +1,257 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+770
+500
+150
+
+shared.css required
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin-top: 20px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #666666;
+}
+
+h1, h2, h3 {
+	text-transform: uppercase;
+}
+
+h1 {
+}
+
+h2 {
+}
+
+h3 {
+}
+
+p, blockquote, ul, ol {
+}
+
+a {
+	color: #C90404;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img {
+	border: none;
+}
+
+img.left {
+	float: left;
+	margin: 0 15px 0 0;
+}
+
+img.right {
+	float: right;
+	float: 0 0 0 15px;
+}
+
+/* Header */
+
+#header {
+	width: 770px;
+	height: 100px;
+	margin: 0 auto;
+	padding: 0 0 0 0;
+	background: url(images/img1.jpg);
+}
+
+#header h1, #header h2 {
+	float: left;
+	font-weight: normal;
+}
+
+#header h1 {
+	padding: 14px 0 0 180px;
+	letter-spacing: 4px;
+	font-size: 30px;
+}
+
+#header h2 {
+	padding: 31px 0 0 10px;
+	letter-spacing: 3px;
+	font-size: 12px;
+}
+
+#header a {
+	text-decoration: none;
+	color: #90210A;
+}
+
+/* Page */
+
+#page {
+	width: 770px;
+	margin: 0 auto;
+	background: url(images/img2.gif) repeat-y;
+}
+
+/* Content */
+
+#content {
+	float: right;
+	width: 500px;
+	padding: 0 20px;
+}
+
+#content .post {
+}
+
+#content .post h2 {
+	margin-bottom: 1em;
+	text-transform: none;
+	font-weight: normal;
+	color: #333333;
+}
+
+#content .post h3 {
+	margin-bottom: 1em;
+	font-size: 100%;
+}
+
+#content .post p, #content .post ul, #content .post ol {
+	margin-bottom: 1em;
+	line-height: 1.5em;
+}
+
+#content .post blockquote, #content .post ul, #content .post ol {
+	margin-left: 3em;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: left;
+	width: 150px;
+	padding: 15px;
+	background: url(images/img3.gif) no-repeat;
+}
+
+#sidebar ul, #sidebar ol {
+  list-style: none;
+}
+
+.boxed {
+}
+
+.boxed h2 {
+	margin: 15px 0;
+	padding-left: 20px;
+	background: url(images/img6.gif) no-repeat left bottom;
+	font-size: 92%;
+	color: #3A2403;
+}
+
+.boxed .list {
+	list-style: none;
+}
+
+.boxed .list li {
+	padding: 10px 0 15px 0;
+}
+
+.boxed .list h3 {
+	font-size: 77%;
+}
+
+/* Menu */
+
+#menu {
+}
+
+#menu ul {
+	list-style: none;
+}
+
+#menu li {
+	padding: 5px 0;
+}
+
+#menu a {
+	text-decoration: none;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+/* Footer */
+
+#footer {
+	width: 140px;
+	height: 100px;
+	margin: 0 auto;
+	padding: 20px 610px 0 20px;
+	background: url(images/img8.gif) no-repeat;
+	font-size: 77%;
+}
+
+#footer p {
+	margin-bottom: 1em;
+	line-height: normal;
+}
+
+
+
+/* CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contactinput {
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #C90404;
+  height: 20px;
+  color: #FFF;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery ul img {
+  border: 3px solid #C90404;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #C90404;
+}
+
+.advert {
+  width: 770px;
+}
+
+.advert a {
+  width: 770px;
+}

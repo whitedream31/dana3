@@ -1,0 +1,351 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 3.0 License
+
+Name       : Definitive
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20120805
+
+shared.css required
+
+980
+515
+300
+
+*/
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: #EFF0EF;
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+body {
+	font-size: 12.5pt;
+	line-height: 1.75em;
+	color: #EFF0EF;
+	background: #969E94;
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+}
+
+body,input {
+	font-family: Ubuntu, sans-serif;
+}
+
+br.clearfix {
+	clear: both;
+}
+
+h1,h2,h3,h4 {
+	font-weight: normal;
+}
+
+h2 {
+	font-size: 1.75em;
+}
+
+h2,h3,h4 {
+	color: #FFF;
+	margin-bottom: 1em;
+	font-family: Abel, sans-serif;
+}
+
+h3 {
+	font-size: 1.5em;
+}
+
+h4 {
+	font-size: 1.25em;
+}
+
+img.alignleft {
+	float: left;
+	margin: 5px 20px 20px 0;
+}
+
+img.aligntop {
+	margin: 5px 0 20px 0;
+}
+
+p {
+	margin-bottom: 1.5em;
+}
+
+ul {
+	margin-bottom: 1.5em;
+}
+
+ul h4 {
+	margin-bottom: 0.35em;
+}
+
+.box {
+	margin: 0 0 45px 0;
+}
+
+#content {
+	padding: 35px;
+	background: #FFF;
+	float: left;
+	color: #262626;
+	width: 515px;
+	box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.1);
+	text-shadow: none;
+}
+
+#content a {
+	color: #262626;
+}
+
+#content h2, #content h3, #content h4 {
+	color: #0F0F0F;
+}
+
+#footer {
+	padding: 0 0 95px 0;
+	text-align: center;
+	color: #CCD1CA;
+}
+
+#footer a {
+	color: #CCD1CA;
+}
+
+#header {
+	height: 110px;
+	padding: 35px;
+	position: relative;
+}
+
+#logo {
+	position: absolute;
+	height: 110px;
+	line-height: 110px;
+	top: 35px;
+	left: 35px;
+}
+
+#logo a {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#logo h1 {
+	font-size: 3.25em;
+	font-family: Lobster, script;
+}
+
+#menu {
+	top: 66px;
+	line-height: 64px;
+	right: 35px;
+	height: 64px;
+	position: absolute;
+	padding: 0 15px 0 15px;
+	font-family: Abel, sans-serif;
+	background: rgba(0,0,0,0.05);
+	box-shadow: inset 1px 1px 3px 0px rgba(0,0,0,0.1), 1px 1px 3px 0px rgba(255,255,255,0.1);
+}
+
+#menu a {
+	color: #EFF0EF;
+	text-decoration: none;
+	font-size: 1.25em;
+}
+
+#menu ul {
+	list-style: none;
+	padding: 0 15px 0 15px;
+}
+
+#menu ul li {
+	display: inline;
+	padding: 0 10px 0 10px;
+}
+
+#page {
+	margin: 25px 0 0 0;
+	padding: 0;
+	width: 980px;
+	position: relative;
+}
+
+#page .section-list {
+	list-style: none;
+	padding-left: 0;
+}
+
+#page .section-list li {
+	padding: 20px 0 20px 0;
+	clear: both;
+}
+
+#page ul {
+	list-style: none;
+}
+
+#page ul li {
+	padding: 10px 0 10px 0;
+	border-top: dotted 1px #D6D6D6;
+}
+
+#page ul li.first {
+	border-top: 0;
+	padding-top: 0;
+}
+
+#page-bottom {
+	position: relative;
+	width: 515px;
+	padding: 50px 35px 20px 35px;
+}
+
+#page-bottom ul {
+	list-style: none;
+}
+
+#page-bottom ul li {
+	padding: 10px 0 10px 0;
+	border-top: dotted 1px #A7AEA5;
+}
+
+#page-bottom ul li.first {
+	padding-top: 0;
+	border-top: 0;
+}
+
+#page-bottom-content {
+	width: 515px;
+	float: left;
+}
+
+#page-bottom-sidebar {
+	width: 300px;
+	margin: 0 0 0 610px;
+}
+
+#col1 {
+	overflow: hidden;
+	width: 240px;
+	float: left;
+}
+
+#col2 {
+	width: 240px;
+	overflow: hidden;
+	margin: 0 0 0 275px;
+}
+
+#search input.form-submit {
+	padding: 5px;
+	background: #D555FC;
+	border: 0;
+	font-family: Abel, sans-serif;
+	margin-left: 1em;
+	color: #000;
+}
+
+#search input.form-text {
+	padding: 5px;
+	border: dotted 1px #A7AEA5;
+}
+
+#sidebar {
+	width: 300px;
+	padding: 0 35px 0 35px;
+	margin: 0 0 0 610px;
+}
+
+#sidebar ul {
+	list-style: none;
+}
+
+#sidebar ul li {
+	border-top: dotted 1px #A7AEA5;
+	padding: 10px 0 10px 0;
+}
+
+#sidebar ul li.first {
+	padding-top: 0;
+	border-top: 0;
+}
+
+#sidebar h2 {
+	background: rgba(0,0,0,0.05);
+	box-shadow: inset 1px 1px 3px 0px rgba(0,0,0,0.1), 1px 1px 3px 0px rgba(255,255,255,0.1);
+	padding: 13px 15px 10px 15px;
+	position: relative;
+	left: -15px;
+}
+
+#wrapper {
+	position: relative;
+	margin: 0 auto 0 auto;
+	width: 980px;
+}
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #EFF0EF;
+  color: #000000;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #EFF0EF;
+}
+
+.gallery ul img {
+  border: 3px solid #EFF0EF;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #EFF0EF;
+}
+
+.advert {
+  width: 980px;
+}
+
+.advert a {
+  width: 980px;
+}

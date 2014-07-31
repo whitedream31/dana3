@@ -1,0 +1,271 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+800
+500
+180
+
+shared.css required
+
+*/
+
+/* Elements */
+
+body {
+	text-align: left;
+	font-family: Tahoman, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	line-height: 20px;
+}
+
+h1 {
+}
+
+h2, h3 {
+	margin-top: 0px;
+}
+
+h4, h5, h6 {
+}
+
+p, ol, ul, dl, blockquote {
+}
+
+a {
+	color: #FFFFFF;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img { border: 2px solid #FFFFFF; }
+
+.img1 {
+	float: left;
+	margin: 5px 15px 0px 0px;
+}
+
+#pagewrapper {
+	background: #000000 url(images/img3.jpg) no-repeat right top;
+}
+
+/* Search */
+#search {
+	margin: 0px;
+	padding: 0px;
+	background-color: #CC441B;
+	color: #FFFFFF;
+}
+
+/** Forms */
+
+form {
+	margin: 0px;
+	padding: 15px 0px 0px 25px;
+}
+
+.input1 {
+	width: 130px;
+	background-color: #FFFFFF;
+	border: 1px solid #363636;
+	color: #FFFFFF;
+}
+
+/* Header */
+
+#header {
+	width: 600px;
+	height: 60px;
+	margin: 0px auto;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+
+#header h1 {
+	float: left;
+	margin: 0px;
+	padding-top: 20px;
+	font-size: 40px;
+	letter-spacing: -2px;
+}
+
+#header h2 {
+	margin: 0px;
+	padding-top: 38px;
+	font-size: 12px;
+	letter-spacing: -1px;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+/* Post */
+
+.latest-post {
+	padding: 0px 2em 1em 3em;
+}
+
+.latest-post h2 {
+	font-size: 1.6em;
+	color: #000000;
+}
+
+.post {
+	padding: 2em 2em 1em 3em;
+	border-top: 1px dashed #823D47;
+}
+
+.post h3 {
+	margin-bottom: .5em;
+	font-size: 1.2em;
+	color: #000000;
+}
+
+.file * {
+	color: #000000;
+}
+
+/* Content */
+
+#page {
+	width: 800px;
+	margin: 20px auto;
+	padding: 20px 0px 0px 0px;
+}
+
+#content {
+	float: right;
+	width: 500px;
+	background-color: #CC441B;
+	padding: 20px 20px;
+	border: 3px solid #666666;
+	color: #FFFFFF;
+}
+
+#content .search {
+  display: none;
+	background-color: #000000;
+	margin: 0px;
+	padding-bottom: 10px;
+	height: 50px;
+}
+
+#sidebar {
+	float: left;
+	width: 180px;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin-bottom: 1em;
+	color: #FFFFFF;
+}
+
+#sidebar li li {
+	margin-bottom: 0;
+	padding-left: 2em;
+}
+
+#sidebar a {
+	color: #FF4000;
+}
+
+#sidebar h1, #sidebar h2 {
+	background: url(images/img2.gif) no-repeat;
+	padding: 0px 0 5px 20px;
+	text-transform: uppercase;
+	font: 12px Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: bold; 
+	border-bottom: 1px dashed #666666; 
+	color: #FFFFFF;
+}
+
+/* Footer */
+
+#footer {
+	width: 600px;
+	margin: 0px auto;
+	padding: 3px 0px;
+	color: #787878;
+}
+
+#footer p {
+	margin: 0px;
+	padding-right: 40px;
+	text-align: right;
+	font-size: 10px;
+}
+
+#footer a {
+	color: #FF4000;
+}
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #FFF;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+  font-weight: normal;
+}
+
+.contact  input[type="submit"] {
+  margin: 5px 5% 0 5%;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  font-weight: normal;
+  font-size: 14px;
+  background-color: #666;
+  color: #FFF;
+}
+
+.gallery table {
+  border: 3px solid #666;
+}
+
+.gallery ul img {
+  border: 3px solid #666;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #666;
+}
+
+.gallery td {
+  display: block;
+  float: left;
+  width: 40%;
+  margin: 10px 10px 0 10px;
+}
+
+.advert {
+  width: 800px;
+}
+
+.advert a {
+  width: 800px;
+}

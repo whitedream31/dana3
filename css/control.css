@@ -1,0 +1,934 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #FFFFFF url(images/bg01.jpg) repeat-x top left;
+  font-size: 13px;
+  color: #7F7F7F;
+}
+
+body, th, td, input, textarea, select, option {
+  font-weight: normal;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: normal;
+  color: #484848;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+p, ul, ol {
+  line-height: 150%;
+}
+
+img {
+  border: 0;
+}
+
+a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+a, a:visited {
+  color: #0000FF;
+  text-decoration: none;
+}
+
+#controlcontent {
+  clear: both;
+  float: none;
+  width: 890px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000;
+}
+
+#mainheading {
+  width: 890px;
+  height: 130px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+#mainlogo {
+  padding: 20px 0 0 0;
+}
+
+#mainlogo h1 {
+  margin: 0 auto;
+  width: 890px;
+  text-transform: lowercase;
+  letter-spacing: -2px;
+  font-size: 3.6em;
+  font-weight: normal;
+  color: #FFFFFF;
+}
+
+#loginline {
+  float: right;
+  color: #008C00;
+  font-size: 14px;
+}
+
+#menu {
+  clear: both;
+  float: left;
+  display: block;
+  width: 550px;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: normal;
+  height: 50px;
+}
+
+#menu ul {
+  padding: 0px 0px 0px 0px;
+  list-style: none;
+}
+
+#menu li {
+  display: inline;
+}
+
+#menu a {
+  display: block;
+  float: left;
+  margin-left: 20px;
+  text-decoration: none;
+  text-transform: lowercase;
+  font-size: 1.36em;
+  font-weight: normal;
+}
+
+img.activitygroupicon {
+  float: left;
+  padding: 0;
+  border: 0;
+  margin: -5px 10px 0 0;
+  height: 40px;
+}
+
+.actvitysection {
+  margin: 0 0 20px 0;
+}
+
+.activitygroup {
+  margin-bottom: 20px;
+}
+
+.activitygroupdescription {
+  margin: 10px;
+  padding: 0;
+  width: 100%;
+  display: inline;
+}
+
+.activitygroup .activitymenuitem {
+  margin-left: 50px;
+}
+
+.activitymenuitem {
+  padding: 0px;
+  margin: 10px;
+  border: thin solid black;
+  background-color: black;
+  width: 30%;
+  float: left;
+}
+
+.activitymenuitem a {
+  color: white;
+  padding: 5px;
+  display: inline;
+}
+
+.activitygroupdescription, .activityitemdescription {
+  font-size: 14px;
+  color: #008C00;
+}
+
+.activityitemdescription {
+  margin: 0; /*  0 5px 45px */
+  padding: 0;
+  width: 65%;
+  display: inline;
+  float: right;
+}
+
+.activitysection {
+  margin: 0 0 20px 0;
+  background: #CCC;
+  padding: 10px;
+}
+
+.activitysection h3 {
+  margin: 0;
+  height: 40px;
+  alignment-adjust: middle;
+  cursor: default;
+  outline: none;
+}
+
+.helptext {
+  font-size: 14px;
+  margin: 0 0 5px 0;
+  color: #008C00;
+}
+
+.fieldlabel {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+.fsfielditem {
+  margin: 0px 15px 5px 15px;
+  padding: 0px 15px 5px 40px;
+  position: relative;
+  border: #00FF00;
+}
+
+.fsfielditem .fielddescription {
+  font-size: 14px;
+  display: block;
+  overflow: visible;
+  color: #008C00;
+  padding: 0;
+  margin: 0 0 10px 0px;
+}
+.fsfielditem input[type="checkbox"] {
+  float: left;
+}
+
+.fsfielditem input[type="text"], .fsfielditem textarea {
+  background: #DDD;
+  color: #000;
+}
+.fsfielditem input[type="text"]:focus, .fsfielditem textarea:focus {
+  background: #FFF;
+  color: #000;
+}
+.fsfielditem input[type="text"], .fsfielditem textarea {
+  background: #EEE;
+  color: #000;
+}
+
+.fieldbutton {
+  color: #0000FF;
+}
+
+.actionbutton {
+  color: #FF0000;
+}
+
+.submitbutton {
+  color: #008C00;
+  font-weight: bold;
+}
+
+.clear {
+  clear: both;
+  float: none;
+}
+
+/* datagrid */
+
+.controlactivitylist {
+  width: 580px;
+  margin: 0 10px 10px 10px;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: thin solid #000000;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.controlactivitylist tr th {
+  width: 505px;
+  margin: 0;
+  color: #FFFFFF;
+  background-color: #0000FF;
+  border: thin solid #000000;
+  padding: 5px;
+}
+
+.controlactivitylist tr:nth-child(even) {
+  height: 30px;
+  background-color: #EEEEEE;
+}
+
+.controlactivitylist tr:nth-child(odd) {
+  height: 30px;
+  background-color: #CCCCCC;
+}
+
+.controlactivitylist .action {
+  width: 16px;
+  height: 16px;
+}
+
+.controlactivitylist .narrow,
+.controlactivitylist .actions {
+  width: 106px;
+  margin: auto;
+}
+
+.controlactivitylist .medium {
+  width: 120px;
+}
+
+/* status grid */
+
+.controlactivitystatusgrid {
+  width: 100%;
+  margin: 0 10px 10px 10px;
+  color: #000000;
+  background-color: #FFFFFF;
+  border: thin solid #000000;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.controlactivitystatusgrid .statuslabel {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.controlactivitystatusgrid .statusvalue {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.right {
+  text-align: right;
+  padding-right: 10px;
+}
+
+table tr .datagridaction {
+  width: 160px;
+}
+
+table .tablenodata {
+  color: #FF0000;
+  background-color: #fff !important;
+  display: block;
+  font-style: italic;
+  width: 505px;
+}
+
+.statusok {
+  color: #008C00;
+  font-weight: bold;
+  font-size: 18px;
+}
+.statuserror {
+  color: #FF0000;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.btnupdate {
+  padding: 10px;
+  margin: 10px auto;
+  background-color: #00f;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  width: 150px;
+  text-align: center;
+}
+
+/*
+
+#controldonation {
+  float: right;
+  display: block;
+  width: 150px;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: normal;
+  height: 50px;
+}
+
+#controldonation form {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#navigationarea {
+  border: thin solid #FF0000;
+  clear: left;
+  width: 220px;
+  float: left;
+  padding: 0;
+  margin-left: 0px;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+#navigationarea ul {
+  list-style: none;
+  list-style-position: inside;
+  margin: 0 0 10px 0;
+}
+
+#navigationarea li {
+  display: block;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+#navigationarea ul li {
+  padding-left: 18px;
+  margin-left: -40px;
+}
+
+
+#navigationarea ul .inactive {
+  background-image: url(images/menuarrowmaingray.jpg);
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+  font-weight: normal;
+}
+
+#navigationarea ul .active {
+  background-image: url(images/menuarrowmain.jpg);
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+  font-weight: bold;
+}
+
+#navigationarea a {
+}
+
+#navigationarea a:hover {
+  color: #FF0000;
+}
+
+#activityarea {
+  float: right;
+  border-top: 3px solid #CCC;
+  width: 647px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 10px;
+}
+
+#activityarea .activitysectionblock {
+  margin: 10px;
+}
+
+.activitysection .item {
+  font-size: 18px;
+  cursor: default;
+  margin-left: 15px;
+}
+#activitycontent {
+  outline: 0;
+  border-bottom: 3px solid #CCC;
+}
+#activitycontent a:hover, #activitycontent a:active, #activitycontent a:focus, #activitycontent a:visited {
+  outline: 0;
+  color: #000000;
+  text-decoration: none;  
+}
+.activitysection .span{
+  cursor: default;
+}
+.activitysection a {
+  font-size: 18px;
+}
+
+.activitysection .ui-state-focus, .ui-state-active a, .ui-state-hover a {
+}
+
+.activitysection ul {
+  list-style: none;
+}
+
+.activitysection ul li {
+  margin-bottom: 20px;;
+}
+
+#sidebar {
+  border-top: 3px solid #CCC;
+  border-right: 3px solid #CCC;
+  clear: left;
+  width: 220px;
+  float: left;
+  padding: 0 20px 0 0;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 10px;
+}
+#sidebar h2 {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+#sidebar .item {
+  margin: 0 0 2px 0;
+  padding: 0;
+  display: block;
+  min-height: 48px;
+  color: #000;
+  cursor: default;
+}
+#sidebar .statusicon {
+  float: left;
+  height: 40px;
+  width: 32px;
+  margin-right: 5px;
+}
+#sidebar .item .title {
+  font-size: 14px;
+  font-weight: normal;
+}
+#sidebar .item .value {
+  display: block;
+  font-weight: bold;
+  overflow: hidden;
+}
+#sidebar .item .value p {
+  margin: 0 10px 3px 0;
+}
+#sidebar .item .count {
+  color: #FF0000;
+}
+#sidebar .website {
+  float: right;
+  font-size: 12px;
+}
+
+.dateselection {
+  color: #0000FF;
+}
+
+#activityarea .buttonfield {
+  margin-left: 20px;
+  margin-bottom: 5px;
+  padding: 2px;
+  background-color: #FFF;
+  width: 120px;
+  border: thin solid #000;
+  text-decoration: none;
+}
+
+.actionbutton, .submitbutton {
+  margin-left: 20px;
+  margin-bottom: 5px;
+  padding: 2px;
+  background-color: #000;
+  width: 150px;
+  border: none;
+  text-decoration: none;
+}
+.actionbutton:hover, .submitbutton:hover, #activityarea .buttonfield {
+  text-decoration: underline;
+}
+
+.setting aside {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  margin-left: 20px;
+  font-size: 12px;
+  color: #008C00;
+}
+
+.setting .below {
+  float: none;
+}
+
+.controlactivitybox {
+  display: block;
+  float: left;
+  border: thin solid #000000;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 0;
+  margin: 5px;
+}
+
+.controlactivitybox .narrow {
+  width: 286px;
+}
+
+.controlactivitybox .wide {
+  width: 600px;
+}
+
+.controlactivitybox .setting {
+  margin: 0 10px 15px 10px;
+}
+
+.controlactivitybox .settingheader {
+  display: block;
+  font-weight: bold;
+  font-size: 16px;
+  height: 25px;
+  line-height: normal;
+  text-align: center;
+  vertical-align: middle;
+  padding: 5px;
+  margin: 0px;
+}
+
+.controlactivitylist .editable img {
+  padding-right: 10px;
+}
+
+.statusok, .success {
+  background-color: #008C00;
+  color: #000000;
+}
+.statuserror, .error, div.errors {
+  background-color: #FF0000;
+  color: #FFFFFF;
+  padding: 5px 5px 5px 5px;
+}
+div.errors {
+  margin: 0;
+  border: thin solid black;
+  border-radius: 5px;
+}
+.errors .errors h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.errors ul {
+  margin: 0;
+  list-style: disc;
+  font-size: 18px;
+}
+.usermessage {
+  border: 1px solid;
+  margin: 10px 0px;
+  padding:10px 5px 10px 5px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  color: #00529B;
+  background-color: #BDE5F8;
+  width: 620px;
+  float: right;
+}
+.usermessage h2 {
+  background-image: url('images/info.png');
+  background-position: top left;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0 0 5px 40px;
+}
+.errormessage {
+  border: 1px solid;
+  margin: 10px 0px;
+  padding:10px 5px 10px 5px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  color: #000;
+  font-weight: bold;
+  background-color: #ff0000;
+  width: 620px;
+  float: right;
+}
+.errormessage h2 {
+  background-image: url('images/error.png');
+  background-position: top left;
+  background-repeat: no-repeat;
+  color: #fff;
+  margin: 0;
+  padding: 0 0 5px 40px;
+}
+
+.required {
+  font-weight: bold;
+  content: '* ';
+}
+
+.buttonbox {
+  display: block;
+  width: 90%;
+}
+
+.controlactivitybox .textright {
+  display: block;
+  float: right;
+  width: 70%;
+  color: red;
+  margin-top: -6px;
+}
+
+.controlactivitybox .buttonarea {
+  width: 140px;
+  float: left;
+  padding-top: 10px;
+}
+
+#pagemgt {
+  width: 890px;
+  background-color: #EEE;
+  border: thin solid #000;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 20px;
+}
+#pagemgt h2 {
+  margin: 0;
+  padding: 0;
+}
+#pagemgt .pagenewsection {
+  border: thin solid #0000FF;
+  float: none;
+  clear: left;
+  background-color: #CCC;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  min-height: 35px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#pagemgt .pagenewsectiontitle {
+  width: 175px;
+  float: left;
+  padding: 0;
+}
+
+#pagemgt .pagenewsectiontitle a {
+  display: block;
+  font-size: 18px;
+  vertical-align: middle;
+  float: none;
+  clear: both;
+}
+
+#pagemgt .pagenewsectiontitle img {
+  float: left;
+}
+
+#pagemgt .pagenewsectiontext {
+  color: #008C00;
+  padding-left: 180px;
+  float: none;
+}
+
+.settingitem {
+  padding: 10px;
+  border-top: thin dashed #7F7F7F;
+}
+
+.settingitem .title, .settingitem .subtitle {
+  font-size: 14px;
+}
+
+.settingitem .value, .settingitem .subvalue {
+  color: #000000;
+  clear: both;
+}
+
+.settingitem .indent {
+  margin-left: 20px;
+}
+
+span.newitems {
+  color: #FF0000 !important;
+  font-weight: bold;
+}
+
+.pageitem, .pageitem:visited, .pageitem:active {
+  color: #0000FF;
+}
+
+.pageitem:hover {
+  color: #FF0000;
+}
+
+.contactaddress li {
+  list-style: none;
+}
+
+div #websitepreview {
+  width: 1040px;
+}
+
+#websitepreview {
+  padding: 0;
+  margin: 0;
+  border: medium solid red;
+}
+
+#themelist {
+}
+
+.themeitem {
+  list-style: none;
+  list-style-position: inside;
+  float: left;
+  width: 175px;
+  text-align: center;
+  margin: 2px;
+  padding: 5px;
+  background: #000000;
+}
+
+.themeitem a {
+  text-decoration: none;
+}
+
+.themeitem a h3 {
+  display: block;
+  padding: 0px;
+  width: 175px;
+  height: 20px;
+  margin: auto;
+  background: #0000FF;
+  color: #FFFFFF;
+  letter-spacing: normal;
+  font-size: 14px;
+}
+
+.themeitem img {
+  display: block;
+  border: 0;
+  margin-top: 5px;
+}
+
+.selectedtheme {
+  background: #00FF00 !important;
+  color: #000000;
+}
+
+.themeitem:hover {
+  background: #FF0000;
+  color: #000000;
+}
+
+.sectionheading .icon, .sectionheading  .title {
+  display: inline;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.sectionheading .icon {
+  margin-right: 10px;
+}
+
+.shorthelp {
+  float: none;
+  clear: both;
+  color: #008C00;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 10px;
+}
+
+.editor {
+  width: 800px;
+}
+
+.editor .small {
+  width: 50px;
+}
+
+.editor .medium {
+  width: 150px;
+}
+
+.editor .long {
+  width: 400px;
+}
+
+.editorcontainer {
+  margin: 20px 0 0 0px;
+  padding: 0 0 5px 0;
+}
+
+.fielditem {
+  width: 100%;
+  border-bottom: thin dashed #0000FF;
+  margin-top: 0px;
+  padding: 20px 0 20px 0;
+}
+
+.fstitle {
+  border: thin;
+  margin: -10px 0 0 0;
+  padding: 0 0 5px 0;
+  display: inline-block;
+  font-weight: bold;
+  color: #1f4f71;
+  cursor: default;
+}
+
+.fsfieldcontainer {
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+  color: #bf572c;
+}
+.fsfielddata {
+  margin: 0;
+  padding: 0;
+  color: #bf572c;
+  font-weight: normal;
+  border: 0;
+}
+
+.sctopen {
+  background: url(images/formedit.png);
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: 0;
+  display: none;
+}
+
+.sctclose {
+  background: url(images/form.png);
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: 0;
+}
+
+.fsfielddata div.formbuttons {
+  margin-top: 20px;
+}
+*/

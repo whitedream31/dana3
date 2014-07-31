@@ -1,0 +1,402 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Blackeyed Susan
+
+840
+510
+230
+
+shared.css required
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	font-size: 13px;
+	text-align: left;
+	color: #6B6854;
+}
+
+body, th, td, input, textarea, select, option {
+	font-family:  "Trebuchet MS", "Times New Roman", Arial, Times, serif;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+	color: #5E8402;
+}
+
+h1, h2, h3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #5E8402;
+}
+
+h1 {
+	letter-spacing: -1px;
+	font-size: 3em;
+}
+
+h2 {
+	font-size: 2em;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+p, ul, ol {
+	margin: 0;
+	padding: 0;
+	line-height: 200%;
+}
+
+blockquote {
+	padding-left: 1em;
+}
+
+blockquote p, blockquote ul, blockquote ol {
+	line-height: normal;
+	font-style: italic;
+}
+
+a {
+	color: #5E8402;
+}
+
+a:hover {
+	color: #5E8402;
+}
+
+hr {
+	display: none;
+}
+
+#wrapper {
+}
+
+#pagewrapper {
+	background: #FFFFFF url(images/img01.jpg) repeat-x;
+}
+
+/* Header */
+
+#header {
+	width: 840px;
+	height: 63px;
+	margin: 0 left;
+	padding: 80px 0 0 90px;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#header h1, #header p {
+	margin: 0;
+}
+
+#header h1 {
+	font-size: 28px;
+	color: #F79F1A;
+}
+
+#header p {
+	margin-top: -10px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #726503;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+#wrapper {
+	width: 840px;
+	margin: 0;
+	padding: 0;
+	background: url(images/img02.jpg) no-repeat left top;
+}
+
+/* Page */
+
+#page {
+	width: 840px;
+	margin: 0 left;
+	padding: 0;
+}
+
+/* Content */
+
+#content {
+	float: right;
+	width: 510px;
+	margin: 0;
+	padding: 170px 0 0 0;
+}
+
+.post {
+	padding: 5px 0 0 0;
+}
+
+.title {
+	padding: 0 20px 0 0px;
+	font-size: 24px;
+}
+
+.title a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.pagetitle {
+}
+
+.byline {
+	background: #AECA8D url(images/img06.gif) no-repeat left 50%;
+	margin: -20px 0 10px 0;
+	padding: 2px 0 0 10px;
+	border-bottom: 1px #FFFFFF dashed;
+	border-top: 1px #FFFFFF dashed;
+	font-size: 11px;
+	color: #FFFFFF;
+}
+
+.byline a {
+	text-decoration: none;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.meta {
+	margin: 0;
+	padding: 1px 0 0 0;
+	background: url(images/img04.gif) repeat-x left top;
+	text-align: right;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #646464;
+}
+
+.meta .more {
+	background: #AECA8D url(images/img06.gif) no-repeat left 50%;
+	padding: 4px 10px;
+}
+
+.meta .comments {
+	padding-left: 18px;
+}
+.meta a {
+	text-decoration: none;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.navigation {
+}
+
+.alignleft {
+	float: left;
+}
+
+.alignright {
+	float: right;
+}
+
+.posts {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: normal;
+}
+
+.posts li {
+}
+
+.posts h3 {
+	margin: 0;
+	font-weight: bold;
+}
+
+.posts p {
+	margin: 0;
+	line-height: normal;
+}
+
+.posts a {
+}
+
+.entry {
+	margin: 0;
+	padding-bottom: 20px;
+}
+
+.last {
+	border: none;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: left;
+	width: 230px;
+	margin-bottom: 10px;
+	padding-left: 100px;
+}
+
+#sidebar ul {
+	margin: 0 0 0 5px;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin: 0;
+	padding: 0;
+}
+
+#sidebar li ul {
+	padding: 0px 21px 16px 0px;
+}
+
+#sidebar li li {
+	background: url(images/img04.gif) repeat-x left bottom;
+	padding: 0 0 10px 0px;
+}
+
+#sidebar h2 {
+	margin: 0;
+	width: 215px;
+	height: 35px;
+	padding: 5px 0px 10px 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+}
+
+#sidebar a {
+	padding-left: 10px;
+	text-decoration: none;
+	background: url(images/img05.jpg) no-repeat left 50%;
+}
+
+#sidebar a:hover {
+	text-decoration: none;
+}
+
+/* Search */
+
+#search input {
+	display: none;
+}
+
+#search input#s {
+	display: block;
+	width: 230px;
+	padding: 2px 5px;
+	border: 1px solid #3DD1FF;
+}
+
+#search br {
+	display: none;
+}
+
+/* Calendar */
+
+#calendar {
+}
+
+#calendar h2 {
+	margin-bottom: 15px;
+}
+
+#calendar table {
+	width: 80%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+#calendar caption {
+	width: 100%;
+	text-align: center;
+}
+
+#next {
+	text-align: right;
+}
+
+#prev {
+	text-align: left;
+}
+
+/* Footer */
+
+#footer {
+	background: url(images/img03.jpg) repeat-x left top;
+	margin: 0;
+	padding: 0 0 0 100px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #FFFFFF;
+}
+
+#footer p {
+	padding: 25px 0 20px 0;
+}
+
+#footer p a {
+	background: #A7C204;
+	padding: 3px 7px;
+	border: 3px #FFFFFF solid;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 10px;
+	color: #FFFFFF;
+}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  font-weight: normal;
+  font-size: 14px;
+  background-color: #BCE8EC;
+  color: #000000;
+}
+
+.gallery table {
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul img {
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #9F9F9F;
+}
+
+.advert {
+  width: 840px;
+}
+
+.advert a {
+  width: 840px;
+}

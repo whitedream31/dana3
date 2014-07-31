@@ -1,0 +1,351 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+600
+600
+0
+
+shared.css required
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 20px 0;
+	font: normal small Arial, Helvetica, sans-serif;
+	color: #666666;
+}
+
+h1, h2, h3 {
+	text-transform: lowercase;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: normal;
+	font-style: italic;
+	color: #7A0026;
+}
+
+h2 {
+}
+
+h3 {
+	font-weight: bold;
+}
+
+p, blockquote, ul, ol {
+}
+
+p {
+}
+
+blockquote {
+	padding-left: 3em;
+	padding-right: 3em;
+	background: url(images/img03.gif) no-repeat;
+	text-align: justify;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-style: italic;
+	color: #330010;
+}
+
+ul {
+	margin-left: 3em;
+}
+
+ul li {
+}
+
+ol {
+	margin-left: 3em;
+}
+
+ol li {
+}
+
+a {
+	color: #0072BC;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #59C700;
+}
+
+img {
+	border: none;
+}
+
+#pagewrapper {
+	background: #7A0026 url(images/img01.gif);
+}
+
+/* Boxed Style */
+
+.boxed {
+}
+
+.boxed .title {
+	height: 23px;
+	padding: 15px 0 0 19px;
+	background: #8CBEF5 url(images/img03.gif) repeat-x left bottom;
+	border: 1px solid #4F9CEF;
+	font-size: 1em;
+	color: #FFFFFF;
+}
+
+.boxed .content {
+	margin: 0 0 20px 0;
+	padding: 20px;
+	background: #DCEBFC;
+}
+
+/* Post */
+
+.post {
+	padding: 20px 20px 0 20px;
+}
+
+.post .title {
+	margin-bottom: 0px;
+	padding: 3px 0 15px 0;
+	background: url(images/img04.gif) repeat-x left bottom;
+	border-bottom: 2px solid #EEEEEE;
+	font-size: 2em;
+}
+
+.post .date {
+	float: right;
+	padding: 10px 20px;
+	font-size: x-small;
+}
+
+.post .date .month {
+}
+
+.post .date .day {
+}
+
+.post .date .year {
+}
+
+.post .meta {
+	padding	: 10px 20px;
+	font-size: x-small;
+}
+
+.post .meta p {
+}
+
+.post .story {
+	clear: both;
+	padding: 20px;
+	border-top: 1px solid #EEEEEE;
+}
+
+.post .story p, .post .story blockquote, .post .story ul, .post .story ol {
+	margin-bottom: 1.5em;
+	line-height: 180%;
+}
+
+/* Page */
+
+#page {
+	width: 600px;
+	margin: 0 auto;
+	background: #FFFFFF;
+	border: 10px solid #330010;
+}
+
+/* Logo */
+
+#logo {
+	height: 200px;
+	background: url(images/img02.jpg);
+}
+
+#logo h1 {
+	padding: 135px 0 0 380px;
+	letter-spacing: -1px;
+	font-size: 2.4em;
+	color: #FFFFFF;
+}
+
+#logo h2 {
+	margin-top: -8px;
+	padding: 0 0 0 410px;
+	font-size: 1.3em;
+	color: #FFFFFF;
+}
+
+#logo a {
+	text-decoration: none;
+}
+
+/* Content */
+
+#content {
+}
+
+#extra {
+}
+
+/* Content > Main */
+
+#main {
+}
+
+#main a {
+}
+
+/* Content > Main > Welcome */
+
+#welcome {
+}
+
+/* Content > Main > Example */
+
+#example {
+}
+
+/* Content > Sidebar */
+
+#sidebar {
+}
+
+#sidebar a {
+}
+
+#sidebar div {
+  float: left;
+  margin: 5px;
+}
+
+/* Content > Menu */
+
+#menu {
+	height: 50px;
+	background: #330010;
+}
+
+#menu ul {
+	margin: 0;
+	list-style: none;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	display: block;
+	float: left;
+	margin-left: 20px;
+	padding: 20px 0 2px 0;
+	border-bottom: 4px solid #330010;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#menu a:hover {
+	border-bottom-color: #FFFFFF;
+}
+
+#menu .active a {
+	border-bottom-color: #FFFFFF;
+}
+
+#menu .first a {
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	padding: 20px;
+	background: #EBE6E8;
+}
+
+#footer p {
+	margin: 0;
+	font-size: x-small;
+	color: #999999;
+}
+
+#footer a {
+	color: #999999;
+}
+
+/* Footer > Legal */
+
+#legal {
+}
+
+/* Footer > Links */
+
+#links {
+}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  font-size: 14px;
+  background: #330010;
+  color: #FFFFFF;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  border: 3px solid #330010;
+}
+
+.gallery ul img {
+  border: 3px solid #330010;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #330010;
+}
+
+.advert {
+  width: 600px;
+}
+
+.advert a {
+  width: 600px;
+}

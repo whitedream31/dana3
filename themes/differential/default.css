@@ -1,0 +1,230 @@
+
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #252D37 url(images/img1.gif) repeat-x;
+	font: normal 11px "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #A4AFBD;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+	color: #FFFFFF;
+}
+
+h1 { font-size: 31px; }
+h2 { font-size: 26px; }
+h3 { font-size: 18px; }
+
+p, ul, ol, blockquote {
+	margin-top: 0;
+	padding-top: 0;
+	text-align: justify;
+	line-height: 18px;
+}
+
+a {
+	color: #95BA2E;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* Boxed */
+
+.boxed {
+	margin: 0 0 20px 0;
+	padding: 0 20px 20px 20px;
+	background: url(images/img4.gif) repeat-x left bottom;
+}
+
+/* Post */
+
+.post {
+	margin: 0 0 20px 0;
+	padding: 10px 20px 30px 20px;
+	background: url(images/img4.gif) repeat-x left bottom;
+}
+
+.post h4 {
+	margin-bottom: 20px;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+.post h4 strong {
+	font-weight: bold;
+	color: #5B6F88;
+}
+
+/* Header */
+
+#header {
+	width: 904px;
+	height: 140px;
+	margin: 0 auto;
+}
+
+/* Menu */
+
+#menu {
+	float: left;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 53px 0 0 0;
+	list-style: none;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	display: block;
+	float: left;
+	height: 25px;
+	padding: 10px 15px 0 15px;
+	text-transform: lowercase;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#menu a:hover {
+	background: #0C7AC7 url(images/img2.gif) repeat-x;
+}
+
+/* Search */
+
+#search {
+	float: right;
+	padding: 63px 0 0 0;
+}
+
+#textfield1 {
+	width: 175px;
+	background: #FFFFFF;
+	border: none;
+}
+
+#submit1 {
+	height: 19px;
+	background: #6F9303;
+	border: none;
+	text-transform: lowercase;
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+/* Content */
+
+#content {
+	width: 904px;
+	margin: 0 auto;
+}
+
+#colOne {
+	float: left;
+	width: 238px;
+}
+
+#colTwo {
+	float: right;
+	width: 646px;
+}
+
+/* ColOne Content */
+
+#colOne ul {
+	margin-left: 0;
+	padding-left: 0;
+	list-style: none;
+}
+
+#colOne li {
+	padding: 5px 0 7px 0;
+	border-top: 1px solid #3B495A;
+}
+
+#colOne li.first {
+	border: none;
+}
+
+#colOne h3 {
+	font-size: 15px;
+}
+
+/* ColTwo Content */
+
+/* Logo */
+
+#logo {
+	margin: 0 0 20px 0;
+	padding: 0 0 40px 20px;
+	background: url(images/img3.gif) repeat-x left bottom;
+}
+
+#logo h1 {
+	text-transform: lowercase;
+}
+
+#logo h2 {
+	text-transform: lowercase;
+	font-size: 12px;
+}
+
+#logo a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+/* Welcome */
+
+#welcome {
+	padding: 5px 20px 20px 20px;
+}
+
+#welcome h2 {
+	margin-bottom: 25px;
+}
+
+#welcome .image {
+	float: left;
+	padding: 0 17px 0 0;
+}
+
+#welcome p {
+	margin-left: 126px;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 904px;
+	margin: 0 auto;
+	background: url(images/img6.gif) repeat-x left top;
+}
+
+#footer p {
+	margin: 0;
+	padding: 30px;
+	text-align: center;
+}

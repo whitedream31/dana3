@@ -1,0 +1,252 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+shared.css required
+
+750
+500
+200
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #A060AA url(images/img1.jpg) repeat-y center top;
+	font: italic medium Georgia, "Times New Roman", Times, serif;
+	color: #B35BC1;
+}
+
+h1, h2, h3, h4, h5, h6, form {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3 {
+}
+
+h4, h5, h6 {
+}
+
+p, ul, ol, blockquote {
+	margin-top: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #9132A5;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+img {
+	border: none;
+}
+
+/* Header */
+
+#header {
+	width: 750px; /*720px; */
+	height: 70px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* Logo */
+
+#logo {
+	float: left;
+	width: 410px;
+	padding: 0 0 0 60px;
+	background: url(images/img4.jpg) no-repeat left center;
+}
+
+#logo h1 {
+	font-size: 2.5em;
+}
+
+#logo h2 {
+	font-size: 1em;
+}
+
+#logo a {
+	background: none;
+}
+
+/* Search */
+
+#search {
+  display: none;
+	float: right;
+	width: 200px;
+	padding-top: 13px;
+}
+
+/* Content */
+
+#content {
+	width: 750px; /*720px; */
+	margin: 0 auto;
+}
+
+/* Column One */
+
+#colOne {
+	float: left;
+	width: 500px; /* 470px */
+}
+
+/* Column Two */
+
+#colTwo {
+	float: right;
+	width: 200px;
+}
+
+#colTwo h2, #colTwo h3 {
+  margin: 10px 0 0 0;
+}
+
+#colTwo ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#colTwo li ul {
+	padding: 1em 0;
+}
+
+#colTwo li a {
+	padding-right: 5px;
+	/*background: url(images/img7.jpg) no-repeat left center; */
+}
+
+/* Latest Post */
+
+#latest-post {
+	padding: 50px 0 0 0;
+	background: url(images/img5.jpg) no-repeat center top;
+}
+
+#latest-post .title {
+	padding: 0 0 0 30px;
+	background: url(images/img6.jpg) no-repeat left center;
+	font-size: 1.4em;
+}
+
+#latest-post .title a {
+	background: none;
+}
+
+#latest-post .posted {
+	padding: 0 0 2em 30px; 
+	font-size: x-small;
+}
+
+#latest-post .posted a {
+	background: none;
+}
+
+#latest-post .image {
+	float: left;
+	margin: .3em 1em 1em 0;
+}
+
+/* Recent Posts */
+
+#recent-posts {
+	padding: 50px 0 0 0;
+	background: url(images/img5.jpg) no-repeat center top;
+}
+
+#recent-posts .title {
+	padding: 0 0 0 30px;
+	background: url(images/img6.jpg) no-repeat left center;
+	font-size: 1.4em;
+}
+
+#recent-posts ul {
+	margin: 0;
+	padding: 20px 0 0 30px;
+	list-style: none;
+}
+
+#recent-posts li {
+	padding: 5px 0 10px 0;
+	background: url(images/img2.jpg) repeat-x left bottom;
+}
+
+#recent-posts a {
+	background: none;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 750px; /*720px; */
+	margin: 0 auto;
+	padding: 5em 0;
+	font-size: xx-small;
+}
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #9132A5;
+  color: #000000;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #9132A5;
+}
+
+.gallery ul img {
+  border: 3px solid #9132A5;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #9132A5;
+}
+
+.advert {
+  width: 750px;
+}
+
+.advert a {
+  width: 750px;
+}

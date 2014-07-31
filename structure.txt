@@ -1,0 +1,21 @@
+url = worker.{idname}.php?in={idname}&act={act}
+
+activity base
+  idname
+  abstract Show()
+
+activity group (static header)
+  icon
+  caption
+
+activity menu item (clickable - add to group)
+  caption
+  targetidname
+  return -> idname
+
+activity data grid (list of record to edit/remove etc - add to group)
+
+activity form (list of fields to edit - add to group)
+
+activity action button (add new record / return - add to group)
+

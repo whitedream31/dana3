@@ -1,0 +1,58 @@
+/*Design by Free CSS Templateshttp://www.freecsstemplates.orgReleased for free under a Creative Commons Attribution 2.5 License
+
+700
+500
+220shared.css required
+*/* {	margin: 0;	padding: 0;}body {	background: #ECE8DD;	font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;	color: #7D7D7D;}h1, h2, h3 {}h2 {}h3 {}p, blockquote, ul, ol {}p {}blockquote {	margin-left: 3em;}ul {	margin-left: 3em;}ul li {}ol {	margin-left: 3em;}ol li {}a {	color: #3366FF;}a:hover {	text-decoration: none;	color: #FF6600;}img {}/* Boxed Style */.boxed {}.boxed .title {	height: 26px;	padding: 10px 0 0 10px;	background: url(images/img03.gif) repeat-x;	text-transform: lowercase;	font-size: 1em;	color: #713816}.boxed .content {	padding: 20px 20px 40px 20px;	background: url(images/img04.gif) repeat-x;}/* Post */.post {	margin-bottom: 15px;	padding: 5px 20px 20px 20px;	background: url(images/img05.gif) no-repeat center bottom;}.post .title {	margin-bottom: 20px;	color: #713816}.post .date {	float: left;	width: 70px;	padding-right: 20px;	text-align: right;	font-size: x-small;}.post .date .month {}.post .date .day {}.post .date .year {	display: none;}.post .meta {	float: left;	padding-left: 20px;	border-left: 1px dotted #713816;	font-size: x-small;}.post .meta p {}.post .story {	padding-top: 50px;}.post h3 {	text-transform: uppercase;	letter-spacing: 2px;	font-size: .8em;}.post .story p, .post .story blockquote, .post .story ul, .post .story ol {	margin-bottom: 1.5em;	line-height: 180%;}/* Logo */#logo {	width: 700px;	height: 240px;	margin: 0 auto;	background: url(images/img01.jpg) no-repeat;}#logo h1 {	padding: 90px 0 0 30px;	letter-spacing: -3px;	font-size: 3em;}#logo h2 {	padding: 0 0 0 100px;	font-size: 1.8em;}#logo a {	text-transform: lowercase;	text-decoration: none;	font-style: italic;	font-weight: bold;	color: #713816;}/* Menu */#menu {	width: 700px;	height: 50px;	margin: 0 auto;	background: url(images/img02.jpg) no-repeat;}#menu ul {	margin: 0;	list-style: none;}#menu li {	display: inline;}#menu a {	display: block;	float: left;	padding: 17px 20px 0 20px;	text-decoration: none;	font-weight: bold;}#menu a:hover, #menu .active a {}/* Content */#content {	width: 740px;	margin: 0 auto;	padding: 20px 0 0 0;}#extra {}/* Content > Main */#main {	float: right;	width: 500px;}#main a {}/* Content > Main > Welcome */#welcome {}/* Content > Main > Example */#example {}/* Content > Sidebar */#sidebar {	float: left;	width: 220px;}#sidebar a {}/* Content > Sidebar > Login */#login {}#login form {}#login fieldset {	border: none;}#login legend {	display: none;}#login label {	font-size: x-small;	font-weight: bold;}#login input {	margin-bottom: 5px;	padding: 2px 5px;	border: 1px solid #385B88;	font-family: Verdana, Arial, Helvetica, sans-serif;}#inputtext1, #inputtext2 {	color: #385B88;}#inputsubmit1 {	background: #385B88;	color: #FFFFFF;}/* Content > Sidebar > Updates*/#updates {}#updates ul {	margin: 0;	list-style: none;}#updates h3 {	margin: 0;	font: bold x-small Verdana, Arial, Helvetica, sans-serif;}#updates p {	margin-bottom: 1.4em;	font-size: smaller;	line-height: normal;}/* Content > Sidebar > Partners*/#partners {}#partners .content {	padding: 10px 0;}#partners ul {	margin: 0;	border-bottom: 1px solid #D1BC5C;	list-style: none;	line-height: normal;}#partners li {	padding: 10px;	border-top: 1px solid #D1BC5C;}/* Footer */#footer {	clear: both;	width: 660px;	margin: 0 auto;	padding: 10px 0;	border-top: 1px dotted #713816;}#footer p {	margin: 0;	font-size: x-small;}/* Footer > Legal */#legal {}/* Footer > Links */#links {}
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contactinput {
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  background-color: #BCE8EC;
+  color: #000000;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul img {
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #9F9F9F;
+}
+
+.advert {
+  width: 700px;
+}
+
+.advert a {
+  width: 700px;
+}

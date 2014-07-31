@@ -1,0 +1,326 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+shared.css required
+
+630
+500 / 390
+200
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #999999;
+	background: #555555;
+}
+
+#pagewrapper {
+	width: 740px;
+	margin: 0 auto;
+	background: #555555 url(images/img01.jpg);
+}
+
+h1, h2, h3 {
+	margin-bottom: 15px;
+	color: #CCC;
+}
+
+h1 {
+	font-size: 190%;
+}
+
+h2 {
+	font-size: 150%;
+}
+
+h3 {
+	font-size: 100%;
+	font-weight: bold;
+}
+
+p, ul, ol {
+	margin-bottom: 1.8em;
+}
+
+ul, ol {
+	margin-left: 3em;
+}
+
+blockquote {
+	margin-left: 2em;
+	padding-left: 1em;
+	background: url(images/img09.jpg) repeat-y;
+	font-style: italic;
+}
+
+a {
+	color: #CCCCCC;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+img {
+	border: none;
+}
+
+img.left {
+	float: left;
+	margin: 0 20px 0 0;
+}
+
+img.right {
+	float: right;
+	margin: 0 0 0 20px;
+}
+
+/* Menu */
+
+#menu {
+	width: 740px;
+	height: 40px;
+	margin: 0 auto;
+	background: url(images/img02.jpg) no-repeat;
+}
+
+#menu ul {
+	float: right;
+	margin: 0;
+	padding: 10px 15px 0 0;
+	list-style: none;
+}
+
+#menu li {
+	display: inline;
+	border-left: 1px solid #3F3F3F;
+}
+
+#menu li.first {
+	border: none;
+}
+
+#menu a {
+	padding: 0 15px 0 20px;
+}
+
+#menu a:hover {
+}
+
+/* Header */
+
+#header {
+	width: 740px;
+	height: 160px;
+	margin: 0 auto;
+	background: url(images/img03.jpg) no-repeat;
+}
+
+#header h1, #header h2 {
+	text-transform: uppercase;
+	font-style: italic;
+	color: #FFF;
+}
+
+#header h1 {
+	float: left;
+	padding: 77px 0 0 20px;
+	letter-spacing: -4px;
+	font-size: 36px;
+}
+
+#header h2 {
+	float: right;
+	padding: 93px 40px 0 0;
+	letter-spacing: -1px;
+	font-size: 18px;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+/* Page */
+
+#page {
+	width: 740px;
+	margin: 0 auto;
+	background: url(images/img04.jpg) repeat-y;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 500px;
+	padding: 0 0 0 20px
+}
+
+.post {
+	padding: 20px;
+	background: url(images/img08.jpg) repeat-x left bottom;
+}
+
+.post h2, .post h3 {
+	margin: 0 0 15px 0;
+	padding: 0 0 0 20px;
+	background: url(images/img06.jpg) no-repeat left center;
+	text-transform: uppercase;
+}
+.post h2 {
+	font-size: 125%;
+}
+ .post h3 {
+	font-size: 110%;
+}
+
+.post .story {
+}
+
+.post .meta {
+}
+
+.post .meta p {
+	margin: 0;
+	font-size: 77%;
+	color: #777777;
+}
+
+.post .meta a {
+	color: #777777;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 200px;
+	padding: 0 10px 0 0;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	padding: 20px 20px 25px 20px;
+	background: url(images/img08.jpg) repeat-x left bottom;
+}
+
+#sidebar li ul {
+	padding-left: 5px;
+}
+
+#sidebar li li {
+	padding: 0 0 0 15px;
+	background: url(images/img07.jpg) no-repeat left center;
+	line-height: 1.8em;
+	font-size: 85%;
+}
+
+#sidebar li h2 {
+	margin: 0 0 15px 0;
+	padding: 0 0 0 20px;
+	background: url(images/img06.jpg) no-repeat left center;
+	text-transform: uppercase;
+	font-size: 100%;
+}
+
+#sidebar a {
+	text-decoration: none;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 590px;
+	margin: 0 auto;
+	padding: 20px 20px;
+}
+
+#footer p {
+	margin: 0;
+	font-size: 77%;
+	color: #666;
+}
+
+#footer a {
+	color: #888;
+}
+
+#footer a:hover {
+}
+
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #FFF;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #CCC;
+  color: #FFF;
+}
+
+.gallery {
+  color: #FFF;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #CCC;
+}
+
+.gallery ul img {
+  border: 3px solid #CCC;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #CCC;
+}
+
+.advert {
+  width: 740px;
+}
+
+.advert a {
+  width: 740px;
+}

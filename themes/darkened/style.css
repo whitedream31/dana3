@@ -1,0 +1,220 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+694px
+394px
+179px
+
+shared.css required
+
+*/
+
+body {
+	background: #000000;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #E7E7E7;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	padding: 0;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color: #FFFFFF;
+}
+
+h1 { font-size: 34px; }
+
+h2 {
+	margin-bottom: 10px;
+	padding: 0 0 22px 0;
+	font-size: 20px;
+	background: #000000 url(images/img3.gif) repeat-x left bottom;
+}
+
+h3 {
+	padding: 0 0 22px 0;
+	font-size: 13px;
+	background: #000000 url(images/img3.gif) repeat-x left bottom;
+}
+
+p {
+	margin-top: 0;
+	text-align: left;
+	line-height: 160%;
+}
+
+a {
+	color: #FE4E00;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+fieldset {
+  margin: 0;
+  width: 90%;
+}
+
+.list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.list li {
+	padding: 5px 0;
+	background: url(images/img5.gif) repeat-x;
+}
+
+.list li.first {
+	background: none;
+}
+
+/* Header */
+
+#header {
+	width: 681px;
+	margin: 0 auto;
+	padding: 40px 0 0 13px;
+	height: 90px;
+	background: url(images/img1.gif) repeat-x left bottom;
+}
+
+#header h1 {
+	float: left;
+}
+
+#header h2 {
+	display: none;
+}
+
+#header ul {
+	float: right;
+	margin: 0;
+	padding: 15px 0 0 0;
+	list-style: none;
+}
+
+#header li {
+	display: inline;
+}
+
+#header a {
+	display: block;
+	float: left;
+	padding: 0 14px 0 20px;
+	background: url(images/img2.gif) no-repeat left center;
+	text-decoration: none;
+	font: bold 12px Georgia, "Times New Roman", Times, serif;
+	color: #FFFFFF;
+}
+
+#header a:hover {
+	text-decoration: underline;
+}
+
+#header .first a {
+	background: none;
+}
+
+/* Content */
+
+#page {
+	width: 694px;
+	margin: 0 auto;
+}
+
+#sidebar {
+	float: left;
+	width: 179px;
+	padding: 0 0 0 21px;
+}
+
+#sidebar h3, #sidebar h2 {
+	margin-top: 14px;
+}
+
+#content {
+	float: right;
+	width: 394px;
+	padding: 0 29px 0 0;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 694px;
+	margin: 0 auto;
+	padding: 30px 0 0 0;
+}
+
+div#footer {
+	padding: 20px 0 0 0;
+	background: url(images/img4.gif) repeat-x;
+}
+#footer p {
+	text-align: center;
+	color: #8A8A8A;
+}
+
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #FFF;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #FFF;
+  color: #000;
+}
+
+.gallery {
+  color: #FFF;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #FFF;
+}
+
+.gallery ul img {
+  border: 3px solid #FFF;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #FFF;
+}
+
+.advert {
+  width: 694px;
+}
+
+.advert a {
+  width: 694px;
+}

@@ -1,0 +1,261 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+720
+480
+220
+
+share.css required
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #52A6CB;
+}
+
+h1, h2, h3, h4, h5, h6, form {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3 {
+}
+
+h4, h5, h6 {
+}
+
+p, ul, ol, blockquote {
+	margin-top: 0;
+}
+
+a {
+	border-bottom: 1px dotted #52A6CB;
+	text-decoration: none;
+	color: #307DA0;
+}
+
+a:hover {
+	border: none;
+}
+
+img {
+	border: none;
+}
+
+#pagewrapper {
+	background: #449EC7 url(images/img1.gif) repeat-y center top;
+}
+
+/* Header */
+
+#header {
+	width: 740px;
+	height: 70px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* Logo */
+
+#logo {
+	float: left;
+	width: 430px;
+	padding: 0 0 0 60px;
+	background: url(images/img2.gif) no-repeat left center;
+}
+
+#logo h1 {
+	font-size: 2.5em;
+}
+
+#logo h2 {
+	font-size: 1em;
+}
+
+#logo a {
+	border: none;
+}
+
+/* Search */
+
+#search {
+	float: right;
+	width: 200px;
+	padding-top: 13px;
+}
+
+/* Content */
+
+#content {
+	width: 760px;
+	margin: 0 auto;
+}
+
+/* Column One */
+
+#colOne {
+	float: left;
+	width: 500px;
+/*  padding-right: 20px; */
+}
+
+/* Column Two */
+
+#colTwo {
+	float: right;
+	width: 200px;
+  padding-left: 0;
+}
+
+#colTwo ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#colTwo li ul {
+	padding: 1em 0;
+}
+
+#colTwo li li {
+	padding-left: 15px;
+	background: url(images/img5.gif) no-repeat left center;
+	border: none;
+}
+
+/* Latest Post */
+
+#latest-post {
+	padding: 25px 0 10px 10px;
+	background: url(images/img3.gif) no-repeat center top;
+}
+
+.post {
+	padding: 10px 0 10px 10px;
+}
+
+#latest-post .title {
+	padding: 0 0 0 30px;
+	background: url(images/img4.gif) no-repeat left center;
+	font-size: 1.5em;
+}
+
+#latest-post .title a {
+	background: none;
+}
+
+#latest-post .posted {
+	padding: 0 0 2em 30px; 
+	font-size: x-small;
+}
+
+#latest-post .posted a {
+	background: none;
+}
+
+#latest-post .image {
+	float: left;
+	margin: .3em 1em 1em 0;
+}
+
+/* Recent Posts */
+
+#recent-posts {
+	padding: 50px 0 10px 10px;
+	background: url(images/img3.gif) no-repeat center top;
+}
+
+#recent-posts .title {
+	padding: 0 0 0 30px;
+	background: url(images/img4.gif) no-repeat left center;
+	font-size: 1.5em;
+}
+
+#recent-posts ul {
+	margin: 0;
+	padding: 20px 0 0 30px;
+	list-style: none;
+}
+
+#recent-posts li {
+	padding: 5px 0 10px 0;
+	background: url(images/img2.jpg) repeat-x left bottom;
+}
+
+#recent-posts a {
+	background: none;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 720px;
+	margin: 0 auto;
+	padding: 5em 0;
+	font-size: xx-small;
+}
+
+
+
+/** CONTACT */
+
+.contact {
+  margin: 20px 20px 20px 20px;
+}
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contact  input[type="submit"] {
+  margin: 5px 5% 0 5%;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  font-weight: normal;
+  font-size: 14px;
+	background-color: #449EC7;
+	color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #449EC7;
+}
+
+.gallery ul img {
+  border: 3px solid #449EC7;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #449EC7;
+}
+
+.advert {
+	width: 720px;
+}
+
+.advert a {
+	width: 720px;
+}

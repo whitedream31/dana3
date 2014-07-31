@@ -1,0 +1,438 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+800
+500
+280
+
+share.css required
+
+*/
+
+body {
+	margin-top: 20px;
+	padding: 0;
+	background: #F5E5C5;
+	font-size: 14px;
+	text-align: left;
+	color: #ABABAB;
+}
+
+body, th, td, input, textarea, select, option {
+	font-family: "Trebuchet MS", "Times New Roman", Arial, Times, serif;
+}
+
+h1, h2, h3 {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: normal;
+	color: #000000;
+}
+
+h1 {
+	letter-spacing: -2px;
+	font-size: 3em;
+}
+
+h2 {
+	letter-spacing: -1px;
+	font-size: 2em;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+p, ul, ol {
+	line-height: 200%;
+}
+
+blockquote {
+	padding-left: 1em;
+}
+
+blockquote p, blockquote ul, blockquote ol {
+	line-height: normal;
+	font-style: italic;
+}
+
+a {
+	color: #CDCDCD;
+}
+
+a:hover {
+	color: #CDCDCD;
+}
+
+hr {
+	display: none;
+}
+
+#wholepage {
+	background: #F5E5C5 url(images/img01.jpg) repeat left top;
+}
+
+#wrapper {
+	width: 800px;
+	margin: 0 auto;
+	padding: 0;
+	background: url(images/img03.jpg) repeat-y left top;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+#wrapper .top {
+	background: url(images/img02.jpg) no-repeat left top;
+}
+
+
+/* Header */
+
+#header {
+	width: 800px;
+	height: 80px;
+	margin: 0 auto;
+	padding: 20px 0 0 0;
+	background: #FFB03B;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-top: 1px solid #000000;
+	color: #B64926;
+}
+
+#header h1, #header p {
+	margin: 0;
+	text-transform: lowercase;
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#header h1 {
+	color: #000000;
+	font-size: 42px;
+	padding-left: 30px;
+}
+
+#header p {
+	padding: 0px 0 0 30px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#header a {
+	text-decoration: none;
+	color: #F79F1A;
+}
+
+/* Page */
+
+#page {
+	width: 800px;
+	margin: 0 auto;
+	margin-bottom: 15px;
+}
+
+/* Content */
+
+#content {
+	float: right;
+	width: 500px;
+	margin: 0;
+	padding: 25px 10px 15px 10px;
+	padding: 25px 10px 15px 10px;
+}
+
+.post {
+	padding: 0px 0 0 0;
+}
+
+.title {
+	border-left: 6px solid #2E2E2E;
+	padding: 0 20px 0 27px;
+	font-size: 24px;
+}
+
+.title a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.pagetitle {
+}
+
+.byline {
+	margin: -25px 20px 0 33px;
+	color: #FFFFFF;
+}
+
+.meta {
+	text-align: left;
+	color: #5C1600;
+	padding: 10px 20px 10px 17px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 12px;
+	background: #FFB03B;
+	border: 3px solid #000000;
+}
+
+.meta .more {
+	background: url(images/img05.jpg) no-repeat left 50%;
+	padding-left: 10px;
+}
+
+.meta .comments {
+	background: url(images/img05.jpg) no-repeat left 50%;
+	padding-left: 10px;
+}
+
+.meta a {
+	color: #000000;
+}
+
+.navigation {
+}
+
+.alignleft {
+	float: left;
+}
+
+.alignright {
+	float: right;
+}
+
+.posts {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: normal;
+}
+
+.posts li {
+}
+
+.posts h3 {
+	margin: 0;
+	font-weight: bold;
+}
+
+.posts p {
+	margin: 0;
+	line-height: normal;
+}
+
+.posts a {
+}
+
+.entry {
+	margin: 0;
+	padding-left: 35px;
+	color: #FFFFFF;
+}
+
+.last {
+	border: none;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: left;
+	width: 280px;
+	margin-bottom: 10px;
+	padding: 40px 0 0 0px;
+	color: #5C1600;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin: 0;
+	padding: 0;
+  width: 280px;
+}
+
+#sidebar li ul {
+	margin: 0 0 20px 0;
+	padding: 0;
+}
+
+#sidebar li li {
+	margin: 0 0 0 20px;
+	padding: 0 0 0 10px;
+	background: url(images/img05.jpg) no-repeat left 50%;
+	line-height: 20px;
+}
+
+#sidebar h2 {
+	width: 240px;
+	height: 54px;
+	margin: 0;
+	padding: 10px 0 0 10px;
+	font-size: 18px;
+	background: url(images/img04.jpg) no-repeat left top;
+	color: #FFFFFF;
+}
+
+#sidebar a {
+	color: #000000;
+}
+
+#sidebar p {
+	margin: 0 5px 0 5px;
+}
+
+#sidebar a:hover {
+	text-decoration: none;
+}
+
+/* Search */
+
+#search input {
+	display: none;
+}
+
+#search input#s {
+	display: block;
+	width: 230px;
+	padding: 2px 5px;
+	border: 1px solid #3DD1FF;
+	background: #FFFFFF url(images/img05.gif) repeat-x;
+}
+
+#search br {
+	display: none;
+}
+
+/* Calendar */
+
+#calendar {
+}
+
+#calendar h2 {
+	margin-bottom: 15px;
+}
+
+#calendar table {
+	width: 80%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+#calendar caption {
+	width: 100%;
+	text-align: center;
+}
+
+#next {
+	text-align: right;
+}
+
+#prev {
+	text-align: left;
+}
+
+/** CONTACT */
+
+.contact {
+  margin: 20px 20px 20px 20px;
+}
+
+.contact label {
+  float: none;
+  display: block;
+  color: #3F4C6B;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #B2B7C4;
+  color: #000000;
+  color: #000000;
+  font-weight: normal;
+}
+
+/* Footer */
+
+#footer {
+	width: 800px;
+	height: 60px;
+	min-height: 60px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #B64926;
+}
+
+#footer p {
+	padding: 20px 0;
+  line-height: normal;
+}
+
+#footer p a {
+	color: #5C1600;
+}
+
+
+
+#productlist h3 {
+  color: #FCB040;
+}
+
+#productlist .productitemspecialoffer {
+  color: #FF0000;
+}
+
+.productitemsection {
+  border-top: none;
+  border-bottom: thin dotted #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 500px;
+  font-weight: normal;
+  font-size: 14px;
+	background: #FCB040;
+	color: #000000;
+  margin: 2px 0px 5px 0px;
+  padding: 2px 2px 2px 2px;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #FFFFFF;
+  text-decoration: none;
+  text-align: center;
+}
+
+.gallery {
+	color: #000000;
+}
+
+.gallery ul img {
+  border: 3px solid #B64926;
+  border-width: 3px;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #F79F1A;
+  border-width: 3px;
+}
+
+.advert {
+	width: 800px;
+}
+
+.advert a {
+	width: 800px;
+}

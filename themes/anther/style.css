@@ -1,0 +1,436 @@
+/*Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+960
+680
+230
+
+share.css required
+
+*/
+
+body{
+  margin:0;
+  padding:0;
+  background:#E2C738;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:12px;
+  color:#464646;
+}
+
+h1,h2,h3{
+  margin:0;
+  padding:0;
+  font-family:Georgia,"Times New Roman",Times,serif;
+  font-weight:normal;
+  color:#181818;
+}
+
+h1{
+  font-size:2em;
+}
+
+h2{
+  font-size:2.0em;
+}
+
+h3{
+  font-size:1.6em;
+}
+
+p,ul,ol{
+  margin-top:0;
+  line-height:180%;
+}
+
+ul,ol{}
+
+a{
+  text-decoration:none;
+  color:#464646;
+}
+
+a:hover{}
+
+#pagewrapper{
+  margin:0 auto;
+  padding:0;
+}
+
+/* Header */
+
+#header-wrapper{}
+
+#header{
+  width:960px;
+  height:240px;
+  margin:0 auto;
+  background:url(images/img03.jpg) no-repeat right bottom;
+}
+
+/* Logo */
+
+#logo{
+  float:left;
+  height:240px;
+  margin:0;
+  padding:0px;
+  color:#FFFFFF;
+}
+
+#logo h1,#logo p{
+  margin:0;
+  padding:0;
+}
+
+#logo h1{
+  padding-top:110px;
+  padding-left:10px;
+  letter-spacing:-1px;
+  text-transform:lowercase;
+  font-size:4.6em;
+  color:#E3295B;
+}
+
+#logo h1 a{
+  color:#E3295B;
+}
+
+#logo p{
+  margin-top:-20px;
+  padding:12px 0 0 10px;
+  font:normal 14px Georgia,"Times New Roman",Times,serif;
+  font-style:italic;
+  color:#464646;
+}
+
+#logo a{
+  border:none;
+  background:none;
+  text-decoration:none;
+  color:#464646;
+}
+
+/* Search */
+
+#search{
+  float:right;
+  width:279px;
+  height:110px;
+  padding:0;
+}
+
+#search form{
+  height:41px;
+  margin:0;
+  padding:10px 0 0 30px;
+}
+
+#search fieldset{
+  margin:0;
+  padding:0;
+  border:none;
+}
+
+#search-text{
+  width:195px;
+  padding:6px 10px;
+  border:1px #4C4842 solid;
+  background:none;
+  text-transform:lowercase;
+  font:normal 11px Arial,Helvetica,sans-serif;
+  color:#808080;
+}
+
+#search-submit{
+  display:none;
+}
+
+/* Menu */
+
+#menu{
+  width:940px;
+  height:40px;
+  margin:0 auto;
+  padding:0;
+  background:#000000;
+}
+
+#menu ul{
+  margin:0;
+  padding:0px 0px 0px 25px;
+  list-style:none;
+  line-height:normal;
+}
+
+#menu li{
+  float:left;
+}
+
+#menu a{
+  display:block;
+  height:18px;
+  margin-right:3px;
+  padding:12px 40px 0px 40px;
+  text-decoration:none;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:12px;
+  font-weight:normal;
+  color:#FFFFFF;
+  border:none;
+}
+
+#menu a:hover,#menu .current_page_item a{}
+
+#menu .current_page_item a{
+  padding-left:0;
+}
+
+#menu a:hover{
+  text-decoration:underline;
+}
+
+/* Page */
+
+#page{
+  width:960px;
+  margin:0 auto;
+  padding:0;
+  background:url(images/img01.jpg) repeat-y left top;
+}
+
+#page-bgtop{}
+
+#page-bgbtm{
+  padding:30px 20px 0px 20px;
+}
+
+/* Content */
+
+#content{
+  float:right;
+  width:680px;
+  padding:0;
+}
+
+.post{}
+
+.post .title{
+  height:38px;
+  padding:12px 0 0 20px;
+  letter-spacing:-.5px;
+  color:#E3295B;
+}
+
+.post .title a{
+  color:#2B2B2B;
+  border:none;
+}
+
+.post .meta{
+  margin-top:-10px;
+  padding-bottom:5px;
+  margin-left:20px;
+  padding-left:15px;
+  background:url(images/img04.jpg) no-repeat left 6px;
+  text-align:left;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:11px;
+  font-style:italic;
+  color:#EB5982;
+}
+
+.post .meta a{
+  color:#EB5982;
+}
+
+.post .entry{
+  text-align:justify;
+  margin-bottom:25px;
+  padding:30px 20px 10px 20px;
+}
+
+.links{
+  display:block;
+  width:100px;
+  margin:20px 0px;
+  padding:3px;
+  background:#E3295B;
+  text-align:center;
+  text-transform:uppercase;
+  font-size:10px;
+  color:#FFFFFF;
+}
+
+/* Sidebar */
+
+#sidebar{
+  float:left;
+  width:230px;
+}
+
+#sidebar ul{
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+#sidebar li{
+  margin:0;
+  padding:0;
+}
+
+#sidebar li ul{
+  padding-bottom:30px;
+}
+
+#sidebar li li{
+  line-height:35px;
+  border-bottom:1px dashed #C8B032;
+}
+
+#sidebar li li span{
+  display:block;
+  padding:0;
+  font-size:11px;
+  font-style:italic;
+}
+
+#sidebar h2{
+  height:38px;
+  padding:12px 0 0 0px;
+  letter-spacing:-.5px;
+  color:#181818;
+}
+
+#sidebar p{
+  margin:0 0px;
+  padding:0px 20px 20px 0px;
+  text-align:justify;
+}
+
+#sidebar a{
+  border:none;
+  color:#464646;
+}
+
+#sidebar a:hover{
+  text-decoration:underline;
+}
+
+/* Calendar */
+
+#calendar{}
+
+#calendar_wrap{
+  padding:20px;
+}
+
+#calendar table{
+  width:100%;
+}
+
+#calendar tbody td{
+  text-align:center;
+}
+
+#calendar #next{
+  text-align:right;
+}
+
+/* Footer */
+
+#footer-wrapper{}
+
+#footer{
+  width:960px;
+  height:100px;
+  margin:0 auto;
+  padding:0px 0 15px 0;
+  background:url(images/img02.jpg) no-repeat left top;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+#footer p{
+  margin:0;
+  padding-top:20px;
+  line-height:normal;
+  font-size:9px;
+  text-transform:uppercase;
+  text-align:center;
+  color:#464646;
+}
+
+#footer a{
+  color:#E3295B;
+}
+
+.contact{
+  margin:20px 20px 20px 20px;
+}
+
+.contact label{
+  float:none;
+  display:block;
+  margin:15px 5% 0 5%;
+  font-size:16px;
+}
+
+.contact input[type="text"], .contact textarea{
+  border: thin solid #E3295B;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contact input[type="text"]:focus, .contact textarea:focus{
+  border: thin solid #000000;
+  background: #EB5982;
+  font-weight: bold;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter{
+  background-color:#E3295B;
+  color:#000000;
+}
+
+#productlistheader li a,#productlistfooter li a,#galleryfooter li a{
+  color:#EDEDED;
+  text-decoration:none;
+  text-align:center;
+}
+
+#productlistheader li a:hover,#productlistfooter li a:hover,#galleryfooter li a:hover{
+  text-decoration:underline;
+}
+
+#content fieldset.contact, .gallery table{
+  border: medium solid #E3295B;
+  padding:2px 5px 2px 5px;
+  margin:5px 0 5px 0;
+  color:#000000;
+}
+
+.gallery{
+  display:block;
+}
+
+.gallery ul img{
+  border:3px solid #4C4842;
+}
+
+.gallery ul a:hover img{
+  border:3px solid #4C4842;
+}
+
+.gallery .image p{
+  width:250px;
+}
+
+.advert{
+  width:960px;
+}
+
+.advert a{
+  width:960px;
+}

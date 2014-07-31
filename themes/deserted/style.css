@@ -1,0 +1,295 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+shared.css
+
+760
+480
+200
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin-top: 20px;
+	background: #404040 url(images/img01.gif) repeat-x;
+	font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #CCCCCC;
+}
+
+h1, h2, h3 {
+	margin-bottom: 1em;
+	text-transform: uppercase;
+	color: #FFFFFF;
+}
+
+h1 { font-size: 2.8em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.2em; }
+
+p, blockquote, ul, ol {
+	margin-bottom: 1.5em;
+	text-align: justify;
+	line-height: 1.8em;
+}
+
+blockquote, ul, ol {
+	margin-left: 3em;
+}
+
+blockquote {
+	margin-right: 3em;
+}
+
+a {
+	color: #CCCCCC;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+img { border: none; }
+
+img.left {
+	float: left;
+	margin: 0 15px 15px 0;
+}
+
+img.right {
+	float: right;
+	margin: 0 15px 0 15px;
+}
+
+hr { display: none; }
+
+.hr {
+}
+
+/* Boxed */
+
+.boxed {
+}
+
+.boxed .title {
+	margin: 0;
+	padding: 5px 15px;
+	background: url(images/img08.gif) no-repeat left center;
+	text-transform: uppercase;
+	font-size: small;
+}
+
+.boxed .content {
+	padding: 15px;
+	background: url(images/img09.gif) repeat-x;
+}
+
+.boxed ol, .boxed ul {
+	margin-left: 0;
+	list-style-position: inside;
+}
+
+/* Logo */
+
+#logo {
+	width: 760px;
+	height: 200px;
+	margin: 0 auto;
+	background: #000000 url(images/img02.jpg) no-repeat;
+}
+
+#logo h1 {
+	float: left;
+	width: 600px;
+	margin: 0;
+	padding: 164px 0 0 0;
+	text-align: right;
+	letter-spacing: 5px;
+	font-size: 18px;
+}
+
+#logo h2 {
+	float: right;
+	margin: 0;
+	padding: 170px 20px 0 0;
+	font-size: 11px;
+}
+
+#logo a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+/* Page */
+
+#page {
+	width: 760px;
+	margin: 0 auto;
+	background: #000000;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 480px;
+	padding: 20px;
+	background: url(images/img03.jpg) no-repeat;
+}
+
+.welcome {
+	padding-bottom: 20px;
+}
+
+#olist {
+	clear: left;
+	float: left;
+	width: 230px;
+}
+
+#ulist {
+	float: left;
+	width: 230px;
+	padding-left: 20px;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 200px;
+	padding: 20px;
+	background: url(images/img04.jpg) no-repeat;
+}
+
+#sidebar blockquote {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+/* Menu */
+
+#menu {
+	margin-bottom: 19px;
+}
+
+#menu h2 {
+	display: none;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: normal;
+}
+
+#menu li {
+	display: block;
+	padding-top: 1px;
+	background: url(images/img07.gif) repeat-x;
+}
+
+#menu li.first {
+	background: none;
+}
+
+#menu a {
+	display: block;
+	width: 165px;
+	padding: 7px 10px 7px 25px;
+	text-transform: uppercase;
+	background: url(images/img08.gif) no-repeat 10px 50%;
+	text-decoration: none;
+	letter-spacing: 1px;
+	font-size: x-small;
+	font-weight: bold;
+}
+
+#menu a:hover {
+	background-color: #0A0A0A;
+}
+
+/* Footer */
+
+#footer {
+	width: 760px;
+	margin: 0 auto;
+	padding: 20px 0;
+	background: url(images/img05.gif) repeat-x;
+}
+
+#footer p {
+	margin: 0;
+	text-align: center;
+	font-size: x-small;
+	color: #FFF;
+}
+
+#footer a {
+
+}
+
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #FFF;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #404040;
+  color: #FFF;
+}
+
+.gallery {
+  color: #FFF;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #404040;
+}
+
+.gallery ul img {
+  border: 3px solid #404040;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #404040;
+}
+
+.advert {
+  width: 760px;
+}
+
+.advert a {
+  width: 760px;
+}

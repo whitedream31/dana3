@@ -1,0 +1,274 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+?
+70%
+25% (gbox)
+
+shared.css required
+
+*/
+
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 20px;
+	padding: 0;
+	background: #FFFFFF;
+	font: normal small Georgia, "Times New Roman", Times, serif;
+	color: #666666;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+	color: #3787DE;
+}
+
+h1, h2, h3 {
+}
+
+h4, h5, h6 {
+}
+
+p, ul, ol, blockquote {
+	margin-top: 0;
+	line-height: 160%;
+}
+
+blockquote {
+	font-style: italic;
+}
+
+a {
+	text-decoration: none;
+	color: #3787DE;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #990000;
+}
+
+img {
+	border: none;
+}
+
+#visitorlogin fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  float: none;
+}
+
+#visitorlogin input[type="text"], #visitorlogin input[type="password"] {
+  width: 180px;
+}
+
+/* Header */
+
+#header {
+	height: 100px;
+}
+
+#header h1 {
+	float: left;
+	letter-spacing: -3px;
+	font-size: 3.4em;
+	color: #999999;
+}
+
+#header h2 {
+	letter-spacing: -1px;
+	font-size: 1.6em;
+}
+
+#header h1 a {
+	text-decoration: none;
+	color: #333333;
+}
+
+#header h2 a {
+	text-decoration: none;
+}
+
+/* Content */
+
+#page {
+}
+
+/* Posts */
+
+#content {
+	float: right;
+	width: 70%;
+	padding: 1em;
+	background: url(images/img1.gif) no-repeat;
+  min-height: 800px;
+  display: block;
+}
+
+.post {
+}
+
+.post h1 {
+	letter-spacing: -1px;
+	font-size: 2em;
+}
+
+.post .posted {
+	margin-bottom: 20px;
+	font-size: .8em;
+}
+
+.post .story {
+}
+
+.post .meta {
+	height: 50px;
+	padding: 8px 0 0 10px;
+	background: url(images/img09.gif) no-repeat;
+	font-size: .8em;
+}
+
+/* Archives */
+
+#archives {
+}
+
+/* Search */
+
+#search {
+}
+
+#search form {
+	margin: 0 0 12px 0;
+	padding: 0;
+}
+
+#search #textfield1 {
+	width: 155px;
+}
+
+#search #submit1 {
+	display: none;
+}
+
+/* Pages */
+
+#pages {
+}
+
+/* Categories */
+
+#categories {
+}
+
+/* Blog Roll */
+
+#blogroll {
+}
+
+/* Green Box */
+
+.gbox {
+	float: left;
+	width: 24%;
+	margin: 0 0 1em 0;
+	padding: 1em;
+	background: url(images/img1.gif) no-repeat;
+}
+
+.gbox .heading {
+	height: 27px;
+	letter-spacing: -1px;
+	font-size: 1.4em;
+	color: #09881C;
+}
+
+.gbox .content {
+	padding: 10px;
+}
+
+.gbox ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.gbox li {
+	padding-left: 15px;
+}
+
+.gbox a {
+	color: #09881C;
+}
+
+/* Footer */
+
+#footer {
+}
+
+#footer p {
+	margin: 0;
+	padding: 0;
+	font-size: x-small;
+}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #09881C;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.addthis {
+  margin: 10px 20px 10px 20px;
+  background: none;
+  vertical-align: middle;
+}
+
+.addthis a {
+  line-height: 15px;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 70%;
+	background-color: #999999;
+	color: #000;
+}
+
+.gallery ul img {
+  border: 3px solid #3787DE;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #3787DE;
+}
+
+.advert {
+	width: 100%;
+}
+
+.advert a {
+	width: 100%;
+}

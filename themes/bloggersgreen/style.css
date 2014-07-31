@@ -1,0 +1,243 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+690
+500
+150
+
+shared.css required
+
+*/
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Tahoma", Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  color: #5E5945;
+}
+
+h1{
+  margin-top: 0px;
+  margin-left: 0px;
+  text-transform: lowercase;
+  font-weight: bold;
+  font-size: 25px;
+  color: #5E5945;
+}
+
+h2{
+  margin-top: 0px;
+  text-transform: lowercase;
+  font-weight: bold;
+  font-size: 14px;
+  color: #5E5945;
+}
+
+hr {
+  display: none;
+}
+
+p, ol, ul {
+  text-align: left;
+  line-height: 160%;
+}
+
+ul {
+  list-style-type: square;
+}
+
+a {
+  color: #488081;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+.contact fieldset {
+  margin: 0;
+  padding: 10px 10px 10px 10px;
+  width: 500px;
+  border: none;
+}
+
+.contact textarea {
+  width: 90%;
+}
+
+#pagewrapper {
+  background: #FFFFFF url(images/0003a-background.jpg) repeat top left;
+}
+
+/** HEADER */
+
+#header {
+  float: left;
+  width: 690px;
+  margin-right: 1px;
+  padding: 10px;
+}
+
+#header h1 {
+  margin: 0px;
+  padding-top: 12px;
+  text-align: center;
+  font-size: 20px;
+}
+
+#header h2 {
+  margin: 0px;
+  text-align: center;
+  font-size: 12px;
+}
+
+/** MENU */
+
+#menu {
+  margin: 20px auto;
+  width: 690px;
+  padding: 20px 0px 20px 0px;
+  background-color: #5E5945;
+  font-size: 11px;
+  color: #FFFFFF;
+}
+
+#menu ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+#menu li {
+  display: inline;
+  text-align: center;
+}
+
+#menu a {
+  display: inline;
+  padding: 20px;
+  background-color: #5E5945;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+#menu a:hover {
+  padding: 20px;
+  background-color: #AFC797;
+  text-decoration: none;
+  color: #5E5945;
+}
+
+/** CONTENT */
+
+#page {
+  margin: auto;
+  width: 690px;
+  padding: 20px;
+  background-color: #FAF6F6;
+  border-left: 1px solid #5E5945;
+  border-right: 1px solid #5E5945;
+}
+
+#page h2 {
+}
+
+#content {
+   float: left;
+   margin: 0px auto;
+   padding: 0px;
+   width: 500px;
+}
+
+#sidebar {
+   float: right;
+   margin: 0px;
+   padding: 10px;
+   width: 150px;
+   border: 1px dashed #5E5945;
+}
+
+#sidebar ul {
+  list-style-position: inside;
+  padding-left: 3px;
+}
+
+#sidebar ul .fileitem {
+  list-style-type: none;
+}
+
+#sidebar div {
+  margin-bottom: 20px;
+}
+
+#sidebar h2 {
+  font-size: 14px;
+}
+
+#sidebar2 {
+  float: right;
+  margin: 5px 0px 10px 0px;
+  padding: 10px;
+  width: 150px;
+  border: 1px dashed #5E5945;
+}
+
+/** FOOTER */
+
+#footer {
+  margin-top: 30px;
+  clear: both;
+  width: 690px;
+  padding: 10px 0px 10px 0px;
+  background-color: #5E5945;
+  color: #FFFFFF;
+  font-size: 11px;
+}
+
+#footer p {
+  margin: 0 auto 0px auto;
+  text-align: center;
+}
+
+
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  font-weight: normal;
+  font-size: 14px;
+  background: #AFC797;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #000000;
+}
+
+.gallery ul img {
+  border: 3px solid #488081;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #AFC797;
+}
+
+.advert {
+	width: 690px;
+}
+
+.advert a {
+	width: 690px;
+}

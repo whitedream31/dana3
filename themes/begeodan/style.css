@@ -1,0 +1,244 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+800
+500
+240
+
+shared.css required
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	font-size: 13px;
+	color: #EBE6E3;
+}
+
+body, th, td, input, textarea, select, option {
+	font-weight: normal;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+	color: #FED772;
+}
+
+h1 {
+	text-transform: lowercase;
+	letter-spacing: -1px;
+	font-size: 24px;
+}
+
+h2 {
+	text-transform: lowercase;
+	letter-spacing: -1px;
+	font-size: 24px;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+p, ul, ol {
+	line-height: 200%;
+}
+
+blockquote {
+	padding-left: 1em;
+}
+
+blockquote p, blockquote ul, blockquote ol {
+	line-height: normal;
+	font-style: italic;
+}
+
+a {
+	color: #FED772;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #EBE6E3;
+}
+
+#pagewrapper {
+	background: #455900 url(images/img01.jpg) no-repeat top center;
+}
+
+/* Header */
+
+#header {
+	width: 800px;
+	height: 280px;
+	margin: 0 auto;
+}
+
+#header h1, #header p {
+	margin: 0;
+	color: #FED772;
+}
+
+#header h1 {
+	font-size: 30px;
+}
+
+
+#header h1 {
+	padding-top: 100px;
+}
+
+#header a {
+	color: #FED772;
+}
+
+/* Page */
+
+#page {
+	width: 800px;
+	margin: 0 auto;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 500px;
+}
+
+.post {
+	padding: 0 0 20px 0;
+}
+
+.title {
+	margin: 0;
+	border-bottom: 2px solid #7B9418;
+}
+
+.byline {
+	margin: 0;
+	color: #D79B00;
+}
+
+.meta {
+	text-align: right;
+	color: #646464;
+}
+
+.meta .more {
+	padding-left: 20px;
+	background: url(images/img03.gif) no-repeat left center;
+}
+
+.meta .comments {
+	padding-left: 20px;
+	background: url(images/img04.gif) no-repeat left center;
+}
+
+.menu {
+  margin-bottom: 20px;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 240px;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+}
+
+#sidebar li ul {
+	padding: 15px 0;
+}
+
+#sidebar li li {
+	padding-left: 20px;
+	border-bottom: 1px dotted #7B9418;
+	background: url(images/img02.gif) no-repeat 5px 50%;
+}
+
+#sidebar h2 {
+	margin: 0;
+	padding: 5px 0 0 0;
+	border-bottom: 2px solid #7B9418;
+}
+
+#sidebar a {
+	text-decoration: none;
+}
+
+#sidebar a:hover {
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 800px;
+	margin: 0 auto;
+	padding: 20px 0;
+	border-top: 2px solid #7B9418;
+	background: url(images/img07.gif) repeat-x;
+	text-align: center;
+	font-size: smaller;
+}
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  background-color: #FED772;
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #FED772;
+}
+
+.gallery ul img {
+  border: 3px solid #FED772;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #FED772;
+}
+
+.advert {
+  width: 800px;
+}
+
+.advert a {
+  width: 800px;
+}

@@ -1,0 +1,268 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+834
+540
+280
+
+shared.css required
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #333333;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #CCCCCC;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+  width: 90%;
+}
+
+textarea {
+	font: bold 1em "Trebuchet MS", Arial, Helvetica, sans-serif;
+  width: 490px;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+h1 {
+	letter-spacing: -1px;
+	font-size: 2.6em;
+}
+
+h2 {
+	font-size: 1.8em;
+}
+
+h3 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+p, ul, ol {
+	margin-bottom: 1.6em;
+	line-height: normal;
+}
+
+p {
+}
+
+blockquote {
+	font-style: italic;
+}
+
+ul {
+}
+
+ol {
+}
+
+a {
+	color: #FFFFFF;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+small {
+}
+
+hr {
+	display: none;
+}
+
+img {
+	border: none;
+}
+
+#wholepage {
+	background: #666767 url(images/img01.jpg);
+}
+
+/* Header */
+
+#header {
+	width: 870px;
+	height: 274px;
+	margin: 0 auto;
+	background: url(images/img02.jpg) no-repeat;
+}
+
+#header h1 {
+	padding: 110px 0 0 50px;
+}
+
+#header h2 {
+	padding: 0 0 0 50px;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+/* Search */
+
+#search {
+	float: right;
+	width: 200px;
+	padding: 150px 0 0 0;
+}
+
+#search legend {
+	display: none;
+}
+
+#searchfield {
+	width: 140px;
+}
+
+#searchsubmit {
+	display: none;
+}
+
+/* Page */
+
+#page {
+	width: 834px;
+	margin: 0 auto;
+	background: #666767 url(images/img03.jpg);
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 540px;
+}
+
+.post {
+	padding: 0px 20px 0px 40px;
+}
+
+.post .title {
+	margin: 0;
+	padding-left: 30px;
+	background: url(images/img06.gif) no-repeat left center;
+	font-size: 2em;
+}
+
+.post .meta {
+	margin: 0 0 15px 0;
+	padding-top: 5px;
+	background: url(images/img05.gif) repeat-x;
+	line-height: normal;
+}
+
+.post .entry {
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 280px;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin-bottom: 20px;
+	padding: 34px 20px 20px 20px;
+}
+
+#sidebar li ul {
+	line-height: 2em;
+}
+
+#sidebar li li {
+	margin: 0;
+	padding: 0;
+}
+
+#sidebar h2 {
+	margin-bottom: 14px;
+	letter-spacing: -1px;
+}
+
+#sidebar a {
+	border: none;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 870px;
+	height: 131px;
+	margin: 0 auto;
+	padding-top: 30px;
+  padding-bottom: 0;
+	background: url(images/img04.jpg) no-repeat;
+	color: #666767;
+}
+
+#footer p {
+	margin: 10px;
+	text-align: center;
+	line-height: normal;
+	font-size: .9em;
+}
+
+#footer a {
+	color: #666767;
+}
+
+
+
+#productlistheader div, #productlistfooter div, #galleryfooter div {
+  width: 490px;
+  padding: 15px;
+  margin: 10px 0 10px 0;
+	background: url(images/img06.jpg) no-repeat;
+	color: #FFF;
+  height: 51px;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #CCC;
+}
+
+.gallery ul img {
+  border: 3px solid #666;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #972296;
+}
+
+.advert {
+	width: 834px;
+}
+
+.advert a {
+	width: 834px;
+}

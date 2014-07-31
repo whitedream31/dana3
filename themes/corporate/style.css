@@ -1,0 +1,79 @@
+/*
+
+770
+510
+200
+
+shared.css required
+
+*/
+
+/** BASIC */body {	margin: 0px;	padding: 0px;	text-align: left;	font-family: Arial, Helvetica, sans-serif;	font-size: 12px;	color: #444444;}h1 {	font-family: Arial, Helvetica, sans-serif;	color: #60B7DE;	text-transform: lowercase;	font-weight: bold;}h2, h3, h4, h5, h6 {	font-family: Arial, Helvetica, sans-serif;	color: #60B7DE;	text-transform: uppercase;	font-weight: bold;}a {	font-weight: bold;	color: #4773C1;}h2 {	font-size: 18px;}
+a:hover {	text-decoration: none;	color: #73C5E5;}.img1 {	float: left;	margin: 4px 15px 0px 0px;	border: 5px solid #ABDCEF;}
+.text1 {	font-size: 14px;}
+#pagewrapper {
+	background: #73C5E5 url(images/img01.gif) repeat-y center top;
+}
+/** HEADER */#header {	width: 770px;	margin: 0px auto;	background: #FFFBFD url(images/img02.gif) repeat-x left top;	padding: 0px;}#header h1 {	margin: 0px;	padding: 20px;}#header h2 {	margin: 0px;	font-size: 14px;}/** MENU */#menu {	width: 770px;	margin: 0px auto;	padding: 5px 0px 6px 0px;	background-color: #60B7DE;}#menu ul {	margin: 0px;	padding: 0px;	list-style: none;}#menu li {	display: inline;}#menu a {	padding: 5px 15px;	text-transform: uppercase;	text-decoration: none;	font-size: 11px;	font-weight: bold;	color: #FFFFFF;}#menu a:hover {	background-color: #73C5E5;}/** CONTENT */#page {	width: 770px;	margin: 0px auto;	padding: 20px 0px 0px 0px;}#page h2, #page h3, #page h4, #page h5, #page h6 {	font-weight: normal;}#page p, #page ul, #page ol {	line-height: 140%;}#content {	float: left;	width: 510px;	padding: 0px 10px 40px 20px;}#sidebar{	float: right;	width: 200px;	padding: 0px 20px 40px 10px;}#colA {	float: left;/*	width: 230px; */
+	padding: 0px 20px 0px 0px;}#colB {	float: right;/*	width: 230px; */	padding: 10px;}
+#colA div.section {
+  float: left;
+  padding: 10px;
+}
+/** FOOTER */#footer {	clear: both;	width: 770px;	margin: 0px auto;	border-top: 5px solid #60B7DE;}#footer p {	margin: 0px;	padding: 20px 10px 0px 125px;	color: #4773C1;}#border-top {	border-top: 5px solid #60B7DE;}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 505px;
+  font-size: 14px;
+  background-color: #73C5E5;
+  color: #000000;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #73C5E5;
+}
+
+.gallery ul img {
+  border: 3px solid #73C5E5;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #73C5E5;
+}
+
+.advert {
+  width: 770px;
+}
+
+.advert a {
+  width: 770px;
+}

@@ -1,0 +1,305 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+920
+500
+165 x 2
+
+shared.css required
+
+*/
+
+/* Elements */
+
+body {
+	/*background: #000000 url(images/img1.gif) repeat-x left top; */
+	background: #000000;
+	text-align: left;
+	font-family: Tahoman, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	line-height: 20px;
+}
+
+h1 {
+}
+
+h2, h3 {
+	margin-top: 0px;
+}
+
+h4, h5, h6 {
+}
+
+p, ol, ul, dl, blockquote {
+}
+
+a {
+	color: #FFFFFF;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img { border: 2px solid #FFFFFF; }
+
+.img1 {
+	float: left;
+	margin: 5px 15px 0px 0px;
+}
+
+/* Search */
+
+#search {
+ display: none;
+	margin: 0px;
+	padding: 0px;
+	background-color: #CC441B;
+	color: #FFFFFF;
+}
+
+/** Forms */
+
+form {
+	margin: 0px;
+	padding: 15px 0px 0px 25px;
+}
+
+fieldset {
+  margin: 0;
+  padding: 5px;
+}
+
+.input1 {
+	width: 130px;
+	background-color: #FFFFFF;
+	border: 1px solid #363636;
+	color: #FFFFFF;
+}
+
+/* Header */
+
+#header {
+	width: 400px;
+	height: 60px;
+	margin: 0px auto;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+
+#header h1 {
+	float: left;
+	margin: 0px;
+	height: 60px;
+	padding-top: 10px;
+	font-size: 40px;
+	letter-spacing: -2px;
+}
+
+#header h2 {
+	margin: 0px;
+	padding-top: 28px;
+	font-size: 12px;
+	letter-spacing: -1px;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+/* Post */
+
+.latest-post {
+	padding: 0px 2em 1em 3em;
+}
+
+.latest-post h2 {
+	font-size: 1.6em;
+	color: #000000;
+}
+
+.post {
+	padding: 2em 2em 1em 3em;
+	border-top: 1px dashed #823D47;
+}
+
+.post h3 {
+	margin-bottom: .5em;
+	font-size: 1.2em;
+	color: #000000;
+}
+
+.file * {
+	color: #000000;
+}
+
+/* Content */
+
+#page {
+	width: 920px;
+	margin: 0px auto;
+	padding: 20px 0px 0px 0px;
+}
+
+#content {
+	float: right;
+	width: 500px;
+	background-color: #CC441B;
+	padding: 20px 20px;
+	border: 3px solid #666666;
+	color: #FFFFFF;
+}
+
+#content .search {
+	background-color: #000000;
+	margin: 0px;
+	padding-bottom: 10px;
+	height: 50px;
+}
+
+#colTwo {
+	float: left;
+	width: 165px;
+}
+
+#colTwo ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#colTwo li {
+	margin-bottom: 1em;
+	color: #FFFFFF;
+}
+
+#colTwo li li {
+	margin-bottom: 0;
+	padding-left: 2em;
+}
+
+#colTwo a {
+	color: #FF4000;
+}
+
+#colTwo h1, #colTwo h2 {
+	background: url(images/img2.gif) no-repeat;
+	padding: 0px 0 5px 20px;
+	text-transform: uppercase;
+	font: 12px Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: bold; 
+	border-bottom: 1px dashed #666666; 
+	color: #FFFFFF;
+}
+
+#sidebar {
+	float: right;
+	width: 165px;
+	margin-left: 15px;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding-left: 20px;
+	list-style: none;
+}
+
+#sidebar li {
+	margin-bottom: 1em;
+	color: #FFFFFF;
+}
+
+#sidebar li li {
+	margin-bottom: 0;
+	padding-left: 2em;
+}
+
+#sidebar a {
+	color: #FF4000;
+}
+
+#sidebar h1, #sidebar h2 {
+	background: url(images/img2.gif) no-repeat;
+	padding: 0px 0 5px 20px;
+	text-transform: uppercase;
+	font: 12px Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: bold; 
+	border-bottom: 1px dashed #666666; 
+	color: #FFFFFF;
+}
+
+/* Footer */
+
+#footer {
+	width: 400px;
+	margin: 0px auto;
+	padding: 3px 0px;
+	color: #787878;
+}
+
+#footer p {
+	margin: 0px;
+	padding-right: 40px;
+	text-align: right;
+	font-size: 10px;
+}
+
+#footer a {
+	color: #FF4000;
+}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  color: #000000;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #363636;
+}
+
+.gallery ul img {
+  border: 3px solid #363636;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #363636;
+}
+
+.advert {
+  width: 920px;
+}
+
+.advert a {
+  width: 920px;
+}

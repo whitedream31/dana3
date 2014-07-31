@@ -1,0 +1,310 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+760
+500
+220
+
+shared.css required
+
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #FFFFFF;
+	font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #666666;
+}
+
+h1, h2, h3, h4, h5, h6, form {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3 {
+}
+
+h4, h5, h6 {
+}
+
+p, ul, ol, blockquote {
+	margin-top: 0;
+}
+
+a {
+	color: #268ED4;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+img {
+	border: none;
+}
+
+/* Header */
+
+#header {
+	height: 40px;
+	background: #5A5A5A url(images/img01.gif) repeat-x;
+	color: #FFFFFF;
+}
+
+#header h1 {
+	width: 760px;
+	margin: 0 auto;
+	padding: 8px 0 0 0;
+	font-size: 1em;
+}
+
+#header h2 {
+	width: 760px;
+	margin: -18px auto 0 auto;
+	text-align: right;
+	font-size: 0.8em;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+/* Pages */
+
+#pages {
+	height: 110px;
+	padding-top: 10px;
+	background: url(images/img02.gif) repeat-x;
+}
+
+#pages h2 {
+	display: none;
+}
+
+#pages ul {
+	display: block;
+	width: 760px;
+	height: 100px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#pages li {
+	display: inline;
+}
+
+#pages a {
+	display: block;
+	float: left;
+	width: 152px;
+	height: 75px;
+	padding: 35px 0 0 0;
+	text-align: center;
+	text-decoration: none;
+	text-transform: lowercase;
+	letter-spacing: -1px;
+	font-size: 1.6em;
+	font-weight: normal;
+	color: #333333;
+}
+
+#pages a:hover {
+	color: #000000;
+}
+
+#page1 { background: #E5FAA1 url(images/img03.gif) no-repeat; }
+#page2 { background: #97F0E6 url(images/img04.gif) no-repeat; }
+#page3 { background: #F3B6CE url(images/img05.gif) no-repeat; }
+#page4 { background: #FADDA1 url(images/img06.gif) no-repeat; }
+#page5 { background: #C9CDFF url(images/img07.gif) no-repeat; }
+
+#page1:hover, #pages .active #page1 { background-image: url(images/img08.gif); }
+#page2:hover, #pages .active #page2 { background-image: url(images/img09.gif); }
+#page3:hover, #pages .active #page3 { background-image: url(images/img10.gif); }
+#page4:hover, #pages .active #page4 { background-image: url(images/img11.gif); }
+#page5:hover, #pages .active #page5 { background-image: url(images/img12.gif); }
+
+/* Content */
+
+#page {
+	width: 760px;
+	margin: 0 auto;
+	padding: 20px 0 0 0;
+}
+
+/* Latest Post Box */
+
+#latest-post {
+	float: left;
+	width: 500px;
+}
+
+#latest-post .title {
+	letter-spacing: -1px;
+	font-size: 2.2em;
+}
+
+#latest-post .posted {
+	margin-bottom: 2em;
+	font-size: .8em;
+	font-weight: normal;
+}
+
+#latest-post .image {
+	float: left;
+	margin: .3em 1em 0 0;
+}
+
+#latest-post p, #latest-post blockquote, #latest-post ul, #latest-post ol {
+	line-height: 155%;
+}
+
+/* Recent Posts Box */
+
+#recent-posts {
+	float: right;
+	width: 210px;
+}
+
+#recent-posts h3 {
+	width: 210px;
+	height: 32px;
+	padding: 12px 0 0 10px;
+	background: #5A5A5A url(images/img13.gif);
+	font-size: 1em;
+	color: #FFFFFF;
+}
+
+#recent-posts ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#recent-posts li {
+	padding: 5px 10px;
+	border-bottom: 1px solid #5A5A5A;
+}
+
+#recent-posts li:hover {
+	background: #EFEFEF;
+}
+
+/* Column One */
+
+#content {
+	padding-bottom: 20px;
+}
+
+/* Column Two */
+
+#sidebar {
+	padding: 20px;
+	background: url(images/img02.gif) repeat-x;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li, #sidebar form {
+	padding: 10px;
+}
+
+#sidebar li {
+	display: block;
+	float: left;
+	width: 220px;
+}
+
+#sidebar li ul {
+}
+
+#sidebar li li {
+	display: list-item;
+	float: none;
+	padding: 0 0 0 10px;
+}
+
+#sidebar h2 {
+	margin: 0 0 .5em 0;
+	padding: 0 0 0 10px;
+	background: url(images/img15.gif) no-repeat left center;
+	font-size: 1em;
+}
+
+/* Footer */
+
+#footer {
+	width: 720px;
+	height: 100px;
+	margin: 0 auto;
+	padding: 20px;
+	background: url(images/img02.gif) repeat-x;
+}
+
+#footer p {
+	text-align: center;
+	font-size: x-small;
+}
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contactinput {
+  width: 90%;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #BCE8EC;
+  color: #000000;
+}
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul img {
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #9F9F9F;
+}
+
+.advert {
+  width: 760px;
+}
+
+.advert a {
+  width: 760px;
+}

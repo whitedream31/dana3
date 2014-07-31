@@ -1,0 +1,214 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+shared.css required
+
+800
+500
+179
+
+*/
+
+body {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+#pagewrapper {
+	background: #C62020 url(images/img8.jpg) repeat-x top left;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	padding: 0;
+	color: #FFFFFF;
+}
+
+h1 { font-size: 34px; }
+
+h2 {
+	margin-bottom: 10px;
+	padding: 20px 0 10px 0;
+	font-size: 24px;
+	border-bottom: #000000 2px solid;
+}
+
+h3 {
+	padding: 0 0 10px 0;
+	font-size: 13px;
+	border-bottom: #000000 2px solid;
+}
+
+p {
+	margin-top: 10px;
+	text-align: left;
+	line-height: 160%;
+}
+
+a {
+	color: #F5C314;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.list li {
+	padding: 5px 0;
+	background: url(images/img5.gif) repeat-x;
+}
+
+.list li.first {
+	background: none;
+}
+
+/* Header */
+
+#header {
+	width: 681px;
+	margin: 0 auto;
+	padding: 40px 0 0 13px;
+	height: 90px;
+	background: url(images/img1a.gif) repeat-x left bottom;
+}
+
+#header h1 {
+	float: left;
+}
+
+#header h2 {
+	display: none;
+}
+
+#header ul {
+	float: right;
+	margin: 0;
+	padding: 15px 0 0 0;
+	list-style: none;
+}
+
+#header li {
+	display: inline;
+}
+
+#header a {
+	display: block;
+	float: left;
+	padding: 0 14px 0 20px;
+	background: url(images/img2.gif) no-repeat left center;
+	text-decoration: none;
+	text-transform: uppercase;
+	font: bold 12px;
+	color: #FFFFFF;
+}
+
+#header a:hover {
+	text-decoration: underline;
+}
+
+#header .first a {
+	background: none;
+}
+
+/* Content */
+
+#page {
+	width: 800px;
+	margin: 0 auto;
+}
+
+#sidebar {
+	float: right;
+	width: 179px;
+	padding: 0 29px 0 0;
+}
+
+#sidebar h2 {
+	margin-top: 0px;
+}
+
+#content {
+	float: left;
+	width: 500px;
+	padding: 0 0 0 21px;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 694px;
+	margin: 0 auto;
+	padding: 30px 0 0 0;
+}
+
+#footer p {
+	padding: 20px 0 0 0;
+	border-top: #000000 2px solid;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #000;
+  color: #FFF;
+}
+
+.gallery {
+  color: #FFF;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #000;
+}
+
+.gallery ul img {
+  border: 3px solid #000;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #000;
+}
+
+.advert {
+  width: 800px;
+}
+
+.advert a {
+  width: 800px;
+}

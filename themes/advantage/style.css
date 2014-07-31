@@ -1,0 +1,373 @@
+/*Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+Modified by Whitedream Software
+
+820
+560
+240
+
+share.css required
+
+*/
+
+*{
+  margin:0;
+  padding:0;
+}
+
+body{
+  margin:0;
+  font:normal small "Trebuchet MS",Arial,Helvetica,sans-serif;
+  color:#333333;
+}
+
+h1,h2,h3{
+  color:#333333;
+}
+
+h3{
+  font-size:1em;
+}
+
+p,blockquote,ul,ol,h2,h3{
+  margin-top:1em;
+  line-height:125%;
+  text-align:left;
+}
+
+blockquote{
+  margin-left:2em;
+  margin-right:2em;
+  font-style:italic;
+}
+
+ul{
+  margin-left:3em;
+}
+
+ul li{}
+
+ol{
+  margin-left:3em;
+}
+
+ol li{}
+
+a{
+  text-decoration:none;
+  color:#972296;
+}
+
+a:hover{
+  text-decoration:underline;
+  color:#000000;
+}
+
+img{}
+
+img.left{
+  float:left;
+  margin:0 20px 0 0;
+}
+
+img.right{
+  float:right;
+  margin:0 0 0 20px;
+}
+
+#pagewrapper{
+  background:#FFFFFF url(images/img01.gif) repeat-x;
+}
+
+/* Boxed Style */
+
+.boxed{}
+
+.boxed .title{
+  padding:10px 20px;
+  text-transform:uppercase;
+  font-size:1em;
+}
+
+.boxed .content{
+  padding:20px;
+  background:url(images/img05.gif) repeat-x;
+}
+
+/* Post */
+
+.post{}
+
+.post .title{
+  padding:10px 20px;
+  text-transform:uppercase;
+  font-size:1em;
+}
+
+.post .story{
+  padding:20px 20px 0 20px;
+  background:url(images/img05.gif) repeat-x;
+}/* Header */
+
+#header{
+  width:820px;
+  height:140px;
+  margin:0 auto;
+}
+
+/* Header > Logo */
+
+#logo{
+  float:left;
+  height:30px;
+  margin:0;
+  padding:30px 0 0 0;
+  width:auto;
+}
+
+#logo h1{
+  font-size:2.2em;
+}
+
+#logo h2{
+  margin-top:-5px;
+  font-size:1em;
+}
+
+#logo a{
+  text-decoration:none;
+  color:#000000;
+}
+
+/* Header > Menu */
+
+#menu{
+  float:right;
+}
+
+#menu ul{
+  margin:0;
+  padding-top:0px;
+  list-style:none;
+}
+
+#menu li{
+  display:inline;
+}
+
+#menu a{
+  display:block;
+  float:left;
+  height:24px;
+  margin-left:8px;
+  padding:15px;
+  background:url(images/img02.gif) repeat-x;
+  color:#000000;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:1em;
+}
+
+#menu a:hover{
+  background-image:url(images/img04.gif);
+  color:#FFFFFF;
+}
+
+#menu .active a{
+  background-image:url(images/img03.gif);
+  color:#FFFFFF;
+}
+
+/* Content */
+
+#content{
+  float:left;
+  width:560px;
+}
+
+/* Content > Main */
+
+#page{
+  width:820px;
+  margin:0 auto;
+  padding-top:20px;
+  padding-bottom:50px;
+}
+
+/* Content > Main > Welcome */
+
+#welcome{}
+
+/* Content > Sidebar */
+
+#sidebar{
+  float:right;
+  width:240px;
+}
+
+#login{}
+
+#login form{}
+
+#login fieldset{
+  border:none;
+}
+
+#login legend{
+  display:none;
+}
+
+#login label{
+  display:block;
+}
+
+#login input{
+  margin-bottom:10px;
+  padding:2px 5px;
+  border:1px solid #972296;
+  font:normal small "Trebuchet MS",Arial,Helvetica,sans-serif;
+  color:#666666;
+}
+
+#inputtext1,#inputtext2{
+  width:98%;
+}
+
+#inputsubmit1{
+  margin:0;
+  padding:0;
+  background:url(images/img05.gif) repeat-x;
+}
+
+/* Content > Sidebar > Updates*/
+
+#updates{}
+
+#updates ul{
+  margin:0;
+  list-style:none;
+}
+
+#updates h3{
+  font-size:.8em;
+}
+
+#updates p{
+  font-size:.8em;
+}
+
+#updates a{
+  text-decoration:none;
+}
+
+/** CONTACT */
+fieldset .contact{
+  border: thin solid #972296;
+}
+
+.contact label{
+  color:#000000;
+  margin:15px 5% 0 5%;
+  font-size:16px;
+}
+
+.contactinput{
+  text-align:left;
+  font-size:16px;
+  background:#FFFFFF;
+  color:#000000;
+  font-weight:normal;
+}
+
+/* Footer */
+
+#footer{
+  clear:both;
+  width:820px;
+  height:80px;
+  margin:30px auto;
+  padding:30px 50px;
+  background:url(images/img07.gif) no-repeat center top;
+}
+
+#footer p{
+  margin:0;
+  text-align:center;
+  font-size:x-small;
+}
+
+#footer a{
+  text-decoration:underline;
+  color:#666666;
+}
+
+#footer a:hover{
+  text-decoration:none;
+}
+
+/* Footer > Legal */
+
+#legal{}
+
+/* Footer > Links */
+
+#links{}
+
+.articleitem{
+  width:560px;
+  font-size:1em;
+  color:#000000;
+  margin:5px 0 20px 0;
+  border-top:thin solid #000000;
+  padding-left:4px;
+  padding-right:4px;
+  padding-bottom:5px;
+}
+
+.articleitem h3{
+  font-weight:bold;
+  color:#333333;
+  font-size:1.8em;
+}
+
+.articledate{
+  color:#787872;
+  font-size:0.75em;
+}
+
+
+#productlist h3{
+  font-size:18px;
+  color:#333333;
+}
+
+.productitemsection{
+  border-bottom:thin dotted #000000;
+}
+
+#productlistheader,#productlistfooter,#galleryfooter{
+  font-size:14px;
+  background:url(images/img02.gif) repeat-x;
+  color:#000000;
+}
+
+#productlistheader li a,#productlistfooter li a,#galleryfooter li a{
+  color:#FFFFFF;
+}
+
+.gallery{
+  color:#000000;
+}
+
+.gallery ul a:hover img{
+  border:3px solid #972296;
+}
+
+.advert{
+  width:820px;
+}
+
+.advert a{
+  width:820px;
+}

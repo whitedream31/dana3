@@ -1,0 +1,220 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+shared.css required
+
+
+241
+
+*/
+
+body {
+	margin: 20px;
+	padding: 0;
+	background: #CCCCCC;
+}
+
+body, th, td, input, textarea, select {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #555555;
+}
+
+h1, h2, h3 {
+	color: #3A570F;
+}
+
+h1 {
+	letter-spacing: -2px;
+	font-size: 2.5em;
+}
+
+h2 {
+	font-size: 2em;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+input, textarea, select {
+	color: #000000;
+}
+
+a {
+	color: #3A570F;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: left;
+	width: 241px;
+}
+
+/* Widgets */
+
+#widgets {
+	background: #658634 url(images/img02.gif) repeat-y;
+}
+
+#widgets-top {
+	height: 20px;
+	background: url(images/img01.gif) no-repeat;
+}
+
+#widgets * {
+	color: #FFFFFF;
+}
+
+#widgets ul {
+	margin: 0;
+	padding: 0 20px 100px 20px;
+	background: url(images/img04.jpg) no-repeat left bottom;
+	list-style: none;
+}
+
+#widgets li {
+}
+
+#widgets li ul {
+	padding: 0 0 20px 6px;
+	background: none;
+	line-height: 180%;
+}
+
+#widgets li li {
+	padding-left: 12px;
+	background: url(images/img05.gif) no-repeat left center;
+}
+
+#widgets h2 {
+	margin: 0;
+	padding: 0 0 20px 0;
+	font-size: 1em;
+}
+
+/* Page */
+
+#page {
+	margin-left: 250px;
+}
+
+/* Search */
+
+#search {
+	height: 51px;
+	background: url(images/img06.gif) repeat-x;
+}
+
+#search form {
+	height: 51px;
+	margin: 0;
+	padding: 0;
+	background: url(images/img07.jpg) no-repeat;
+}
+
+#search fieldset {
+	height: 40px;
+	margin: 0;
+	padding: 11px 20px 0 0;
+	background: url(images/img08.gif) no-repeat right top;
+	border: none;
+	text-align: right;
+  display: none;
+}
+
+/* Content */
+
+#content {
+}
+
+#content h1, #content h2 {
+	font-weight: normal;
+	margin-top: 0;
+}
+
+.pagetitle {
+	margin: 0 0 10px 0;
+	padding-top: 27px;
+}
+
+.post {
+	margin-bottom: 10px;
+	background: #ADB79E url(images/img09.gif) repeat-y right top;
+}
+
+.post h2, .post h3 {
+	margin: 0;
+	padding: 0 20px;
+}
+
+.byline {
+	margin: 0 20px;
+	border-top: 2px solid #C2C9B6;
+}
+
+.post p {
+	padding: 0px 20px 0 20px;
+}
+
+.meta {
+	margin: 0;
+	padding: 0 20px;
+}
+
+/* Rounded Corners */
+
+.ct {
+}
+
+.ct .l {
+	background: url(images/img10.gif) no-repeat;
+}
+
+.ct .r {
+	height: 15px;
+	background: url(images/img11.gif) no-repeat right top;
+}
+
+.cb {
+	background: url(images/img12.gif) repeat-x left bottom;
+}
+
+.cb .l {
+	background: url(images/img13.gif) no-repeat left bottom;
+}
+
+.cb .r {
+	height: 15px;
+	background: url(images/img14.gif) no-repeat right bottom;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	padding-top: 10px;
+	font-size: smaller;
+}
+
+#footer p {
+	margin: 0;
+}
+
+
+
+
+.advert {
+  width: 100%;
+}
+
+.advert a {
+  width: 100%;
+}

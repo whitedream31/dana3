@@ -1,0 +1,462 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+960
+580
+240
+
+shared.css required
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0px;
+	background: #F5F5F5;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #4D4D4D;
+}
+
+h1, h2, h3 {
+	color: #AA2808;
+}
+
+h1 {
+}
+
+h2 {
+}
+
+h3 {
+}
+
+p, blockquote, ul, ol {
+	margin-bottom: 20px;
+	line-height: 2em;
+}
+
+p {
+}
+
+blockquote {
+}
+
+ul, ol, li {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+a {
+	text-decoration: underline;
+	color: #00A8E9;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #838383;
+}
+
+#wholepage {
+	background: #F5F5F5 url(images/img01.jpg) repeat-x left top;
+}
+
+/* Wrapper */
+
+#wrapper {
+}
+
+/* Header */
+
+#header {
+	width: 960px;
+	height: 70px;
+	margin: 0 auto;
+}
+
+/* Logo */
+
+#logo {
+	float: left;
+	height: 70px;
+	margin: 0px;
+	padding-left: 30px;
+}
+
+#logo h1 {
+	margin: 0;
+	padding: 0;
+	font: normal 36px Georgia, "Times New Roman", Times, serif;
+	color: #FFFFFF;
+}
+
+#logo h2, #logo p {
+	margin: -2px 0 0 0;
+	padding: 0;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#logo a {
+	text-decoration: none;
+}
+
+/* Menu */
+
+#menu {
+	width: 960px;
+	height: 60px;
+	margin: 0 auto;
+	background: url(images/img02.jpg) no-repeat left top;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 20px 0 0 0px;
+	list-style: none;
+	line-height: normal;
+	margin-left: 30px;
+}
+
+#menu li {
+	display: inline;
+	text-align: center;
+}
+
+#menu a {
+	display: block;
+	float: left;
+	margin-right: 3px;
+	padding: 5px 20px 5px 20px;
+	text-decoration: none;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 11px;
+	font-weight: bold;
+	color: #525252;
+}
+
+#menu a:hover, #menu .active a {
+	background: #FFFFFF;
+	color: #525252;
+}
+
+#splash {
+	width: 940px;
+	height: 299px;
+	margin: 0 auto;
+}
+
+/* Search */
+
+#header-search {
+	width: 940px;
+	height: 51px;
+	margin: 0 auto;
+	padding: 0px 0px 0px 0px;
+}
+
+#header-search form {
+	float: right;
+	width: 300px;
+	margin: 0;
+	padding: 12px 0px 0px 0px;
+}
+
+#header-search fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#header-search-text {
+	width: 200px;
+	padding: 2px 3px;
+	background: #1E1E1E;
+	border: none;
+	color: #4D4D4D;
+}
+
+#header-search-submit {
+	background: none;
+	border: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #E4E4E4;
+}
+
+#search {
+	height: 51px;
+	margin: 0 auto;
+	padding: 0px 0px 60px 0px;
+}
+
+#search form {
+	margin: 0;
+	padding: 12px 0px 0 0;
+}
+
+#search fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#search input {
+	float: left;
+	font: 12px Arial, Helvetica, sans-serif;
+}
+
+#search-text {
+	width: 160px;
+	height: 18px;
+	padding: 3px 0 3px 5px;
+	border: none;
+	color: #000000;
+}
+
+#search-submit {
+	margin-left: 10px;
+	padding: 4px 4px;
+	border: none;
+	background: #000000;
+	color: #FFFFFF;
+}
+
+/* Page */
+
+#page {
+	width: 960px;
+	margin: 0 auto;
+	background: url(images/img03.jpg) repeat-y left top;
+}
+
+#page-bgtop {
+	padding: 0px 0px 0px 20px;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 580px;
+	padding-top: 10px;
+}
+
+.post {
+	margin: 0px 0px 10px 0px;
+}
+
+.post .title {
+	margin: 0px;
+	padding: 0px 0px 5px 0px;
+	color: #232F01;
+}
+
+.post .title a {
+	padding: 4px 35px 4px 15px;
+	background: #8DD006;
+	text-decoration: none;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+.post .entry {
+	padding: 10px 0px;
+}
+
+.post img {
+}
+
+.post .meta {
+	text-align: right;
+	padding: 0px 0 20px 0;
+	font-weight: bold;
+	color: #202020;
+}
+
+.post .byline {
+	float: right;
+	margin-top: -30px;
+	font-size: 12px;
+	color: #5E5E5E;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 240px;
+	margin: 20px 0px;
+	padding: 30px 30px 30px 30px;
+	color: #D4C792;
+	background: #212121;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: normal;
+}
+
+#sidebar li {
+	margin-bottom: 1px;
+}
+
+#sidebar li ul {
+	margin: 0px;
+	padding: 0px 0px 40px 0px;
+}
+
+#sidebar li li {
+	margin: 0;
+	padding: 9px 0px;
+	border: none;
+	border-bottom: 1px solid #171717;
+}
+
+#sidebar h2 {
+	margin: 0px;
+	padding: 0 0px 5px 0px;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 160%;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+#sidebar h3 {
+	font-size: 100%;
+	color: #FFFFFF;
+}
+
+#sidebar div {
+  margin-bottom: 10px;
+}
+
+#sidebar p {
+	margin: 0;
+	line-height: normal;
+}
+
+#sidebar a {
+	border: none;
+	text-decoration: none;
+	color: #BFBFBF;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+.fileitem  {
+  text-decoration: none;
+  color: red;
+}
+
+.fileitem  img {
+  border: 0;
+  margin-right: 10px;
+}
+
+/* Submenu */
+
+#submenu {
+}
+
+/* News */
+
+#news {
+}
+
+#news a {
+	font-size: 85%;
+}
+
+/* Footer */
+
+#footer {
+	width: 960px;
+	height: 100px;
+	margin: 0 auto;
+	padding: 5px 0px 0px 0px;
+	background: url(images/img04.jpg) no-repeat left top;
+	color: #9C9C9C;
+}
+
+#footer p {
+	margin: 0;
+	text-align: center;
+	font-size: 77%;
+}
+
+#footer a {
+	text-decoration: underline;
+	color: #808080;
+}
+
+#footer a:hover {
+	text-decoration: none;
+}
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000000;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #8DD006;
+  color: #FFFFFF;
+  font-weight: normal;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+	background-color: #8DD006;
+	color: #FFFFFF;
+}
+
+.gallery {
+	color: #000000;
+  display: block;
+}
+
+.gallery table {
+  border: 3px solid #0065CC;
+}
+
+.gallery ul img {
+  border: 3px solid #0065CC;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #00A8E9;
+}
+
+.advert {
+	width: 760px;
+}
+
+.advert a {
+	width: 760px;
+}

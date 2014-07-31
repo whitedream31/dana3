@@ -1,0 +1,300 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+758
+500
+218
+
+shared.css required
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #6DCFF6;
+	font: normal 13px Georgia, "Times New Roman", Times, serif;
+	color: #3F4C6B;
+}
+
+h2, h3 {
+	color: #313131;
+}
+
+h1 {
+	margin-bottom: .5em;
+	font-size: 300%;
+	font-weight: normal;
+	letter-spacing: -2px;
+	color: #0033CC;
+}
+
+h2 {
+	margin-bottom: .5em;
+	font-size: 160%;
+	font-weight: normal;
+	letter-spacing: -1px;
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 100%;
+	font-weight: bold;
+}
+
+p, blockquote, ol, ul {
+	margin-bottom: 1.5em;
+	text-align: left;
+	line-height: 167%;
+	font-size: 107%;
+}
+
+blockquote {
+	margin-left: 2em;
+}
+
+ol {
+	margin-left: 2em;
+}
+
+ul {
+	list-style: none;
+}
+
+ul li {
+}
+
+a {
+	border-bottom: 1px dotted #FFFFFF;
+	text-decoration: none;
+	color: #0033CC;
+}
+
+a:hover {
+	border-bottom: none;
+}
+
+#pagewrapper {
+	background: #6DCFF6 url(images/img1.jpg) no-repeat center top;
+}
+
+/* Menu */
+
+#menu {
+	width: 700px;
+	height: 20px;
+	margin: 0 auto;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0;
+	text-align: right;
+	list-style: none;
+}
+
+#menu li {
+	padding: 0;
+	display: inline;
+	background: none;
+}
+
+#menu a {
+	padding-left: 20px;
+	border: none;
+	font: bold 77% Verdana, Arial, Helvetica, sans-serif;
+	color: #0033CC;
+}
+
+#menu a:hover {
+	color: #FFFFFF;
+}
+
+#menu b {
+	text-decoration: underline;
+}
+
+/* Logo */
+
+#logo {
+	width: 700px;
+	height: 140px;
+	margin: 0 auto;
+	border-bottom: none;
+	text-decoration: none;
+	text-transform: lowercase;
+	font-style: italic;
+}
+
+#logo h1 {
+	margin: 0;
+	padding: 20px 0 0 60px;
+	letter-spacing: 5px;
+	font-size: 30px;
+	color: #0033CC;
+}
+
+#logo h2 {
+	margin: -10px 0 0 0;
+	padding: 0 0 0 200px;
+	letter-spacing: 3px;
+	font-size: 24px;
+	color: #00AEEF;
+}
+
+/* Page */
+
+#page {
+	width: 758px;
+	margin: 0 auto;
+	background: url(images/img3.gif) repeat-y;
+}
+
+/* Content */
+
+#content {
+	float: right;
+	width: 500px;
+	padding: 5px 0 0 30px;
+}
+
+#welcome {
+	margin-bottom: 20px;
+	padding-bottom: 1px;
+}
+
+.floating-box {
+	float: left;
+	width: 450px;
+}
+
+.floating-box p, .floating-box blockquote, .floating-box ol, .floating-box ul {
+	font-size: 92%;
+}
+
+.floating-box img {
+	border: 5px solid #FFFFFF;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: left;
+	width: 218px;
+	padding: 0 5px 10px 1px;
+/*	background: url(images/img2.jpg) no-repeat; */
+}
+
+#sidebar div {
+	width: 208px;
+  margin: 10px 5px 10px 5px;
+}
+
+#sidebar .title {
+	height: 30px;
+	padding: 10px 0 0 20px;
+/*	background: url(images/img5.gif) repeat-x; */
+}
+
+#sidebar .content {
+	padding: 10px 20px;
+}
+
+#sidebar blockquote {
+	margin: 0;
+}
+
+#sidebar blockquote p {
+}
+
+#links {
+}
+
+#links ul {
+}
+
+#links li {
+	padding: 5px 0;
+}
+
+#links a {
+	border: none;
+	color: #FFFFFF;
+}
+
+#links a:hover {
+	border-bottom: 1px dotted #FFFFFF;
+}
+
+/** CONTACT */
+
+.contact {
+  margin: 20px 20px 20px 20px;
+}
+
+.contact label {
+  float: none;
+  display: block;
+  color: #3F4C6B;
+  margin: 15px 5% 0 5%;
+  font-size: 16px;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #B2B7C4;
+  color: #000000;
+  font-weight: normal;
+}
+
+/* Footer */
+
+#footer {
+	width: 758px;
+	margin: 0 auto;
+	padding: 20px 0;
+	background: url(images/img4.gif) no-repeat;
+}
+
+#footer .links {
+}
+
+#footer .legal {
+}
+
+
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  font-weight: normal;
+  font-size: 14px;
+  background: #00AEEF;
+	color: #000000;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #FFFFFF;
+}
+
+.gallery ul img {
+  border: 3px solid #666666;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #972296;
+}
+
+.advert {
+	width: 758px;
+}
+
+.advert a {
+	width: 758px;
+}

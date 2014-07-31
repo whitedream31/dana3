@@ -1,0 +1,265 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+740
+500
+220
+
+shared.css required
+
+*/
+
+body {
+	background: #FFFFFF;
+	font: normal small "Comic Sans MS", Arial, Helvetica, sans-serif;
+	color: #666666;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3 {
+}
+
+h4, h5, h6 {
+}
+
+p, ul, ol, blockquote {
+	margin-top: 0;
+}
+
+a {
+	color: #344E44;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img {
+	border: none;
+}
+
+fieldset {
+  width: 80%;
+}
+
+/* Header */
+
+#header {
+	width: 740px;
+	height: 150px;
+	margin: 0 auto 20px auto;
+	background: #344E44 url(images/img1.gif);
+	color: #FFFFFF;
+}
+
+#header h1 {
+	float: left;
+	padding: 20px;
+	font-size: 3em;
+}
+
+#header h2 {
+	float: left;
+	padding: 40px 0 0 0;
+}
+
+#header a {
+}
+
+/* Pages */
+
+#pages ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: 1.4em;
+}
+
+#pages li {
+  height: 2.5em;
+}
+
+#pages a {
+	text-decoration: none;
+	color: #000000;
+}
+
+#pages a:hover {
+	text-decoration: underline;
+}
+
+/* page */
+
+#page {
+	width: 740px;
+	margin: 0 auto;
+}
+
+/* Column One */
+
+#content {
+	float: left;
+	width: 500px;
+}
+
+#content .title {
+	font-size: 2em;
+}
+
+#content .posted {
+	margin-bottom: 1em;
+}
+
+#content .meta {
+	background: url(images/img3.gif) repeat-x left bottom;
+	margin-bottom: 3em;
+	padding-bottom: 3em;
+	text-align: right;
+	font-style: italic;
+	font-size: .8em;
+}
+
+/* Column Two */
+
+#sidebar {
+	float: right;
+	width: 220px;
+}
+
+#sidebar form {
+	margin: 0;
+	padding: 0;
+}
+
+#sidebar #textfield1 {
+	width: 10em;
+	padding: .25em;
+	background: #344E44 url(images/img1.gif) no-repeat center center;
+	border: none;
+	font: bold small "Comic Sans MS", Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+
+#sidebar #submit1 {
+	width: 3em;
+	background: #344E44 url(images/img1.gif) no-repeat center center;
+	border: none;
+	font: bold small "Comic Sans MS", Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+	margin-bottom: 1em;
+}
+
+#sidebar li ul {
+}
+
+#sidebar li li {
+	margin: 0;
+	padding-left: 2em;
+}
+
+#sidebar li h2, #sidebar li h3 {
+	width: 220px;
+	height: 30px;
+	margin-bottom: 0.8em;
+	background: #344E44 url(images/img2.gif);
+	text-align: center;
+	color: #FFFFFF;
+}
+
+#sidebar li h2 {
+	font-size: 1.3em;
+}
+
+#sidebar li h3 {
+	font-size: 1em;
+}
+
+#sidebar fieldset {
+  width: 200px;
+}
+
+/* Footer */
+
+#footer {
+	width: 740px;
+	height: 40px;
+	margin: 0 auto;
+	padding-top: 5px;
+	background: url(images/img4.gif);
+}
+
+#footer p {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#footer a {
+	color: #FFFFFF;
+}
+
+fieldset {
+  border: none;
+}
+
+textarea, fieldset {
+  width: 500px;
+}
+
+
+#main .content #productlist td {
+  background-color: #FFFFFF;
+  background-image: none;
+  padding-left: 22px;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 740px;
+  font-weight: normal;
+  font-size: 14px;
+  padding-left: 22px;
+  color: #FFFFFF;
+	background: #FFFFFF url(images/img1.gif) no-repeat center center;
+  height: 60px;
+  margin-bottom: -15px;
+}
+
+.gallery {
+	color: #000000;
+  display: block;
+  border: medium;
+  border-color: black;
+}
+
+.gallery ul img {
+  border: 3px solid #344E44;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #666666;
+}
+
+.advert {
+	width: 740px;
+}
+
+.advert a {
+	width: 740px;
+}

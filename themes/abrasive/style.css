@@ -1,0 +1,368 @@
+/*Design by NodeThirtyThree for Free CSS Templates
+http://www.nodethirtythree.com/ + http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+920
+650
+180
+
+share.css required
+
+background: #FFFFFF bg01.jpg
+
+*/
+
+body {
+  margin: 0px;
+  padding: 0px;
+  background: #FFFFFF;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #797979;
+}
+
+#pagewrapper {
+  background: #FFFFFF url(images/bg01.jpg) repeat left top;
+}
+
+h1, h2, h3 {
+  margin-top: 0px;
+  text-transform: lowercase;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 42px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+p, ul, ol {
+  margin-top: 0px;
+  line-height: 160%;
+}
+
+ul, ol {}
+
+a {
+  color: #0098A4;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.alignleft {
+  float: left;
+}
+
+.alignright {
+  float: right;
+}
+
+.aligncenter {
+  margin: 0px auto;
+}
+
+img.alignleft {
+  margin-right: 20px;
+}
+
+img.alignright {
+  margin-left: 20px;
+}
+
+a img {
+  border: none;
+}
+
+/* Wrapper */
+
+#wrapper {
+  background: url(images/bg02.jpg) repeat-x left top;
+  width: 920px;
+  margin: 0px auto;
+}
+
+/* Header */
+
+#header {
+  width: 920px;
+  height: 130px;
+  margin: 0px auto;
+  background: url(images/bg03.jpg) no-repeat left top;
+}
+
+/* Logo */
+
+#logo {
+  float: none;
+}
+
+#logo h1 {
+  float: left;
+  margin: 0px;
+}
+
+#logo h1 {
+  padding: 60px 0px 0px 30px;
+}
+
+#logo a {
+  text-decoration: none;
+  color: #797979;
+}
+
+#logo a:hover {
+  text-decoration: underline;
+  color: #0098A4;
+}
+
+#header h2, #header h2 a {
+  font-size: 13px;
+  color: #9F9F9F;
+}
+
+#header h2 {
+  padding: 20px;
+}
+
+/* Menu */
+
+#menu {}
+
+#menu ul {
+  margin: 0px;
+  padding: 78px 30px 0px 0px;
+  list-style: none;
+}
+
+#menu a {
+  padding: 0px 20px 0px 22px;
+  text-decoration: none;
+  text-transform: lowercase;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 14px;
+}
+
+#menu a:hover {
+  text-decoration: underline;
+  color: #0098A4;
+}
+
+/* Page */
+
+#page {
+  width: 920px;
+  margin: 0px auto;
+  background: url(images/bg04.jpg) repeat-y left top;
+}
+
+#bgtop {
+  background: url(images/bg05.jpg) no-repeat left top;
+}
+
+#bgbottom {
+  background: url(images/bg06.jpg) no-repeat left bottom;
+}
+
+/* Content */
+
+#content {
+  float: left;
+  width: 650px;
+  padding: 50px 0px 0px 35px;
+}
+
+.post p {
+  color: #000000;
+}
+
+.post .title {
+  padding: 0px 0px 0px 15px;
+  background: url(images/img03.gif) no-repeat left top;
+}
+
+.post .title h2, .post .title h3 {
+  margin: 0px;
+}
+
+.post .title h2 a, .post .title h3 a {
+  text-decoration: none;
+  color: #9F9F9F;
+}
+
+.post .title h2 a:hover, .post .title h3 a:hover {
+  text-decoration: underline;
+}
+
+.post .title p {
+  margin: 0px;
+  text-transform: lowercase;
+  font-size: 16px;
+  color: #8D8D8D;
+}
+
+.post .title p a {
+  text-decoration: none;
+  color: #8D8D8D;
+}
+
+.post .entry {
+  padding: 15px 15px 25px 15px;
+}
+
+/* Sidebar */
+
+#sidebar {
+  float: right;
+  width: 180px;
+  padding: 50px 10px 0px 0px;
+  color: #000000;
+}
+
+#sidebar ul {
+  margin: 2px;
+  padding: 0px;
+  list-style: none;
+}
+
+#sidebar li {}
+
+#sidebar li ul {
+  margin: 15px 15px 25px 15px;
+}
+
+#sidebar li li {
+  margin: 2px;
+  font-size: 11px;
+}
+
+#sidebar h2 {
+  height: 27px;
+  padding: 3px 0px 0px 15px;
+  background: url(images/img04.gif) no-repeat left top;
+  font-size: 20px;
+  color: #FFFFFF;
+  margin-top: 20px;
+  margin-bottom: 10px
+}
+
+#sidebar h3 {
+  margin: 0px;
+  padding: 20px 0px 0px 15px;
+  font-size: 18px;
+  color: #FFFFFF;
+}
+
+#sidebar a {
+  color: #BCE8EC;
+}
+
+/* Footer */
+
+#footer {
+  width: 920px;
+  height: 100px;
+  margin: 0px auto;
+  background: url(images/bg07.jpg) no-repeat left top;
+}
+
+#footer p {
+  margin: 0px;
+  padding: 30px 0px 0px 0px;
+  text-align: center;
+  font-size: 11px;
+}
+
+#footer a {
+  color: #797979;
+}
+
+
+/** CONTACT */
+
+.contact label {
+  color: #000000;
+  font-size: 16px;
+  margin: 15px 5% 0 5%;
+}
+
+.contact .contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: normal;
+}
+
+.contactinput {
+  font-size: 16px;
+  background: #FFFFFF;
+  color: #000000;
+}
+
+/* product items */
+
+#productlist h3 {
+  font-size: 18px;
+  color: #9F9F9F;
+  font-weight: bold;
+}
+
+.productitemsection {
+  border-bottom: thin dotted #000000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  font-size: 14px;
+  background-color: #9F9F9F;
+  font-weight: normal;
+  color: #000000;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  font-weight: bold;
+}
+
+/* gallery items */
+
+.gallery {
+  color: #000000;
+}
+
+.gallery table {
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul img {
+  border: 3px solid #9F9F9F;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #9F9F9F;
+}
+
+ul li.fileitem {
+  list-style-type: none;
+  list-style-position: inside;
+  margin-left: -10px;
+  background: none;
+}
+
+.advert {
+  width: 920px;
+}
+
+.advert p {
+  width: 920px;
+}

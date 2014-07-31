@@ -1,0 +1,225 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+shared.css required
+
+940
+190 x 2
+500
+
+*/
+
+/* Elements */
+
+body {
+	margin: 0px;
+	font-family: "trebuchet ms", Arial, Helvetica, sans-serif;
+	font-size: small;
+	text-align: left;
+	color: #085F00;
+}
+
+h1 {
+}
+
+h2, h3 {
+	margin-top: 0px;
+}
+
+h4, h5, h6 {
+}
+
+p, ol, ul, dl, blockquote {
+}
+
+a {
+	color: #009900;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* Header */
+
+#header {
+	margin: 0px;
+	height: 129px;
+	background: url(images/a1.jpg) repeat-x left center;
+	color: #CAFFCA;
+}
+
+#header h1 {
+	display: block;
+	width: 778px;
+	padding: 30px 0 0 15px;
+	margin: 0em auto;
+}
+
+#header h2 {
+	width: 778px;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 0em auto;
+	padding-left: 15px;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+/* Menu */
+
+#menu {
+	padding: 1em 2em 1em 0em;
+	background: #F1DFC9 url('images/a2.gif') top left repeat-x;
+	font-size: 0.9em;
+}
+
+#menu ul {
+	display: block;
+	width: 778px;
+	margin: 0em auto;
+	list-style: none;
+	padding-left: 2.5em;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu li a {
+	color: #CAFFCA;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 0.25em 0.75em 0.25em 0.75em;
+}
+
+#menu li a:hover {
+	background: #000 top left repeat-x;
+	color: #fff;
+}
+
+/* Content */
+
+#content {
+	width: 940px;
+	margin: 0 auto;
+	color: #085F00;
+}
+
+#colOne {
+	float: left;
+	width: 190px;
+	padding: 20px 10px;
+}
+
+#colOne ul {
+	margin-left: 0;
+	padding-left: 0.8em;
+	list-style: square inside;
+}
+
+#colTwo {
+	float: left;
+	width: 500px;
+	padding: 20px 10px;
+}
+
+#colThree {
+	float: left;
+	width: 190px;
+	padding: 20px 10px;
+}
+
+#colThree ul {
+	margin-left: 0;
+	padding-left: 1em;
+	list-style: square inside;
+}
+
+#content h1, #content h2 {
+	color: #004400;
+	background-color: #339966;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 0.25em 0.75em 0.25em 0.75em;
+}
+
+/* Footer */
+
+#footer {
+	padding: 3px 0px;
+	background: #EEEEEE url(images/a3.jpg) repeat-x;
+	height: 157px;
+}
+
+#footer p {
+	margin: 0px;
+	padding-top: 50px;
+	text-align: center;
+	color: #009900;
+}
+
+#footer a {
+	color: #007700;
+}
+
+
+
+
+/** CONTACT */
+
+.contact label {
+  float: none;
+  display: block;
+  color: #000;
+  font-size: 16px;
+}
+
+.contact .contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+.contactinput {
+  width: 90%;
+  font-size: 16px;
+  background: #FFF;
+  color: #000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  background-color: #339966;
+  color: #FFF;
+}
+
+.gallery {
+  color: #FFF;
+}
+
+.gallery table {
+  width: 100%;
+  border: 3px solid #339966;
+}
+
+.gallery ul img {
+  border: 3px solid #339966;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #339966;
+}
+
+.advert {
+  width: 940px;
+}
+
+.advert a {
+  width: 940px;
+}

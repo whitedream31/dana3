@@ -1,0 +1,168 @@
+/* 
+
+770
+500
+190
+
+shared.css required
+
+ */
+
+body {
+	margin: 0;
+	padding: 0;
+	font: normal small Georgia, "Times New Roman", Times, serif;
+	color: #898F7D;
+	text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 0;
+	padding-top: 0;
+}
+
+a {
+	color: #8A3923;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.contact fieldset, textarea {
+  width: 480px;
+}
+
+#pagewrapper {
+	background: #FFFFFF url(images/img05.gif) repeat left top;
+}
+
+/** HEADER */
+
+#header {
+	width: 770px;
+	height: 90px;
+	margin: 0 auto;
+}
+
+#header h1 {
+	margin: 0;
+	padding: 30px 0 0 20px;
+	text-transform: lowercase;
+	font-size: 30px;
+	font-style: italic;
+	letter-spacing: -2px;
+	color: #898F7D;
+}
+
+#header h2 {
+	padding-left: 25px;
+	font-size: 10px;
+}
+
+/** MENU */
+
+#menu {
+	width: 750px;
+	margin: -2.5em auto 1em auto;
+}
+
+#menu ul {
+	margin: 20px 0 0 0;
+	padding: 0;
+	list-style: none;
+	text-align: right;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	padding: 0 0 0 2em;
+	text-decoration: none;
+	font-weight: bold;
+	color: #898F7D;
+}
+
+#menu a:hover {
+}
+
+/** CONTENT */
+
+#page {
+	width: 770px;
+	margin: 0 auto 1em auto;
+	background: #FFFFFF;
+	border: 2px dotted #898F7D;
+}
+
+#page * {
+	line-height: 140%;
+}
+
+#content {
+	float: left;
+	width: 500px;
+	padding: 25px 20px 0 20px;
+}
+
+#sidebar {
+	float: right;
+	width: 190px;
+	padding: 25px 20px 0 10px;
+}
+
+#sidebar h2 {
+	padding-top: .45em;
+	font-size: medium;
+}
+
+#sidebar  ul li.fileitem {
+  list-style-type: none;
+  list-style-position: inside;
+  margin-left: -40px;
+}
+
+/** FOOTER */
+
+#footer {
+	clear: both;
+	width: 700px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+#footer p {
+	margin: 0;
+	padding: .8em 0 0 0;
+	text-align: center;
+	font: bold x-small Arial, Helvetica, sans-serif;
+}
+
+
+
+#productlistheader, #productlistfooter, #galleryfooter {
+	background: #FFFFFF;
+	color: #000000;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  color: #8A3923;
+}
+
+.gallery ul img {
+  border: 3px solid #666666;
+}
+
+.gallery ul a:hover img {
+  border: 3px solid #972296;
+}
+
+.advert {
+	width: 770px;
+}
+
+.advert a {
+	width: 770px;
+}

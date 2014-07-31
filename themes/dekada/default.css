@@ -1,0 +1,150 @@
+
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+body {
+	background: #C62020 url(images/img8.jpg) repeat-x top left;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #FFFFFF;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	padding: 0;
+	color: #FFFFFF;
+}
+
+h1 { font-size: 34px; }
+
+h2 {
+	margin-bottom: 10px;
+	padding: 0 0 10px 0;
+	font-size: 24px;
+	border-bottom: #000000 2px solid;
+}
+
+h3 {
+	padding: 0 0 10px 0;
+	font-size: 13px;
+	border-bottom: #000000 2px solid;
+}
+
+p {
+	margin-top: 10px;
+	text-align: justify;
+	line-height: 160%;
+}
+
+a {
+	color: #F5C314;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.list li {
+	padding: 5px 0;
+	background: url(images/img5.gif) repeat-x;
+}
+
+.list li.first {
+	background: none;
+}
+
+/* Header */
+
+#header {
+	width: 681px;
+	margin: 0 auto;
+	padding: 40px 0 0 13px;
+	height: 90px;
+	background: url(images/img1a.gif) repeat-x left bottom;
+}
+
+#header h1 {
+	float: left;
+}
+
+#header h2 {
+	display: none;
+}
+
+#header ul {
+	float: right;
+	margin: 0;
+	padding: 15px 0 0 0;
+	list-style: none;
+}
+
+#header li {
+	display: inline;
+}
+
+#header a {
+	display: block;
+	float: left;
+	padding: 0 14px 0 20px;
+	background: url(images/img2.gif) no-repeat left center;
+	text-decoration: none;
+	text-transform: uppercase;
+	font: bold 12px;
+	color: #FFFFFF;
+}
+
+#header a:hover {
+	text-decoration: underline;
+}
+
+#header .first a {
+	background: none;
+}
+
+/* Content */
+
+#content {
+	width: 694px;
+	margin: 0 auto;
+}
+
+#colOne {
+	float: right;
+	width: 179px;
+	padding: 0 29px 0 0;
+}
+
+#colOne h3 {
+	margin-top: 0px;
+}
+
+#colTwo {
+	float: left;
+	width: 394px;
+	padding: 0 0 0 21px;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	width: 694px;
+	margin: 0 auto;
+	padding: 30px 0 0 0;
+}
+
+#footer p {
+	padding: 20px 0 0 0;
+	border-top: #000000 2px solid;
+	text-align: center;
+	color: #FFFFFF;
+}
