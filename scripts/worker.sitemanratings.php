@@ -16,11 +16,10 @@ class workersitemanratings extends workerform {
   protected $datagrid;
   protected $table;
   protected $areadescription;
-  protected $fldareascovered;
+  protected $fldratings;
   protected $fldareadescription;
   protected $fldpostalarea;
   protected $fldcountyid;
-  protected $fldaddarea;
 
   protected function InitForm() {
     $this->table = new areacovered($this->itemid);
@@ -46,23 +45,11 @@ class workersitemanratings extends workerform {
         $this->showroot = false;
         break;
       case ACT_REMOVE:
-        $this->buttonmode = array(BTN_CONFIRM, BTN_CANCEL);
-        $this->title = 'Remove Area Cover'; 
-        $this->fldareadescription = $this->AddField(
-          'description', new formbuilderstatictext('description', '', 'Area to be removed'));
-        $this->action = ACT_CONFIRM;
-        $this->returnidname = $this->idname;
-        $this->showroot = false;
         break;
       default:
-        $this->fldaddarea = $this->AddField(
-          'addarea', new formbuilderbutton('addarea', 'Add Area'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
-        $this->fldaddarea->url = $url;
-
         $this->buttonmode = array(BTN_BACK);
-        $this->title = 'Manage Areas Covered'; 
-        $this->fldareascovered = $this->AddField('areascovered', $this->datagrid, $this->table);
+        $this->title = 'Manage Ratings'; 
+        $this->fldratings = $this->AddField('ratings', $this->datagrid, $this->table);
         break;
     }
   }
@@ -111,20 +98,16 @@ class workersitemanratings extends workerform {
   protected function AssignFieldDisplayProperties() {
     $this->datagrid->SetIDName($this->idname);
     $this->NewSection(
-      'areascovered', 'What Areas do you cover?',
-      'Please specify postal codes or county names of all the areas you offer business. If you cover the entire country please leave this blank.');
-    $this->fldareascovered->description = 'Areas your business covers';
-    $this->AssignFieldToSection('areascovered', 'areascovered');
-    if ($this->fldaddarea) {
-      $this->fldaddarea->description = 'Click this button to add a new area that you cover';
-      $this->AssignFieldToSection('areascovered', 'addarea');
-    }
+      'ratings', 'View Customer Ratings',
+      'Below are any ratings that customers have made about your organisation. You cannot remove them but you can respond with a message, which will be shown below the related rating/comment.');
+    $this->fldratings->description = 'Customer Ratings';
+    $this->AssignFieldToSection('ratings', 'ratings');
   }
 
   protected function AssignItemEditor($isnew) {
     $title = ($isnew) ? 'New Areas Covered' : 'Changing Area Covered';
     $this->NewSection(
-      'areascovered', $title,
+      'ratings', $title,
       'Please specify <strong>either</strong> the postal code <strong>or</strong> the county name the area.');
     // description field
     $this->fldareadescription->description = 'The caption to display to your visitors (ie. name of the area). You can leave this blank and the system will fill this in for you.';
