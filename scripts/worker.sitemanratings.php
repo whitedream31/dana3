@@ -17,33 +17,27 @@ class workersitemanratings extends workerform {
   protected $table;
   protected $areadescription;
   protected $fldratings;
-  protected $fldareadescription;
-  protected $fldpostalarea;
-  protected $fldcountyid;
+  
+  protected $fldcomment;
+  protected $fldreply;
 
   protected function InitForm() {
-    $this->table = new areacovered($this->itemid);
+    $this->table = new rating($this->itemid);
     $this->icon = 'images/sect_site.png';
-    $this->areadescription = 'some text here';
+    $this->activitydescription = 'some text here';
     $this->contextdescription = 'rating management';
     $this->datagrid = new formbuilderdatagrid('ratings', '', 'Ratings');
     switch ($this->action) {
       case ACT_EDIT:
-      case ACT_NEW:
-        $this->title = (($this->action == ACT_NEW) ? 'New' : 'Modify') . ' Area';
-        $this->fldareadescription = $this->AddField(
-          'description', new formbuildereditbox('description', '', 'Description'), $this->table);
-        $this->fldpostalarea = $this->AddField(
-          'postalarea', new formbuildereditbox('postalarea', '', 'Postal Area'), $this->table);
-        $this->fldcountyid = $this->AddField(
-          'countyid', new formbuilderselect('countyid', '', 'Name of the County'), $this->table);
-        $countylist = database::RetrieveLookupList('county', FN_DESCRIPTION, FN_REF, FN_ID, "`countryid` = 2");
-        foreach($countylist as $countyid => $countydescription) {
-          $this->fldcountyid->AddValue($countyid, $countydescription);
-        }
+        $this->title = 'Modify Reply';
+        $this->fldcomment = $this->AddField(
+          'comment', new formbuilderstatictext('comment', '', 'Comment'));
+        $this->fldreply = $this->AddField(
+          'reply', new formbuildertextarea('reply', '', 'Your Reply'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
+      case ACT_NEW:
       case ACT_REMOVE:
         break;
       default:
@@ -54,33 +48,10 @@ class workersitemanratings extends workerform {
     }
   }
 
-  protected function DeleteItem($itemid) {
-    try {
-      $status = STATUS_DELETED;
-      $query =
-        "UPDATE `areacovered` SET `status` = '{$status}' " .
-        "WHERE `id` = {$itemid}";
-      database::Query($query);
-      $ret= true;
-    } catch (Exception $e) {
-      $this->AddMessage('Cannot remove item');
-      $ret = false;
-    }
-    return $ret;
-  }
-
   protected function PostFields() {
     switch ($this->action) {
       case ACT_EDIT:
-      case ACT_NEW:
-        $ret = $this->fldareadescription->Save() + $this->fldpostalarea->Save() + $this->fldcountyid->Save();
-        break;
-      case ACT_CONFIRM:
-        $caption = $this->table->GetFieldValue('description');
-        if ($this->DeleteItem($this->itemid)) {
-          $this->AddMessage("Item '{$caption}' removed");
-        }
-        $ret = false;
+        $ret = $this->fldreply->Save();
         break;
       default:
         $ret = true;
@@ -89,11 +60,11 @@ class workersitemanratings extends workerform {
   }
 
   protected function SaveToTable() {
+    $this->table->SetFieldValue('replystamp', date());
     return (int) $this->table->StoreChanges();
   }
 
-  protected function AddErrorList() {
-  }
+  protected function AddErrorList() {}
 
   protected function AssignFieldDisplayProperties() {
     $this->datagrid->SetIDName($this->idname);
@@ -105,35 +76,25 @@ class workersitemanratings extends workerform {
   }
 
   protected function AssignItemEditor($isnew) {
-    $title = ($isnew) ? 'New Areas Covered' : 'Changing Area Covered';
+    $title = 'Replying to Customer Comment';
     $this->NewSection(
       'ratings', $title,
-      'Please specify <strong>either</strong> the postal code <strong>or</strong> the county name the area.');
-    // description field
-    $this->fldareadescription->description = 'The caption to display to your visitors (ie. name of the area). You can leave this blank and the system will fill this in for you.';
-    $this->fldareadescription->size = 100;
-    $this->AssignFieldToSection('areascovered', 'description');
-    // postal code field
-    $this->fldpostalarea->description = 'The (first) area part of the postal code (e.g. NW2)';
-    $this->fldpostalarea->size = 10;
-    $this->fldpostalarea->style = 'text-transform:uppercase';
-    $this->AssignFieldToSection('areascovered', 'postalarea');
-    // county name
-    $this->fldcountyid->includenone = true;
-    $this->fldcountyid->size = 10;
-    $this->fldcountyid->SetNoneCaption('(None)');
-    $this->fldcountyid->description = 'If you cover an entire COUNTY, please select the county name below.';
-    $this->AssignFieldToSection('areascovered', 'countyid');
+      'Please type in a reply to this customers comment. Please check for spellings and grammar - <strong>NOTICE: bad language and offensive phrases are not tolerated. Your comment may be removed. Repeated occurrences will mean you will not be able to reply to comments.</strong>');
+    // comment field
+    $visitorname = trim($this->table->GetFieldValue('visitorname'));
+    if (!$visitorname) {
+      $visitorname = '<em>anonymous</em>';
+    }
+    $this->fldcomment->value = '&quot;' . $this->table->GetFieldValue('comment') . '&quot; by ' . $visitorname;
+    $this->fldacomment->description = 'This is the comments that was made by the customer.';
+    $this->AssignFieldToSection('rating', 'comment');
+    // reply
+    $this->fldreply->description = 'Type in your reply to the comment. Please read the notice above.';
+    $this->fldreply->rows = 10;
+    $this->AssignFieldToSection('rating', 'reply');
   }
 
   protected function AssignItemRemove($confirmed) {
-    $caption = $this->table->GetFieldValue('description');
-    $this->NewSection(
-      'confirmation', "Remove '{$caption}'",
-      'This cannot be undone! Please click on the Confirm button to remove this.');
-    $desc = $this->AddField(
-      'description', new formbuilderstatictext('description', '', 'Name of the area covered'), $this->table);
-    $this->AssignFieldToSection('confirmation', 'description');
   }
 }
 

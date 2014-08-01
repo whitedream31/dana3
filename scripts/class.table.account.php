@@ -914,18 +914,29 @@ class account extends idtable {
     return $this->businesscategorydescription;
   }
 
-  public function LogoImage($userootpath = true, $class = '') {
-    $path = ($userootpath)
-      ? $this->GetRelativePath('media')
-      : '../' . $this->GetFieldValue('nickname') . '/media/';
+  public function GetLogoFilename($thumbnail = true) {
     $mediaid = $this->GetFieldValue('logomediaid');
     if ($mediaid > 0) {
-      $filename = $path . database::SelectFromTableByField('media', FN_ID, $mediaid, 'thumbnail');
-      $exists = file_exists($filename);
+      $field = ($thumbnail) ? 'thumbnail' : 'imgname';
+      $filename = database::SelectFromTableByField('media', FN_ID, $mediaid, $field);
     } else {
-      $exists = false;
+      $filename = false;
     }
-    $classname = ($class) ? " class='{$class}'" : '';
+    return $filename;
+  }
+
+  public function LogoImage($userootpath = true, $class = '', $thumbnail = true) {
+    $path = ($userootpath)
+      ? $this->GetRelativePath('media')
+      : 'media/'; // '../' . $this->GetFieldValue('nickname') . '/media/';
+    $filename = $this->GetLogoFilename($thumbnail);
+    if ($filename === false) {
+      $exists = false;
+    } else {
+      $filename = $path . $filename;
+      $exists = file_exists($filename);
+      $classname = ($class) ? " class='{$class}'" : '';
+    }
     $ret = ($exists)
       ? "<img src='{$filename}'{$classname} alt=''>"
       : '<em>none</em>';

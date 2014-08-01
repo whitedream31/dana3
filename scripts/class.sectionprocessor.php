@@ -65,13 +65,14 @@ abstract class sectionprocessor {
   protected $pagelist;
   protected $pagecount;
   
-  private $lastgalleryid;
-  private $lastgallery;
+  protected $lastgalleryid;
+  protected $lastgallery;
   private $sectiontag;
   private $sectionclass;
+
   // caches
-  private $logo;
-  private $activenewsletterlist;
+  static protected $logo;
+  static private $activenewsletterlist;
 //  private $downloadablefiles;
 //  private $addthis;
 
@@ -81,15 +82,10 @@ abstract class sectionprocessor {
     $this->rootpath = $pagewriter->rootpath;
     $this->sourcepath = $pagewriter->sourcepath;
     $this->page = $pagewriter->currentpage;
-    $this->pagelist = $pagewriter->pagelist;
+    $this->pagelist = $pagewriter->pagelist->pages;
     $this->pagecount = count($this->pagelist);
     $this->account = $this->pagewriter->account;
     $this->contact = $pagewriter->contact;
-    
-    $this->logo = null;
-    $this->activenewsletterlist = null;
-//    $this->downloadablefiles = null;
-//    $this->addthis = null;
   }
 
   abstract protected function FetchPreparationCode();
@@ -97,26 +93,26 @@ abstract class sectionprocessor {
   abstract protected function FetchScript();
 
   protected function FetchMainContent() {
-    return $this->page->maincontent;
+    return $this->page->GetFieldValue('maincontent');
   }
 
   protected function FetchInitialContent() {
-    return $this->page->initialcontent;
+    return $this->page->GetFieldValue('initialcontent');
   }
 
   private function MakeTag($content, $tag = '', $idname = '', $class = '') {
     if (!$tag) {
       $tag = $this->sectiontag;
     }
-    if ($tag != '') {
+    if ($tag) {
       $ret = '<' . $tag;
       if (!$class) {
         $class = $this->sectionclass;
       }
-      if ($idname != '') {
+      if ($idname) {
         $ret .= " id='{$idname}'";
       }
-      if ($class != '') {
+      if ($class) {
         $ret .= " class='{$class}'";
       }
       $ret .= ">{$content}</{$tag}>";
@@ -138,8 +134,8 @@ abstract class sectionprocessor {
 
   private function IncludeStatsCode() {
     $path = $this->rootpath;
-    $pageid = $this->page->id;
-    $pagemgrid = $this->account->pagemgrid;
+    $pageid = $this->page->ID();
+    $pagemgrid = $this->account->GetFieldValue('pagemgrid');
     $ret = array();
     $ret[] = '/* collect statistics */';
     $ret[] = "require_once '{$path}scripts" . DIRECTORY_SEPARATOR . "statistics.php';";
@@ -150,7 +146,7 @@ abstract class sectionprocessor {
   private function IncludeAdvertPrepareCode() {
     $ret = array();
     // only show adverts when live
-    if (($this->mode == PWMODE_LIVE) && $this->account->showadverts) {
+    if (($this->mode == PWMODE_LIVE) && $this->account->GetFieldValue('showadverts')) {
       $path = PDIR;
       $ret[] = '/* adverts */';
       $ret[] = "require_once('{$path}scripts/advertclass.php');";
@@ -261,17 +257,17 @@ abstract class sectionprocessor {
 
   // page title
   private function GetSectionPageTitle() {
-    return $this->account->businessname . ' - ' . $this->page->GetFieldValue('description');
+    return $this->account->GetFieldValue('businessname') . ' - ' . $this->page->GetFieldValue('description');
   }
 
   // meta keywords
   private function GetSectionKeywords() {
-    return $this->account->metakeywords;
+    return $this->account->GetFieldValue('metakeywords');
   }
 
   // meta description
   private function GetSectionMetaDescription() {
-    return $this->account->metadescription;
+    return $this->account->GetFieldValue('metadescription');
   }
 
   // navigation - set of available pages
@@ -284,11 +280,11 @@ abstract class sectionprocessor {
   }
 
   private function GetSectionHeader() {
-    return $this->MakeTag($this->page->header);
+    return $this->MakeTag($this->page->GetFieldValue('header'));
   }
 
   private function GetSectionTagline() {
-    return $this->MakeTag($this->account->tagline);
+    return $this->MakeTag($this->account->GetFieldValue('tagline'));
   }
 
   private function GetSectionInitialcontent() {
@@ -325,7 +321,7 @@ abstract class sectionprocessor {
 
   private function GetSectionTranslation() {
     $ret = '';
-    if ($this->page->includetranslation) {
+    if ($this->page->GetFieldValue('includetranslation')) {
       $ret = $this->DoGoogleTranslation();
     }
     return $ret;
@@ -356,13 +352,13 @@ abstract class sectionprocessor {
   private function GetSectionSideContent() {
     $ret = $this->MakeTag($this->page->GetSideContent(), '', HTMLID_SIDECONTENT) .
       $this->DoArticlesSidebar() . $this->DoGuestBookSidebar() . $this->DoNewslettersSidebar();
-    if ($this->page->incsocialnetwork) {
+    if ($this->page->GetFieldValue('incsocialnetwork')) {
       $ret .= $this->DoSocialNetworkSidebar();
     }
     $ret .=
       $this->DoCalendarSidebar() . $this->DoBookingSidebar() .
       $this->DoPrivateAreaSidebar() . GetBlogSideContent(); // $this->DoSurveySidebar()
-    if ($this->page->showfiles) {
+    if ($this->page->GetFieldValue('showfiles')) {
       $ret = $this->BuildDownloadableFiles();
     }
     return $ret;
@@ -370,7 +366,7 @@ abstract class sectionprocessor {
 
   private function GetSectionFooter() {
     return $this->MakeTag(
-      $this->page->footer . "\n" .
+      $this->page->GetFieldValue('footer') . "\n" .
       "<p class='designname'>designed by <a title='Free CSS Templates' href='http://www.freecsstemplates.org'>Free CSS Templates</a>. " .
       "<small>Modified by <a title='whitedream software' href='http://whitedreamsoftware.co.uk'>Whitedream Software</a>.</small> " .
       "&mdash; <a title='click to sign up' href='http://mylocalsmallbusiness.com'><strong>FREE Mini Websites</strong></a></p><br>\n",
@@ -442,7 +438,7 @@ abstract class sectionprocessor {
     return $ret;
   }
 
-  private function AddScriptForGallery($value) {
+  protected function AddScriptForGallery($value) {
     return 
       "<script type='text/javascript'>\n" .
       "  \$(function() {\n" .
@@ -479,7 +475,7 @@ abstract class sectionprocessor {
 
   private function AddAdvert() {
     $ret = '';
-    if ($this->account->showadverts && ($this->mode == PWMODE_LIVE)) {
+    if ($this->account->GetFieldValue('showadverts') && ($this->mode == PWMODE_LIVE)) {
       $ret = $this->MakeTag(
         "<?php\n  AddAdvertInPage();\n?>\n", 'div', '', 'advert');
     }
@@ -499,7 +495,7 @@ abstract class sectionprocessor {
 
   private function ProcessScript() {
     $ret = $this->FetchScript();
-    if ($this->mode != PWMODE_PROFILE) {
+    if ($this->mode != PWOPT_PROFILE) {
       $ret .= $this->AddScriptForGoogleAnalytics();
     }
     return $ret;
@@ -510,7 +506,7 @@ abstract class sectionprocessor {
       $nav = "<ul>\n";
       $cnt = 0;
       foreach($this->pagelist as $page) {
-        $url = $page->name . '.php';
+        $url = $page->GetFieldValue('name') . '.php';
         $class = '';
         $cnt++;
         // work out any required class names
@@ -520,14 +516,14 @@ abstract class sectionprocessor {
         if ($cnt == $this->pagecount) {
           $class .= ' last';
         }
-        $active = trim($class . ' ' . ($page->id == $this->page->id) ? 'active' : '');
+        $active = trim($class . ' ' . ($page->ID() == $this->page->ID()) ? 'active' : '');
         if ($active) {
           $active = " class='{$active}'";
         }
         // add the entire page link as a list item
-        $nav .= "  <li{$active}><a href='{$url}'>{$page->description}</a></li>\n";
+        $nav .= "  <li{$active}><a href='{$url}'>{$page->GetFieldValue('description')}</a></li>\n";
       }
-      $nav .= "</ul>\n";
+      $nav .= "</ul>";
       $ret = $this->MakeTag($nav, 'nav', HTMLID_NAVIGATION, $this->sectionclass);
     } else {
       $ret = '';
@@ -537,15 +533,16 @@ abstract class sectionprocessor {
 
   private function DoLogo() {
     if (!$this->logo) {
-      $this->logo = $this->account->GetLogoFilename();
-      if ($this->logo != '') {
-        $img = "<img alt='{$this->account->businessname}' src='media/'{$this->logo}' />\n";
-        $website = strtolower($this->account->website);
-        if ($website != '') {
+      $this->logo = $this->account->GetLogoFilename(false);
+      if ($this->logo) {
+        $businessname = $this->account->GetFieldValue('businessname');
+        $img = "<img alt='{$businessname}' src='media/'{$logo}' />";
+        $website = strtolower($this->account->GetFieldValue('website'));
+        if ($website) {
           if (substr($website, 0, 4) != 'http') {
             $website = 'http://' . $website;
           }
-          $url = "<a href='{$website}' target='_blank' title='visit our main website'>{$img}</a>\n";
+          $url = "<a href='{$website}' target='_blank' title='visit our main website'>{$img}</a>";
         } else {
           $url = $img;
         }
@@ -570,7 +567,7 @@ abstract class sectionprocessor {
   }
 
   private function DoGuestBookSidebar() {
-    $ret = ($this->page->pagetype == PAGECREATION_GUESTBOOK) ? "<?php ShowGuestBookSideContent(); ?>\n" : '';
+    $ret = ($this->page->pgtype == PAGECREATION_GUESTBOOK) ? "<?php ShowGuestBookSideContent(); ?>\n" : '';
     return $this->MakeTag($ret, '', HTMLID_GUESTBOOKSIDEBAR);
   }
 
@@ -680,15 +677,15 @@ abstract class sectionprocessor {
 
   private function DoAddThis() {
 //    if (!$this->addthis) {
-      $query = 'SELECT `content` FROM `socialnetwork` WHERE `id` = ' . $this->page->socialnetwork;
-      $result = database::$instance->Query($query);
+      $query = 'SELECT `content` FROM `socialnetwork` WHERE `id` = ' . $this->page->GetFieldValue('socialnetwork');
+      $result = database::Query($query);
 //      $this->addthis = '';
       $line = $result->fetch_assoc();
       if ($line != '') {
         $ret = $this->MakeTag(
           "  <h2>Share This Page</h2>\n" . $line['content'] . "\n", 'div', HTMLID_ADDTHIS, 'addthis');
       }
-      $result->free();
+      $result->close();
 //    }
     return $ret;
   }
@@ -715,10 +712,10 @@ abstract class sectionprocessor {
 
   private function IncludeProductPrepareCode() {
     switch ($this->mode) {
-      case PWMODE_PROFILE:
+      case PWOPT_PROFILE:
         $ret = "<?php require('{$this->rootpath}scripts" . DIRECTORY_SEPARATOR . "client.profile.product.php');\n";
         break;
-      case PWMODE_LIVE:
+      case PWOPT_LIVE:
         $ret = "<?php require('{$this->rootpath}scripts" . DIRECTORY_SEPARATOR . "client.live.product.php');\n";
         break;
     }
@@ -736,11 +733,11 @@ class sectionprocessorgeneral extends sectionprocessor {
     $query =
       "SELECT MAX(`height`) AS maxht FROM `media` m " .
       "INNER JOIN `galleryitem` gi ON m.`id` = gi.`largemediaid` " .
-      "WHERE gi.`galleryid` = {$this->page->gengalleryid} AND gi.`enabled` = 1";
-    $result = mysql_query($query) or die("Error whilst locating rows from newslist: " . mysql_error());
-    $line = mysql_fetch_assoc($result);
+      "WHERE gi.`galleryid` = " . $this->page->GetFieldValue('gengalleryid') . " AND gi.`enabled` = 1";
+    $result = database::Query($query);
+    $line = $result->fetch_assoc();
     $max = $line['maxht'] + 30;
-    mysql_free_result($result);
+    $result->close();
     if ($max < 100) {
       $max = 100;
     }
@@ -748,13 +745,13 @@ class sectionprocessorgeneral extends sectionprocessor {
   }
 
   private function DoGallerySlideShow() {
-    if ($this->lastgalleryid == $this->page->gengalleryid) {
+    if ($this->lastgalleryid == $this->page->GetFieldValue('gengalleryid')) {
       $ret = $this->lastgallery;
     } else {
-      $gallery = new gallery($this->page->gengalleryid);
+      $gallery = new gallery($this->page->GetFieldValue('gengalleryid'));
       $galleryheight = $this->CalcGalleryHeight();
       $ret = $gallery->BuildSlideshowList($galleryheight);
-      $this->lastgalleryid = $this->page->gengalleryid;
+      $this->lastgalleryid = $this->page->GetFieldValue('gengalleryid');
       $this->lastgallery = $ret;
     }
     return $ret;
@@ -805,13 +802,13 @@ class sectionprocessorgeneral extends sectionprocessor {
   }
 
   protected function FetchMainContent() {
-    $ret = ($this->page->gengalleryid > 0) ? $this->DoGallerySlideShow() : '';
-    $ret .= $this->page->maincontent;
+    $ret = ($this->page->GetFieldValue('gengalleryid') > 0) ? $this->DoGallerySlideShow() : '';
+    $ret .= $this->page->GetFieldValue('maincontent');
     return $ret;
   }
 
   protected function FetchMetaLinks() {
-    return ($this->page->gengalleryid > 0)
+    return ($this->page->GetFieldValue('gengalleryid') > 0)
       ?
         "  <link href='{$this->rootpath}css/lightbox.css# rel='stylesheet' type='text/css' media='screen' />\n" .
         "  <script src='http://cdn.mlsb.org/jquery.js' type='text/javascript'></script>\n" .
@@ -820,7 +817,7 @@ class sectionprocessorgeneral extends sectionprocessor {
   }
 
   protected function FetchScript() {
-    return ($this->page->gengalleryid > 0)
+    return ($this->page->GetFieldValue('gengalleryid') > 0)
       ? $this->AddScriptForImageRotator() . $this->AddScriptForGallery('div.rotator ul li.show')
       : '';
   }
@@ -833,10 +830,10 @@ class sectionprocessorcontact extends sectionprocessor {
   // preparation for contact page
   private function IncludeContactCheckCode() {
     switch ($this->mode) {
-      case PWMODE_PROFILE:
+      case PWOPT_PROFILE:
         $ret = "<?php require('{$this->rootpath}scripts" . DIRECTORY_SEPARATOR . "client.profile.contact.php');\n";
         break;
-      case PWMODE_LIVE:
+      case PWOPT_LIVE:
         $ret = "<?php require('{$this->rootpath}scripts" . DIRECTORY_SEPARATOR . "client.live.contact.php');\n";
         break;
     }
@@ -844,27 +841,32 @@ class sectionprocessorcontact extends sectionprocessor {
   }
 
   private function DoContactForm() {
+    $pagename = $this->page->GetFieldValue('pagename');
+    $contactname = $this->page->GetFieldValue('contactname');
+    $contactemail = $this->page->GetFieldValue('contactemail');
+    $contactsubject = $this->page->GetFieldValue('contactsubject');
+    $contactmessage = $this->page->GetFieldValue('contactmessage');
     return
       "<?php echo \$response; ?>\n" .
-      "<form name='formcontact' method='post' enctype='application/x-www-form-urlencoded' action='{$this->page->pagename}.php'>\n" .
+      "<form name='formcontact' method='post' enctype='application/x-www-form-urlencoded' action='{$pagename}.php'>\n" .
       "  <fieldset class='contact'>\n" .
       "    <div>\n" .
-      "      <label for='contactname'>{$this->page->contactname}</label>\n" .
+      "      <label for='contactname'>{$contactname}</label>\n" .
       "      <br><input class='contactinput' name='contactname' type='text' value='<?php echo \$contactname; ?>' maxlength='100' />\n" .
       "    </div>\n" .
       "    <br>\n" .
       "    <div>\n" .
-      "      <label for='contactemail'>{$this->page->contactemail}</label>\n" .
+      "      <label for='contactemail'>{$contactemail}</label>\n" .
       "      <br><input class='contactinput' name='contactemail' type='text' value='<?php echo \$contactemail; ?>' maxlength='100' />\n" .
       "    </div>\n" .
       "    <br>\n" .
       "    <div>\n" .
-      "      <label for='contactsubject'>{$this->page->contactsubject}</label>\n" .
+      "      <label for='contactsubject'>{$contactsubject}</label>\n" .
       "      <br><input class='contactinput' name='contactsubject' type='text' value='<?php echo \$contactsubject; ?>' maxlength='100' />\n" .
       "    </div>\n" .
       "    <br>\n" .
       "    <div>\n" .
-      "      <label for='contactmessage'>{$this->page->contactmessage}</label>\n" .
+      "      <label for='contactmessage'>{$contactmessage}</label>\n" .
       "      <br><textarea class='contactinput' name='contactmessage' rows='20' cols='80'><?php echo \$contactmessage; ?></textarea>\n" .
       "    </div>\n" .
       "    <br>\n" .
@@ -881,9 +883,8 @@ class sectionprocessorcontact extends sectionprocessor {
   }
 
   private function DoMap() {
-    if ($this->page->mapaddress != '') {
-      $addr = $this->page->mapaddress;
-    } else {
+    $addr = $this->page->GetFieldValue('mapaddress');
+    if (!$addr) {
       $addr = $this->contact->FullAddress('', ' ');
     }
     $addrarray = explode('+', urlencode(str_replace('  ', ' ', $addr)));
@@ -940,7 +941,7 @@ class sectionprocessorgallery extends sectionprocessor {
   }
 
   protected function FetchMainContent() {
-    return $this->DoGallery($this->page->groupid);
+    return $this->DoGallery($this->page->GetFieldValue('groupid'));
   }
 
   protected function FetchMetaLinks() {

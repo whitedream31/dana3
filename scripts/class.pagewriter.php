@@ -21,6 +21,7 @@ define('LOG_FOUND_CONTACT', 'fndcnt');
 define('LOG_FOUND_THEME', 'fndthm');
 define('LOG_MAKE_DIRECTORY', 'mkdir');
 define('LOG_START_PROCESSOR', 'procstart');
+define('LOG_DELETEITEM', 'delitm');
 define('LOG_WRITE_PAGE', 'writepg');
 define('LOG_STOP_PROCESSOR', 'procstop');
 define('LOG_PAGESKIPPED', 'pageskipped');
@@ -34,8 +35,8 @@ class pagewriter {
   private $themepath;
   private $errcount;
   private $log;
-  private $pagelist;
   private $shortname;
+  public $pagelist;
   public $contact;
   public $errors;
   public $sourcepath;
@@ -294,14 +295,17 @@ class pagewriter {
     }
   }
 
-  protected function WritePage($htmlsrc, $pageid = 0) {
-    $this->currentpage = $this->account->FindPage($pageid);
-    if ($this->currentpage->exists && ($this->currentpage->status == STATUS_ACTIVE) && $this->currentpage->visible) {
+  protected function WritePage($page, $htmlsrc) { //$htmlsrc, $pageid = 0) {
+    $this->currentpage = $page; //$this->account->FindPage($pageid);
+    if ($this->currentpage->exists && 
+      ($this->currentpage->GetFieldValue('status') == STATUS_ACTIVE) &&
+      $this->currentpage->GetFieldValue('visible')) {
       $this->ProcessPage($htmlsrc);
     }
   }
 
   private function GetSectionProcessor($pagetype) {
+    require_once 'class.sectionprocessor.php';
     switch ($pagetype) {
       case PAGETYPE_GENERAL: // gen
         $ret = new sectionprocessorgeneral($this);
@@ -332,11 +336,15 @@ class pagewriter {
     return $ret;
   }
 
+  private function GetPageName() {
+    $this->pagename = $this->currentpage->GetFieldValue('name');
+  }
+
   protected function ProcessPage($htmlsrc) {
-    $this->sectionprocessor = $this->GetSectionProcessor($this->currentpage->pagetype);
+    $this->sectionprocessor = $this->GetSectionProcessor($this->currentpage->pgtype);
     if ($this->sectionprocessor) {
       $this->GetPageName();
-      $htmldst = $this->rootpath . DIRECTORY_SEPARATOR . $this->pagename . '.php';
+      $htmldst = $this->rootpath . $this->pagename . '.php';
       // prepare the content for the page
       $srchandle = fopen($htmlsrc, 'r'); // open the source hml (template) file
       $this->dsthandle = fopen($htmldst, 'w'); // create the destination file
@@ -348,7 +356,7 @@ class pagewriter {
       fclose($srchandle);
       fclose($this->dsthandle);
     } else {
-      $this->AddToLog(LOG_PAGESKIPPED, "Page type {$this->currentpage->pagetype} - ID: {$this->currentpage->ID()}");
+      $this->AddToLog(LOG_PAGESKIPPED, "Page type {$this->currentpage->pgtype} - ID: {$this->currentpage->ID()}");
     }
   }
 
@@ -365,10 +373,10 @@ class pagewriter {
         $left = substr($line, 0, $posstart);
         $right = substr($line, $posend, strlen($line) - $posend);
         $sectionvalue = $this->ProcessSection($sectionname);
-        if ($sectionvalue) {
+//        if (count($sectionvalue)) {
           $line = $left . implode("\n", $sectionvalue) . $right;
-          $ret = true;
-        }
+          $ret = count($sectionvalue); //true;
+//        }
       }
     }
     return $ret;
@@ -393,11 +401,14 @@ class pagewriter {
     $section = strtok($sectname, ' ');
     $tag = strtok(' ');
     $class = strtok(' ');
+    $ret = array();
     // get the html code based on the section name
     $res = $this->sectionprocessor->RetrieveSection($section, $tag, $class);
     // return the html code with optionally wrapped tag and class
-    if ($res) {
-      if ($tag) {
+    if ($res === false) {
+      $ret[] = $sectname;
+    } elseif($res) {
+/*      if ($tag) {
         $starttag = '<' . $tag;
         if ($class != '') {
           $starttag .= " class='{$class}'";
@@ -405,9 +416,9 @@ class pagewriter {
         $starttag .= '>';
         $endtag = "</{$tag}>";
         $ret = array($starttag, $res, $endtag);
-      }
-    } else {
-      $ret = array();
+      } else { */
+        $ret = explode("\n", $res);
+//      }
     }
     return $ret;
   }

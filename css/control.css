@@ -324,6 +324,10 @@ img.activitygroupicon {
   padding-right: 10px;
 }
 
+.important {
+  font-weight: bold;
+}
+
 table tr .datagridaction {
   width: 160px;
 }

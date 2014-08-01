@@ -172,7 +172,7 @@ class formbuilderdatagrid extends formbuilderbase {
 //    $editrow = reset($columns);
     $list = array();
     foreach ($this->columns as $key => $column) {
-      $col = ((isset($columns[$key]))) ? $columns[$key] : $key;
+      $col = ((isset($columns[$key]))) ? $columns[$key] : '';
       if ($column['editable']) {
         $link = $this->GetActionButtons(TBLOPT_EDITABLE, 0, $id, $col);
         $list[] = "<td class='editable'>{$link}</td>";
