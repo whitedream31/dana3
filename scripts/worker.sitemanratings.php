@@ -60,8 +60,9 @@ class workersitemanratings extends workerform {
   }
 
   protected function SaveToTable() {
-    $this->table->SetFieldValue('replystamp', date());
-    return (int) $this->table->StoreChanges();
+    $this->table->SetFieldValue('replystamp', time());
+
+    return (int) parent::StoreChanges(); //$this->table->StoreChanges();
   }
 
   protected function AddErrorList() {}

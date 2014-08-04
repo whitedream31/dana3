@@ -72,8 +72,11 @@ $('#activitycontent').accordion({
   animate: "easeInOutQuad",
   heightStyle: "content"
 });
-$('a, input[type="button"], input[type="submit"]').click(function(){
+$('a, input[type="button"]').click(function(){
   $(this).prop("disabled", "disabled");
+});
+$('input[type="submit"]').click(function(){
+//  $(this).prop("disabled", "disabled");
 });
   </script>
 </body>

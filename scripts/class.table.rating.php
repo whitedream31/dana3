@@ -44,6 +44,7 @@ class rating extends idtable {
   public $accountexists;
   public $available;
   public $title;
+  public $dostats = true;
   static public $statistics = false;
   public $rated = false;
 
@@ -270,7 +271,6 @@ class rating extends idtable {
     $this->accountexists = ($account) ? $this->account->exists : false;
     $status = $this->account->GetCurrentStatus();
     $this->available = $this->accountexists && (($status == ACCSTATUS_PUBLISHED) || ($status == ACCSTATUS_MODIFIED));
-
     if ($this->accountexists) {
       if ($this->available) {
         $businesname = $account->GetFieldValue('businessname');
@@ -561,7 +561,7 @@ class rating extends idtable {
      return $ret;
   }
 
-  public function StoreChanges() {
+  private function ProceesStats() {
     $overallcount = 0;
     $overalltotal = 0;
     $valuequality = $this->GetFieldValue('value' . RATINGTYPE_QUALITY);
@@ -614,7 +614,10 @@ class rating extends idtable {
       $ret = parent::StoreChanges();
       if ($ret > 0) {
         require_once 'class.table.history.php';
-        $accountid = $this->account->ID();
+        //$accountid = $this->account->ID();
+        if (!$this->account) {
+          $this->account = new account($this->accountid);
+        }
         $businessname = $this->account->GetFieldValue('businessname');
         $details = "accountid: {$accountid}, business: {$businessname}";
         history::MakeHistoryItem(
@@ -666,6 +669,17 @@ class rating extends idtable {
             'Your Business Was Rated', $msg, EMAIL_SUPPORT, $accountid);
         }
       }
+    } else {
+      $ret = false;
+    }
+    return $ret;
+  }
+  
+  public function StoreChanges() {
+    if ($this->dostats) {
+      $ret = $this->ProceesStats();
+    } else {
+      $ret = parent::StoreChanges();
     }
     return $ret;
   }
