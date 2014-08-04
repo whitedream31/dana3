@@ -107,9 +107,33 @@ todo
   privatearea: private area login/logout link
 
 
-class contentviewer {
-  public function FetchContent(CONTTYPE_MAIN, CONTTYPE_ACTIONBAR, CONTTYPE_SIDEBAR)
-  maincontent
-  actionbar
-  sidebar (ajax)
+define('CONTTYPE_MAIN', 'm');
+define('CONTTYPE_ACTIONBAR', 'a')
+define('CONTTYPE_SIDEBAR', 's');
+
+static class contentviewer {
+  protected $maincontent;
+  protected $actionbar;
+  protected $sidebar; // (ajax)
+
+  abstract protected function GetMainContent();
+  abstract protected function GetActionBar();
+  abstract protected function GetSideBar();
+
+  public function FetchContent($contenttype) {
+    switch ($contenttype) {
+      case CONTTYPE_MAIN:
+        $ret = $this->GetMainContent();
+        break;
+      case CONTTYPE_ACTIONBAR:
+        $ret = $this->GetActionBar();
+        break;
+      case CONTTYPE_SIDEBAR:
+        $ret = $this->GetSideBar();
+        break;
+      default:
+        throw new Exception("Invalid content type: {$contenttype}");
+    }
+    return $ret;
+  }
 }
