@@ -128,6 +128,7 @@ abstract class page extends idtable { //implements pagetype
     $this->AddField('header', DT_STRING);
     $this->AddField('initialcontent', DT_TEXT, '', FLDTYPE_TEXTAREA);
     $this->AddField('sidecontent', DT_TEXT, '', FLDTYPE_TEXTAREA);
+//    $this->AddField('maincontent', DT_TEXT); //, '', FLDTYPE_TEXTAREA);
 //    $this->AddField('incrss', DT_BOOLEAN, true);
     $this->AddField('incshownewsletters', DT_BOOLEAN, true);
     $this->AddField('incsocialnetwork', DT_BOOLEAN, true);
@@ -136,12 +137,11 @@ abstract class page extends idtable { //implements pagetype
     $this->AddField('showhours', DT_BOOLEAN, true);
     $this->AddField('showfiles', DT_BOOLEAN, true);
     $this->AddField('footer', DT_STRING);
-    $this->AddField('category', DT_STRING);
+//    $this->AddField('category', DT_STRING);
     $this->AddField('dateadded', DT_DATETIME);
     $this->AddField('dateupdated', DT_DATETIME);
     $this->AddField('pageorder', DT_INTEGER);
     $this->AddField(FN_STATUS, DT_STATUS);
-
 //    $this->AddField('inccontactinsidearea', DT_BOOLEAN, true);
     $this->AddField('inccontactname', DT_BOOLEAN, true);
     $this->AddField('incaddress', DT_BOOLEAN, true);
@@ -372,6 +372,55 @@ abstract class page extends idtable { //implements pagetype
       $ret = '(not supported)';
     }
     return $ret;
+  }
+
+  public function GetContactInfo() {
+    $contact = $this->account->Contact();
+    $ret = array();
+    $ret[] = "<div id='contactdetails'>";
+    $ret[] = "<h2>Contact Details</h2>";
+    $ret[] = '<ul>';
+    if ($this->GetFieldValue('inccontactname')) {
+      $lastname = trim($contact->GetFieldValue('lastname'));
+      if (IsBlank($lastname)) {
+        $ret[] = '  <li>' . $this->account->GetFieldValue('businessname') . '</li>';
+      } else {
+        $ret[] = '  <li>' . $contact->FullContactName() . '</li>';
+      }
+    }
+    $addr = $contact->FullAddress('  <li>', "</li>\n", $this->GetFieldValue('incaddress'));
+    $ret = array_merge($ret, explode("\n", $addr));
+    $ret[] = '</ul>';
+    if ($this->GetFieldValue('inctelephone')) {
+      $tellist = $contact->TelephoneNumbersAsString();
+      $ret = array_merge($ret, explode("\n", $tellist));
+    }
+//    if ($this->GetFieldValue('incemail')) {
+    $email = $contact->EmailAsString();
+    $website = $this->account->MainWebsiteURL(true);
+    if ($email || $website) {
+      $ret[] = '<ul>';
+      if ($email) {
+        $ret[] = $email;
+      }
+//    }
+/*    if ($this->account->website) {
+      $website = strtolower(trim($this->account->website));
+      if (substr($website, 0, 4) != 'http') {
+        $website = 'http://' . $website;
+      }
+      $ret[] = '  <li>Website: <a href="' . $website . '" target="_blank" title="visit our website">' . $this->account->website . '</a></li>';
+    } */
+      $ret[] = $contact->AddSpecialLinkItem($website, 'Website', 'website', true, '', false);
+      //$ret[] = "  <li>Website: {$website}</li>";
+      $ret[] = '</ul>';
+    }
+    $ret[] = '</div>';
+    return ArrayToString($ret);
+  }
+
+  public function GetSidebarContent() {
+    return $this->GetFieldValue('sidecontent');
   }
 
   protected function GetGalleryList($includepicturecount = false) {

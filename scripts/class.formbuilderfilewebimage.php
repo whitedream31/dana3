@@ -2,7 +2,7 @@
 require_once 'class.formbuilderfile.php';
 
 // file upload field for image files suitable for the web - FLDTYPE_FILEWEBSITE
-class filewebimagefield extends filefield {
+class formbuilderfilewebimage extends formbuilderfile {
   public $uploaded;
   public $imgtype;
   public $imgsize;
@@ -23,7 +23,7 @@ class filewebimagefield extends filefield {
   public $newimgthumbnail;
 
 // public $showimage as thumbnail?
-  function __construct($name, $value, $label, $targetname) {
+  function __construct($name, $value, $label, $targetname = '') {
     parent::__construct($name, $value, $label, $targetname);
   }
 
@@ -140,30 +140,33 @@ class filewebimagefield extends filefield {
     return array('width' => $dstwidth, 'height' => $dstheight);
   }
 
-  public function ShowControl($usehtml5 = false) {
+  public function GetControl() {
+    $ret = array();
     $usepreview = $this->previewthumbnail;
     if ($usepreview) {
       $thumbnailfile = $this->targetpath . $this->previewthumbnail;
-      echo "<div class='mediapreview'>\n";
+      $ret[] = "<div class='mediapreview'>";
       if ($usepreview == 'none') {
-        echo "  <p>NONE</p>\n";
+        $ret[] = "  <p>NONE</p>";
       } else if (file_exists($thumbnailfile)) {
-        echo
+        $ret[] =
           "  <img src='{$thumbnailfile}' " .
 //            'width=" ' . $this->thumbnailwidth . '" ' .
 //            'height="' . $this->thumbnailheight .
-          "><br>\n";
+          "><br>";
       } else {
-        echo "  <p>NOT FOUND</p>\n";
+        $ret[] = "  <p>NOT FOUND</p>\n";
       }
     }
-    parent::ShowControl($usehtml5);
+    $ret = array_merge($ret, parent::GetControl());
     if ($usepreview) {
-      echo "</div>\n";
+      $ret[] = "</div>\n";
     }
     if ($this->mediaid) {
-      new hiddenfield($this->name . '_key', $this->mediaid);
+      $fld = new formbuilderhidden($this->name . '_key', $this->mediaid);
+      $ret = array_merge($ret, $fld->GetControl());
     }
+    return $ret;
   }
 
 }

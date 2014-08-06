@@ -16,8 +16,8 @@ define('ROWSTATE_VISHIDE', 8);
 define('ROWSTATE_VISSHOW', 16);
 
 class formbuilderdatagrid extends formbuilderbase {
-  protected $idname;
   protected $script;
+  public $idname;
 //  protected $table; // idtable
 
   protected $columns; // array - List of column header titles
@@ -54,7 +54,7 @@ class formbuilderdatagrid extends formbuilderbase {
   }
 
   private function ShowHeader() {
-    $ret = array('<tr>');
+    $ret = array('idname: ' . $this->idname . '<tr>');
     foreach ($this->columns as $key => $column) {
       $classname = $column['class'];
       if (!$classname) {

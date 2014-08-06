@@ -13,7 +13,7 @@ class contact extends idtable {
   static public $instance;
 
   public $displayname;
-  public $countyname;
+  private $countyname;
 
   static function StartInstance() {
     if (!isset(self::$instance)) {
@@ -56,87 +56,6 @@ class contact extends idtable {
     $this->AddField('datecreated', DT_DATETIME);
   }
 
-  private function AssignContactDetailsForm($formeditor) {
-    $formeditor->usetabs = true;
-    $title = $formeditor->AddDataField($this, 'title', 'Title', FLDTYPE_EDITBOX, 10);
-    $formeditor->AddDataField($this, 'firstname', 'First Name', FLDTYPE_EDITBOX, 50, true);
-    $formeditor->AddDataField($this, 'lastname', 'Last Name', FLDTYPE_EDITBOX, 50, true);
-    $formeditor->AssignActiveFieldSet(FS_CONTACTADDRESS, 'Business Address');
-    $addr = $formeditor->AddDataField($this, 'address', 'Address', FLDTYPE_TEXTAREA, false);
-    $addr->rows = 3;
-    $addr->cols = 50;
-    $formeditor->AddDataField($this, 'town', 'Town', FLDTYPE_EDITBOX, 50, true);
-    $formeditor->AddDataField($this, 'county', 'County', FLDTYPE_EDITBOX, 50, true);
-    $formeditor->AddDataField($this, 'postcode', 'Post Code', FLDTYPE_EDITBOX, 10, true);
-    $formeditor->AssignActiveFieldSet(FS_CONTACTTELEPHONE, 'Telephone', 30);
-    $formeditor->AddDataField($this, 'telephone', 'Main Telephone', FLDTYPE_EDITBOX, 30);
-    $formeditor->AddDataField($this, 'telephone2', '2nd Telephone', FLDTYPE_EDITBOX, 30);
-    $formeditor->AddDataField($this, 'telephone3', '3rd Telephone', FLDTYPE_EDITBOX, 30);
-    $formeditor->AddDataField($this, 'mobile', 'Mobile', FLDTYPE_EDITBOX, 30);
-    $formeditor->AddDataField($this, 'fax', 'Fax', FLDTYPE_EDITBOX, 30);
-    $formeditor->AssignActiveFieldSet(FS_CONTACTEMAIL, 'Change E-mail');
-    $email = $formeditor->AddDataField($this, 'email', 'Email Address', FLDTYPE_EMAIL, 80, true);
-    $emailconfirm = $formeditor->AddField('confirm', '', 'Confirm', FLDTYPE_EMAIL, 80);
-    $formeditor->submitvalue = 'Save Changes';
-    $formeditor->useeditor = false;
-    $formeditor->class = 'controlactivitybox wide';
-    //$formeditor->PostFields();
-  }
-
-  // add fields to 'change login password' form and validate fields to saving
-  private function AssignPasswordForm($formeditor) {
-    $oldpwd = $formeditor->AddField('oldpassword', '', 'Old Password', FLDTYPE_PASSWORD, 80, true);
-    $newpwd = $formeditor->AddField('newpassword', '', 'New Password', FLDTYPE_PASSWORD, 80, true);
-    $cfmpwd = $formeditor->AddField('confirmpassword', '', 'Confirm Password', FLDTYPE_PASSWORD, 80, true);
-    //$formeditor->PostFields();
-  }
-
-  private function ValidateContactDetailsForm($formeditor) {
-  }
-
-  private function ValidatePasswordForm($formeditor) {
-    $valid = true;
-    $origpwd = $this->GetFieldValue('password');
-    if ($oldpwd->value != $origpwd) {
-      $valid = false;
-      $oldpwd->errors[ERRKEY_OLDPASSWORD] = ERRVAL_OLDPASSWORD;
-    }
-    $newval = $newpwd->value;
-    if ($newval != $cfmpwd->value) {
-      $valid = false;
-      $cfmpwd->errors[ERRKEY_PASSWORDMISMATCH] = ERRVAL_PASSWORDMISMATCH;
-    }
-    if ($valid) {
-      if (strlen($newval) > 5) {
-        $this->SetFieldValue('password', $newval);
-      } else {
-        $newpwd->errors[ERRKEY_TOOSHORT] = ERRVAL_TOOSHORT;
-      }
-    }
-  }
-
-  public function ValidateFormFields($formeditor, $idref) {
-    switch ($idref) {
-      case IDREF_CHANGECONTACT:
-        $this->ValidateContactDetailsForm($formeditor);
-        break;
-      case IDREF_CHANGEPASSWORD:
-        $this->ValidatePasswordForm($formeditor);
-        break;
-    }
-  }
-
-  public function AssignFormFields($formeditor, $idref) {
-    switch ($idref) {
-      case IDREF_CHANGECONTACT:
-        $this->AssignContactDetailsForm($formeditor);
-        break;
-      case IDREF_CHANGEPASSWORD:
-        $this->AssignPasswordForm($formeditor);
-        break;
-    }
-  }
-
   protected function AfterPopulateFields() {
     if (trim($this->displayname) == '') {
       $this->displayname = $this->GetFieldValue('firstname');
@@ -154,142 +73,124 @@ class contact extends idtable {
     return $id;
   }
 
-  public function FullContactName() {
-    $firstname = $this->GetFieldValue('firstname');
-    $lastname = $this->GetFieldValue('lastname');
-    if (strtolower($firstname) == 'na' || strtolower($lastname) == 'na') {
-      $ret = '';
+  public function FullContactName($default = '') {
+    $firstname = $this->GetFieldValue('firstname', 'na');
+    $lastname = $this->GetFieldValue('lastname', 'na');
+    if (IsBlank($firstname) || IsBlank($lastname)) {
+      $ret = $default;
     } else {
       $ret = trim(trim($this->GetFieldValue('title') . ' ' . $firstname) . ' ' . $lastname);
     }
     return $ret;
   }
 
-  public function FullAddress($prefix = '', $suffix = CRNL) {
+  public function GetCountyName() {
+    $id = $this->GetFieldValue('countyid');
+    if ($id && !$this->countyname) {
+      $this->countyname = database::SelectDescriptionFromLookup('county', $id);
+    } else {
+      $this->countyname = false;
+    }
+    return $this->countyname;
+  }
+
+  public function FullAddress($prefix = '', $suffix = "\n", $incfirstline = false) {
     $list = array();
-    $addr = trim($this->GetFieldValue('address'));
-    if (strtolower($addr) == 'na') {
-      $addr = '';
+    $addr = ($incfirstline) ? trim($this->GetFieldValue('address')) : false;
+    $town = trim($this->GetFieldValue('town'));
+    $pcode = $this->GetFieldValue('postcode');
+    if (!IsBlank($addr)) {
+      $addr = str_replace('  ', ' ', str_replace("\n", ', ', $addr));
     }
-    if ($addr != '') {
-      $addr = str_replace('  ', ' ', str_replace(',', ' ', str_replace("\r\n", ', ', trim($addr))));
-    }
-    if (trim($addr . $this->GetFieldValue('town') . $this->GetFieldValue('postcode')) != '') {
-      if ($addr != '') {
-        $list[] = $addr;
+    if (!IsBlank($addr . $town . $pcode)) {
+      $list[] = $addr;
+      $list[] = $town;
+      $this->GetCountyName();
+      if ($this->countyname != $town) {
+        $list[] = $this->countyname;
       }
-      $town = $this->GetFieldValue('town');
-      if ($town != '' or strtolower($town) != 'na') {
-        $list[] = $town;
-      }
-      if (!empty($this->countyid->value)) {
-        $this->countyname = database::$instance->SelectFromTableByID('county', $this->GetFieldValue('countyid'), 'description');
-        if (($this->countyname != $town) and ($this->countyname != '')) {
-          $list[] = $this->countyname;
-        }
-      }
-      $pcode = $this->GetFieldValue('postcode');
-      if ($pcode != '' or strtolower($pcode) != 'na') {
-        $list[] = $pcode;
-      }
+      $list[] = $pcode;
     }
     $ret = '';
-    $count = count($list);
-    for ($idx = 1; $idx <= $count; $idx++) {
-      $ret .= $prefix . array_shift($list);
-      if ($idx < $count) {
-        $ret .= $suffix;
+    foreach($list as $ln) {
+      if (!IsBlank($ln)) {
+        $ret .= $prefix . $ln . $suffix;
       }
     }
     return $ret;
   }
 
   public function LocationDescription() {
-    $town = $this->GetFieldValue('town');
-    if ($town == 'na') {
+    $onlineonly = $this->GetFieldValue('onlineonly');
+    $town = trim($this->GetFieldValue('town'));
+    if ($onlineonly || IsBlank($town)) {
       $ret = 'Online Only';
     } else {
-      $county = $this->GetFieldValue('county');
-      $ret = $town . ', ' . $county;
+      $ret = $town . ', ' . $this->GetCountyName();
     }
     return $ret;
   }
 
-  protected function AddSpecialLinkItem($value, $label, $img = '', $islistitem = true, $linkprefix = '') {
-    if ($this->IfNotBlank($value)) {
+  public function AddSpecialLinkItem($value, $label, $img = '', $islistitem = true, $linkprefix = '', $showlabel = true) {
+    if (IsBlank($value)) {
+      $ret = '';
+    } else {
       if ($linkprefix) {
-        $linkstart = '<a href="' . $linkprefix . ':' . $value . '" title="' . $value . '">';
+        $linkstart = "<a href='{$linkprefix}:{$value}' title='{$label}'>";
         $linkend = '</a>';
       } else {
         $linkstart = '';
         $linkend = '';
       }
       if ($img) {
-        $img = '<img src="../images/' . $img . '.png" alt="">&nbsp;';
+        $img = "<img src='//cdn.mlsb.org/images/{$img}.png' alt=''>&nbsp;";
       }
-      if ($islistitem) {
-        $ret = '<li>';
-      } else {
-        $ret = '';
-      }
-      $lbl = ($label) ? '<span>' . $label . ':</span>' : '';
+      $ret = ($islistitem) ? "  <li class='contactitem'>" : '';
+      $lbl = ($showlabel && $label) ? '<span>' . $label . ':</span>' : '';
       $ret .= $img . $lbl . ' ' . $linkstart . $value . $linkend;
-      //' <strong>' . $linkstart . $value . $linkend . '</strong>';
       if ($islistitem) {
-        $ret .= '</li>';
+        $ret .= "</li>\n";
       }
-    } else {
-      $ret = '';
     }
     return $ret;
   }
 
   public function GetTelephoneNumbers() {
-    $ret = array();
     $telephone1 = $this->GetFieldValue('telephone');
-    if ($telephone1) {
-      $ret['telephone1'] = array('value' => $telephone1, 'name' => 'Main Telephone', 'icon' => 'phone');
-    }
     $telephone2 = $this->GetFieldValue('telephone2');
-    if ($telephone2) {
-      $ret['telephone2'] = array('value' => $telephone2, 'name' => 'Secondary Telephone', 'icon' => 'phone');
-    }
     $telephone3 = $this->GetFieldValue('telephone3');
-    if ($telephone3) {
-      $ret['telephone3'] = array('value' => $telephone3, 'name' => 'Other Telephone', 'icon' => 'phone');
-    }
     $mobile = $this->GetFieldValue('mobile');
-    if ($mobile) {
-      $ret['mobile'] = array('value' => $mobile, 'name' => 'Mobile', 'icon' => 'mobile');
-    }
     $fax = $this->GetFieldValue('fax');
-    if ($fax) {
-      $ret['fax'] = array('value' => $fax, 'name' => 'Fax', 'icon' => 'fax');
-    }
-    return $ret;
+    return array(
+      'telephone1' => (IsBlank($telephone1)) ? false : array('value' => $telephone1, 'name' => 'Main Telephone', 'icon' => 'phone'),
+      'telephone2' => (IsBlank($telephone2)) ? false : array('value' => $telephone2, 'name' => 'Secondary Telephone', 'icon' => 'phone'),
+      'telephone3' => (IsBlank($telephone3)) ? false : array('value' => $telephone3, 'name' => 'Other Telephone', 'icon' => 'phone'),
+      'mobile' => (IsBlank($mobile)) ? false : array('value' => $mobile, 'name' => 'Mobile', 'icon' => 'mobile'),
+      'fax' => (IsBlank($fax)) ? false : array('value' => $fax, 'name' => 'Fax', 'icon' => 'fax')
+    );
   }
-  public function ShowTelephoneNumbers() {
+
+  // was ShowTelephoneNumbers()
+  public function TelephoneNumbersAsString($listitems = true, $showlabel = true) {
     $tel = $this->GetTelephoneNumbers();
     $ret = '';
     foreach ($tel as $itm) {
-      $ret .= $this->AddSpecialLinkItem($itm['value'], $itm['name'], $itm['icon']);
-    // link = tel / callto
-//    $ret .= $this->AddSpecialLinkItem($tel['telephone2']['value'], 'Secondary Telephone', $tel['telephone2']['icon']);
-//    $ret .= $this->AddSpecialLinkItem($tel['telephone3']['value'], 'Other Telephone', $tel['telephone1']['icon']);
-//    $ret .= $this->AddSpecialLinkItem($tel['mobile']['value'], 'Mobile', 'mobile');
-//    $ret .= $this->AddSpecialLinkItem($tel['fax']['value'], 'Fax', 'fax');
+      $ret .= $this->AddSpecialLinkItem($itm['value'], $itm['name'], $itm['icon'], $listitems, '', $showlabel);
     }
-    if ($ret) {
-      $ret = '<ul class="contactaddress">' . $ret . '</ul>';
+    if ($listitems && $ret) {
+      $ret = "<ul class='contactaddress'>{$ret}</ul>";
     }
     return $ret;
   }
 
-  public function ShowEmail() {
+  // was ShowEmail()
+  public function EmailAsString($listitems = true, $makelink = true, $showlabel = true) {
     $email = $this->GetFieldValue('email');
-    $ret = $this->AddSpecialLinkItem($email, '', '', false);
+    if ($makelink) {
+      $email = "<a title='click to send a message now' href='mailto:{$email}'>{$email}</a>";
+    }
+    $ret = $this->AddSpecialLinkItem($email, 'e-mail', 'email', $listitems, '', $showlabel);
     return $ret;
-    //return '<ul class="contactaddress">' . $ret . '</ul>';
   }
 
   public function SendContactMessage($contactname, $contactemail, $contactsubject, $contactmessage) {

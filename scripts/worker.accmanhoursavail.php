@@ -141,7 +141,7 @@ class workeraccmanhoursavail extends workerform {
     }
   }
 
-  private function AssignDay($day, $name) {
+  private function AssignDay($day, $name, $desc, $hrs) {
     $day->description = $desc;
     $day->size = 30;
     $day->placeholder = $hrs;
@@ -163,19 +163,19 @@ class workeraccmanhoursavail extends workerform {
     $this->fldis24hrs->description = 'Is your business open all the time? (eg. online or offer emergency callouts). If so, please leave the hours blank or state when the office is open etc.';
     $this->AssignFieldToSection('workinghours', 'is24hrs');
     // monday field
-    $this->AssignDay($this->fldmonday, 'monday');
+    $this->AssignDay($this->fldmonday, 'monday', $desc, $hrs);
     // tuesday field
-    $this->AssignDay($this->fldtuesday, 'tuesday');
+    $this->AssignDay($this->fldtuesday, 'tuesday', $desc, $hrs);
     // wednesday field
-    $this->AssignDay($this->fldwednesday, 'wednesday');
+    $this->AssignDay($this->fldwednesday, 'wednesday', $desc, $hrs);
     // thursday field
-    $this->AssignDay($this->fldthursday, 'thursday');
+    $this->AssignDay($this->fldthursday, 'thursday', $desc, $hrs);
     // friday field
-    $this->AssignDay($this->fldfriday, 'friday');
+    $this->AssignDay($this->fldfriday, 'friday', $desc, $hrs);
     // saturday field
-    $this->AssignDay($this->fldsaturday, 'saturday');
+    $this->AssignDay($this->fldsaturday, 'saturday', $desc, $hrs);
     // sunday field
-    $this->AssignDay($this->fldsunday, 'sunday');
+    $this->AssignDay($this->fldsunday, 'sunday', $desc, $hrs);
     // comments field
     $this->fldcomments->description = 'Please specify any comments you would like to tell any customers about the opening hours (eg. not open on bank holidays)';
     $this->fldcomments->rows = 10;

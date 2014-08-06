@@ -2,10 +2,12 @@
 // page writer for MyLocalSmallBusiness
 // written by Ian Stewart (c) 2011, 2013 Whitedream Software
 // created: 23 sep 2013 (org. 8 jun 2010)
-// modified: 30 jul 2014
+// modified: 5 aug 2014
 // (rewritten into a class structure)
 
 require_once 'class.database.php';
+require_once 'class.table.account.php';
+require_once 'class.table.contact.php';
 
 define('PDIR', ".." . DIRECTORY_SEPARATOR); // parent directory
 
@@ -27,6 +29,7 @@ define('LOG_STOP_PROCESSOR', 'procstop');
 define('LOG_PAGESKIPPED', 'pageskipped');
 define('LOG_RES_COPIED', 'rescopied');
 define('LOG_ROOTPATH', 'rp');
+define('LOG_PERMISSIONS', 'perm');
 
 class pagewriter {
   private $dsthandle;
@@ -48,8 +51,7 @@ class pagewriter {
 //  public $rssfeedfilename;
 
   public function __construct($options) {
-    require_once 'class.table.account.php';
-    require_once 'class.table.contact.php';
+    $this->options = (is_array($options)) ? $options : array($options);
     $this->errors = array();
     $this->errcount = 0;
     $this->log = array();
@@ -64,7 +66,6 @@ class pagewriter {
           $this->AddToLog(LOG_FOUND_CONTACT, $this->contact->FullContactName());
           $this->pagelist = $this->account->GetPageList(true);
           $this->shortname = $this->account->GetFieldValue('nickname');
-          $this->options = $options;
           if ($this->FindThemePath()) {
             $this->AddToLog(LOG_FOUND_THEME, $this->theme->GetFieldValue('description'));
             $this->MakeSite();
@@ -84,26 +85,32 @@ class pagewriter {
     }
   }
 
-  protected function AddError($msg) {
+  public function AddError($msg) {
     $this->errors[] = $msg;
     $this->errcount++;
   }
 
-  protected function AddToLog($key, $msg = '') {
+  public function AddToLog($key, $msg = '') {
     $t = microtime(true);
     $micro = sprintf("%06d",($t - floor($t)) * 1000000);
     $date = date('Y-m-d H:i:s.') . $micro;
     $msg = "{$date} - {$key} [{$msg}]";
     $this->log[] = $msg;
+//    if (in_array(PWOPT_TEST, $this->options)) {
+//      echo "<pre>{$msg}</pre>\n";
+//    }
   }
 
-  private function WriteOut($line, $nl = false) {
-    $out = (is_array($line)) ? implode("\n", $line) : $line;
-    if (trim($out) != '') {
+  private function WriteOut($line, $nl = true) {
+    $out = (is_array($line)) ? ArrayToString($line) : trim($line);
+    if ($out) {
       if ($nl) {
         $out .= "\n";
       }
       fwrite($this->dsthandle, $out);
+/*      if (in_array(PWOPT_TEST, $this->options)) {
+        echo $out;
+      } */
       return true;
     } else {
       return false;
@@ -160,8 +167,10 @@ class pagewriter {
   }
 
   private function DeleteFile($filename) {
-    $this->AddToLog(LOG_DELETEITEM, $filename);
-    unlink($filename); // delete file
+    if (file_exists($filename)) {
+      $this->AddToLog(LOG_DELETEITEM, $filename);
+      unlink($filename); // delete file
+    }
   }
   
   private function DeleteFilesInDirectory($dir, $deldir = false) {
@@ -189,7 +198,7 @@ class pagewriter {
     $root = $this->GetRootPath($mode); // mylocalsmallbusiness.com/profiles/nickname or mlsb.org/nickname
     $this->MakeDirectory($root); // profile name
     $this->MakeDirectory($root . 'images'); // css images folder
-    $this->MakeDirectory($root . 'images' . DIRECTORY_SEPARATOR . 'lightbox'); // lightbox folder
+//    $this->MakeDirectory($root . 'images' . DIRECTORY_SEPARATOR . 'lightbox'); // lightbox folder
     $this->MakeDirectory($root . 'media'); // picture gallery / logo
     $this->MakeDirectory($root . 'files'); // downloadable files
     $this->WritePages();
@@ -203,11 +212,12 @@ class pagewriter {
       while ((($file = readdir($dh)) !== false) && $flg) {
         if ($file != '.' && $file != '..') {
           $fullpath = $path . '/' . $file;
+          $this->AddToLog(LOG_PERMISSIONS, $fullpath);
           if (is_link($fullpath)) {
             $flg = false;
           } elseif (!is_dir($fullpath) && !chmod($fullpath, $filemode)) {
             $flg = false;
-          } elseif (!SetDirectoryPermissions($fullpath, $filemode)) {
+          } elseif (!$this->SetDirectoryPermissions($fullpath, $filemode)) {
             $flg = false;
           }
         }
@@ -232,7 +242,7 @@ class pagewriter {
     // copy the auxiliary files
     $this->CopyStyleSheet($this->themepath, $this->rootpath, 'style.css'); // copy the style sheet
     $this->CopyImages($this->themepath, $this->rootpath); // copy the style sheet images
-    $this->CopyImages(PDIR, $this->sourcepath, 'images' . DIRECTORY_SEPARATOR . 'lightbox'); // copy lightbox images
+//    $this->CopyImages(PDIR, $this->sourcepath, 'images' . DIRECTORY_SEPARATOR . 'lightbox'); // copy lightbox images
 
     // copy the media files (logo and images for galeries) to the live website
     if ($this->mode != PWOPT_PROFILE) {
@@ -257,7 +267,7 @@ class pagewriter {
       $this->account->MarkAsUpdated(); // mark as no longer modified
     }
     $this->SetDirectoryPermissions($this->rootpath, 0755);
-    $this->AddToLog(LOG_STOP_PROCESSOR, 'page count=' . $this->pagecount);
+    $this->AddToLog(LOG_STOP_PROCESSOR, 'page count=' . count($this->pagelist->pages));
   }
 
   private function CopyStyleSheet($pathsrc, $pathdst, $filename) {
@@ -373,9 +383,10 @@ class pagewriter {
         $left = substr($line, 0, $posstart);
         $right = substr($line, $posend, strlen($line) - $posend);
         $sectionvalue = $this->ProcessSection($sectionname);
+        $ret = count($sectionvalue); //true;
 //        if (count($sectionvalue)) {
-          $line = $left . implode("\n", $sectionvalue) . $right;
-          $ret = count($sectionvalue); //true;
+          $line = $left . ArrayToString($sectionvalue) . $right;
+          //$ret = count($sectionvalue); //true;
 //        }
       }
     }
@@ -389,11 +400,11 @@ class pagewriter {
   }
 
   private function WritePagePreparation() {
-    $this->WriteOut('<?php', true);
+    $this->WriteOut('<?php');
     // add code based on the page type
     $code = $this->sectionprocessor->RetrievePreparationCode();
-    $this->WriteOut($code, true);
-    $this->WriteOut('?>', true); // end PHP
+    $this->WriteOut($code);
+    $this->WriteOut('?>'); // end PHP
   }
 
   private function ProcessSection($sectname) {
@@ -439,20 +450,26 @@ class pagewriter {
         $ret[] = "    <li>{$msg}</li>";
       }
       $ret[] = "  </ul>";
+    } else {
+      $ret[] = "  <p>NONE</p>";
     }
     $ret[] = "  <h2>Log</h2>";
     $ret[] = "  <ul>";
+    $log = array();
     foreach ($this->log as $msg) {
-      $ret[] = "    <li>{$msg}</li>";
+      $log[] = "    <li>{$msg}</li>";
     }
+    $ret = array_merge($ret, $log);
     $ret[] = "  </ul>";
     $ret[] = "</body>";
     $ret[] = "</html>";
-    $msg = implode("\n", $ret);
+    $msg = ArrayToString($ret);
     if (in_array(PWOPT_PROFILE, $this->options)) {
-      echo $msg;
-    } elseif (!in_array(PWOPT_TEST, $this->options)) {
-      $this->account->EmailToSupport('Page Writer Error', $msg);
+      if (in_array(PWOPT_TEST, $this->options)) {
+        echo $msg;
+      } elseif ($this->errors) {
+        $this->account->EmailToSupport('Page Writer Error', $msg);
+      }
     }
     return $ret;
   }
@@ -471,5 +488,3 @@ class pagewriter {
   }
 
 }
-
-?>

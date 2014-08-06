@@ -1,25 +1,5 @@
 <?php
 
-define('IDNAME_CHANGEORGDETAILS', 'accchgorgdet');
-define('IDNAME_CHANGECONDETAILS', 'accchgcondet');
-define('IDNAME_CHANGELOGINPWD', 'accchglogin');
-define('IDNAME_MANAGEAREASCOVERED', 'accmanareacovered');
-define('IDNAME_MANAGEHOURSAVAILABLE', 'accmanhoursavail');
-define('IDNAME_MANAGEADDRESSES', 'accmanaddress');
-define('IDNAME_MANAGEPAGES', 'pgman');
-define('IDNAME_SITEPREVIEW', 'sitepreview');
-define('IDNAME_CHANGETHEME', 'sitechgtheme');
-define('IDNAME_SITEUPDATE', 'siteupdate');
-define('IDNAME_MANAGERATINGS', 'sitemanratings');
-define('IDNAME_MANAGEGALLERIES', 'resmangalleries');
-define('IDNAME_MANAGEFILES', 'resmanfiles');
-define('IDNAME_MANAGEARTICLES', 'resmanarticles');
-define('IDNAME_MANAGENEWLETTERS', 'resmannewsletters');
-define('IDNAME_MANAGEBOOKINGS', 'resmanbookings');
-define('IDNAME_MANAGEGUESTBOOKS', 'resmanguestbooks');
-define('IDNAME_MANAGEPRIVATEAREAS', 'resmanprivateareas');
-define('IDNAME_MANAGECALENDARDATES', 'resmancalendardates');
-
 /**
   * activity manager - calls worker classes / shows data in activity area
   * dana framework v.3

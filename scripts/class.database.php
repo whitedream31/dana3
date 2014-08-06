@@ -1,5 +1,4 @@
 <?php
-
 // database library for MyLocalSmallBusiness
 // written by Ian Stewart (c) 2012 Whitedream Software
 // created: 30 nov 2012

@@ -376,9 +376,13 @@ class account extends idtable {
     return '<a href="http://' . $url . '" target="_blank" title="' . $title . '">' . $value . '</a>';
   }
 
-  public function MainWebsiteURL() {
+  public function MainWebsiteURL($makelink = false) {
     $website = $this->GetFieldValue('website');
-    return ($website) ? "http://{$website}" : false;
+    $ret = $website; //($website) ? "http://{$website}" : false;
+    if ($ret && $makelink) {
+      $ret = "<a href='{$ret}' target='_blank' title='visit our website'>{$website}</a>";
+    }
+    return $ret;
   }
 
   public function GetMediaDetails($mediaid) {
@@ -914,8 +918,8 @@ class account extends idtable {
     return $this->businesscategorydescription;
   }
 
-  public function GetLogoFilename($thumbnail = true) {
-    $mediaid = $this->GetFieldValue('logomediaid');
+  static public function GetImageFilename($mediaid, $thumbnail = true) {
+    //$mediaid = $this->GetFieldValue('logomediaid');
     if ($mediaid > 0) {
       $field = ($thumbnail) ? 'thumbnail' : 'imgname';
       $filename = database::SelectFromTableByField('media', FN_ID, $mediaid, $field);
@@ -929,7 +933,7 @@ class account extends idtable {
     $path = ($userootpath)
       ? $this->GetRelativePath('media')
       : 'media/'; // '../' . $this->GetFieldValue('nickname') . '/media/';
-    $filename = $this->GetLogoFilename($thumbnail);
+    $filename = self::GetImageFilename($this->GetFieldValue('logomediaid'), $thumbnail);
     if ($filename === false) {
       $exists = false;
     } else {
@@ -991,12 +995,6 @@ class account extends idtable {
     }
     $ret = (count($list) > 0) ? $list : false;
     return $ret;
-  }
-
-  public function ValidateFormFields($formeditor, $idref) {
-  }
-
-  public function ValidateFields() {
   }
 
   public function GetRating($refresh = false) {

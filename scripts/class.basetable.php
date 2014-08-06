@@ -136,7 +136,7 @@ abstract class basetable {
     } else {
       $ret = false;
     }
-    if (!$ret and $default) {
+    if (!$ret && $default) {
       $ret = $default;
     }
     return $ret;
@@ -214,7 +214,8 @@ abstract class basetable {
     foreach ($this->fieldlist as $fld) {
       $name = $fld[FA_NAME];
       if (isset($this->fieldlist[$name])) {
-        $this->fieldlist[$name][FA_VALUE] = stripslashes($line[$name]);
+        $value = (isset($line[$name])) ? $line[$name] : false;
+        $this->fieldlist[$name][FA_VALUE] = ($value) ? stripslashes($value) : false;
       }
     }
     $this->AfterPopulateFields();
@@ -375,15 +376,16 @@ abstract class basetable {
   static protected function FormatDateTime($formattype, $value, $defaultvalue = '') {
     $ret = $defaultvalue;
     if ($value) {
+      $time = (is_string($value)) ? strtotime($value) : $value;
       switch ($formattype) {
         case DF_LONGDATETIME:
-          $ret = date('D, jS F Y h:i a', strtotime($value));
+          $ret = date('D, jS F Y h:i a', $time);
           break;
         case DF_MEDIUMDATETIME:
-          $ret = date('j F Y h:i a', strtotime($value));
+          $ret = date('j F Y h:i a', $time);
           break;
         case DF_MEDIUMDATE:
-          $ret = date('j F Y', strtotime($value));
+          $ret = date('jS F Y', $time);
           break;
       }
     }
@@ -451,7 +453,7 @@ abstract class basetable {
       $this->exists = !($line === false);
       $ret = $this->exists;
       if ($this->exists) {
-        $this->exists = true;
+//        $this->exists = true;
         $this->PopulateFields($line);
       } else {
         $this->AssignDefaultFieldValues();

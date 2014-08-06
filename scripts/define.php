@@ -1,4 +1,5 @@
 <?php
+require_once "consts.php";
 
 // basic data types for fields
 define('DT_STRING', 's');
@@ -91,6 +92,32 @@ define('THEMESUITABAILTYTYPE_SIMPLE', 1);
 define('THEMESUITABAILTYTYPE_REGULAR', 2);
 define('THEMESUITABAILTYTYPE_ADVANCED', 3);
 
+// date formats
+define('DF_LONGDATETIME', 'ldt');
+define('DF_MEDIUMDATETIME', 'mdt');
+define('DF_MEDIUMDATE', 'md');
+
+define('IDNAME_CHANGEORGDETAILS', 'accchgorgdet');
+define('IDNAME_CHANGECONDETAILS', 'accchgcondet');
+define('IDNAME_CHANGELOGINPWD', 'accchglogin');
+define('IDNAME_MANAGEAREASCOVERED', 'accmanareacovered');
+define('IDNAME_MANAGEHOURSAVAILABLE', 'accmanhoursavail');
+define('IDNAME_MANAGEADDRESSES', 'accmanaddress');
+define('IDNAME_MANAGEPAGES', 'pgman');
+define('IDNAME_SITEPREVIEW', 'sitepreview');
+define('IDNAME_CHANGETHEME', 'sitechgtheme');
+define('IDNAME_SITEUPDATE', 'siteupdate');
+define('IDNAME_MANAGERATINGS', 'sitemanratings');
+define('IDNAME_MANAGEGALLERIES', 'resmangalleries');
+define('IDNAME_MANAGEGALLERYIMAGES', 'resmangalleryimages');
+define('IDNAME_MANAGEFILES', 'resmanfiles');
+define('IDNAME_MANAGEARTICLES', 'resmanarticles');
+define('IDNAME_MANAGENEWLETTERS', 'resmannewsletters');
+define('IDNAME_MANAGEBOOKINGS', 'resmanbookings');
+define('IDNAME_MANAGEGUESTBOOKS', 'resmanguestbooks');
+define('IDNAME_MANAGEPRIVATEAREAS', 'resmanprivateareas');
+define('IDNAME_MANAGECALENDARDATES', 'resmancalendardates');
+
 /*
 define('WORKFUNCTION', 'RunAction');
 define('RESOURCEFUNCTION', 'RunResAction');
@@ -172,11 +199,6 @@ define('RA_SEARCHBOOKINGBYDATE', 'sbd'); // find a booking by date
 define('RA_NEWCALENDARDATE', 'ncd'); // new calendar date
 define('RA_NEWPRIVATEAREAGROUP', 'npag'); // new private area group
 define('RA_NEWPRIVATEAREAMEMBER', 'npam'); // new private area member
-
-// date formats
-define('DF_LONGDATETIME', 'ldt');
-define('DF_MEDIUMDATETIME', 'mdt');
-define('DF_MEDIUMDATE', 'md');
 
 // booking status types (status values in booking table - from bookingtype table)
 define('BS_AVAILABLE', 'A'); // not booked
@@ -292,6 +314,28 @@ function DebugShowVar($var) {
   return "<input class='actionbutton' type='button' name='{$name}' value='{$value}' title='{$title}' onclick=\"{$event}\" />";
 }*/
 
+function IsBlank($value) {
+  return (!$value || strtolower($value) == 'na');
+}
+
+function ArrayToString($value) {
+  if (is_array($value)) {
+    $ret = implode("\n", $value);
+  } else {
+    $ret = $value;
+  }
+  return $ret;
+}
+
+function StringToArray($value) {
+  if (is_array($value)) {
+    $ret = $value;
+  } else {
+    $ret = explode("\n", $value);
+  }
+  return $ret;
+}
+
 function GetGet($name, $default = false) {
   return (isset($_GET[$name])) ? $_GET[$name] : $default;
 }
@@ -313,8 +357,15 @@ function __autoload($name) {
       if (file_exists($classfile)) {
         include $classfile;
       } else {     
-        echo "<p class='error'>Class {$name} not found</p>\n";
-        throw new Exception("Unable to load {$name}.");
+        $classfile = "../../scripts/class.table.{$name}.php";
+        if (file_exists($classfile)) {
+          include $classfile;
+        } else {     
+          echo
+            "<p class='error'>Class {$name} not found</p>\n" .
+            "<p>Current Directory: " . getcwd() . "</p>\n";
+          throw new Exception("Unable to load {$name}.");
+        }
       }
     }
   }
