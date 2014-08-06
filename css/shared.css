@@ -1,0 +1,397 @@
+/* SHARED CSS FILE THAT ALL THEMES USE */
+
+/** CONTACT */
+
+#pagewrapper {
+  margin: 0 auto;
+}
+
+.contact {
+  margin: 20px 20px 20px 20px;
+}
+
+.contact label {
+  float: none;
+  display: block;
+}
+
+.contact input[type="submit"] {
+  margin: 5px 5% 0 5%;
+}
+
+.contactinput {
+  width: 90%;
+  margin: 5px 5% 0 5%;
+  text-align: left;
+  font-weight: normal;
+}
+
+#guestbook {
+  width: 90%;
+}
+
+#guestbook h3 {
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 0px;
+}
+
+#logoimg img {
+  display: block;
+  margin: 0 auto 0 auto;
+}
+
+/* product list page */
+
+.productitemsection {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-top: none;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-bottom: 10px
+}
+
+#productlist {
+  width: 90%;
+  border: 1px;
+}
+
+#productlist h3 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 2px;
+  padding-bottom: 2px
+}
+
+#productlist img {
+  margin: 0px 10px 10px 0px;
+}
+
+#productlist td {
+  margin: 2px 5px 2px 10px;
+}
+
+#productlist td p {
+  margin: 0;
+  height: auto;
+  line-height: 125%;
+}
+
+#productlist .price {
+  width: 75px;
+  text-align: right;
+  margin: 0 20px 0 0;
+}
+
+#productlist .productitem {
+  width: 75px;
+  vertical-align: top;
+  border: 1px;
+}
+
+#productlist .productitemspecialoffer {
+  font-weight: bold;
+  font-size: large;
+  color: #FF0000;
+}
+
+#productlistheader, #productlistfooter, #galleryfooter {
+  width: 100%;
+  font-weight: normal;
+  margin: 2px 0px 5px 0px;
+  padding: 2px 2px 2px 2px;
+}
+
+#productlistheader div, #productlistfooter div {
+  padding: 2px 0px 2px 0px;
+  margin: 5px 0 5px 0;
+}
+
+#productlistheader img, #productlistfooter img, #galleryfooter img {
+  border: 0;
+  margin: 1px;
+}
+
+#productlistheader p, #productlistfooter p, #galleryfooter p {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  float: left;
+}
+
+#productlistheader ul, #productlistfooter ul, #galleryfooter ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+#productlistheader li, #productlistfooter li, #galleryfooter li {
+  margin: 0;
+  padding: 0 0 0 5px;
+  display: inline;
+  text-align: center;
+}
+
+#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+  text-decoration: none;
+  text-align: center;
+}
+
+/* gallery selectors */
+
+.gallery {
+  padding: 2px 5px 2px 5px;
+  margin: 5px 0 5px 0;
+}
+
+.gallery table {
+  width: 100%;
+}
+
+.gallery ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style-position: outside;
+}
+
+.gallery ul li {
+  padding: 10px;
+  margin: auto auto;
+  display: block;
+  float: left;
+}
+
+.gallery ul img {
+  border-width: 3px;
+}
+
+.gallery ul a:hover img {
+  border-width: 3px;
+}
+
+/* gallery item
+  <td class="galleryitem">
+    <div class="galleryitemimage">
+      <p class="galleryitemtitle">title</p>
+      <a>
+        <img />
+      </a>
+    </div>
+    <div class="galleryitemtext">
+      <p>description</p>
+    </div>
+  </td>
+*/
+
+.galleryitem2 {
+  width: 50%;
+  vertical-align: top;
+}
+
+.galleryitem3 {
+  width: 33%;
+  vertical-align: top;
+  margin: 0 auto;
+}
+
+.galleryitemimage {
+  float: left;
+  display: block;
+  width: 100%;
+  margin: 0px auto;
+}
+
+.galleryitemtitle {
+  font-weight: bold;
+  text-align: center;
+  min-height: 40px;
+}
+
+.galleryitemimage img {
+  display: block;
+  width: 40%;
+  margin-left: 0;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 10px
+}
+
+.galleryitemtext {
+  margin: 0px 0 10px 0px;
+  padding: 0;
+  display: block;
+  line-height: normal;
+  text-align: left;
+  height: auto;
+  min-height: 80px;
+  width: 100%;
+}
+
+.galleryitemtext p {
+  line-height: normal;
+}
+
+
+/*.gallery .image p {
+  padding: 10px 0 0 0;
+  margin: 0;
+  line-height: normal;
+  min-height: 50px;
+  text-align: center;
+  display: table-cell;
+  vertical-align: bottom;
+} */
+
+.gallery .gap {
+  margin: 0;
+}
+
+#question {
+  background: #FFFFFF;
+  color: #000000;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#rssfeed {
+  height: auto;
+}
+
+#rssfeed img {
+  margin: 0;
+  border: 0;
+  vertical-align: middle;
+}
+
+#rssfeed span {
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.addthis {
+  margin: 10px 0px 0px 0px;
+  padding: 0;
+  background: none;
+  vertical-align: middle;
+}
+
+.error, .response {
+  margin: 20px 0 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+}
+
+.response {
+  color: #000000;
+}
+
+ul.fileitem {
+  list-style: none;
+}
+
+.fileitem a {
+  text-decoration: none;
+}
+
+.fileitem img {
+  border: 0;
+  margin-right: 10px;
+}
+
+ul li.fileitem {
+  list-style-type: none;
+  list-style-position: inside;
+  margin-left: -10px;
+  background: none;
+}
+
+/* adverts (top and bottom) */
+
+.advert {
+  margin: 0 auto;
+  display: block;
+  padding: 5px;
+  background: #FFFFFF;
+  color: #000000;
+  float: none;
+  clear: both;
+}
+
+.advert p {
+  margin: 0;
+  padding: 0;
+}
+
+.advert a {
+  margin: 0;
+  padding: 0;
+  color: #000000;
+  display: block;
+  font-size: 14px;
+  line-height: normal;
+  text-decoration: none;
+}
+
+.advertheader, .advertfooter {
+  background: #000000;
+  color: #FFFFFF;
+  font-size: 10px;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  line-height: normal;
+}
+
+/* rotator slide show */
+
+/* rotator in-page placement */
+.rotator {
+  border: 0;
+  position: relative;
+  margin: 0px;
+  padding: 0;
+/*  display: none; */
+  list-style-type: none;
+  list-style-image: none;
+  list-style-position: inside;
+}
+/* rotator css */
+.rotator ul {
+  margin: 0;
+  padding: 0;
+  display: block;
+  list-style-type: none;
+  list-style-image: none;
+  list-style-position: inside;
+}
+.rotator ul li {
+  float: left;
+  position: absolute;
+  display: block;
+  list-style-type: none;
+  list-style-image: none;
+  list-style-position: inside;
+}
+/* rotator image style */
+.rotator ul li img {
+  border: 1px solid #ccc;
+  padding: 4px;
+  background: #FFF;
+}
+.rotator ul li.show {
+  z-index: 500
+}
+
+.guestbookcomment {
+  margin-bottom: 20px;
+}
