@@ -41,7 +41,12 @@ class pagegallery extends page {
       $this->fldgallerygroup->isdisabled = true;
     }
     // images per page
-    $ippvalues = array(6 => '6 (2 cols x 3 rows)', 12 => '12 (3 cols x 4 rows)', 24 => '24 (4 cols x 6 rows)', 48 => '48 (4 cols x 12 rows)');
+    $ippvalues = array(
+      6 => '6 (2 cols x 3 rows)',
+      12 => '12 (3 cols x 4 rows)',
+      24 => '24 (4 cols x 6 rows)',
+      48 => '48 (4 cols x 12 rows)'
+    );
     $ipp = $this->GetFieldValue('imagesperpage');
     $this->fldimagesperpage = $worker->AddField(
       'imagesperpage', new formbuilderselect('imagesperpage', '', 'How many pictures per page?'), $this);
@@ -49,6 +54,7 @@ class pagegallery extends page {
       $this->fldimagesperpage->AddValue($id, $title, $id == $ipp);
     }
   }
+
   public function AssignFieldProperties($worker, $isnew) {
     parent::AssignFieldProperties($worker, $isnew);
     $count = count($this->galleries);

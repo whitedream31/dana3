@@ -29,6 +29,7 @@ abstract class workerform extends workerbase { // activitybase {
   protected $formtarget = '_self';
   protected $formtitle = '';
   protected $formclass = 'workerform';
+  public $fieldlabelclass = '';
   public $posted = false;
 
   function __construct() {
@@ -42,7 +43,23 @@ abstract class workerform extends workerbase { // activitybase {
     $this->sections = array();
   }
 
+  protected function AssignFormAction() {
+    $list = array(
+      'rid' => $this->itemid,
+      'pid' => $this->groupid,
+      'act' => $this->action
+    );
+    $ret = '';
+    foreach($list as $key => $value) {
+      if ($value) {
+        $ret .= "&amp;{$key}={$value}";
+      }
+    }
+    $this->formaction = $_SERVER['SCRIPT_NAME'] . "?in={$this->idname}{$ret}";
+  }
+
   protected function DoPrepare() {
+    $this->AssignFormAction();
     $this->InitForm();
   }
 
@@ -90,7 +107,7 @@ echo "<p>MOVEUP: {$this->itemid}</p>\n"; exit;
 echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
   }
 
-  protected function ProcessAction($action) {
+  protected function ProcessAction($action = false) {
     if (!$action) {
       $this->AssignFieldDisplayProperties();
     } else {
@@ -123,9 +140,22 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
     }
   }
 
+  protected function Notify($postsucceeded) {}
+
+  protected function AssignBlankFieldvalue($fld, $value) {
+    if ($fld && ($fld instanceof formbuilderbase) && (!$fld->value)) {
+      $fld->SetValue($value);
+    }
+  }
+
+  protected function CheckForBlankValues() {}
+
   public function Execute() {
 //$this->ShowDebugInfo();
     if ($this->posting) {
+      if (($this->action == ACT_EDIT) || ($this->action == ACT_NEW)) {
+        $this->CheckForBlankValues();
+      }
       if (!$this->PostFields() && $this->IsValid()) {
         $this->SaveToTable();
         $this->AddMessage("Changes to {$this->contextdescription} Saved");
@@ -133,17 +163,19 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         $this->action = false;
         // re-init form
         $this->InitForm();
-        $this->ProcessAction(false);
+        $this->ProcessAction();
       } else {
         $this->AddErrorList();
         if ($this->manager->HasErrors()) {
           $this->AddMessage('Sorry, there were errors. Please rectify them and try again.');
           $this->AssignFieldDisplayProperties();
           $this->posted = false;
+$this->ProcessAction($this->action);
         } else {
           $this->AddMessage('No changes were found!');
           $this->posted = true;
         }
+        $this->Notify($this->posted);
       }
     } else {
       $this->ProcessAction($this->action);
@@ -183,11 +215,14 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
 
   protected function AssignItemRemove($confirmed) {}
 
-  public function NewSection($key, $caption, $description) {
+  public function NewSection($key, $caption, $description, $fieldlabelclass = '') {
     if (isset($this->sections[$key])) {
       $ret = $this->sections[$key];
     } else {
-      $ret = array('caption' => $caption, 'description' => $description, 'list' => array());
+      $ret = array(
+        'caption' => $caption, 'description' => $description,
+        'list' => array(), 'fieldlabelclass' => $fieldlabelclass
+      );
       $this->sections[$key] = $ret;
     }
     return $ret;
@@ -207,13 +242,28 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
     return $item;
   }
 
-  public function AssignFieldToSection($sectionkey, $fieldkey) {
+  public function AssignFieldToSection($sectionkey, $fieldkey, $fieldlabelclass = '') {
     if (isset($this->fieldlist[$fieldkey])) {
       $item = $this->fieldlist[$fieldkey];
       $this->sections[$sectionkey]['list'][] = $item;
     } else {
       throw new Exception("Form field not found: {$fieldkey}");
     }
+  }
+
+  protected function GetTargetNameFromMedia($mediaid) {
+    $media = new media($mediaid);
+    if ($media->exists) {
+      $ret = array(
+        'imgname' => $media->GetFieldValue('imgname'),
+        'thumbnail' => $media->GetFieldValue('thumbnail'),
+        'filename' => $media->GetFieldValue('originalname'),
+        'size' => $media->GetFieldValue('imgsize')
+      );
+    } else {
+      $ret = false;
+    }
+    return $ret;
   }
 
   protected function GetErrors() {
@@ -260,17 +310,21 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         formbuilderbase::IncludeAttribute('title', $this->formtitle) .
         formbuilderbase::IncludeAttribute('class', $this->formclass) .
       ">\n";
-
     $ret[] = "    <p class='activitygroupdescription'>{$this->activitydescription}<p>";
     foreach($this->sections as $section) {
-      $caption = $section['caption'];
-      $description = $section['description'];
+      $caption = (isset($section['caption']) && $section['caption']) ? ucwords(strtolower($section['caption'])) : false;
+      $description = (isset($section['description'])) ? $section['description'] : false;
       $ret[] = "    <div class='activitysection'>";
-      $ret[] = "      <h3>{$caption}</h3>";
-      $ret[] = "      <p class='helptext'>{$description}</p>";
+      if ($caption) {
+        $ret[] = "      <h3>{$caption}</h3>";
+      }
+      if ($description) {
+        $ret[] = "      <p class='helptext'>{$description}</p>";
+      }
       $ret[] = "      <section>";
       $list = $section['list'];
       foreach($list as $item) {
+        $item->labelclass = isset($section['fieldlabelclass']) ? $section['fieldlabelclass'] : false;
         $ret = array_merge($ret, $item->AsArray());
       }
       $ret[] = "      </section>";

@@ -67,15 +67,18 @@ class workeraccchgorgdet extends workerform {
     // logo
     $this->fldlogomediaid = $this->AddField(
       'logomediaid', new formbuilderfilewebimage('logomediaid', '', 'Business Logo'), $this->account);
-    $this->fldlogomediaid->mediaid = $this->GetFieldValue('logomediaid');
-    $media = $this->GetMediaThumbnail($this->fldlogomediaid->mediaid); // get the fk for media id
+    $this->fldlogomediaid->mediaid = $this->account->GetFieldValue('logomediaid');
+    $media = $this->GetTargetNameFromMedia($this->fldlogomediaid->mediaid); // get the fk for media id
     if ($media) {
       $this->fldlogomediaid->previewthumbnail = $media['thumbnail'];
     } else {
       $this->fldlogomediaid->previewthumbnail = 'none';
     }
-    $this->fldlogomediaid->targetfilename = $media['targetfilename']; // $this->GetMediaFilename($this->logo->mediaid);
-    $this->fldlogomediaid->targetpath = $this->GetRelativePath('media');
+    $this->fldlogomediaid->AssignThumbnail(
+      '../profiles/' . $this->account->GetFieldValue('nickname') . '/media/',
+      ($media) ? $media['thumbnail'] : 'none',
+      ($media) ? $media['filename'] : false
+    );
   }
 
   protected function PostFields() {

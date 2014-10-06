@@ -18,25 +18,47 @@ class workerresmangalleryimages extends workerform {
   protected $fldtitle;
   protected $fldimage;
   protected $flddescription;
+  protected $fldgalleryid;
 
   protected function InitForm() {
-    $this->table = new gallery($this->itemid);
+    $this->table = new galleryitem($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'gallery picture management';
 //    $this->datagrid = new formbuilderdatagrid('galleryimage', '', 'Gallery Picture');
+    $this->fldgalleryid = new formbuilderhidden('galleryid', $this->groupid); // //$table->GetFieldValue('galleryid'));
     switch ($this->action) {
       case ACT_NEW:
       case ACT_EDIT:
-        $this->title = 'Modify Gallery Picture';
+        $this->title = 'Gallery Picture';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Picture Title'), $this->table);
         $this->fldimage = $this->AddField(
           'image', new formbuilderfilewebimage('largemediaid', '', 'Picture'), $this->table);
+
+        $this->fldimage->mediaid = $this->table->GetFieldValue('largemediaid');
+
+        $media = $this->GetTargetNameFromMedia($this->fldimage->mediaid); // get the fk for media id
+        if ($this->posting) {
+          $this->fldimage->targetfilename = account::$instance->GetMediaFilename($this->fldimage->mediaid); // get the filename based on the media/account tables
+        } else {       
+          if ($media) {
+            $this->fldimage->previewthumbnail = $media['thumbnail'];
+          } else {
+            $this->fldimage->previewthumbnail = 'none';
+          }
+        }
+        $this->fldimage->AssignThumbnail(
+          '../profiles/' . $this->account->GetFieldValue('nickname') . '/media/',
+          ($media) ? $media['thumbnail'] : 'none',
+          ($media) ? $media['filename'] : false
+        );
+
         $this->flddescription = $this->AddField(
           'description', new formbuildertextarea('description', '', 'Description of Picture'), $this->table);
         $this->returnidname = IDNAME_MANAGEGALLERIES; //$this->idname;
-        $this->showroot = false; 
+        $this->showroot = false;
+
         break;
       case ACT_REMOVE:
         break;
@@ -52,10 +74,20 @@ class workerresmangalleryimages extends workerform {
     }
   }
 
+  protected function Notify($postsucceeded) {
+    if ($postsucceeded) {
+      echo "<p>SUCCEEDED</p>\n";
+//      $this->redirect = IDNAME_MANAGEGALLERIES;
+    } else {
+      echo "<p>FAILED</p>\n";
+    }
+  }
+
   protected function PostFields() {
     switch ($this->action) {
+      case ACT_NEW:
       case ACT_EDIT:
-        $ret = $this->fldtitle->Save() + $this->fldaddimage + $this->flddescription;
+        $ret = $this->fldtitle->Save() + $this->fldimage->Save() + $this->flddescription->Save();
         break;
       default:
         $ret = true;
@@ -64,12 +96,50 @@ class workerresmangalleryimages extends workerform {
   }
 
   protected function SaveToTable() {
-    return (int) parent::StoreChanges(); //$this->table->StoreChanges();
+    $ret = -1;
+    $media = $this->account->media;
+    if ($media) {
+      $media->AssignFromWebImage($this->fldimage);
+      $nextimgnumber = account::$instance->nextimgnumber;
+      $media->SetFieldValue('imgid', $nextimgnumber);
+
+      if ($media->StoreChanges()) {
+        $mediaid = $media->ID();
+        $this->table->SetFieldValue('largemediaid', $mediaid);
+        $this->table->SetFieldValue('galleryid', $this->groupid);
+        $ret = (int) $this->table->StoreChanges();
+      }
+    }
+    // back to gallery worker
+    foreach($_POST as $pkey => $pval) {
+      unset($_POST[$pkey]);
+    }
+    foreach($_GET as $gkey => $gval) {
+      if ($gkey == 'rid') {
+        $_GET[$gkey] = $this->groupid;
+      } else {
+        unset($_GET[$gkey]);
+      }
+    }
+    $this->itemid = $this->groupid;
+    $this->groupid = false;
+    $this->action = false;
+    $this->posting = false;
+    $this->idname = IDNAME_MANAGEGALLERIES; //$this->SetIDName(IDNAME_MANAGEGALLERIES);
+/*    if ($ret) {
+      $this->returnidname = IDNAME_MANAGEGALLERIES;
+    } */
+    return $ret;
   }
 
-  protected function AddErrorList() {}
+  protected function AddErrorList() {
+    $this->AddErrors($this->fldtitle->errors);
+    $this->AddErrors($this->fldimage->errors);
+    $this->AddErrors($this->flddescription->errors);
+  }
 
   protected function AssignFieldDisplayProperties() {
+//    $this->datagridsettings->SetIDName(IDNAME_MANAGEGALLERIES);
 //    $this->datagrid->SetIDName($this->idname);
 /*    $this->NewSection(
       'galleryimage', 'Gallery Picture',
@@ -85,13 +155,22 @@ class workerresmangalleryimages extends workerform {
   protected function AssignItemEditor($isnew) {
     $title = (($isnew) ? 'Adding a new' : 'Modify a ') . 'Gallery Picture';
     $this->NewSection(
-      'galleryimage', 'Gallery Picture',
+      'galleryimage', $title,
       'You can upload a picture file to the gallery, type in a title (leave blank to use the filename of the image) and give a general description, which can be shown in Gallery pages.');
     $this->fldtitle->description = 'Specify a title of the image (leave blank to use the filename of the image).';
     $this->fldtitle->size = 50;
+    $this->fldtitle->placeholder = 'eg. first picture';
     $this->AssignFieldToSection('galleryimage', 'title');
+/*
+    $this->fldimage->mediaid = $this->table->GetFieldValue('largemediaid');
+    $media = $this->GetTargetNameFromMedia($this->fldimage->mediaid);
+    $this->fldimage->AssignThumbnail(
+      '../profiles/' . $this->account->GetFieldValue('nickname') . '/media/',
+      ($media) ? $media['thumbnail'] : 'none',
+      ($media) ? $media['filename'] : false
+    );
+*/
     $this->fldimage->description = 'Gallery Picture';
-    $this->fldimage->previewthumbnail = true;
     $this->AssignFieldToSection('galleryimage', 'image');
     $this->flddescription->description = 'Picture Description';
     $this->flddescription->rows = 10;

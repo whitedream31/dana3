@@ -18,7 +18,7 @@ class workerresmangalleries extends workerform {
   protected $areadescription;
   protected $fldgalleries;
   protected $fldaddgallery;
-  
+  protected $fldaddimage;
   protected $fldtitle;
   protected $imagegrid;
 
@@ -48,7 +48,7 @@ class workerresmangalleries extends workerform {
         $this->fldgalleries = $this->AddField('gallery', $this->datagrid, $this->table);
         $this->fldaddgallery = $this->AddField(
           'addgallery', new formbuilderbutton('addgallery', 'Add New Gallery'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&amp;act=" . ACT_NEW;
         $this->fldaddgallery->url = $url;
         break;
     }
@@ -66,7 +66,7 @@ class workerresmangalleries extends workerform {
   }
 
   protected function SaveToTable() {
-    return (int) parent::StoreChanges(); //$this->table->StoreChanges();
+    return (int) $this->table->StoreChanges(); //parent::StoreChanges(); //$this->table->StoreChanges();
   }
 
   protected function AddErrorList() {}
@@ -93,22 +93,23 @@ class workerresmangalleries extends workerform {
     $list = $this->table->visibleitems;
     if ($list) {
       $actions = array(TBLOPT_DELETABLE);
+      $options = array('parentid' => $this->itemid); // parent of the images is the gallery (item id)
       $path = '../profiles/' . $this->account->GetFieldValue('nickname') . '/media/';
       foreach($list as $imageitem) {
         $thumbnail = $path . account::GetImageFilename($imageitem->GetFieldValue('largemediaid'), true);
         $coldata = array(
           'IMG' => "<img src='{$thumbnail}' alt=''>",
           'DESC' => $imageitem->GetFieldValue('title', '<em>(untitled)</em>'),
-          'TEXT' => $imageitem->GetFieldValue('description')
+          'TEXT' => $imageitem->GetFieldValue('description'),
         );
-        $this->imagegrid->AddRow($imageitem->ID(), $coldata, true, $actions);
+        $this->imagegrid->AddRow($imageitem->ID(), $coldata, true, $actions, $options);
       }
 
     }
   }
 
   protected function AssignItemEditor($isnew) {
-    $title = (($isnew) ? 'Creating a new' : 'Modify a ') . 'Gallery1';
+    $title = (($isnew) ? 'Creating a new ' : 'Modify a ') . 'Gallery';
     $this->NewSection(
       'gallery', $title,
       "Please describe the gallery with a simple name or phrase, such as 'Products', 'Portfolio', or 'Before and After' etc.");
@@ -124,6 +125,12 @@ class workerresmangalleries extends workerform {
     $this->PopulateImageGrid();
     $this->imagegrid->description = 'Type in your reply to the comment. Please read the notice above.';
     $this->AssignFieldToSection('imagegrid', 'imagegrid');
+    // add image button
+    $this->fldaddimage = $this->AddField(
+      'addimage', new formbuilderbutton('addimage', 'Add Picture'));
+    $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGEGALLERYIMAGES . "&amp;pid={$this->itemid}&amp;act=" . ACT_NEW;
+    $this->fldaddimage->url = $url;
+    $this->AssignFieldToSection('imagegrid', 'addimage');
   }
 
   protected function AssignItemRemove($confirmed) {

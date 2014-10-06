@@ -1,7 +1,9 @@
 <?php
 session_start();
-
-/**
+$mem = ini_get('memory_limit'); // '128M' // handle large images
+$max = ini_get('post_max_size'); // '8M'
+$fsz = ini_get('upload_max_filesize'); // '8M'
+/*
   * main control script
   * dana framework v.3
 */
@@ -10,13 +12,18 @@ require_once 'class.status.php';
 require_once 'class.activitymanager.php';
 require_once 'class.table.account.php';
 
-$account = account::StartInstance(2);
+/*
+acc  322
+con  454
+nick lorem
+usr  lorem
+pwd  ipsum
+*/
 
-/*$action = GetGet('act');
-if ($action) {
-  echo "<p>ACTION: {$action}</p>\n";
-  exit;
-} */
+$account = account::StartInstance(322);
+
+$_SESSION[SESS_IDGROUP] = 3;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,17 +74,8 @@ $activitymanager->Show();
       <p id="links"><a href="privacy.html">Privacy Policy</a> | <a href="tc.html">Terms of Use</a></p>
     </footer>
   </div>
-  <script type="text/javascript">
-$('#activitycontent').accordion({
-  animate: "easeInOutQuad",
-  heightStyle: "content"
-});
-$('a, input[type="button"]').click(function(){
-  $(this).prop("disabled", "disabled");
-});
-$('input[type="submit"]').click(function(){
-//  $(this).prop("disabled", "disabled");
-});
-  </script>
+<?php
+$activitymanager->ShowAccordion();
+?>
 </body>
 </html>

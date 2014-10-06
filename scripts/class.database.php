@@ -132,11 +132,11 @@ class database {
       $query .= ' AND ' . $where;
     }
     $result = self::Query($query); // or die("Error whilst locating row from {$tblname}: " . mysql_error());
-    if ($result->num_rows > 0) {
+//    if ($result->num_rows > 0) {
       $line = $result->fetch_assoc();
-    } else {
-      $line = false;
-    }
+//    } else {
+//      $line = false;
+//    }
     $result->free();
     return $line;
   }

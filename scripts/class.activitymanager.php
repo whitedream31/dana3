@@ -12,6 +12,7 @@ class activitymanager {
   protected $pagegroup;
   protected $sitegroup;
   protected $resourcegroup;
+  protected $showroot = true;
 
   protected function AddGroup($idname, $icon, $caption, $desc) {
     $group = new activitygroup($idname);
@@ -91,7 +92,7 @@ class activitymanager {
       $this->resourcegroup, IDNAME_MANAGEARTICLES,
       'Manage Articles', 'blogs/articles for visitors to read');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGENEWLETTERS,
+      $this->resourcegroup, IDNAME_MANAGENEWSLETTERS,
       'Manage Newsletters', 'subscribers and add/edit/remove newsletters');
     $this->AddItem(
       $this->resourcegroup, IDNAME_MANAGEBOOKINGS,
@@ -127,10 +128,20 @@ class activitymanager {
           include $script; // create worker as an object
           $worker->SetIDName($idname);
           $worker->Execute();
-          if ($worker->showroot) {
-            $ret = $this->ProcessRoot();
+          if ($worker->idname == $idname) {
+            $this->showroot = $worker->showroot;
+            if ($this->showroot) {
+              $ret = $this->ProcessRoot();
+            } else {
+//              if ($worker->redirect) {
+//                $this->ProcessByIDName($worker->redirect);
+//              } else {
+                $ret = $worker->AsArray();
+//              }
+            }
           } else {
-            $ret = $worker->AsArray();
+            // redirect to a different worker
+            $ret = $this->ProcessByIDName($worker->idname);
           }
 /*          if ($worker->posted) {
             $ret = $this->ProcessRoot();
@@ -158,6 +169,32 @@ class activitymanager {
       $this->sitegroup->AsArray(),
       $this->resourcegroup->AsArray()
     );
+  }
+
+  public function ShowAccordion() {
+    if ($this->showroot) {
+      $active = ($_SESSION[SESS_IDGROUP]) ? $_SESSION[SESS_IDGROUP] : 1;
+      echo implode("\n", array(
+        "  <script type='text/javascript'>",
+        "\$('#activitycontent').accordion({",
+        "  animate: 'easeInOutQuad',",
+        "  heightStyle: 'content',",
+        "  active: {$active}",
+        "});",
+        "\$('a, input[type=\"button\"]').click(function(){",
+        "  \$(this).prop('disabled', 'disabled');",
+        "});",
+        "",
+        "\$('input[type=\"submit\"]').click(function(){",
+        //  $(this).prop("disabled", "disabled");
+        "  $(this).unbind();",
+        //  $.delay(2000);
+        //  alert($(this).val());
+          //$(this).removeProp("disabled");
+        //  alert('click');
+        "});",
+        "  </script>"));
+    }
   }
 
   public function AddMessage($msg) {
@@ -197,7 +234,7 @@ class activitymanager {
     $ret = array_merge($ret, $lines);
     $ret[] = '      </div>';
     $ret[] = '    </section>';
-    echo implode("\r\n", $ret);
+    echo ArrayToString($ret);
   }
 }
 

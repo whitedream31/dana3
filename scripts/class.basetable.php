@@ -40,6 +40,7 @@ define('FN_DESCRIPTION', 'description');
 define('FN_TAG', 'tag');
 define('FN_STATUS', 'status');
 define('FN_VISIBLE', 'visible');
+define('FN_ACCOUNTID', 'accountid');
 
 /**
   * base class for all table related classes
@@ -49,6 +50,7 @@ abstract class basetable {
   public $tablename;
   public $exists;
 
+  public $key;
   public $fieldlist;
   public $lastinsertid = 0;
   public $lasterror = false;
@@ -83,10 +85,10 @@ abstract class basetable {
   }
 
   public function PerformSearch($termwhat, $termwhere) {}
-  
+
+  // no longer used?
   protected function FindInList($text, $list, $directmatchvalue, $substrvalue) {
     $haystack = preg_replace("/[^0-9a-z ]/", '', strtolower(trim($text)));
-//echo "<p>term: {$haystack}</p>\n";
     $ret = 0;
     $vallist = explode(' ', $haystack); // list of words to search in
     foreach($vallist as $valword) {
@@ -132,12 +134,13 @@ abstract class basetable {
       $ret = $this->fieldlist[$name][FA_VALUE];
       if ($ret === null) {
         $ret = $this->fieldlist[$name][FA_DEFAULT];
+      } else {
+        if (!$ret && $default) {
+          $ret = $default;
+        }
       }
     } else {
       $ret = false;
-    }
-    if (!$ret && $default) {
-      $ret = $default;
     }
     return $ret;
   }
@@ -154,6 +157,7 @@ abstract class basetable {
     return $ret;
   }
 
+  // no longer used?
   static public function GetFieldTypeByDataType($datatype) {
     switch ($datatype) {
       case DT_STRING:
@@ -260,8 +264,6 @@ abstract class basetable {
           $targetstring .= $c;
       }
     }
-//    $targetstring = str_replace('\\\\"', '\\"', $targetstring);
-//    $targetstring = str_replace("\\\\'", "\\'", $targetstring);
     return $targetstring;
   }
 
@@ -312,7 +314,7 @@ abstract class basetable {
         $cnt = -2;
       }
       try {
-      database::Query($query);
+        database::Query($query);
         if (!$this->exists) {
           $this->lastinsertid = $this->UpdateKey();
         }
@@ -373,7 +375,7 @@ abstract class basetable {
     return trim($value) and strtolower($value) != 'na';
   }
 
-  static protected function FormatDateTime($formattype, $value, $defaultvalue = '') {
+  static public function FormatDateTime($formattype, $value, $defaultvalue = '') {
     $ret = $defaultvalue;
     if ($value) {
       $time = (is_string($value)) ? strtotime($value) : $value;
@@ -386,6 +388,12 @@ abstract class basetable {
           break;
         case DF_MEDIUMDATE:
           $ret = date('jS F Y', $time);
+          break;
+        case DF_SHORTDATE:
+          $ret = date('d M Y', $time);
+          break;
+        case DF_SHORTDATETIME:
+          $ret = date('d M Y H:i', $time);
           break;
       }
     }
@@ -428,6 +436,7 @@ abstract class basetable {
     return $this->fieldlist[$name];
   }
 
+  // no longer used?
   protected function AssignFormDetails($name, $label, $desc, $required = false) {
     if (isset($this->fieldlist[$name])) {
       $field = $this->fieldlist[$name];
@@ -468,8 +477,9 @@ abstract class basetable {
     return (bool) $this->fieldlist[$fieldname][FA_MODIFIED];
   }
 
-  public function MarkAsDeleted($flg = true) {
-    $this->SetFieldValue(FN_STATUS, STATUS_DELETED);
+  public function MarkAsDeleted() { //$flg = true) {
+    $status = ($flg) ? STATUS_DELETED : '';
+    $this->SetFieldValue(FN_STATUS, $status);
     $this->StoreChanges();
   }
 
@@ -508,9 +518,10 @@ abstract class basetable {
   * @abstract
 */
 abstract class idtable extends basetable {
-  public $linkedpages; // array page objects
+//  public $linkedpages; // array page objects
 
   function __construct($tablename, $id = 0) {
+    $this->key = $id;
     parent::__construct($tablename);
     $this->FindByKey($id);
   }
@@ -532,9 +543,9 @@ abstract class idtable extends basetable {
   }
 
   public function StoreChanges() {
-    if ($this->FieldExists('accountid') && isset(account::$instance)) {
-      if (!$this->GetFieldValue('accountid')) {
-        $this->SetFieldValue('accountid', account::$instance->ID());
+    if ($this->FieldExists(FN_ACCOUNTID) && isset(account::$instance)) {
+      if (!$this->GetFieldValue(FN_ACCOUNTID)) {
+        $this->SetFieldValue(FN_ACCOUNTID, account::$instance->ID());
       }
     }
     return parent::StoreChanges();
@@ -556,7 +567,6 @@ abstract class idtable extends basetable {
   }
 
   //abstract public function AssignFormFields($formeditor, $idref); // delete this after replacing it with...
-  
 
   protected function KeyWithValue() {
     return '`' . FN_ID . '` = ' . $this->ID();
@@ -590,6 +600,7 @@ abstract class linktable extends basetable {
   public $id2;
 
   function __construct($tablename, $id1name, $id2name) {
+    $this->key = array($id1name, $id2name);
     $this->id1name = $id1name;
     $this->id2name = $id2name;
     parent::__construct($tablename);
@@ -761,5 +772,4 @@ abstract class lookuptable extends idtable {
   protected function KeyWithValue() {
     return '`' . FN_ID . '` = ' . $this->ID();
   }
-
 }

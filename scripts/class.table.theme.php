@@ -67,12 +67,14 @@ class theme extends idtable {
       $imgfilename = $imgpath . $theme->url . '/' . $theme->url . '.png';
       if (file_exists($imgfilename)) {
         $currentclass = ($id == $selectedthemeid) ? ' selectedtheme' : '';
-        $tagid = 'id="thm' . $id . '"';
-        $img = '<img ' . $tagid . ' src="' . $imgfilename . '" alt="' . $theme->description . '" ' .
-          'width="' . THEME_THUMBNAIL_WIDTH . '" height="' . THEME_THUMBNAIL_HEIGHT . '">';
-        $head = '<h3>' . $theme->description . '</h3>';
-        $url = '<a href="' . $mainurl . $theme->ID() . '" title="click to choose ' . $theme->description . '">' . $head . $img . '</a>';
-        $ret .= '  <div class="themeitem' . $currentclass . '">' . $url . '</div>' . CRNL;
+        $tagid = "id='thm{$id}'";
+        $width = THEME_THUMBNAIL_WIDTH;
+        $height = THEME_THUMBNAIL_HEIGHT;
+        $img = "<img {$tagid} src='{$imgfilename}' alt='{$theme->description}'" .
+          "width='{$width}' height='{$height}'>";
+        $head = "<h3>{$theme->description}</h3>";
+        $url = "<a href='{$mainurl}{$id}' title='click to choose {$theme->description}'>{$head}{$img}</a>";
+        $ret .= "  <div class='themeitem{$currentclass}'>{$url}</div>" . CRNL;
       }
     }
     $ret .= '</div>' . CRNL;

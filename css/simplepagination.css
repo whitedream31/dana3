@@ -1,0 +1,12 @@
+.simple-pagination-first,
+.simple-pagination-previous,
+.simple-pagination-page-numbers,
+.simple-pagination-navigation-page,
+.simple-pagination-next,
+.simple-pagination-last,
+.simple-pagination-page-x-of-x,
+.simple-pagination-showing-x-of-x {
+  padding-right: 20px;
+  display: block;
+  float: left;
+}

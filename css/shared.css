@@ -26,6 +26,19 @@
   font-weight: normal;
 }
 
+#contactdetails ul a {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+li.contactitem {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 #guestbook {
   width: 90%;
 }
@@ -98,11 +111,12 @@
   color: #FF0000;
 }
 
-#productlistheader, #productlistfooter, #galleryfooter {
+#productlistheader, #productlistfooter, #galleryfooter, #galleryheader {
   width: 100%;
   font-weight: normal;
   margin: 2px 0px 5px 0px;
   padding: 2px 2px 2px 2px;
+  height: 20px;
 }
 
 #productlistheader div, #productlistfooter div {
@@ -110,67 +124,84 @@
   margin: 5px 0 5px 0;
 }
 
-#productlistheader img, #productlistfooter img, #galleryfooter img {
+#productlistheader img, #productlistfooter img, #galleryfooter img, #galleryheader img {
   border: 0;
   margin: 1px;
 }
-
+/*
 #productlistheader p, #productlistfooter p, #galleryfooter p {
   margin: 0;
   padding: 0;
   line-height: normal;
   float: left;
-}
+} */
 
-#productlistheader ul, #productlistfooter ul, #galleryfooter ul {
+#productlistheader ul, #productlistfooter ul, #galleryfooter ul, #galleryheader ul {
   list-style: none;
   margin: 0;
   padding: 0;
   line-height: normal;
 }
 
-#productlistheader li, #productlistfooter li, #galleryfooter li {
+#productlistheader li, #productlistfooter li, #galleryfooter li, #galleryheader li {
   margin: 0;
   padding: 0 0 0 5px;
   display: inline;
   text-align: center;
 }
 
-#productlistheader li a, #productlistfooter li a, #galleryfooter li a {
+#productlistheader a, #productlistfooter a, #galleryfooter a, #galleryheader a {
   text-decoration: none;
   text-align: center;
 }
 
 /* gallery selectors */
 
-.gallery {
+#gallery {
   padding: 2px 5px 2px 5px;
   margin: 5px 0 5px 0;
 }
 
-.gallery table {
-  width: 100%;
-}
-
-.gallery ul {
+#gallery ul {
   list-style: none;
   margin: 0;
   padding: 0;
   list-style-position: outside;
 }
 
-.gallery ul li {
+#gallery ul li {
   padding: 10px;
   margin: auto auto;
   display: block;
   float: left;
+  min-height: 250px;
 }
 
-.gallery ul img {
+#gallery .col3 {
+  width: 28%;
+}
+
+#gallery h4 {
+  text-align: center;
+  font-weight: bold;
+  height: 40px;
+  padding: 10px 0 0 0;
+  overflow: hidden;
+}
+
+#gallery td {
+  vertical-align: top;
+}
+
+#gallery img {
+  padding: 0;
   border-width: 3px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.gallery ul a:hover img {
+#gallery ul a:hover img {
   border-width: 3px;
 }
 
@@ -235,7 +266,6 @@
 .galleryitemtext p {
   line-height: normal;
 }
-
 
 /*.gallery .image p {
   padding: 10px 0 0 0;

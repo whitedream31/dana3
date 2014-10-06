@@ -8,6 +8,7 @@ define('TBLOPT_MOVEDOWN', 'md');
 define('TBLOPT_MOVEUP', 'mu');
 define('TBLOPT_NEWITEM', ACT_NEW);
 define('TBLOPT_SENDNL', 'sn');
+define('TBLOPT_AUTHORISE', 'au'); // guestbook entry
 
 define('ROWSTATE_ISTOP', 1);
 define('ROWSTATE_ISBOTTOM', 2);
@@ -68,7 +69,7 @@ class formbuilderdatagrid extends formbuilderbase {
     return $ret;
   }
 
-  protected function GetActionButton($action, $state, $rowid, $text) {
+  protected function GetActionButton($action, $state, $rowid, $text, $parentid = false) {
     $icon = false;
     $title = '';
     $ret = '';
@@ -124,7 +125,10 @@ class formbuilderdatagrid extends formbuilderbase {
         break;
     }
     if ($icon) {
-      $link = "{$this->script}?in={$this->idname}&rid={$rowid}&act={$action}";
+      $link = "{$this->script}?in={$this->idname}&amp;rid={$rowid}&amp;act={$action}";
+      if ($parentid) {
+        $link .= '&amp;pid=' . $parentid;
+      }
       $img = "<img class='actionimg' src='images//{$icon}' alt=''>";
       $ret = "<a class='action' href='{$link}' title='{$title}'>{$img}{$text}</a>";
     } else {
@@ -134,15 +138,15 @@ class formbuilderdatagrid extends formbuilderbase {
     return $ret;
   }
 
-  protected function GetActionButtons($actions, $state, $rowid, $text = '') {
+  protected function GetActionButtons($actions, $state, $rowid, $text = '', $parentid = false) {
     $ret = array();
     if (is_array($actions)) {
       foreach($actions as $action) {
-        $ret[] = $this->GetActionButton($action, $state, $rowid, $text);
+        $ret[] = $this->GetActionButton($action, $state, $rowid, $text, $parentid);
       }
       $ret = implode(' ', $ret);
     } else {
-      $ret = $this->GetActionButton($actions, $state, $rowid, $text);
+      $ret = $this->GetActionButton($actions, $state, $rowid, $text, $parentid);
     }
     return $ret;
   }
@@ -157,13 +161,14 @@ class formbuilderdatagrid extends formbuilderbase {
     return implode("\n", $ret);
   }
 
-  public function AddRow($id, $columns, $isvisible, $actions) {
+  public function AddRow($id, $columns, $isvisible, $actions, $options = false) {
     $this->rows[$id] = array(
-      'columns' => $columns, 'visible' => $isvisible, 'actions' => $actions
+      'columns' => $columns, 'visible' => $isvisible,
+      'actions' => $actions, 'options' => $options
     );
   }
 
-  private function ShowRow($id, $idx, $columns, $actions, $visible) {
+  private function ShowRow($id, $idx, $columns, $actions, $visible, $options) {
     $this->ignorefirstrow = (in_array(TBLOPT_IGNOREFIRSTROW, $actions));
     $showvisible = (in_array(TBLOPT_TOGGLEVISIBLE, $actions));
     $isfirst = ($idx == 1);
@@ -174,7 +179,8 @@ class formbuilderdatagrid extends formbuilderbase {
     foreach ($this->columns as $key => $column) {
       $col = ((isset($columns[$key]))) ? $columns[$key] : '';
       if ($column['editable']) {
-        $link = $this->GetActionButtons(TBLOPT_EDITABLE, 0, $id, $col);
+        $parentid = (isset($options['parentid'])) ? $options['parentid'] : false;
+        $link = $this->GetActionButtons(TBLOPT_EDITABLE, 0, $id, $col, $parentid);
         $list[] = "<td class='editable'>{$link}</td>";
       } elseif ($key == 'ACT') {
         $state = 0;
@@ -221,7 +227,7 @@ class formbuilderdatagrid extends formbuilderbase {
         $id = $rowid; //(isset($row['id'])) ? $row['id'] : $idx;
         $columns = $row['columns'];
         if (count($columns)) {
-          $ret[] = $this->ShowRow($id, $idx, $columns, $row['actions'], $row['visible']);
+          $ret[] = $this->ShowRow($id, $idx, $columns, $row['actions'], $row['visible'], $row['options']);
         }
         $idx++;
       }

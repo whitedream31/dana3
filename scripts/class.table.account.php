@@ -62,7 +62,6 @@ class account extends idtable {
     $this->hoursid = 0;
     $this->hours = false;
     parent::__construct('account', $id);
-    //
     $this->ratingstatistics = false;
     $this->pagelist = false;
     self::$errors = array();
@@ -378,8 +377,12 @@ class account extends idtable {
 
   public function MainWebsiteURL($makelink = false) {
     $website = $this->GetFieldValue('website');
-    $ret = $website; //($website) ? "http://{$website}" : false;
+    $ret = $website;
     if ($ret && $makelink) {
+      $pos = strpos($website, '//');
+      if ($pos) {
+        $website = substr($website, $pos+2);
+      }
       $ret = "<a href='{$ret}' target='_blank' title='visit our website'>{$website}</a>";
     }
     return $ret;
@@ -450,11 +453,7 @@ class account extends idtable {
     if (isset($this->media)) {
       $this->media->AssignFromWebImage($mediaid);
       $this->media->SetFieldValue('imgid', $this->nextimgnumber);
-//      $msg = ($this->media->exists) ? 'updated' : 'added';
       $this->media->StoreChanges();
-//      if ($this->account->media->StoreChanges()) {
-//        account::AddResultMessage('logo', 'Organisation details ' . $msg);
-//      }
       $this->SetFieldValue('logomediaid', $this->media->ID());
       if ($postnow) {
         $this->StoreChanges();
@@ -476,9 +475,6 @@ class account extends idtable {
   }
 
   public function StoreChanges() {
-/*    if (!isset($this->media)) {
-      $this->media = $this->GetMediaFilename($mediaid);
-    } */
     if (isset($this->media)) {
       $this->media->AssignFromWebImage($this->logo);
       $this->media->SetFieldValue('imgid', $this->nextimgnumber);

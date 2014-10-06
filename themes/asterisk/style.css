@@ -334,9 +334,15 @@ hr {
 	color: #FFFFFF;
 }
 
+#galleryfooter .simple-pagination-navigation-disabled, #galleryheader .simple-pagination-navigation-disabled {
+  font-weight: normal;
+}
 
+#galleryfooter .simple-pagination-navigation-page, #galleryheader .simple-pagination-navigation-page {
+  font-weight: bold;
+}
 
-#productlistheader, #productlistfooter, #galleryfooter {
+#productlistheader, #productlistfooter, #galleryfooter, #galleryheader {
   width: 100%;
   font-weight: normal;
   font-size: 14px;

@@ -2,10 +2,11 @@
 // page writer for MyLocalSmallBusiness
 // written by Ian Stewart (c) 2011, 2013 Whitedream Software
 // created: 23 sep 2013 (org. 8 jun 2010)
-// modified: 5 aug 2014
+// modified: 25 aug 2014
 // (rewritten into a class structure)
 
-require_once 'class.database.php';
+require_once 'define.php';
+require_once 'class.pagewriter.php';
 require_once 'class.table.account.php';
 require_once 'class.table.contact.php';
 
@@ -45,9 +46,10 @@ class pagewriter {
   public $sourcepath;
   public $account;
   public $options;
-  public $rootpath;
+  public $rootpath; // path to the accounts profile directory (ie. /profiles/nickname)
   public $currentpage;
   public $mode;
+  public $testing;
 //  public $rssfeedfilename;
 
   public function __construct($options) {
@@ -56,6 +58,10 @@ class pagewriter {
     $this->errcount = 0;
     $this->log = array();
     $this->sourcepath = getcwd() . DIRECTORY_SEPARATOR; // should be: mylocalsmallbusiness.com/scripts/
+    $this->testing = in_array(PWOPT_TEST, $options);
+  }
+
+  public function Execute() {
     $this->AddToLog(LOG_INIT);
     try {
       $this->account = account::StartInstance();
@@ -66,15 +72,15 @@ class pagewriter {
           $this->AddToLog(LOG_FOUND_CONTACT, $this->contact->FullContactName());
           $this->pagelist = $this->account->GetPageList(true);
           $this->shortname = $this->account->GetFieldValue('nickname');
-          if ($this->FindThemePath()) {
+          if ($this->GetTheme()) {
             $this->AddToLog(LOG_FOUND_THEME, $this->theme->GetFieldValue('description'));
             $this->MakeSite();
           }
         } else {
-          $this->AddError("Contact {$this->contact->ID()} does not exist");
+          $this->AddError("Contact {$this->contact->key} does not exist");
         } 
       } else {
-        $this->AddError("Account {$this->account->ID()} does not exist");
+        $this->AddError("Account {$this->account->key} does not exist");
       }
     } catch (Exception $e) {
       $this->AddError("Exception: [{$e->code}] - {$e->message}");
@@ -102,11 +108,12 @@ class pagewriter {
   }
 
   private function WriteOut($line, $nl = true) {
-    $out = (is_array($line)) ? ArrayToString($line) : trim($line);
+    if (is_string($line) && $nl) {
+      $out = $line . "\n";
+    } else {
+      $out = ArrayToString($line);
+    }
     if ($out) {
-      if ($nl) {
-        $out .= "\n";
-      }
       fwrite($this->dsthandle, $out);
 /*      if (in_array(PWOPT_TEST, $this->options)) {
         echo $out;
@@ -138,7 +145,7 @@ class pagewriter {
     switch($mode) {
       case PWOPT_LIVE:
         $modetype = 'LIVE';
-        $ret = realpath($this->GetLiveRootPath()) . DIRECTORY_SEPARATOR;
+        $ret = $this->GetLiveRootPath() . DIRECTORY_SEPARATOR; //realpath($this->GetLiveRootPath()) . DIRECTORY_SEPARATOR;
         break;
       default:
         // current: mylocalsmallbusiness/scripts
@@ -243,7 +250,6 @@ class pagewriter {
     $this->CopyStyleSheet($this->themepath, $this->rootpath, 'style.css'); // copy the style sheet
     $this->CopyImages($this->themepath, $this->rootpath); // copy the style sheet images
 //    $this->CopyImages(PDIR, $this->sourcepath, 'images' . DIRECTORY_SEPARATOR . 'lightbox'); // copy lightbox images
-
     // copy the media files (logo and images for galeries) to the live website
     if ($this->mode != PWOPT_PROFILE) {
       // copy auxiliary files from profile
@@ -261,7 +267,8 @@ class pagewriter {
       }
     } else {
       $this->AddToLog(LOG_WRITE_PAGE, '** NO PAGE **');
-      $this->WritePage(); // write no page message using current theme / template
+      // TODO: add 404 error page using theme
+      //$this->WritePage(false, $htmlsrc); // write no page message using current theme / template
     }
     if ($this->mode != PWOPT_PROFILE) {
       $this->account->MarkAsUpdated(); // mark as no longer modified
@@ -307,7 +314,7 @@ class pagewriter {
 
   protected function WritePage($page, $htmlsrc) { //$htmlsrc, $pageid = 0) {
     $this->currentpage = $page; //$this->account->FindPage($pageid);
-    if ($this->currentpage->exists && 
+    if ($this->currentpage && $this->currentpage->exists && 
       ($this->currentpage->GetFieldValue('status') == STATUS_ACTIVE) &&
       $this->currentpage->GetFieldValue('visible')) {
       $this->ProcessPage($htmlsrc);
@@ -328,7 +335,7 @@ class pagewriter {
       case PAGETYPE_GALLERY: //gal
         $ret = new sectionprocessorgallery($this);
         break;
-      case PAGETYPE_ARTICLES: // blg
+      case PAGETYPE_ARTICLE: // blg
         $ret = new sectionprocessorarticles($this);
         break;
       case PAGETYPE_GUESTBOOK: // gbk
@@ -337,7 +344,7 @@ class pagewriter {
       //case PAGETYPE_SOCAILNETWORK: // snw
       case PAGETYPE_BOOKING: // bk
       case PAGETYPE_CALENDAR: // cal
-      case PAGETYPE_PRIVATEAREA: // pvt
+//      case PAGETYPE_PRIVATEAREA: // pvt
       case PAGETYPE_SURVEY: // svy
       default:
         $ret = false;
@@ -382,12 +389,14 @@ class pagewriter {
         $posend += 4;
         $left = substr($line, 0, $posstart);
         $right = substr($line, $posend, strlen($line) - $posend);
-        $sectionvalue = $this->ProcessSection($sectionname);
+        $sectionvalue = RemoveEmptyElements($this->ProcessSection($sectionname));
         $ret = count($sectionvalue); //true;
 //        if (count($sectionvalue)) {
-          $line = $left . ArrayToString($sectionvalue) . $right;
+        if ($ret) {
+          $gap = ($ret > 1) ? "\n" : '';
+          $line = $left . $gap . ArrayToString($sectionvalue) . $gap . $right;
           //$ret = count($sectionvalue); //true;
-//        }
+        }
       }
     }
     return $ret;
@@ -396,15 +405,12 @@ class pagewriter {
   private function ProcessPageLine($line) {
     // replace all place holders with proper content based on the page details
     while ($this->ReplacePlaceHolderWithContent($line));
-    $this->WriteOut($line);
+    $this->WriteOut($line, false);
   }
 
   private function WritePagePreparation() {
-    $this->WriteOut('<?php');
     // add code based on the page type
-    $code = $this->sectionprocessor->RetrievePreparationCode();
-    $this->WriteOut($code);
-    $this->WriteOut('?>'); // end PHP
+    $this->WriteOut($this->sectionprocessor->RetrievePreparationCode());
   }
 
   private function ProcessSection($sectname) {
@@ -417,7 +423,7 @@ class pagewriter {
     $res = $this->sectionprocessor->RetrieveSection($section, $tag, $class);
     // return the html code with optionally wrapped tag and class
     if ($res === false) {
-      $ret[] = $sectname;
+      $ret[] = false; //$sectname;
     } elseif($res) {
 /*      if ($tag) {
         $starttag = '<' . $tag;
@@ -428,7 +434,11 @@ class pagewriter {
         $endtag = "</{$tag}>";
         $ret = array($starttag, $res, $endtag);
       } else { */
+      if (is_string($res)) {
         $ret = explode("\n", $res);
+      } else {
+        $ret = $res;
+      }
 //      }
     }
     return $ret;
@@ -474,17 +484,27 @@ class pagewriter {
     return $ret;
   }
 
-  private function FindThemePath() {
+  public function AssignThemeByRef($ref) {
+    $line = database::SelectFromTableByRef('theme', $ref);
+    $this->theme = new theme($line['id']);
+  }
+
+  private function GetTheme() {
     // find theme to use
     require_once 'class.table.theme.php';
-    $this->theme = $this->account->Theme();
-    if (!$this->theme->exists) {
-      $this->AddError("Theme row {$this->theme->ID()} does not exist!");
+    if (!$this->theme) {
+      $this->theme = $this->account->Theme(); // use theme from account
     }
-    $themedir = PDIR . 'themes' . DIRECTORY_SEPARATOR . $this->theme->GetFieldValue('url');
-    // cwd is 'scripts' - get full path to theme directory
-    $this->themepath = realpath($themedir) . DIRECTORY_SEPARATOR;
-    return file_exists($this->themepath . 'index.html') && file_exists($this->themepath . 'style.css');
+    if (!$this->theme->exists) {
+      $this->AddError("Theme row {$this->theme->key} does not exist!");
+      $ret = false;
+    } else {
+      $themedir = PDIR . 'themes' . DIRECTORY_SEPARATOR . $this->theme->GetFieldValue('url');
+      // cwd is 'scripts' - get full path to theme directory
+      $this->themepath = realpath($themedir) . DIRECTORY_SEPARATOR;
+      $ret = file_exists($this->themepath . 'index.html') && file_exists($this->themepath . 'style.css');
+    }
+    return $ret;
   }
 
 }

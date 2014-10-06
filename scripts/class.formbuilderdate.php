@@ -6,7 +6,7 @@ define('DATEFMT_MDY', 'mdy');
 define('DATEFMT_YMD', 'ymd');
 
 // date field - FLDTYPE_DATE - detrieved from edit box
-class datefield extends editboxfield {
+class formbuilderdate extends formbuildereditbox {
   public $inputformat = DATEFMT_DMY;
   public $outputformat = DATEFMT_YMD;
   public $separator = '-';

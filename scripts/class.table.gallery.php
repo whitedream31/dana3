@@ -2,7 +2,9 @@
 require_once 'class.database.php';
 require_once 'class.basetable.php';
 
-// gallery group
+/**
+ * @name gallery group
+ */
 class gallery extends idtable {
   public $itemsloaded; // true if the two item arrays are populated with current details
   public $allitems; // all gallery items for this gallery group
@@ -59,10 +61,11 @@ class gallery extends idtable {
     $this->PopulateItems();
     $gallerylist = $this->visibleitems;
     if (count($gallerylist) > 1) {
-      $ret[] = "<div id='gallery' class='rotator' style='height: {$this->galleryheight}px'>";
+      $div = "<div id='gallery' class='rotator' style='height: {$this->galleryheight}px'>";
     } else {
-      $ret[] = "<div class='norotator'>";
+      $div = "<div class='norotator'>";
     }
+    $ret[] = $div;
     $ret[] = "  <ul class='gallery'>";
     $flg = true;
     $class = ' class="show"';
@@ -112,7 +115,31 @@ class gallery extends idtable {
     return $ret;
   }
 
-  public function PopulateItems() {
+  /**
+   * @name used for building the gallary page
+   * @param int $start is the first item to show (0 for first item)
+   * @param int $pagecount is how many items to show in a page
+   * @return \galleryitem list of items [id] = gallery item object
+   */
+  private function GetPagedActiveItems($start, $pagecount) {
+    $id = $this->ID();
+    $query = 'SELECT `id`, `enabled` FROM `galleryitem` ' .
+      "WHERE `galleryid` = {$id} AND `enabled` > 0 " .
+      "ORDER BY `title` LIMIT {$start}, {$pagecount}";
+    $list = array();
+    $result = database::Query($query);
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $itm = new galleryitem($id);
+      if ($itm->exists) {
+        $list[$id] = $itm;
+      }
+    }
+    $result->close();
+    return $list;
+  }
+
+  public function PopulateItems($start = 0, $pagecount = 0) {
     if (!$this->itemsloaded) {
 //    require_once 'class.table.galleryitem.php';
       $this->allitems = array();
@@ -120,6 +147,9 @@ class gallery extends idtable {
       $id = $this->ID();
       $query = 'SELECT `id`, `enabled` FROM `galleryitem` ' .
         "WHERE `galleryid` = {$id} ORDER BY `title`";
+      if ($pagecount) {
+        $query .= " LIMIT {$start}, {$pagecount}";
+      }
       $result = database::Query($query);
       while ($line = $result->fetch_assoc()) {
         $id = $line['id'];
@@ -135,7 +165,7 @@ class gallery extends idtable {
       $this->itemsloaded = true;
     }
   }
-
+/*
   private function CheckGalleryPageLinks() {
     $homepagefound = false;
     $gallerycount = 0;
@@ -173,7 +203,7 @@ class gallery extends idtable {
     }
     return $ret;
   }
-
+*/
   private function FindGalleryLinkedPageDescription($galleryid) {
     $query = "SELECT `description` FROM `page` " .
       "WHERE (`groupid` = {$galleryid}) OR (`gengalleryid` = {$galleryid})";
@@ -239,5 +269,63 @@ class gallery extends idtable {
       ));
     }
     $result->free();
+  }
+
+  /**
+   * @name BuildGalleryViewer create a html section containing each gallery item
+   * @param int $start - the first item to show
+   * @param int $imagesperpage - number of items to show
+   * @param bool $incdescription - add the items description text, if exists
+   */
+  public function BuildGalleryViewer($start, $imagesperpage, $cols, $incdescription, $itemclass = false) {
+    $ret = array("<section id='galleryviewer' class='galleryviewer'>");
+    $list = $this->GetPagedActiveItems($start, $imagesperpage);
+    $item = reset($list);
+    if ($item) {
+
+      $ret[] = "  <div id='galleryheader'>";
+      $ret[] = "    <div class='simple-pagination-first'></div>";
+      $ret[] = "    <div class='simple-pagination-previous'></div>";
+      $ret[] = "    <div class='simple-pagination-page-numbers'></div>";
+      $ret[] = "    <div class='simple-pagination-next'></div>";
+      $ret[] = "    <div class='simple-pagination-last'></div>";
+      $ret[] = "    <div class='simple-pagination-page-x-of-x'></div>";
+      $ret[] = "    <div class='simple-pagination-showing-x-of-x'></div>";
+      $ret[] = "  </div>";
+
+      //$class = ($itemclass) ? " class='{$itemclass}'" : '';
+      $ret[] = '<table>';
+      while (!empty($item)) {
+        $ret[] = '  <tr>';
+        $colcount = 0;
+        $row = '';
+        while ($item && ($colcount < $cols)) {
+          $row .= '    <td>' . ArrayToString($item->BuildItem($incdescription)) . '</td>';
+  //        $ret[] = "  <li{$class}>" . ArrayToString($item->BuildItem($incdescription)) . '</li>';
+          $item = next($list);
+          $colcount++;
+        }
+        $ret[] = $row;
+        $ret[] = '  </tr>';
+      }
+      $ret[] = '</table>';
+
+      $ret[] = "  <div id='galleryfooter'>";
+      $ret[] = "    <div class='simple-pagination-first'></div>";
+      $ret[] = "    <div class='simple-pagination-previous'></div>";
+      $ret[] = "    <div class='simple-pagination-page-numbers'></div>";
+      $ret[] = "    <div class='simple-pagination-next'></div>";
+      $ret[] = "    <div class='simple-pagination-last'></div>";
+      $ret[] = "    <div class='simple-pagination-page-x-of-x'></div>";
+      $ret[] = "    <div class='simple-pagination-showing-x-of-x'></div>";
+  /*    $ret[] = "    <div>Show <select class='simple-pagination-items-per-page'>";
+      $ret[] = "       <option value='4'>three</option>";
+      $ret[] = "       <option value='10'>ten</option>";
+      $ret[] = "       <option value='25'>twenty five</option>";
+      $ret[] = "     </select> rows per page.</div>"; */
+      $ret[] = "  </div>";
+    }
+    $ret[] = "</section>";
+   return $ret;
   }
 }

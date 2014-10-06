@@ -8,6 +8,7 @@ require_once 'class.basetable.php';
  */
 
 // error list - codes
+define('ERRKEY_PHPERROR', 'phperr'); // error from php ($php_errormsg)
 define('ERRKEY_VALUEREQUIRED', 'vreq');
 define('ERRKEY_IMAGETOOBIG', 'toobig');
 define('ERRKEY_INVALIDFILE', 'invfile');
@@ -31,6 +32,8 @@ abstract class formbuilderbase {
   public $classname; // optional class name for control
   public $style = false; // optional style attribute
   public $label; // optional label text
+  public $labelclass;
+  public $labelstyle;
   public $value; // value of control
   public $description; // optional description paragraph
   public $isdisabled = false; // boolean disabled attribute flag in control
@@ -143,9 +146,9 @@ abstract class formbuilderbase {
 
   protected function GetPostValue() {
     if (isset($_POST[$this->name])) {
-      $value = addslashes($_POST[$this->name]);
+      $postvalue = addslashes($_POST[$this->name]);
       $removetags = ($this->fieldtype != FLDTYPE_TEXTAREA);
-      $value = $this->SafeStringEscape($value);
+      $value = $this->SafeStringEscape($postvalue);
       if ($removetags) {
         $value = strip_tags($value);
       }
@@ -208,10 +211,14 @@ abstract class formbuilderbase {
       : array();
   }
 
+  protected function SetValue($value) {
+    $this->value = $value;
+  }
+
   public function BindToTable($table) {
     if ($table instanceof basetable) {
       $this->table = $table;
-      $this->value = $table->GetFieldValue($this->name);
+      $this->SetValue($table->GetFieldValue($this->name));
     }
   }
 
@@ -241,8 +248,11 @@ abstract class formbuilderbase {
       $lbl = $this->label;
     }
     $reqlbl = ($this->required) ? ' required' : '';
+    $class = ($this->labelclass) ? $this->labelclass : 'fieldlabel';
+    $style = ($this->labelstyle) ? " style='$this->labelstyle'" : '';
     if ($lbl) {
-      $ret[] = "<label class='fieldlabel{$reqlbl}' for='{$this->id}'>{$lbl}</label>";
+      $lbl = ucwords(strtolower($lbl));
+      $ret[] = "<label class='{$class}{$reqlbl}'{$style} for='{$this->id}'>{$lbl}</label>";
     }
     if (count($this->errors)) {
       $ret = array_merge($ret, $this->GetErrors());

@@ -2,7 +2,7 @@
 // section processor for the page writer for MyLocalSmallBusiness
 // written by Ian Stewart (c) 2012 Whitedream Software
 // created: 22 nov 2012
-// modified: 4 oct 2013
+// modified: 4 sep 2014
 
 //require_once('library.php');
 //require_once('pagewriter.php');
@@ -33,6 +33,7 @@ define('SCT_FOOTER', 'footer');
 define('SCT_ADDTHIS', 'addthis');
 define('SCT_METALINKS', 'metalinks');
 define('SCT_SCRIPT', 'script');
+define('SCT_CALLJS', 'calljs');
 define('SCT_ADVERT', 'advert');
 
 // id name of sections
@@ -40,10 +41,13 @@ define('HTMLID_LOGO', 'logoimg'); // business logo
 define('HTMLID_NAVIGATION', 'menu'); // navigation (menu) of pages
 define('HTMLID_INITIALCONTENT', 'inittext');
 define('HTMLID_MAINCONTENT', 'maintext');
-define('HTMLID_ARTICLESIDEBAR', 'artsidebar');
-define('HTMLID_GUESTBOOKSIDEBAR', 'guestbooksidebar');
-define('HTMLID_NEWSLETTERSIDEBAR', 'newslettersidebar');
-define('HTMLID_SOCIALNETWORKSIDEBAR', 'socialnetworksidebar');
+define('HTMLID_ARTICLE', 'art');
+define('HTMLID_GUESTBOOK', 'guestbook');
+define('HTMLID_NEWSLETTER', 'newsletter');
+define('HTMLID_SOCIALNETWORK', 'socialnetwork');
+define('HTMLID_CALENDAR', 'calendar');
+define('HTMLID_BOOKING', 'booking');
+define('HTMLID_PRIVATEAREA', 'privatearea');
 define('HTMLID_TRANSLATION', 'translation');
 define('HTMLID_RSSFEED', 'rssfeed');
 define('HTMLID_CONTACTDETAILS', 'contactdetails');
@@ -52,6 +56,10 @@ define('HTMLID_SIDECONTENT', 'sidetext');
 define('HTMLID_PAGEFOOTER', 'pagefooter');
 define('HTMLID_ADDTHIS', 'addthis');
 
+define('CONTENTAREATYPE_SIDEBAR', 's');
+define('CONTENTAREATYPE_MAIN', 'm');
+
+// base class for the section processor
 abstract class sectionprocessor {
   protected $pagewriter;
   protected $mode;
@@ -63,8 +71,10 @@ abstract class sectionprocessor {
   protected $contact;
   protected $pagelist;
   protected $pagecount;
-  
-  protected $lastgalleryid;
+
+  protected $pgtype;  // page type
+  protected $groupid; // bespoke resource id (eg. gallery id)
+
   protected $lastgallery;
   protected $newsletterlist;
   private $sectiontag;
@@ -88,23 +98,19 @@ abstract class sectionprocessor {
     $this->rootpath = $pagewriter->rootpath; // root destination path
     $this->sourcepath = $pagewriter->sourcepath; // scripts path
     $this->page = $pagewriter->currentpage;
+    $this->pgtype = $this->page->pgtype;
+    $this->groupid = (int) $this->page->GetFieldValue('groupid', 0);
     $this->pagelist = $pagewriter->pagelist->pages;
     $this->pagecount = count($this->pagelist);
     $this->account = $this->pagewriter->account;
     $this->contact = $pagewriter->contact;
   }
 
+  // returns false or an array
   abstract protected function FetchPreparationCode();
   abstract protected function FetchMetaLinks();
   abstract protected function FetchScript();
-
-  protected function FetchMainContent() {
-    return $this->page->GetFieldValue('maincontent');
-  }
-
-  protected function FetchInitialContent() {
-    return $this->page->GetFieldValue('initialcontent');
-  }
+  abstract protected function FetchCallJS();
 
   private function MakeTag($content, $tag = '', $idname = '', $class = '') {
     if (IsBlank($content)) {
@@ -124,7 +130,12 @@ abstract class sectionprocessor {
         if ($class) {
           $ret .= " class='{$class}'";
         }
-        $ret .= ">{$content}</{$tag}>";
+        if (is_array($content)) {
+          $strcontent = ArrayToString($content);
+          $ret .= ">{$strcontent}</{$tag}>";
+        } else {
+          $ret .= ">{$content}</{$tag}>";
+        }
       } else {
         $ret = $content;
       }
@@ -132,20 +143,24 @@ abstract class sectionprocessor {
     return $ret;
   }
 
-  private function IncludePublishStateCode() {
-    //global $rootpath;
-    $path = $this->sourcepath;
-    $ret = array();
-//    $ret[] = '/* check for publishing state */';
-    $ret[] = "require_once '" . $path . "class.websitemanager.php';";
-    $ret[] = 'websitemanager::SetAccount(' . $this->account->ID() . ');';
-    return $ret;
+  private function IncludeWebsiteManager() {
+    $accid = $this->account->ID();
+    $pageid = $this->page->ID();
+    $rootpath = rtrim($this->rootpath, "\\");  // remove trailing path
+    $sourcepath = rtrim($this->sourcepath, "\\");
+//    $path = $this->sourcepath;
+    return array(
+      "require_once '{$this->sourcepath}class.websitemanager.php';",
+      "websitemanager::Initialise({$accid}, '{$this->pgtype}', {$pageid}, " .
+        "{$this->groupid}, '{$this->mode}', '{$rootpath}', '{$sourcepath}');"
+    );
   }
 
   private function IncludeStatsCode() {
 //    $path = $this->sourcepath;
-    $pageid = $this->page->ID();
-    $pagemgrid = $this->account->GetFieldValue('pagemgrid');
+// TODO: params already known
+//    $pageid = $this->page->ID();
+//    $pagemgrid = $this->account->GetFieldValue('pagemgrid');
     $ret = array();
     $ret[] = '/* collect statistics */';
 //    $ret[] = "require_once '{$path}scripts" . DIRECTORY_SEPARATOR . "statistics.php';";
@@ -156,7 +171,7 @@ abstract class sectionprocessor {
   private function IncludeAdvertPrepareCode() {
     $ret = array();
     // only show adverts when live
-    if (($this->mode == PWMODE_LIVE) && $this->account->GetFieldValue('showadverts')) {
+    if (($this->mode == PWOPT_LIVE) && $this->account->GetFieldValue('showadverts')) {
       $path = PDIR;
 //      $ret[] = '/* advert */';
       $ret[] = "websitemanager::ShowAdvert()";
@@ -173,17 +188,21 @@ abstract class sectionprocessor {
   }
 
   // retrieve php code added at the start of a page (preprocessing)
+  // this starts and initialises the websitemanager class
   public function RetrievePreparationCode() {
     // write the public state code
-    $ret = $this->IncludePublishStateCode();
+    $website = $this->IncludeWebsiteManager();
     if ($this->mode != PWOPT_PROFILE) {
-      // write the statistics code
-      $ret[] = $this->IncludeStatsCode();
-      // add advert code
-      $ret = array_merge($ret, $this->IncludeAdvertPrepareCode());
+      $stats = $this->IncludeStatsCode(); // write the statistics code
+      $advert = $this->IncludeAdvertPrepareCode(); // add advert code
+    } else {
+      $stats = array();
+      $advert = array();
     }
-    $ret[] = $this->FetchPreparationCode();
-    return $ret;
+    // get any php code for running before the main page starts
+    $prep = $this->FetchPreparationCode();
+    $ret = array_merge(array('<?php '), $website, $stats, $advert, $prep, array('?>'));
+    return RemoveEmptyElements($ret);
   }
 
   // main method to retrieve section
@@ -207,29 +226,17 @@ abstract class sectionprocessor {
         $ret = $this->GetSectionLogo();
         break;
       case SCT_HEADER:
-        $ret = $this->GetSectionHeader();
+        $ret = $this->GetSectionHeader(); // DONE
         break;
       case SCT_TAGLINE:
         $ret = $this->GetSectionTagline();
         break;
       case SCT_INITIALCONTENT:
-        $ret = $this->GetSectionInitialcontent();
+        $ret = $this->GetSectionInitialcontent(); // DONE
         break;
       case SCT_MAINCONTENT:
         $ret = $this->GetSectionMainContent();
         break;
-//      case SCT_ARTICLES:
-//        $ret = $this->GetSectionArticles();
-//        break;
-//      case SCT_GUESTBOOK:
-//        $ret = $this->GetSectionGuestbook();
-//        break;
-//      case SCT_NEWSLETTERS:
-//        $ret = $this->GetSectionNewsletters();
-//        break;
-//      case SCT_SOCIALNETWORKS:
-//        $ret = $this->GetSectionSocialNetworks();
-//        break;
       case SCT_TRANSLATION:
         $ret = $this->GetSectionTranslation();
         break;
@@ -239,14 +246,11 @@ abstract class sectionprocessor {
       case SCT_CONTACTDETAILS:
         $ret = $this->GetSectionContactDetails();
         break;
-//      case SCT_DOWNLOADABLEFILES:
-//        $ret = $this->GetSectionDownloadableFiles();
-//        break;
       case SCT_SIDECONTENT:
-        $ret = $this->GetSectionSideContent();
+        $ret = $this->GetSectionSideContent(); // DONE
         break;
       case SCT_FOOTER:
-        $ret = $this->GetSectionFooter();
+        $ret = $this->GetSectionFooter(); // DONE
         break;
       case SCT_ADDTHIS:
         $ret = $this->GetSectionAddthis();
@@ -259,6 +263,9 @@ abstract class sectionprocessor {
         break;
       case SCT_ADVERT:
         $ret = $this->GetSectionAdvert();
+        break;
+      case SCT_CALLJS:
+        $ret = $this->GetCallJS();
         break;
       default:
         $ret = false;
@@ -299,36 +306,26 @@ abstract class sectionprocessor {
   }
 
   private function GetSectionInitialcontent() {
-    return $this->DoInitialContent();
+    $value = $this->DoGetWebsiteContent(CTWM_INITIALCONTENT, CONTENTAREATYPE_MAIN);
+    return $this->MakeTag($value, '', HTMLID_INITIALCONTENT);
   }
 
   private function GetSectionMainContent() {
-    return $this->ProcessMainContent();
+/*    $list = array(
+      $this->MakeTag($this->page->GetFieldValue('maincontent'), '', HTMLID_MAINCONTENT),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_ARTICLES, CONTENTAREATYPE_MAIN), '', HTMLID_ARTICLE),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_GUESTBOOK, CONTENTAREATYPE_MAIN), '', HTMLID_GUESTBOOK),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_NEWSLETTERS, CONTENTAREATYPE_MAIN), '', HTMLID_NEWSLETTER),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_SOCIALNETWORK, CONTENTAREATYPE_MAIN), '', HTMLID_SOCIALNETWORK),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_CALENDAR, CONTENTAREATYPE_MAIN), '', HTMLID_CALENDAR),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_BOOKING, CONTENTAREATYPE_MAIN), '', HTMLID_BOOKING),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_PRIVATEAREA, CONTENTAREATYPE_MAIN), '', HTMLID_PRIVATEAREA),
+      $this->MakeTag($this->DoGetWebsiteContent(CT_DOWNLOADABLEFILES, CONTENTAREATYPE_MAIN), '', HTMLID_DOWNLOADABLEFILES)
+    ); */
+    return $this->MakeTag($this->DoGetWebsiteContent(CTWM_MAINCONTENT, CONTENTAREATYPE_MAIN), '', HTMLID_MAINCONTENT);
+//    return $this->MakeTag($this->page->GetFieldValue('maincontent'), '', HTMLID_MAINCONTENT);
+//    return ArrayToString($list);
   }
-
-//  private function GetSectionArticles() {
-//    return $this->DoArticlesSidebar();
-//  }
-
-//  private function GetSectionGuestBook() {
-//    return $this->DoGuestBookSidebar();
-//  }
-
-//  private function GetSectionNewsletters() {
-//    return $this->DoNewslettersSidebar();
-//  }
-
-  private function GetBlogSideContent() {
-    return "<?php websitemanager::ShowBlogSideContent(); ?>";
-  }
-
-//  private function GetSectionSocialNetworks() {
-//    $ret = '';
-//    if ($this->page->incsocialnetwork) {
-//      $ret = $this->DoSocialNetworkSidebar();
-//    }
-//    return $ret;
-//  }
 
   private function GetSectionTranslation() {
     $ret = '';
@@ -352,40 +349,47 @@ abstract class sectionprocessor {
       $this->page->GetContactInfo(), '', HTMLID_CONTACTDETAILS);
   }
 
-//  private function GetSectionDownloadableFiles() {
-//    $ret = '';
-//    if ($this->page->showfiles) {
-//      $ret = $this->BuildDownloadableFiles();
-//    }
-//    return $ret;
-//  }
+  // get content from database via the website manager
+  // it is only fetched at runtime, when the visitor requests the page
+  protected function DoGetWebsiteContent($ct, $areatype) {
+    switch ($areatype) {
+      case CONTENTAREATYPE_SIDEBAR:
+        $ret = "<?php websitemanager::ShowSideContent('{$ct}', {$this->groupid}); ?>";
+        break;
+      case CONTENTAREATYPE_MAIN:
+        $ret = "<?php websitemanager::ShowMainContent('{$ct}', {$this->groupid}); ?>";
+        break;
+      default:
+        $ret = '';
+    }
+    return $ret;
+  }
 
+  // fetch all side content
   private function GetSectionSideContent() {
-//    $list = array();
-    $list = StringToArray($this->MakeTag($this->page->GetSidebarContent(), '', HTMLID_SIDECONTENT));
-    $list[] = $this->DoArticlesSidebar();
-    $list[] = $this->DoGuestBookSidebar();
-    $list[] = $this->DoNewslettersSidebar();
-    if ($this->page->GetFieldValue('incsocialnetwork')) {
-      $list[] = $this->DoSocialNetworkSidebar();
-    }
-    $list[] = $this->DoCalendarSidebar();
-    $list[] = $this->DoBookingSidebar();
-    $list[] = $this->DoPrivateAreaSidebar();
-    $list[] = $this->GetBlogSideContent(); // $this->DoSurveySidebar()
-    if ($this->page->GetFieldValue('showfiles')) {
-      $list[] = $this->GetDownloadableFiles();
-    }
+    $list = array(
+      $this->MakeTag($this->page->GetSidebarContent(), '', HTMLID_SIDECONTENT),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_ARTICLES, CONTENTAREATYPE_SIDEBAR), '', HTMLID_ARTICLE),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_GUESTBOOK, CONTENTAREATYPE_SIDEBAR), '', HTMLID_GUESTBOOK),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_NEWSLETTERS, CONTENTAREATYPE_SIDEBAR), '', HTMLID_NEWSLETTER),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_SOCIALNETWORK, CONTENTAREATYPE_SIDEBAR), '', HTMLID_SOCIALNETWORK),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_CALENDAR, CONTENTAREATYPE_SIDEBAR), '', HTMLID_CALENDAR),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_BOOKING, CONTENTAREATYPE_SIDEBAR), '', HTMLID_BOOKING),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_PRIVATEAREA, CONTENTAREATYPE_SIDEBAR), '', HTMLID_PRIVATEAREA),
+      $this->MakeTag($this->DoGetWebsiteContent(CTWM_DOWNLOADABLEFILES, CONTENTAREATYPE_SIDEBAR), '', HTMLID_DOWNLOADABLEFILES)
+    );
     return ArrayToString($list);
   }
 
+  // fetch footer for each page
   private function GetSectionFooter() {
     return $this->MakeTag(
-      $this->page->GetFieldValue('footer') . "\n" .
-      "<p class='designname'>designed by <a title='Free CSS Templates' href='http://www.freecsstemplates.org'>Free CSS Templates</a>. " .
-      "<small>Modified by <a title='whitedream software' href='http://whitedreamsoftware.co.uk'>Whitedream Software</a>.</small> " .
-      "&mdash; <a title='click to sign up' href='http://mylocalsmallbusiness.com'><strong>FREE Mini Websites</strong></a></p><br>\n",
-      '', HTMLID_PAGEFOOTER);
+      //$this->page->GetFieldValue('footer') . "\n" .
+      array(
+        "<p class='designname'>Originally designed by <a title='Free CSS Templates' href='http://www.freecsstemplates.org'>Free CSS Templates</a>.",
+        "<small>Modified by <a title='whitedream software' href='http://whitedreamsoftware.co.uk'>Whitedream Software</a>.</small> ",
+        "&mdash; <a title='click to sign up' href='http://mylocalsmallbusiness.com'><strong>FREE Mini Websites</strong></a></p>"
+      ), '', HTMLID_PAGEFOOTER);
   }
 
   private function GetSectionAddthis() {
@@ -402,6 +406,10 @@ abstract class sectionprocessor {
 
   private function GetSectionAdvert() {
     return $this->AddAdvert();
+  }
+
+  private function GetCallJS() {
+    return $this->DoCallJS();
   }
 
   private function FindNewsletterList() {
@@ -440,12 +448,10 @@ abstract class sectionprocessor {
       }
       $result->close();
       if (count($list)) {
-        $ret = array();
-        $ret[] = "  <h2>Downloads</h2>";
-        $ret[] = "  <ul>";
-        $ret = array_merge($ret, $list);
-        $ret[] = "  </ul>";
-        $ret = $this->MakeTag(ArrayToString($ret), 'div', HTMLID_DOWNLOADABLEFILES);
+        $ret1 = array("  <h2>Downloads</h2>", "  <ul>");
+        $ret2 = array_merge($ret1, $list);
+        $ret2[] = "  </ul>";
+        $ret = $this->MakeTag(ArrayToString($ret2), 'div', HTMLID_DOWNLOADABLEFILES);
       } else {
         $ret = false;
       }
@@ -455,7 +461,12 @@ abstract class sectionprocessor {
   }
 
   protected function AddScriptForGallery() { //$value) {
-    return "<script type='text/javascript' src='" . CDN_PATH . "rotator.js'></script>\n";
+    return array(
+      "  <link href='" . CDN_PATH . "css/lightbox.css' rel='stylesheet' type='text/css' media='screen' />",
+      "  <script src='" . CDN_PATH . "js/jquery.js' type='text/javascript'></script>",
+      "  <script src='" . CDN_PATH . "js/lightbox.js' type='text/javascript'></script>",
+      "  <script src='" . CDN_PATH . "js/rotator.js' type='text/javascript'></script>"
+    );
   }
 
   private function AddScriptForGoogleAnalytics() {
@@ -474,55 +485,63 @@ abstract class sectionprocessor {
 
   private function AddAdvert() {
     $ret = '';
-    if ($this->account->GetFieldValue('showadverts') && ($this->mode == PWMODE_LIVE)) {
-      $ret = $this->MakeTag(
-        "<?php\n  AddAdvertInPage();\n?>\n", 'div', '', 'advert');
+    if ($this->account->GetFieldValue('showadverts') && ($this->mode == PWOPT_LIVE)) {
+      $ret = $this->MakeTag("<?php AddAdvertInPage();?>", 'div', '', 'advert');
     }
     return $ret;
   }
 
-  protected function ProcessMainContent() {
-    $ret = $this->FetchMainContent();
-    return $this->MakeTag($ret, '', HTMLID_MAINCONTENT);
+  private function DoCallJS() {
+    return $this->FetchCallJS();
   }
 
   // other css and js files
   private function ProcessMetaLinks() {
-    return "<link href='" . CDN_PATH . "css/shared.css' rel='stylesheet' type='text/css' media='all' />\n" .
-      $this->FetchMetaLinks();
+    //return "<link href='" . CDN_PATH . "css/shared.css' rel='stylesheet' type='text/css' media='all' />\n" .
+    $ret = array("<link href='../../css/shared.css' rel='stylesheet' type='text/css' media='all' />");
+    $links = MakeArray($ret, $this->FetchMetaLinks());
+    return $links;
   }
 
   private function ProcessScript() {
     $ret = $this->FetchScript();
     if ($this->mode != PWOPT_PROFILE) {
-      $ret .= $this->AddScriptForGoogleAnalytics();
+      $ret[] = $this->AddScriptForGoogleAnalytics();
     }
     return $ret;
   }
 
   private function DoNavigation() {
     if ($this->pagecount > 1) {
-      $nav = "<ul>\n";
+      $activepageid = $this->page->ID();
+      $nav = array("<ul>");
       $cnt = 0;
       foreach($this->pagelist as $page) {
-        $url = $page->GetFieldValue('name') . '.php';
-        $class = '';
-        $cnt++;
-        // work out any required class names
-        if ($cnt == 1) {
-          $class = 'first';
+        if ($page->GetFieldValue('visible')) {
+          if ($page->GetFieldValue('ishomepage')) {
+            $url = 'index.php';
+          } else {
+            $url = $page->GetFieldValue('name') . '.php';
+          }
+          $class = '';
+          $cnt++;
+          // work out any required class names
+          if ($cnt == 1) {
+            $class = 'first';
+          }
+          if ($cnt == $this->pagecount) {
+            $class .= ' last';
+          }
+          $pageid = $page->ID();
+          $active = trim($class . ' ' . (($pageid == $activepageid) ? 'active' : ''));
+          if ($active) {
+            $active = " class='{$active}'";
+          }
+          // add the entire page link as a list item
+          $nav[] = "  <li{$active}><a href='{$url}'>{$page->GetFieldValue('description')}</a></li>";
         }
-        if ($cnt == $this->pagecount) {
-          $class .= ' last';
-        }
-        $active = trim($class . ' ' . ($page->ID() == $this->page->ID()) ? 'active' : '');
-        if ($active) {
-          $active = " class='{$active}'";
-        }
-        // add the entire page link as a list item
-        $nav .= "  <li{$active}><a href='{$url}'>{$page->GetFieldValue('description')}</a></li>\n";
       }
-      $nav .= "</ul>";
+      $nav[] = "</ul>";
       $ret = $this->MakeTag($nav, 'nav', HTMLID_NAVIGATION, $this->sectionclass);
     } else {
       $ret = '';
@@ -551,25 +570,9 @@ abstract class sectionprocessor {
     return self::$cache_logo;
   }
 
-  private function DoInitialContent() {
-    $ret = $this->FetchInitialContent();
-    return $this->MakeTag($ret, '', HTMLID_INITIALCONTENT);
-  }
-
 //  private function DoProductList() {
 //    return "<?php ShowProducts({$this->account->ID()}, {$this->page->ID()});
 //  }
-
-  private function DoArticlesSidebar() {
-    $ret = '(todo: list of recent articles)'; // TODO: list of recent articles
-    return $this->MakeTag($ret, '', HTMLID_ARTICLESIDEBAR);
-  }
-
-  private function DoGuestBookSidebar() {
-    $guestbook = ($this->page->pgtype == PAGETYPE_GUESTBOOK) ? "<?php ShowGuestBookSideContent(); ?>\n" : false;
-    $ret = ($guestbook) ? $this->MakeTag($guestbook, '', HTMLID_GUESTBOOKSIDEBAR) : false;
-    return $ret;
-  }
 
   private function DoNewslettersSidebar() {
     if (!self::$cache_newsletter) {
@@ -593,7 +596,7 @@ abstract class sectionprocessor {
           $list[] = "    <li><a {$link} target='_blank'>{$img}{$desc}</a></li>";
         }
         $list[] = "  </ul>";
-        $ret = $this->MakeTag(ArrayToString($list), 'div', HTMLID_NEWSLETTERSIDEBAR);
+        $ret = $this->MakeTag(ArrayToString($list), 'div', HTMLID_NEWSLETTER);
         self::$cache_newsletter = $ret;
       } else {
         $ret = '<p>TODO: link to subscribe to newsletters';
@@ -630,7 +633,7 @@ abstract class sectionprocessor {
             "</li>";
         }
         $list[] = "  </ul>\n";
-        $ret = $this->MakeTag(ArrayToString($list), 'div', HTMLID_SOCIALNETWORKSIDEBAR);
+        $ret = $this->MakeTag(ArrayToString($list), 'div', HTMLID_SOCIALNETWORK);
       } else {
         $ret = false;
       }
@@ -664,19 +667,21 @@ abstract class sectionprocessor {
   }
 
   private function DoGoogleTranslation() {
-    $ret =
-      "\n<h2>Translate</h2>\n" .
-      "<div id=\"google_translate_element\"></div>\n" .
-      "<script>\n" .
-      "  function googleTranslateElementInit() {\n" .
-      "    new google.translate.TranslateElement({\n" .
-      "      pageLanguage: 'en',\n" .
-      "      autoDisplay: false,\n" .
-      "      gaTrack: true,\n" .
-      "      gaId: 'UA-20300263-6'\n" .
-      "    }, 'google_translate_element');\n" .
-      "  }\n" .
-      "</script><script src=\"//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit\"></script>\n";
+    $ret = array(
+      "<h2>Translate</h2>",
+      "<div id='google_translate_element'></div>",
+      "<script>",
+      "  function googleTranslateElementInit() {",
+      "    new google.translate.TranslateElement({",
+      "      pageLanguage: 'en',",
+      "      autoDisplay: false,",
+      "      gaTrack: true,",
+      "      gaId: 'UA-20300263-6'",
+      "    }, 'google_translate_element');",
+      "  }",
+      "</script>",
+      "<script src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit\"></script>"
+    );
     return $this->MakeTag($ret, 'div', HTMLID_TRANSLATION);
   }
 
@@ -740,215 +745,112 @@ abstract class sectionprocessor {
 // GENERAL PAGE processor
 class sectionprocessorgeneral extends sectionprocessor {
 
-  private function DoGallerySlideShow() {
-    if ($this->lastgalleryid == $this->page->GetFieldValue('gengalleryid')) {
-      $ret = $this->lastgallery;
-    } else {
-      $gallery = new gallery($this->page->GetFieldValue('gengalleryid'));
-//      $galleryheight = $gallery->GetGalleryHeight();
-      $ret = $gallery->BuildSlideShowList(); //$galleryheight);
-      $this->lastgalleryid = $this->page->GetFieldValue('gengalleryid');
-      $this->lastgallery = $ret;
-    }
-    return ArrayToString($ret);
-  }
-
-/*  private function AddScriptForImageRotator() {
-    return
-      "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'></script>\n" .
-      "  <!-- By Dylan Wagstaff, http://www.alohatechsupport.net -->\n" .
-      "  <script type='text/javascript'>\n" .
-      "  function theRotator() {\n" .
-      //"    //Set the opacity of all images to 0\n" .
-      "    \$('div.rotator ul li').css({opacity: 0.0});\n" .
-      //"    //Get the first image and display it (gets set to full opacity)\n" .
-      "    \$('div.rotator ul li:first').css({opacity: 1.0});\n" .
-      //"    //Call the rotator function to run the slideshow, 6000 = change to next image after 6 seconds\n" .
-      "    setInterval('rotate()',6000);\n" .
-      "  }\n" .
-      "  function rotate() {\n" .
-      //"    //Get the first image\n" .
-      "    var current = (\$('div.rotator ul li.show')?  \$('div.rotator ul li.show') : \$('div.rotator ul li:first'));\n" .
-      "      if ( current.length == 0 ) current = \$('div.rotator ul li:first');\n" .
-      //"    //Get next image, when it reaches the end, rotate it back to the first image\n" .
-      "    var next = ((current.next().length) ? ((current.next().hasClass('show')) ? \$('div.rotator ul li:first') :current.next()) : \$('div.rotator ul li:first'));\n" .
-      //"    //Un-comment the 3 lines below to get the images in random order\n" .
-      //"    //var sibs = current.siblings();\n" .
-      //"      //var rndNum = Math.floor(Math.random() * sibs.length );\n" .
-      //"      //var next = $( sibs[ rndNum ] );\n" .
-      //"    //Set the fade in effect for the next image, the show class has higher z-index\n" .
-      "    next.css({opacity: 0.0})\n" .
-      "    .addClass('show')\n" .
-      "    .animate({opacity: 1.0}, 1500);\n" .
-      //"    //Hide the current image\n" .
-      "    current.animate({opacity: 0.0}, 1500)\n" .
-      "    .removeClass('show');\n" .
-      "  };\n" .
-      "  \$(document).ready(function() {\n" .
-      //"    //Load the slideshow\n" .
-      "    theRotator();\n" .
-      "    \$('div.rotator').fadeIn(1500);\n" .
-      "      \$('div.rotator ul li').fadeIn(1500); // tweek for IE\n".
-      "  });\n" .
-      "</script>\n";
-  } */
-
   protected function FetchPreparationCode() {
-    return '';
-  }
-
-  protected function FetchMainContent() {
-    $gallery = ($this->page->GetFieldValue('gengalleryid') > 0) ? $this->DoGallerySlideShow() : '';
-    $content = $this->page->GetFieldValue('maincontent');
-    return $gallery . $content;
+    return array();
   }
 
   protected function FetchMetaLinks() {
     return ($this->page->GetFieldValue('gengalleryid') > 0)
-      ?
-        "  <link href='" . CDN_PATH . "css/lightbox.css' rel='stylesheet' type='text/css' media='screen' />\n" .
-        "  <script src='" . CDN_PATH . "jquery.js' type='text/javascript'></script>\n" .
-        "  <script src='" . CDN_PATH . "lightbox.js' type='text/javascript'></script>\n"
-      : '';
+      ? array(
+          "  <link href='" . CDN_PATH . "css/lightbox.css' rel='stylesheet' type='text/css' media='screen' />",
+          "  <script src='" . CDN_PATH . "jquery.js' type='text/javascript'></script>",
+          "  <script src='" . CDN_PATH . "lightbox.js' type='text/javascript'></script>"
+        )
+      : false;
   }
 
   protected function FetchScript() {
     return ($this->page->GetFieldValue('gengalleryid') > 0)
       ? $this->AddScriptForGallery() //'div.rotator ul li.show')
 //      ? $this->AddScriptForImageRotator() . $this->AddScriptForGallery() //'div.rotator ul li.show')
-      : '';
+      : array();
   }
 
-}
-
-// CONTACT PAGE processor
-class sectionprocessorcontact extends sectionprocessor {
-
-  // preparation for contact page
-  private function IncludeContactCheckCode() {
-    switch ($this->mode) {
-      case PWOPT_PROFILE:
-        $ret = "<?php require '{$this->sourcepath}client.profile.contact.php';\n";
-        break;
-      case PWOPT_LIVE:
-        $ret = "<?php require '{$this->sourcepath}client.live.contact.php';\n";
-        break;
-    }
-    return $ret;
-  }
-
-  private function DoContactForm() {
-    $pagename = $this->page->GetFieldValue('pagename');
-    $contactname = $this->page->GetFieldValue('contactname');
-    $contactemail = $this->page->GetFieldValue('contactemail');
-    $contactsubject = $this->page->GetFieldValue('contactsubject');
-    $contactmessage = $this->page->GetFieldValue('contactmessage');
-    return
-      "<?php echo \$response; ?>\n" .
-      "<form name='formcontact' method='post' enctype='application/x-www-form-urlencoded' action='{$pagename}.php'>\n" .
-      "  <fieldset class='contact'>\n" .
-      "    <div>\n" .
-      "      <label for='contactname'>{$contactname}</label>\n" .
-      "      <br><input class='contactinput' name='contactname' type='text' value='<?php echo \$contactname; ?>' maxlength='100' />\n" .
-      "    </div>\n" .
-      "    <br>\n" .
-      "    <div>\n" .
-      "      <label for='contactemail'>{$contactemail}</label>\n" .
-      "      <br><input class='contactinput' name='contactemail' type='text' value='<?php echo \$contactemail; ?>' maxlength='100' />\n" .
-      "    </div>\n" .
-      "    <br>\n" .
-      "    <div>\n" .
-      "      <label for='contactsubject'>{$contactsubject}</label>\n" .
-      "      <br><input class='contactinput' name='contactsubject' type='text' value='<?php echo \$contactsubject; ?>' maxlength='100' />\n" .
-      "    </div>\n" .
-      "    <br>\n" .
-      "    <div>\n" .
-      "      <label for='contactmessage'>{$contactmessage}</label>\n" .
-      "      <br><textarea class='contactinput' name='contactmessage' rows='20' cols='80'><?php echo \$contactmessage; ?></textarea>\n" .
-      "    </div>\n" .
-      "    <br>\n" .
-      "    <div>\n" .
-      "      <?php \$question = new questionmanager(); echo \$question->ShowQuestion('{$this->rootpath}questions'); ?>\n" .
-      "    </div>\n" .
-      "    <br>\n" .
-      "    <div class='button'>\n" .
-      "      <input type='reset' name='btnclear' title='clear fields' value='Clear' />\n" .
-      "      <input type='submit' name='btnsubmit' title='send message' value='Send' />\n" .
-      "    </div>\n" .
-      "  </fieldset>\n" .
-      "</form>\n";
-  }
-
-  private function DoMap() {
-    $addr = $this->page->GetFieldValue('mapaddress');
-    if (!$addr) {
-      $addr = $this->contact->FullAddress('', ' ');
-    }
-    $addrarray = explode('+', urlencode(str_replace('  ', ' ', $addr)));
-    $q = implode(',+', $addrarray);
-    $ret = "<iframe width='400' height='400' frameborder='1' scrolling='no' marginheight='0' marginwidth='0' " .
-      "src='http://maps.google.co.uk/maps?q={$q},+uk&amp;ie=UTF8&amp;hq=&amp;hnear={$q},+uk&amp;t=m&amp;z=16&amp;vpsrc=0&amp;output=embed'></iframe><br>\n";
-    return $ret;
-  }
-
-  protected function FetchPreparationCode() {
-    return $this->IncludeContactCheckCode();
-  }
-
-  protected function FetchMainContent() {
-    return $this->DoContactForm() . $this->DoMap();
-  }
-
-  protected function FetchMetaLinks() {
-    return '';
-  }
-
-  protected function FetchScript() {
-    return '';
+  protected function FetchCallJS() {
+//    $cdn = CDN_PATH;
+    return array(
+      "<script type='text/javascript'>",
+      "</script>"
+    );
   }
 }
 
-// GALLERY PAGE processor
+
+/**
+  * GALLERY PAGE processor
+*/
 class sectionprocessorgallery extends sectionprocessor {
-
-  private function WriteGalleryPrepareCode() {
-/*    $pageid = $this->page->ID();
-    $rootdirectory = $this->pagewriter->rootdirectory;
-    return ArrayToString(array(
-      "require_once('{$this->sourcepath}class.table.gallery.php');",
-      "",
-//      $this->AddGetVar('pg', 'pagenumbergallery', '1') .
-      "\$mode = {$this->mode};",
-      "\$rootdirectory = '{$rootdirectory}';",
-      "",
-      "function ShowGallery(\$galleryid) {",
-      "  \$gallery = new gallery(\$galleryid);",
-      "  echo \$gallery->BuildGallery({$pageid});",
-      "}"
-    )); */
-  }
 
   private function DoGallery($galleryid) {
     return "<?php websitemanager::ShowGallery({$galleryid}); ?>\n";
   }
 
   protected function FetchPreparationCode() {
-    return $this->WriteGalleryPrepareCode();
-  }
-
-  protected function FetchMainContent() {
-    return $this->DoGallery($this->page->GetFieldValue('groupid'));
+    return array();
   }
 
   protected function FetchMetaLinks() {
-    return
-      "  <link href='" . CDN_PATH . "lightbox.css' rel='stylesheet' type='text/css' media='screen'/>\n" .
-      "  <script src='" . CDN_PATH . "jquery.js'></script>\n" .
-      "  <script src='" . CDN_PATH . "lightbox.js'></script>\n";
+    return array(
+      "  <link href='" . CDN_PATH . "lightbox/css/lightbox.css' rel='stylesheet' type='text/css' media='screen'/>",
+      "  <link href='" . CDN_PATH . "css/simplepagination.css' rel='stylesheet' type='text/css' media='screen'/>"
+    );
   }
 
   protected function FetchScript() {
-    return $this->AddScriptForGallery(); //'#gallery a');
+    return array();
+/*
+      "  <link href='" . CDN_PATH . "css/lightbox.css' rel='stylesheet' type='text/css' media='screen' />",
+      "  <link href='" . CDN_PATH . "lightbox/css/lightbox.css' rel='stylesheet' type='text/css' media='screen' />",
+      "  <script src='" . CDN_PATH . "js/jquery.js' type='text/javascript'></script>",
+//      "  <script src='" . CDN_PATH . "js/lightbox.js' type='text/javascript'></script>",
+      "  <script src='" . CDN_PATH . "js/pagination.js' type='text/javascript'></script>"
+*/
+  }
+
+  protected function FetchCallJS() {
+    $cdn = CDN_PATH;
+    return array(
+      "<script src='" . CDN_PATH . "js/jquery.js' type='text/javascript'></script>",
+      "<script src='" . CDN_PATH . "js/pagination.js' type='text/javascript'></script>",
+      "<script src='" . CDN_PATH . "lightbox/js/lightbox.js' type='text/javascript'></script>",
+      "<script>",
+//      "(function(\$){",
+//      "  \$('#gallery').simplePagination();",
+      "\$('.galleryviewer').simplePagination({",
+      "  items_per_page: 3,", // THREE rows
+      "  number_of_visible_page_numbers: 5,",
+      "  use_page_count: true,",
+      "  first_content: '&lt;&lt;',",
+      "  previous_content: '&lt;',",
+      "  next_content: '&gt;',",
+      "  last_content: '&gt;&gt;'",
+      "});",
+//      "})(jQuery);",
+      "</script>"
+    );
+  }
+
+}
+
+/**
+  * CONTACT PAGE processor
+*/
+class sectionprocessorcontact extends sectionprocessor {
+
+  protected function FetchPreparationCode() {
+    return array();
+  }
+
+  protected function FetchMetaLinks() {
+    return array();
+  }
+
+  protected function FetchScript() {
+    return array();
+  }
+
+  protected function FetchCallJS() {
+    return array();
   }
 
 }
@@ -983,19 +885,19 @@ class sectionprocessorarticles extends sectionprocessor {
   }
 
   protected function FetchPreparationCode() {
-    return $this->WriteBlogPrepareCode();
-  }
-
-  protected function FetchMainContent() {
-    return $this->DoArticleContent();
+    return array(); //$this->WriteBlogPrepareCode();
   }
 
   protected function FetchMetaLinks() {
-    return '';
+    return false;
   }
 
   protected function FetchScript() {
     return '';
+  }
+
+  protected function FetchCallJS() {
+    return array();
   }
 
 }
@@ -1032,15 +934,7 @@ class sectionprocessorguestbook extends sectionprocessor {
   }
 
   protected function FetchPreparationCode() {
-    return $this->WriteGuestBookPrepareCode();
-  }
-
-  protected function FetchInitialContent() {
-    return "<?php \$guestbook->WriteInitialMessage(); ?>";
-  }
-
-  protected function FetchMainContent() {
-    return $this->DoGuestBookContent();
+    return array(); //$this->WriteGuestBookPrepareCode();
   }
 
   protected function FetchMetaLinks() {
@@ -1049,6 +943,10 @@ class sectionprocessorguestbook extends sectionprocessor {
 
   protected function FetchScript() {
     return '';
+  }
+
+  protected function FetchCallJS() {
+    return array();
   }
 
 }

@@ -5,7 +5,7 @@ global $MIME_WEBIMAGES;
 
 // MIME types for uploading
 $MIME_DOCUMENTS = array(
-  'application/msword' => 'doc', 'application/pdf' => 'pdf', 'application/rtf' => 'rtf',
+  'application/msword' => 'doc', 'application/pdf' => 'pdf', 'application/rtf' => 'rtf', 'text/plain' => 'txt',
   'application/vnd.ms-excel' => 'xls', 'application/vnd.ms-excel' => 'xlw', 'application/vnd.ms-powerpoint' => 'ppt',
   'application/vnd.ms-project' => 'mpp', 'application/vnd.ms-works' => 'wcm', 'application/vnd.ms-works' => 'wdb',
   'application/vnd.ms-works' => 'wks', 'application/vnd.ms-works' => 'wps', 'application/x-msmetafile' => 'wmf',
@@ -49,7 +49,9 @@ class formbuilderfile extends formbuildereditbox {
   public $file;
 
   function __construct($name, $value, $label, $targetname = '') {
-    ini_set('memory_limit', '100M'); // handle large images
+    ini_set('memory_limit', '128M'); // handle large images
+    ini_set('post_max_size', '64M');
+    ini_set('upload_max_filesize', '64M');
     $this->targetfilename = $targetname;
     $this->fieldtype = FLDTYPE_FILE;
     $this->acceptedfiletypes = array();
@@ -74,15 +76,33 @@ class formbuilderfile extends formbuildereditbox {
     $ret['extension'] = (isset($m[5])) ? $m[5] : '';
     return $ret;
   }
-
-  protected function CheckPostExists() {
-    $this->posted = isset($_FILES[$this->name]);
+/*
+  public function Post() {
+    if ($this->posted) {
+      $ret = false;
+    } else {
+      if ($this->CheckPostExists()) {
+        $this->GetPostValue();
+        $this->CheckPost();
+      }
+//      $this->posted = true;
+      $ret = true;
+    }
+    return $ret;
+  }
+*/
+  protected function GetPostValue() {
     if ($this->posted) {
       $this->file = $_FILES[$this->name];
       $this->value = $this->file['name'];
     } else {
       $this->file = false;
+      $this->value = false;
     }
+  }
+
+  protected function CheckPostExists() {
+    $this->posted = isset($_FILES[$this->name]);
     return $this->posted;
   }
 
@@ -109,7 +129,9 @@ class formbuilderfile extends formbuildereditbox {
         if (!$pathinfo['extension']) {
           $this->targetfilename .= '.' . $fileext;
         }
-        if (!move_uploaded_file($srcfile, $this->targetpath . $this->targetfilename)) { //$this->targetprefix . $this->targetfilename)) {
+        if (move_uploaded_file($srcfile, $this->targetpath . $this->targetfilename)) { //$this->targetprefix . $this->targetfilename)) {
+          parent::ProcessPost();
+        } else {
           $this->errors[] = FILEERROR_CANNOTMOVE;
         }
       }
@@ -123,6 +145,24 @@ class formbuilderfile extends formbuildereditbox {
           $this->errors[] = 'There was a technical error. Please try again later.';
           break;
       }
+    }
+  }
+
+  protected function ValidateValue() {
+    if ($this->file) {
+      $pathinfo = $this->GetPathInfo($this->file["name"]);
+      $fileext = strtolower($pathinfo['extension']);
+      $acceptedlist = array_values($this->acceptedfiletypes);
+      $ret = (in_array($fileext, $acceptedlist));
+      if (isset($php_errormsg)) {
+        $this->errors[ERRKEY_PHPERROR] =
+          (substr_count('exceeds', $php_errormsg)) ? 'Your file is too big to upload' : $php_errormsg;
+      }
+      if (!$ret) {
+        $this->errors[ERRKEY_INVALIDFILE] = ERRVAL_INVALIDFILE;
+      }
+    } else {
+      $ret = false;
     }
   }
 

@@ -22,10 +22,10 @@ class fileitem extends idtable {
     $this->AddField('filename', DT_STRING);
     $this->AddField('filetypeid', DT_FK);
     $this->AddField('filesize', DT_INTEGER);
-    $this->AddField('description', DT_STRING);
+    $this->AddField(FN_DESCRIPTION, DT_STRING);
     $this->AddField('stampadded', DT_DATETIME);
     $this->AddField('stampupdated', DT_DATETIME);
-    $this->AddField('status', DT_STATUS);
+    $this->AddField(FN_STATUS, DT_STATUS);
   }
 
   protected function GetFileTypeDescription() {
@@ -93,6 +93,66 @@ class fileitem extends idtable {
       $ret = '<p>Article not found</p>'; */
     }
     return $ret;
+  }
+
+  public function AssignDataGridColumns($datagrid) {
+    $datagrid->showactions = false;
+    $datagrid->AddColumn('DESC', 'Filename', true);
+    $datagrid->AddColumn('TITLE', 'Title');
+    $datagrid->AddColumn('FILETYPE', 'File type');
+    $datagrid->AddColumn('FILESIZE', 'File Size', false, 'right');
+  }
+
+/*  static public function FileSizeToString($size, $unit = '') {
+    if ((!$unit && $size >= 1 << 30) || $unit == 'GB') {
+      $ret = number_format($size / (1 << 30), 2) . 'GB';
+    } elseif ((!$unit && $size >= 1 << 20) || $unit == 'MB') {
+      $ret = number_format($size / (1 << 20), 2)."MB";
+    } elseif ((!$unit && $size >= 1 << 10) || $unit == 'KB') {
+      $ret = number_format($size / (1 << 10), 2) . 'KB';
+    } else {
+      $ret = number_format($size) . ' bytes';
+    }
+     return $ret;
+  } */
+
+  static public function GetCurrentList($showimg = false, $islistitem = true, $linkprefix = '') {
+    $accountid = account::$instance->ID();
+    $status = STATUS_ACTIVE;
+    $query =
+      'SELECT i.*, t.`iconurl`, t.`description` AS filetypedesc FROM `fileitem` i ' .
+      'INNER JOIN `filetype` t ON i.`filetypeid` = t.`id` ' .
+      "WHERE (i.`accountid` = {$accountid}) AND " .
+      "(i.`status` = '{$status}') ORDER BY i.`stampadded`";
+    $img = '';
+    $list = array();
+    $result = database::Query($query);
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $value = $line['iconurl'];
+      $label = $line['filetypedesc'];
+      if ($showimg) {
+        $img = $line['iconurl'];
+      }
+      $icon = AddSpecialLinkItem($value, $label, $img, $islistitem, $linkprefix);
+      $filesize = $this->GetFileSizeAsString();
+      $list[$id] = array(
+        'DESC' => $line['filename'],
+        'TITLE' => $line['title'],
+        'FILETYPE' => $icon,
+        'FILESIZE' => $filesize
+      );
+    }
+    $result->free();
+    return $list;
+  }
+
+  public function AssignDataGridRows($datagrid) {
+    $list = self::GetCurrentList();
+    foreach($list as $fileid => $filedetails) {
+      $datagrid->AddRow($fileid, $filedetails, true, array());
+    }
+    return $list;
   }
 
 }

@@ -143,7 +143,7 @@ class contact extends idtable {
         $linkend = '';
       }
       if ($img) {
-        $img = "<img src='//cdn.mlsb.org/images/{$img}.png' alt=''>&nbsp;";
+        $img = "<img src='//cdn.mlsb.org/images/{$img}.png' alt=''>";
       }
       $ret = ($islistitem) ? "  <li class='contactitem'>" : '';
       $lbl = ($showlabel && $label) ? '<span>' . $label . ':</span>' : '';
@@ -171,15 +171,15 @@ class contact extends idtable {
   }
 
   // was ShowTelephoneNumbers()
-  public function TelephoneNumbersAsString($listitems = true, $showlabel = true) {
+  public function TelephoneNumbersAsArray($listitems = true, $showlabel = true) {
     $tel = $this->GetTelephoneNumbers();
-    $ret = '';
+    $ret = array();
     foreach ($tel as $itm) {
-      $ret .= $this->AddSpecialLinkItem($itm['value'], $itm['name'], $itm['icon'], $listitems, '', $showlabel);
+      $ret[] = $this->AddSpecialLinkItem($itm['value'], $itm['name'], $itm['icon'], $listitems, 'tel', $showlabel);
     }
-    if ($listitems && $ret) {
-      $ret = "<ul class='contactaddress'>{$ret}</ul>";
-    }
+//    if ($listitems && $ret) {
+//      $ret = "<ul class='contactaddress'>{$ret}</ul>";
+//    }
     return $ret;
   }
 
@@ -193,11 +193,26 @@ class contact extends idtable {
     return $ret;
   }
 
-  public function SendContactMessage($contactname, $contactemail, $contactsubject, $contactmessage) {
-    $email = $this->GetFieldValue('email');
-    if ($email != '') {
+  public function SendContactMessage($sendername, $senderemail, $sendersubject, $message) {
+    $email = ($senderemail) ? $senderemail : $this->GetFieldValue('email');
+    if ($email) {
       require_once 'class.table.emailhistory.php';
-      emailhistory::SendEmail(ET_ACCCONTACT, $contactemail, $email, $contactsubject, $contactmessage);
+      $account = account::$instance;
+      $accountid = $account->ID();
+      $businessname = $account->GetFieldValue('businessname');
+      emailhistory::SendEmailMessage(
+        ET_ACCCONTACT, $email, $sendersubject, $message, $senderemail, $accountid);
+      // send message to admin
+      $msg = array(
+        "Message sent from contact page of '{$businessname}'",
+        'Sender Name: ' . $sendername,
+        'Sender Email: ' . $senderemail,
+        'Sender Subject: ' . $sendersubject,
+        'Sender Message:',
+        $message
+      );
+      emailhistory::SendSystemEmailMessage(
+        ET_ACCCONTACT, "Contact Message ({$businessname})", ArrayToString($msg), $accountid, false, false);
     }
     //SendContactMessage($contactemail, $email, $contactsubject, $contactmessage);
   }

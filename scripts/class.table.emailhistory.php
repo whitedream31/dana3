@@ -79,12 +79,13 @@ class emailhistory extends idtable {
   }
 
   static public function SendSystemEmailMessage(
-    $emailtype, $subject, $message, $accountid = 0, $visitorid = 0) {
-    self::SendEmailMessage($emailtype, EMAIL_SUPPORT, $subject, $message, EMAIL_SUPPORT, $accountid , $visitorid);
+    $emailtype, $subject, $message, $accountid = 0, $visitorid = 0, $recordhistory = true) {
+    self::SendEmailMessage($emailtype, EMAIL_SUPPORT, $subject, $message, EMAIL_SUPPORT, $accountid , $visitorid, false);
   }
 
   static public function SendEmailMessage(
-    $emailtype, $recipient, $subject, $message, $replyaddress = 0, $accountid = 0, $visitorid = 0) {
+    $emailtype, $recipient, $subject, $message, $replyaddress = false,
+    $accountid = false, $visitorid = false, $recordhistory = true) {
     if (SENDEMAILS) {
       $headers = array(
         'From: ' . EMAIL_SUPPORT,
@@ -102,13 +103,14 @@ class emailhistory extends idtable {
     } else {
       $ret = true; // pretend email was sent
     }
-    require_once 'class.table.account.php';
-    $emailhistory = new emailhistory();
-    $emailhistory->SetFieldValue('accountid', $accountid);
-    $emailhistory->SetFieldValue('visitorid', $visitorid);
-    $emailhistory->SetFieldValue('emailtype', $emailtype);
-    $emailhistory->SetFieldValue('subject', $subject);
-    $emailhistory->StoreChanges();
+    if ($recordhistory) {
+      $emailhistory = new emailhistory();
+      $emailhistory->SetFieldValue('accountid', $accountid);
+      $emailhistory->SetFieldValue('visitorid', $visitorid);
+      $emailhistory->SetFieldValue('emailtype', $emailtype);
+      $emailhistory->SetFieldValue('subject', $subject);
+      $emailhistory->StoreChanges();
+    }
     return $ret;
   }
 }

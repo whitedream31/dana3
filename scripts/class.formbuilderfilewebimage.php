@@ -18,9 +18,11 @@ class formbuilderfilewebimage extends formbuilderfile {
   public $imageresizeheight = 500;
   // optional properties to show a thumbnail and id for passing to a database
   public $mediaid; // hidden control id value
-  public $previewthumbnail; //
+  public $previewthumbnail; // name of thumbnail file
+  public $originalfilename; // name of filename that was originally uploaded (for display only)
   public $newimgfilename;
   public $newimgthumbnail;
+  public $targetpath; // path of where the files are stored
 
 // public $showimage as thumbnail?
   function __construct($name, $value, $label, $targetname = '') {
@@ -32,7 +34,7 @@ class formbuilderfilewebimage extends formbuilderfile {
     $this->fieldtype = FLDTYPE_FILEWEBIMAGES;
     $this->acceptedfiletypes = $MIME_WEBIMAGES;
     $this->mediaid = -1; // no id
-    $this->previewthumbnail = '';
+    $this->previewthumbnail = 'none';
   }
 // brentwientjes at NOSPAM dot comcast dot net
 //  $img_base = base directory structure for thumbnail images
@@ -66,7 +68,7 @@ class formbuilderfilewebimage extends formbuilderfile {
   } */
 
   protected function ProcessPost() {
-    if ($this->file['error'] != UPLOAD_ERR_NO_FILE) {
+    if ($this->file['error'] != UPLOAD_ERR_NO_FILE && !$this->errors) {
       parent::ProcessPost();
       if (count($this->errors) == 0) {
         $srcfilename = $this->targetpath . $this->targetfilename;
@@ -76,38 +78,33 @@ class formbuilderfilewebimage extends formbuilderfile {
         $this->newimgthumbnail = $pathinfo['filename'] . $this->thumbnailprefix . '.' . $pathinfo['extension'];;
         $imgthumbnail = $this->targetpath . $this->newimgthumbnail;
         list($this->srcwidth, $this->srcheight, $srctype) = getimagesize($srcfilename); // create new dimensions, keeping aspect ratio
-        $imgsz = ($this->srcwidth * $this->srcheight * 24);
-        if ($imgsz > 100 * 1024 * 1024) {
-          $this->errors[ERRKEY_IMAGETOOBIG] = ERRVAL_IMAGETOOBIG;
-        } else {
-          switch ($srctype) {
-            case 1:   //  gif -> jpg
-              $this->img_src = imagecreatefromgif($srcfilename);
-              break;
-            case 2:   //  jpeg -> jpg
-              $this->img_src = imagecreatefromjpeg($srcfilename);
-              break;
-            case 3:  //  png -> jpg
-              $this->img_src = imagecreatefrompng($srcfilename);
-              break;
-            default:
-              $this->img_src = $this->MakeErrorImage($srcfilename);
+        switch ($srctype) {
+          case 1:   //  gif -> jpg
+            $this->img_src = imagecreatefromgif($srcfilename);
+            break;
+          case 2:   //  jpeg -> jpg
+            $this->img_src = imagecreatefromjpeg($srcfilename);
+            break;
+          case 3:  //  png -> jpg
+            $this->img_src = imagecreatefrompng($srcfilename);
+            break;
+          default:
+            $this->img_src = $this->MakeErrorImage($srcfilename);
+        }
+        if ($this->img_src) {
+          if ($this->srcwidth > $this->imageresizewidth) {
+            // too wide, resize it to 500
+            $newsize = $this->MakeImageFile($srcfilename, $this->imageresizewidth, $this->imageresizeheight);
+            $this->file['size'] = filesize($srcfilename);
+          } else {
+            $newsize = false;
           }
-          if ($this->img_src) {
-            if ($this->srcwidth > $this->imageresizewidth) {
-              // too wide, resize it to 500
-              $newsize = $this->MakeImageFile($srcfilename, $this->imageresizewidth, $this->imageresizeheight);
-              $this->file['size'] = filesize($srcfilename);
-            } else {
-              $newsize = false;
-            }
-            // make 150 width version (thumbnail)
-            $this->MakeImageFile($imgthumbnail, $this->thumbnailwidth, $this->thumbnailheight);
-            imagedestroy($this->img_src);
-            if (is_array($newsize)) {
-              $this->srcwidth = $newsize['width'];
-              $this->srcheight = $newsize['height'];
-            }
+          // make 150 width version (thumbnail)
+          $this->MakeImageFile($imgthumbnail, $this->thumbnailwidth, $this->thumbnailheight);
+          imagedestroy($this->img_src);
+          if (is_array($newsize)) {
+            $this->srcwidth = $newsize['width'];
+            $this->srcheight = $newsize['height'];
           }
         }
       }
@@ -127,17 +124,19 @@ class formbuilderfilewebimage extends formbuilderfile {
 
   protected function ResizeImage(
     $srcimg, $newimg, $srcwidth, $srcheight, $dstwidth, $dstheight) {
-    $ratio = $srcwidth / $srcheight;
-    $dstwidth =  ($dstwidth / $dstheight > $ratio)
+//    $ratio = $srcwidth / $srcheight;
+    // 500 * 2560 / 1920
+    $newheight = $dstwidth * $srcheight / $srcwidth;
+/*    $newheight =  ($dstwidth / $dstheight > $ratio)
       ? floor($dstheight * $ratio)
-      : floor($dstwidth / $ratio);
-    $dstimg = imagecreatetruecolor($dstwidth, $dstheight); // resample
+      : floor($dstwidth / $ratio); */
+    $dstimg = imagecreatetruecolor($dstwidth, $newheight); // resample
     imagecopyresampled(
-      $dstimg, $srcimg, 0, 0, 0, 0, $dstwidth, $dstheight, $srcwidth, $srcheight);
+      $dstimg, $srcimg, 0, 0, 0, 0, $dstwidth, $newheight, $srcwidth, $srcheight);
     imagejpeg($dstimg, $newimg); // save new image
     // clean up image storage
     imagedestroy($dstimg);
-    return array('width' => $dstwidth, 'height' => $dstheight);
+    return array('width' => $dstwidth, 'height' => $newheight);
   }
 
   public function GetControl() {
@@ -149,8 +148,11 @@ class formbuilderfilewebimage extends formbuilderfile {
       if ($usepreview == 'none') {
         $ret[] = "  <p>NONE</p>";
       } else if (file_exists($thumbnailfile)) {
+        if ($this->originalfilename) {
+          $ret[] = "<p>Current picture is {$this->originalfilename}</p>";
+        }
         $ret[] =
-          "  <img src='{$thumbnailfile}' " .
+          "  <img src='{$thumbnailfile}' alt='' " .
 //            'width=" ' . $this->thumbnailwidth . '" ' .
 //            'height="' . $this->thumbnailheight .
           "><br>";
@@ -167,6 +169,12 @@ class formbuilderfilewebimage extends formbuilderfile {
       $ret = array_merge($ret, $fld->GetControl());
     }
     return $ret;
+  }
+
+  public function AssignThumbnail($path, $thumbnailfilename, $originalfilename = false) {
+    $this->targetpath = $path;
+    $this->previewthumbnail = $thumbnailfilename;
+    $this->originalfilename = $originalfilename;
   }
 
 }

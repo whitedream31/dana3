@@ -6,14 +6,17 @@
 */
 
 abstract class workerbase {
-  protected $idname = false;
   protected $icon;
   protected $title = 'worker title';
   protected $activitydescription = 'This is the default description';
   protected $manager = false;
   protected $returncaption = 'Back';
   protected $returnidname = false;
+  protected $previousidname = false;
+
+  public $idname = false;
   public $showroot = false;
+  public $redirect = false;
 
   public function __construct() {
     global $activitymanager;
@@ -21,8 +24,10 @@ abstract class workerbase {
   }
 
   public function SetIDName($idname) {
-    $this->idname = $idname;
-    $this->DoPrepare();
+    if ($this->idname != $idname) {
+      $this->idname = $idname;
+      $this->DoPrepare();
+    }
   }
 
   public function AddMessage($msg) {

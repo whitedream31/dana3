@@ -184,12 +184,6 @@ abstract class page extends idtable { //implements pagetype
       'inctelephone', new formbuildercheckbox('inctelephone', '', 'Include Contact Telephone Numbers'), $this);
   }
 
-/*
-  protected function AssignPageFieldsForFooter($formeditor) {
-    $footer = $formeditor->AddDataField($this, 'footer', 'Page Footer', FLDTYPE_EDITBOX, 100);
-    $footer->description = 'This is the footer of the page that is shown at the bottom of the page. A simple copyright phrase is automatically added before this text, so it is not required here.';
-  }
-*/
   protected function InitFieldsForOptions($worker) {
     $this->fldshowhours = $worker->AddField(
       'showfiles', new formbuildercheckbox('showfiles', '', 'Show Downloadable Files?'), $this);
@@ -377,9 +371,9 @@ abstract class page extends idtable { //implements pagetype
   public function GetContactInfo() {
     $contact = $this->account->Contact();
     $ret = array();
-    $ret[] = "<div id='contactdetails'>";
+    $ret[] = "<div>"; // id='contactdetails'>";
     $ret[] = "<h2>Contact Details</h2>";
-    $ret[] = '<ul>';
+    $ret[] = "<ul class='contactaddress'>";
     if ($this->GetFieldValue('inccontactname')) {
       $lastname = trim($contact->GetFieldValue('lastname'));
       if (IsBlank($lastname)) {
@@ -390,31 +384,24 @@ abstract class page extends idtable { //implements pagetype
     }
     $addr = $contact->FullAddress('  <li>', "</li>\n", $this->GetFieldValue('incaddress'));
     $ret = array_merge($ret, explode("\n", $addr));
-    $ret[] = '</ul>';
     if ($this->GetFieldValue('inctelephone')) {
-      $tellist = $contact->TelephoneNumbersAsString();
-      $ret = array_merge($ret, explode("\n", $tellist));
+      $tellist = $contact->TelephoneNumbersAsArray(false, false);
+      foreach($tellist as $itm) {
+        if (trim($itm)) {
+          $ret[] = "<li>{$itm}</li>";
+        }
+      }
+        //$ret = array_merge($ret, explode("\n", $tellist));
     }
-//    if ($this->GetFieldValue('incemail')) {
-    $email = $contact->EmailAsString();
+    $email = $contact->EmailAsString(true, true, false);
     $website = $this->account->MainWebsiteURL(true);
     if ($email || $website) {
-      $ret[] = '<ul>';
       if ($email) {
         $ret[] = $email;
       }
-//    }
-/*    if ($this->account->website) {
-      $website = strtolower(trim($this->account->website));
-      if (substr($website, 0, 4) != 'http') {
-        $website = 'http://' . $website;
-      }
-      $ret[] = '  <li>Website: <a href="' . $website . '" target="_blank" title="visit our website">' . $this->account->website . '</a></li>';
-    } */
-      $ret[] = $contact->AddSpecialLinkItem($website, 'Website', 'website', true, '', false);
-      //$ret[] = "  <li>Website: {$website}</li>";
-      $ret[] = '</ul>';
+      $ret[] = $contact->AddSpecialLinkItem($website, '', 'website', true, '', false, false);
     }
+    $ret[] = '</ul>';
     $ret[] = '</div>';
     return ArrayToString($ret);
   }
@@ -427,7 +414,7 @@ abstract class page extends idtable { //implements pagetype
     if ($includepicturecount) {
       $query = 'SELECT DISTINCT g.`id`, g.`title`, COUNT(gi.`id`) as cnt ' .
       'FROM `gallery` g ' .
-      'INNER JOIN `galleryitem` gi ON g.`id` = gi.`galleryid` ' .
+      'LEFT OUTER JOIN `galleryitem` gi ON g.`id` = gi.`galleryid` ' .
       'WHERE g.`accountid` = ' . $this->account->ID() . 
       ' GROUP BY g.`id`';
     } else {
@@ -560,7 +547,28 @@ class pagelist extends idtable {
     return $page;
   }
 
+  protected function GetPrivatePages() {
+    $status = STATUS_ACTIVE;
+    $accid = $this->account->ID();
+    $query = 'SELECT pp.* FROM `privatepage` pp ' .
+      'INNER JOIN `privatearea` pa ON pp.`privateareaid` = pa.`id` ' .
+      'INNER JOIN `page` p ON p.`id` = pp.`pageid` ' .
+      "WHERE pa.`accountid` = {$accid} AND pa.`status` = '{$status}' " .
+      "AND p.`status` = '{$status}' AND p.`visible` > 0 " .
+      'ORDER BY p.`pageorder`';
+    $res = database::Query($query);
+    $list = array();
+    while ($line = $res->fetch_assoc()) {
+      $pageid = $line['pageid'];
+      $privateareaid = $line['privateareaid'];
+      $list[$pageid] = $privateareaid;
+    }
+    $res->close();
+    return $list;
+  }
+
   protected function PopulateList($pgmgrid) {
+    $privatepages = $this->GetPrivatePages();
     $status = STATUS_ACTIVE;
     $pid = (int) $pgmgrid;
     $query = 'SELECT p.`id`, pt.`pgtype` FROM `page` p ' .
@@ -571,8 +579,10 @@ class pagelist extends idtable {
     $list = array();
     while ($line = $res->fetch_assoc()) {
       $pageid = $line['id'];
-      $pagetype = $line['pgtype'];
-      $list[$pageid] = $pagetype;
+      if (!array_key_exists($pageid, $privatepages)) {
+        $pagetype = $line['pgtype'];
+        $list[$pageid] = $pagetype;
+      }
     }
     $this->pages = array();
     $res->close();

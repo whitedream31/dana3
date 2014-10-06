@@ -41,16 +41,30 @@ class galleryitem extends idtable {
     $this->commentsloaded = true;
   }
 
-  public function Show() {
-/*    $imgid = $this->GetFieldValue('imageid');
-    $img = new image($imgid);
-    $title = $this->GetFieldValue('title');
-    $media = $img->ImageTag(true, $title, $anchorstart, $anchorend);
-    $desc = $this->GetFieldValue('title');
-//    $comments = viewer::CountToString($this->count, 'comment');
-//    $comments = $anchorstart . $comments . $anchorend;
-//    echo "      <div class='galleryitem'>{$media}<p>{$desc}</p><p>{$comments}</p></div>\n";
-    echo "      <div class='galleryitem'>{$media}<p>{$desc}</p></div>\n";
- */
+  public function Show() {}
+
+  private function GetImageDetails($mediaid, $incdesc) {
+    $path = 'media/';
+    $smallurl = $path . account::GetImageFilename($mediaid);
+    $largeurl = $path . account::GetImageFilename($mediaid, false);
+    $title = $this->GetfieldValue('title');
+    $desc = ($incdesc) ? $this->GetFieldValue('description') : false;
+    $lbd = ($desc) ? ' - ' . $desc : '';
+    $ret['title'] = $title;
+    $ret['img'] =
+      "<a href='{$largeurl}' data-lightbox='media' data-title='{$title}{$lbd}'>" .
+        "<img src='{$smallurl}' alt='{$title}' />" .
+      "</a>";
+    $ret['desc'] = ($incdesc) ? $this->GetFieldValue('description') : false;
+    return $ret;    
+  }
+
+  public function BuildItem($incdesc) {
+    $imgdet = $this->GetImageDetails($this->GetFieldValue('largemediaid'), $incdesc);
+    $ret = array("<h4>{$imgdet['title']}</h4>", $imgdet['img']);
+    if ($imgdet['desc']) {
+      $ret[] = "<p>{$imgdet['desc']}</p>";
+    }
+    return $ret;
   }
 }

@@ -4,6 +4,9 @@
 // created: 15 dec 2010
 // modified: 6 may 2014
 
+define('HIST_CONTACTMSG', 'cont');
+
+
 require_once 'class.basetable.php';
 
 class history extends idtable {

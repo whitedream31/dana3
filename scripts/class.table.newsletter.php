@@ -39,6 +39,7 @@ class newsletter extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
+    $this->AddField('accountid', DT_FK);
     $this->AddField('title', DT_STRING);
     $this->AddField('showdate', DT_DATE);
     $this->AddField('datelastsent', DT_DATE);
@@ -63,6 +64,85 @@ class newsletter extends idtable {
       $list[] = $line['id'];
     }
     $result->close();
+    return $list;
+  }
+
+  static public function FindShowableNewslettersByAccount($accountid) {
+    $status = STATUS_ACTIVE;
+    $query = 
+      "SELECT `id` FROM `newsletter` " .
+      "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
+      "AND `showdate` < NOW() " .
+      'ORDER BY `showdate` DESC';
+    $result = database::Query($query);
+    $list = array();
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $list[$id] = new newsletter($id);
+    }
+    $result->close();
+    return $list;
+  }
+
+  public function FindNewsletterItems() {
+    $id = $this->ID();
+//    $status = STATUS_ACTIVE;
+    $query = 
+      "SELECT `id` FROM `newsletteritem` " .
+      "WHERE `newsletterid` = {$id} " .
+      'ORDER BY `itemorder`';
+    $result = database::Query($query);
+    $list = array();
+    while ($line = $result->fetch_assoc()) {
+      $itemid = $line['id'];
+      $list[$itemid] = new newsletteritem($itemid);
+    }
+    $result->close();
+    return $list;
+  }
+
+  public function FindSubscribers() {
+    $id = account::$instance->ID();
+    $status = STATUS_DELETED;
+    $query = 
+      "SELECT `id` FROM `newslettersubscriber` " .
+      "WHERE `accountid` = {$id} " .
+      "AND NOT (`status` = '{$status}') " .
+      'ORDER BY `status`, `datestarted` DESC';
+    $result = database::Query($query);
+    $list = array();
+    while ($line = $result->fetch_assoc()) {
+      $subid = $line['id'];
+      $list[$subid] = new newslettersubscriber($subid);
+    }
+    $result->close();
+    return $list;
+  }
+
+  public function AssignDataGridColumns($datagrid) {
+    $datagrid->showactions = true;
+    $datagrid->AddColumn('DESC', 'Title', true);
+    $datagrid->AddColumn('SHOWDATE', 'Date');
+  }
+
+  public function AssignDataGridRows($datagrid) {
+    $accountid = account::$instance->ID();
+    $query =
+      'SELECT * FROM `newsletter` ' .
+      "WHERE `accountid` = {$accountid} " .
+      "ORDER BY `showdate` DESC";
+    $actions = array(TBLOPT_DELETABLE);
+    $list = array();
+    $result = database::Query($query);
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $coldata = array(
+        'DESC' => $line['title'],
+        'SHOWDATE' => $this->FormatDateTime(DF_MEDIUMDATE, $line['showdate'], '<em>none</em>')
+      );
+      $datagrid->AddRow($id, $coldata, true, $actions);
+    }
+    $result->free();
     return $list;
   }
 }
