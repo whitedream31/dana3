@@ -32,7 +32,31 @@ class workerresmanfiles extends workerform {
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Title'), $this->table);
         $this->fldfilename = $this->AddField(
-          'filename', new filewebsitefield('filename', '', 'Filename'), $this->table);
+          'filename', new formbuilderfilewebsite('filename', '', 'Filename'), $this->table);
+        $this->fldfilename->targetpath = account::$instance->GetRelativePath('files'); // get the filename based on the media/account tables
+        $fname = $this->table->GetFieldValue('filename', null);
+//        if ($this->posting) {
+          $this->fldfilename->targetfilename = ($this->action == ACT_EDIT) 
+            ? $fname
+            : null; //$this->fldfilename->file['name']; //account::$instance->GetRelativePath($leafname = 'files'); // get the filename based on the media/account tables
+//        } else {
+//        }
+//        if ($this->fldfilename->targetfilename) {
+          $file = (isset($_FILES[$this->fldfilename->name]))
+            ? $file = $_FILES[$this->fldfilename->name]
+            : false;
+          if (!$file) {
+            $file = database::SelectFromTableByField(
+              'fileitem', FN_ID, $this->itemid
+            );
+            $this->fldfilename->file = array(
+              'name' => $this->table->GetFieldValue('filename'),
+              'filesize' => $this->table->GetFieldValue('filesize'),
+              'filetype' => false
+            );
+          }
+//        }
+        $this->fldfilename->mediaid = $this->table->ID(); // are we modifying item (as apposed to new item)
         $this->flddescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Description of File'), $this->table);
         $this->returnidname = $this->idname;
@@ -62,9 +86,10 @@ class workerresmanfiles extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = STATUS_DELETED;
-      $query = 'DELETE `fileitem` WHERE `id` = ' . $itemid;
-      database::Query($query);
+      // TODO: mark as deleted in status
+      //$status = STATUS_DELETED;
+      //$query = 'DELETE `fileitem` WHERE `id` = ' . $itemid;
+      //database::Query($query);
       $ret= true;
     } catch (Exception $e) {
       $this->AddMessage('Cannot remove file');
@@ -94,10 +119,27 @@ class workerresmanfiles extends workerform {
   }
 
   protected function SaveToTable() {
+    $file = $this->fldfilename->file;
+    if ($this->table && $file && $file['name']) {
+      $ftype = $file['type'];
+      $ln = database::SelectFromTableByField('filetype', 'filetype', $ftype, 'id');
+      $filetypeid = ($ln) ? $ln : 0;
+      $this->table->SetFieldValue('filetypeid', $filetypeid);
+      $this->table->SetFieldValue('filesize', $file['size']);
+      if (!$this->table->GetFieldValue('title')) {
+        $this->table->SetFieldValue('title', $file['name']);
+      }
+      if (!$this->table->GetFieldValue(FN_STATUS)) {
+        $this->table->SetFieldValue(FN_STATUS, STATUS_ACTIVE);
+      }
+    }
     return (int) $this->table->StoreChanges();
   }
 
   protected function AddErrorList() {
+    $this->AddErrors($this->fldfilename->errors);
+    $this->AddErrors($this->flddescription->errors);
+    $this->AddErrors($this->fldtitle->errors);
   }
 
   protected function AssignFieldDisplayProperties() {
@@ -105,11 +147,17 @@ class workerresmanfiles extends workerform {
     $this->NewSection(
       'files', 'Files Available For Your Visitors to Download',
       'Please specify the filename to upload and optionally a friendly title and description.');
-    $this->filelist->description = 'Files Currently Available';
-    $this->AssignFieldToSection('files', 'filelist');
+    if ($this->filelist) {
+      $this->filelist->description = 'Files Currently Available';
+      $this->AssignFieldToSection('files', 'filelist');
+    }
     if ($this->fldaddfile) {
-      $this->fldaddfile->description = 'Click this button to upload a new file to your website';
-      $this->AssignFieldToSection('files', 'addfile');
+      if ($this->fldaddfile) {
+        $this->fldaddfile->description = 'Click this button to upload a new file to your website. ' .
+        'The types of files to upload are office files (Word, Excel, Powerpoint or equivalents, ' .
+        'JPEG, GIF, PNG images and PDF files). The maximum file size is 2MB (megabytes).';
+        $this->AssignFieldToSection('files', 'addfile');
+      }
     }
   }
 
@@ -124,7 +172,12 @@ class workerresmanfiles extends workerform {
     $this->fldtitle->size = 50;
     $this->AssignFieldToSection('files', 'title');
     // filename field
-    $this->fldfilename->description = 'Please select the file you wish to upload.';
+    $this->fldfilename->description = 'Please select the file you wish to upload. ' .
+      'The types of files to upload are <strong>office files</strong> ' .
+      '(Word, Excel, Powerpoint or equivalents), ' .
+      '<strong>Picture files</strong> (JPEG, GIF, PNG images) and ' .
+      '<strong>Adobe Acrobat</strong> (PDF files).<br><strong>The maximum ' .
+      'file size is 2MB (megabytes).</strong>';
     $this->AssignFieldToSection('files', 'filename');
     // description field
     $this->flddescription->description = 'A short description of the file.';

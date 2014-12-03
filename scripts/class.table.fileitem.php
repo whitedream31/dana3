@@ -33,17 +33,17 @@ class fileitem extends idtable {
     return database::SelectDescriptionFromLookup('filetype', $filetypeid);
   }
 
-  protected function GetFileSizeAsString() {
-    $filesize = $this->GetFieldValue('filesize');
+  protected function GetFileSizeAsString($size = false) {
+    $filesize = ($size) ? $size : $this->GetFieldValue('filesize');
     if ($filesize > 0) {
       $kb = $filesize / 1024;
       $mb = $kb / 1024;
-      if ($mb > 4096) {
+      if ($mb > 3) {
         $val = round($mb, 2);
-        $suf = 'MB';
-      } else if ($kb > 4096) {
+        $suf = ' MB';
+      } else if ($kb > 3) {
         $val = round($kb, 2);
-        $suf = 'KB';
+        $suf = ' KB';
       } else {
         $val = $filesize;
         $suf = ' bytes';
@@ -116,7 +116,7 @@ class fileitem extends idtable {
      return $ret;
   } */
 
-  static public function GetCurrentList($showimg = false, $islistitem = true, $linkprefix = '') {
+  public function GetCurrentList($showimg = false, $islistitem = true, $linkprefix = '') {
     $accountid = account::$instance->ID();
     $status = STATUS_ACTIVE;
     $query =
@@ -129,13 +129,13 @@ class fileitem extends idtable {
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
-      $value = $line['iconurl'];
+//      $value = $line['iconurl'];
       $label = $line['filetypedesc'];
       if ($showimg) {
         $img = $line['iconurl'];
       }
-      $icon = AddSpecialLinkItem($value, $label, $img, $islistitem, $linkprefix);
-      $filesize = $this->GetFileSizeAsString();
+      $icon = account::$instance->contact->AddSpecialLinkItem($label, '', $img, $islistitem, $linkprefix);
+      $filesize = $this->GetFileSizeAsString($line['filesize']);
       $list[$id] = array(
         'DESC' => $line['filename'],
         'TITLE' => $line['title'],
@@ -148,7 +148,7 @@ class fileitem extends idtable {
   }
 
   public function AssignDataGridRows($datagrid) {
-    $list = self::GetCurrentList();
+    $list = $this->GetCurrentList(true, false);
     foreach($list as $fileid => $filedetails) {
       $datagrid->AddRow($fileid, $filedetails, true, array());
     }

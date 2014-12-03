@@ -1,7 +1,7 @@
 <?php
 require_once 'class.formbuildereditbox.php';
 
-global $MIME_WEBIMAGES;
+global $MIME_WEBIMAGES, $MIME_WEBSITE;
 
 // MIME types for uploading
 $MIME_DOCUMENTS = array(
@@ -41,12 +41,15 @@ class fileexception extends Exception {}
 
 // file field (non specific upload file) - FLDTYPE_FILE - derived from edit box so it gets size and maxlength
 class formbuilderfile extends formbuildereditbox {
+  protected $keyid;
+  public $usecurrentfile = false;
   public $acceptedfiletypes;
   public $targetfilename;
   public $targetpath;
   //public $targetprefix = 'file';
   public $posted;
   public $file;
+  public $mediaid; // hidden control id value
 
   function __construct($name, $value, $label, $targetname = '') {
     ini_set('memory_limit', '128M'); // handle large images
@@ -56,6 +59,7 @@ class formbuilderfile extends formbuildereditbox {
     $this->fieldtype = FLDTYPE_FILE;
     $this->acceptedfiletypes = array();
     $this->keyid = 0;
+    $this->mediaid = -1; // no id
     $this->Init();
     parent::__construct($name, $value, $label);
   }
@@ -93,11 +97,15 @@ class formbuilderfile extends formbuildereditbox {
 */
   protected function GetPostValue() {
     if ($this->posted) {
-      $this->file = $_FILES[$this->name];
+      if (!$this->file || isset($this->file['name'])) {
+        $this->file = $_FILES[$this->name];
+      }
       $this->value = $this->file['name'];
+      $this->keyid = GetPost($this->name . '_key'); // needed?
     } else {
       $this->file = false;
       $this->value = false;
+      $this->keyid = 0;
     }
   }
 
@@ -149,11 +157,19 @@ class formbuilderfile extends formbuildereditbox {
   }
 
   protected function ValidateValue() {
-    if ($this->file) {
-      $pathinfo = $this->GetPathInfo($this->file["name"]);
+    $ret = false;
+    if ($this->file['error'] == UPLOAD_ERR_NO_FILE) {
+      $this->usecurrentfile = ($this->keyid);
+      if ($this->usecurrentfile) {
+        $ret = true;
+      } else {
+        $this->errors[ERRKEY_NOFILE] = ERRVAL_NOFILE;
+      }
+    } elseif ($this->file) {
+      $pathinfo = $this->GetPathInfo($this->file["name"]); // basename
       $fileext = strtolower($pathinfo['extension']);
       $acceptedlist = array_values($this->acceptedfiletypes);
-      $ret = (in_array($fileext, $acceptedlist));
+      $ret = $acceptedlist && (in_array($fileext, $acceptedlist));
       if (isset($php_errormsg)) {
         $this->errors[ERRKEY_PHPERROR] =
           (substr_count('exceeds', $php_errormsg)) ? 'Your file is too big to upload' : $php_errormsg;
@@ -164,6 +180,7 @@ class formbuilderfile extends formbuildereditbox {
     } else {
       $ret = false;
     }
+    return $ret;
   }
 
   protected function AddAttributesAndValues() {
@@ -173,10 +190,18 @@ class formbuilderfile extends formbuildereditbox {
   }
 
   public function GetControl() {
-    return array(
-      "<input type='file' name='{$this->name}' id='{$this->id}' value='{$this->GetValue()}'" .
+    if ($this->mediaid) {
+      $fld = new formbuilderhidden($this->name . '_key', $this->mediaid);
+      $ret = $fld->GetControl();
+    } else {
+      $ret = array();
+    }
+    return array_merge(
+      array(
+        "<input type='file' name='{$this->name}' id='{$this->id}' value='{$this->GetValue()}'" .
         $this->IncludeAllAttributes() .
-        $this->AddDisabled() . $this->AddReadOnly() . $this->AddRequired() . " >"
+        $this->AddDisabled() . $this->AddReadOnly() . $this->AddRequired() . " >"), 
+      $ret
     );
   }
 }

@@ -20,7 +20,7 @@ class gallery extends idtable {
   protected function AssignFields() {
     parent::AssignFields();
     $this->AddField('title', DT_STRING);
-    //$this->AddField('visible', DT_BOOLEAN);
+    $this->AddField(FN_ACCOUNTID, DT_ID);
   }
 
   protected function AfterPopulateFields() {
@@ -282,7 +282,6 @@ class gallery extends idtable {
     $list = $this->GetPagedActiveItems($start, $imagesperpage);
     $item = reset($list);
     if ($item) {
-
       $ret[] = "  <div id='galleryheader'>";
       $ret[] = "    <div class='simple-pagination-first'></div>";
       $ret[] = "    <div class='simple-pagination-previous'></div>";
@@ -292,7 +291,6 @@ class gallery extends idtable {
       $ret[] = "    <div class='simple-pagination-page-x-of-x'></div>";
       $ret[] = "    <div class='simple-pagination-showing-x-of-x'></div>";
       $ret[] = "  </div>";
-
       //$class = ($itemclass) ? " class='{$itemclass}'" : '';
       $ret[] = '<table>';
       while (!empty($item)) {

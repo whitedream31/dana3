@@ -17,7 +17,7 @@ class formbuilderfilewebimage extends formbuilderfile {
   public $imageresizewidth = 500;
   public $imageresizeheight = 500;
   // optional properties to show a thumbnail and id for passing to a database
-  public $mediaid; // hidden control id value
+//  public $mediaid; // hidden control id value
   public $previewthumbnail; // name of thumbnail file
   public $originalfilename; // name of filename that was originally uploaded (for display only)
   public $newimgfilename;
@@ -33,7 +33,7 @@ class formbuilderfilewebimage extends formbuilderfile {
     global $MIME_WEBIMAGES;
     $this->fieldtype = FLDTYPE_FILEWEBIMAGES;
     $this->acceptedfiletypes = $MIME_WEBIMAGES;
-    $this->mediaid = -1; // no id
+//    $this->mediaid = -1; // no id
     $this->previewthumbnail = 'none';
   }
 // brentwientjes at NOSPAM dot comcast dot net
@@ -68,7 +68,7 @@ class formbuilderfilewebimage extends formbuilderfile {
   } */
 
   protected function ProcessPost() {
-    if ($this->file['error'] != UPLOAD_ERR_NO_FILE && !$this->errors) {
+    if (!$this->usecurrentfile && !$this->errors) { //($this->file['error'] != UPLOAD_ERR_NO_FILE && !$this->errors) {
       parent::ProcessPost();
       if (count($this->errors) == 0) {
         $srcfilename = $this->targetpath . $this->targetfilename;

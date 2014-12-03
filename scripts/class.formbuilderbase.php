@@ -15,6 +15,7 @@ define('ERRKEY_INVALIDFILE', 'invfile');
 define('ERRKEY_PASSWORDMISMATCH', 'pwdmis');
 define('ERRKEY_OLDPASSWORD', 'oldpwd');
 define('ERRKEY_TOOSHORT', 'short');
+define('ERRKEY_NOFILE', 'nofile');
 // error list - messages
 define('ERRVAL_VALUEREQUIRED', 'Field required');
 define('ERRVAL_IMAGETOOBIG', 'Uploaded image is too big (please resize)');
@@ -22,6 +23,7 @@ define('ERRVAL_INVALIDFILE', 'Invalid file type');
 define('ERRVAL_OLDPASSWORD', 'Your old password is incorrect');
 define('ERRVAL_PASSWORDMISMATCH', 'Your new password does not match the confirmation');
 define('ERRVAL_TOOSHORT', 'Too few characters');
+define('ERRVAL_NOFILE', 'No file selected');
 
 abstract class formbuilderbase {
   public $id;

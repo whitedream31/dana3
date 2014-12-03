@@ -44,7 +44,7 @@ class media extends idtable {
   
   public function AssignFromWebImage($src) {
     require_once 'class.formbuilderfilewebimage.php';
-    if ($src instanceof formbuilderfilewebimage) {
+    if ($src instanceof formbuilderfilewebimage && !$src->usecurrentfile) {
       $this->SetFieldValue('imgtype', $src->file['type']);
       $this->SetFieldValue('originalname', $src->file['name']);
       $this->SetFieldValue('imgsize', $src->file['size']);

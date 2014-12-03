@@ -143,11 +143,11 @@ class contact extends idtable {
         $linkend = '';
       }
       if ($img) {
-        $img = "<img src='//cdn.mlsb.org/images/{$img}.png' alt=''>";
+        $img = "<img src='//cdn.mlsb.org/images/{$img}.png' class='linkicon' alt=''>";
       }
       $ret = ($islistitem) ? "  <li class='contactitem'>" : '';
-      $lbl = ($showlabel && $label) ? '<span>' . $label . ':</span>' : '';
-      $ret .= $img . $lbl . ' ' . $linkstart . $value . $linkend;
+      $lbl = ($showlabel && $label) ? $label : '';
+      $ret .= $img . "<span class='linktext'>{$lbl} {$linkstart}{$value}{$linkend}</span>";
       if ($islistitem) {
         $ret .= "</li>\n";
       }

@@ -13,14 +13,14 @@ require_once 'class.activitymanager.php';
 require_once 'class.table.account.php';
 
 /*
-acc  322
-con  454
+acc  322 / 542
+con  454 / 675
 nick lorem
 usr  lorem
 pwd  ipsum
 */
 
-$account = account::StartInstance(322);
+$account = account::StartInstance(542); //322);
 
 $_SESSION[SESS_IDGROUP] = 3;
 

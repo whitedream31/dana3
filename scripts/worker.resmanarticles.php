@@ -48,10 +48,12 @@ class workerresmanarticles extends workerform {
         $this->title = (($this->action == ACT_EDIT) ? 'Modify' : 'New') . ' Article';
         $this->fldheading = $this->AddField(
           'heading', new formbuildereditbox('heading', '', 'Heading'), $this->table);
+        $this->fldheading->required = true;
         $this->fldcategory = $this->AddField(
           'category', new formbuildereditbox('category', '', 'Category'), $this->table);
         $this->fldcontent = $this->AddField(
           'content', new formbuildertextarea('content', '', 'Article Text'), $this->table);
+        $this->fldcontent->required = true;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;

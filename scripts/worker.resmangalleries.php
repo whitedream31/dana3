@@ -35,8 +35,10 @@ class workerresmangalleries extends workerform {
         $this->title = 'Modify Gallery';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Gallery Title'), $this->table);
-        $this->imagegrid = $this->AddField(
-          'imagegrid', new formbuilderdatagrid('imagegrid', '', 'Gallery Images'));
+        if ($this->action == ACT_EDIT) {
+          $this->imagegrid = $this->AddField(
+            'imagegrid', new formbuilderdatagrid('imagegrid', '', 'Gallery Images'));
+        }
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
@@ -56,6 +58,7 @@ class workerresmangalleries extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
+      case ACT_NEW:
       case ACT_EDIT:
         $ret = $this->fldtitle->Save();
         break;
@@ -113,24 +116,28 @@ class workerresmangalleries extends workerform {
     $this->NewSection(
       'gallery', $title,
       "Please describe the gallery with a simple name or phrase, such as 'Products', 'Portfolio', or 'Before and After' etc.");
+    $desc = ($isnew) 
+      ? 'To add images to the gallery first save the gallery then click on the gallery name to edit it.'
+      : "Below are the images currently in the gallery. You can edit the details about each image, delete it or add a new image.";
     $this->NewSection(
-      'imagegrid', 'Managing the Images in the Gallery',
-      "Below are the images currently in the gallery. You can edit the details about each image, delete it or add a new image.");
+      'imagegrid', 'Managing the Images in the Gallery', $desc);
     // title field
     $this->fldtitle->description = 'This is the name of the gallery.';
     $this->fldtitle->size = 50;
     $this->AssignFieldToSection('gallery', 'title');
     // imagegrid
-    $this->imagegrid->SetIDName(IDNAME_MANAGEGALLERYIMAGES);
-    $this->PopulateImageGrid();
-    $this->imagegrid->description = 'Type in your reply to the comment. Please read the notice above.';
-    $this->AssignFieldToSection('imagegrid', 'imagegrid');
-    // add image button
-    $this->fldaddimage = $this->AddField(
-      'addimage', new formbuilderbutton('addimage', 'Add Picture'));
-    $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGEGALLERYIMAGES . "&amp;pid={$this->itemid}&amp;act=" . ACT_NEW;
-    $this->fldaddimage->url = $url;
-    $this->AssignFieldToSection('imagegrid', 'addimage');
+    if ($this->imagegrid) {
+      $this->imagegrid->SetIDName(IDNAME_MANAGEGALLERYIMAGES);
+      $this->PopulateImageGrid();
+      $this->imagegrid->description = 'Type in your reply to the comment. Please read the notice above.';
+      $this->AssignFieldToSection('imagegrid', 'imagegrid');
+      // add image button
+      $this->fldaddimage = $this->AddField(
+        'addimage', new formbuilderbutton('addimage', 'Add Picture'));
+      $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGEGALLERYIMAGES . "&amp;pid={$this->itemid}&amp;act=" . ACT_NEW;
+      $this->fldaddimage->url = $url;
+      $this->AssignFieldToSection('imagegrid', 'addimage');
+    }
   }
 
   protected function AssignItemRemove($confirmed) {

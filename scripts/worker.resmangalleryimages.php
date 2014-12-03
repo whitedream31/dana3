@@ -97,17 +97,21 @@ class workerresmangalleryimages extends workerform {
 
   protected function SaveToTable() {
     $ret = -1;
-    $media = $this->account->media;
-    if ($media) {
-      $media->AssignFromWebImage($this->fldimage);
-      $nextimgnumber = account::$instance->nextimgnumber;
-      $media->SetFieldValue('imgid', $nextimgnumber);
+    if ($this->fldimage->usecurrentfile) {
+      $ret = (int) $this->table->StoreChanges(); //$ret = $this->table->ID();
+    } else {
+      $media = $this->account->media;
+      if ($media) {
+        $media->AssignFromWebImage($this->fldimage);
+        $nextimgnumber = account::$instance->nextimgnumber;
+        $media->SetFieldValue('imgid', $nextimgnumber);
 
-      if ($media->StoreChanges()) {
-        $mediaid = $media->ID();
-        $this->table->SetFieldValue('largemediaid', $mediaid);
-        $this->table->SetFieldValue('galleryid', $this->groupid);
-        $ret = (int) $this->table->StoreChanges();
+        if ($media->StoreChanges()) {
+          $mediaid = $media->ID();
+          $this->table->SetFieldValue('largemediaid', $mediaid);
+          $this->table->SetFieldValue('galleryid', $this->groupid);
+          $ret = (int) $this->table->StoreChanges();
+        }
       }
     }
     // back to gallery worker
@@ -125,10 +129,7 @@ class workerresmangalleryimages extends workerform {
     $this->groupid = false;
     $this->action = false;
     $this->posting = false;
-    $this->idname = IDNAME_MANAGEGALLERIES; //$this->SetIDName(IDNAME_MANAGEGALLERIES);
-/*    if ($ret) {
-      $this->returnidname = IDNAME_MANAGEGALLERIES;
-    } */
+    $this->idname = IDNAME_MANAGEGALLERIES;
     return $ret;
   }
 

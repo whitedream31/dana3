@@ -151,14 +151,13 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
   protected function CheckForBlankValues() {}
 
   public function Execute() {
-//$this->ShowDebugInfo();
     if ($this->posting) {
       if (($this->action == ACT_EDIT) || ($this->action == ACT_NEW)) {
         $this->CheckForBlankValues();
       }
       if (!$this->PostFields() && $this->IsValid()) {
         $this->SaveToTable();
-        $this->AddMessage("Changes to {$this->contextdescription} Saved");
+        $this->AddMessage("Changes Saved"); //to {$this->contextdescription} Saved");
         $this->posted = true;
         $this->action = false;
         // re-init form
@@ -168,6 +167,7 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         $this->AddErrorList();
         if ($this->manager->HasErrors()) {
           $this->AddMessage('Sorry, there were errors. Please rectify them and try again.');
+          $this->InitForm();
           $this->AssignFieldDisplayProperties();
           $this->posted = false;
 $this->ProcessAction($this->action);
