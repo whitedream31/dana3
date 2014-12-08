@@ -35,27 +35,12 @@ class workerresmanfiles extends workerform {
           'filename', new formbuilderfilewebsite('filename', '', 'Filename'), $this->table);
         $this->fldfilename->targetpath = account::$instance->GetRelativePath('files'); // get the filename based on the media/account tables
         $fname = $this->table->GetFieldValue('filename', null);
-//        if ($this->posting) {
-          $this->fldfilename->targetfilename = ($this->action == ACT_EDIT) 
-            ? $fname
-            : null; //$this->fldfilename->file['name']; //account::$instance->GetRelativePath($leafname = 'files'); // get the filename based on the media/account tables
-//        } else {
-//        }
-//        if ($this->fldfilename->targetfilename) {
-          $file = (isset($_FILES[$this->fldfilename->name]))
-            ? $file = $_FILES[$this->fldfilename->name]
-            : false;
-          if (!$file) {
-            $file = database::SelectFromTableByField(
-              'fileitem', FN_ID, $this->itemid
-            );
-            $this->fldfilename->file = array(
-              'name' => $this->table->GetFieldValue('filename'),
-              'filesize' => $this->table->GetFieldValue('filesize'),
-              'filetype' => false
-            );
-          }
-//        }
+        $this->fldfilename->targetfilename = ($this->action == ACT_EDIT)
+          ? $fname
+          : null;
+
+$this->AssignFileDetails();
+
         $this->fldfilename->mediaid = $this->table->ID(); // are we modifying item (as apposed to new item)
         $this->flddescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Description of File'), $this->table);
@@ -81,6 +66,25 @@ class workerresmanfiles extends workerform {
         $this->title = 'Manage Downloadable Files'; 
         $this->filelist = $this->AddField('filelist', $this->datagrid, $this->table);
         break;
+    }
+  }
+
+  private function AssignFileDetails() {
+    $file = (isset($_FILES[$this->fldfilename->name]))
+      ? $file = $_FILES[$this->fldfilename->name]
+      : false;
+    $this->fldfilename->file = $file;
+    if ((!$file) || (isset($file['error']) && $file['error'] == UPLOAD_ERR_NO_FILE)) {
+      if ($this->itemid) {
+        $file = database::SelectFromTableByField(
+          'fileitem', FN_ID, $this->itemid
+        );
+        $this->fldfilename->file = array(
+          'name' => $file['filename'], // $this->table->GetFieldValue('filename'),
+          'size' => $file['filesize'], // $this->table->GetFieldValue('filesize'),
+          'type' => $file['filetypeid'] //false
+        );
+      }
     }
   }
 
@@ -118,16 +122,33 @@ class workerresmanfiles extends workerform {
     return $ret;
   }
 
+  protected function GetTitleFromFilename($value) {
+    return str_replace('_', ' ', pathinfo($value, PATHINFO_FILENAME));
+  }
+
   protected function SaveToTable() {
+    $this->AssignFileDetails();
     $file = $this->fldfilename->file;
+
     if ($this->table && $file && $file['name']) {
-      $ftype = $file['type'];
-      $ln = database::SelectFromTableByField('filetype', 'filetype', $ftype, 'id');
-      $filetypeid = ($ln) ? $ln : 0;
-      $this->table->SetFieldValue('filetypeid', $filetypeid);
-      $this->table->SetFieldValue('filesize', $file['size']);
-      if (!$this->table->GetFieldValue('title')) {
-        $this->table->SetFieldValue('title', $file['name']);
+      if (isset($file['type']) && $file['type']) {
+        $ftype = $file['type'];
+        if (is_numeric($ftype)) {
+          $filetypeid = $ftype;
+        } else {
+          $ln = database::SelectFromTableByField('filetype', 'filetype', $ftype, 'id');
+          $filetypeid = ($ln) ? $ln : 0;
+        }
+        $this->table->SetFieldValue('filetypeid', $filetypeid);
+      }
+      $size = $file['size'];
+      if ($size > 0) {
+        $this->table->SetFieldValue('filesize', $size);
+      }
+      $title = $this->fldtitle->value;
+      if (!$title) {
+        $name = $this->GetTitleFromFilename($file['name']);
+        $this->table->SetFieldValue('title', $name);
       }
       if (!$this->table->GetFieldValue(FN_STATUS)) {
         $this->table->SetFieldValue(FN_STATUS, STATUS_ACTIVE);

@@ -60,6 +60,7 @@ class formbuilderfile extends formbuildereditbox {
     $this->acceptedfiletypes = array();
     $this->keyid = 0;
     $this->mediaid = -1; // no id
+    $this->file = false; // assign $_FILE array later
     $this->Init();
     parent::__construct($name, $value, $label);
   }
