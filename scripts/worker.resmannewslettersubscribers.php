@@ -59,7 +59,9 @@ class workerresmannewslettersubscribers extends workerform {
 
   protected function SaveToTable() {
     $ret = (int) $this->table->StoreChanges();
-    $this->table->SendInvite();
+    if ($this->action == ACT_NEW) {
+      $this->table->SendInvite();
+    }
     return $ret;
   }
 
