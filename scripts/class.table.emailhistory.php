@@ -18,6 +18,7 @@ define('ET_ACCCONTACT', 'C'); // - contact messages from account contact pages
 define('ET_ADMINCONTACT', 'M'); // - contact messages from mlsb.org to me
 define('ET_SPONSOR', 'P'); // - sponsor message - just added, confirmed
 define('ET_NEWSLETTER', 'N'); // - newsletters from accounts
+define('ET_SUBSCRIBERINVITE', 'I'); // - newsletter subscriber invite sent
 define('ET_RATED', 'R'); // - business rated
 define('ET_TEST', 'T'); // - test message (only sent to me)
 
@@ -68,6 +69,8 @@ class emailhistory extends idtable {
         $ret = 'Sponsor'; break;
       case ET_NEWSLETTER: //'N' - newsletters from accounts
         $ret = 'Newsletter'; break;
+      case ET_SUBSCRIBERINVITE: //'I' - newsletter subscriber (invite sent)
+        $ret = 'Subscriber'; break;
       case ET_RATED: // 'R' - business rated
         $ret = 'Rated'; break;
       case ET_TEST: //'T' - test message (only sent to me)

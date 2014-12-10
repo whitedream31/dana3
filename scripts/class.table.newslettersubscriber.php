@@ -20,8 +20,53 @@ class newslettersubscriber extends idtable {
     $this->AddField(FN_STATUS, DT_STATUS);
   }
 
+  private function GetSessionRef() {
+    return session_id();
+  }
+
   public function SendInvite() {
-  
+    require_once 'class.table.emailhistory.php';
+    $account = account::$instance;
+    $businessname = $account->GetFieldValue('businessname');
+    $nickname = $account->GetFieldValue('nickname');
+    $firstname = $this->GetFieldValue('firstname');
+    $lastname = $this->GetFieldValue('lastname');
+    $fullname = trim($firstname . ' ' . $lastname);
+    $email = $this->GetFieldValue('email');
+    $sessionref = $this->GetFieldValue('sessionref');
+    if (!$sessionref) {
+      // no sesion ref so make it now
+      $sessionref = $this->GetSessionRef();
+      $this->SetFieldValue('sessionref', $sessionref);
+    }
+    $replyaddress = $account->Contact()->GetFieldValue('email');
+//    $fromaddress = EMAIL_SUPPORT;
+    $subject = 'Newsletter Invitation';
+    $message =
+      "Hello {$fullname},\r\n\r\n" .
+      "This is a message from {$businessname}.\r\n\r\n" .
+      "You are invited to subcribe to our newsletter, that we will send " .
+      "to you from time to time.\r\n\r\n" .
+      "We will keep your details safe and will not sell or give them to " .
+      "third parties. Please read our privcy policy at:\r\n\r\n" .
+      "http://mylocalsmallbusiness.com/privacy.html\r\n\r\n" .
+      "If you wish to subscribe please click (or copy and paste into a webbrowser) " .
+      "the following link:\r\n" .
+      "http://mlsb.org/confirm.php?act=n&r={$sessionref}\r\n\r\n" .
+      "If you subscribe you will have a the opportunity to unsubscribe in the " .
+      "newsletter message and at our website: http://mlsb.org/{$nickname}\r\n\r\n" .
+      "If you do not wish to subscribe please ignore this message.\r\n\r\n" .
+      "Please note:\r\n" .
+      "The newsletter is provided and managed by MyLocalSmallBusiness.com " .
+      "(also known as MLSB), who are registered with the Data Protection Registar, " .
+      "under the name of Whitedream Software.\r\n";
+    emailhistory::SendEmailMessage(
+      ET_SUBSCRIBERINVITE, $email, $subject, $message, $replyaddress,
+      $account->ID()
+    );
+    // mark as inite sent in table
+    $this->SetFieldValue(FN_STATUS, STATUS_WAITING); // mark as invite sent - waiting
+    $this->StoreChanges();
   }
 
   public function GetStatusAsString($usecolour = false, $status = false) {
