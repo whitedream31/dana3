@@ -29,9 +29,9 @@ class newslettersubscriber extends idtable {
     $account = account::$instance;
     $businessname = $account->GetFieldValue('businessname');
     $nickname = $account->GetFieldValue('nickname');
-    $firstname = $this->GetFieldValue('firstname');
-    $lastname = $this->GetFieldValue('lastname');
-    $fullname = trim($firstname . ' ' . $lastname);
+//    $firstname = $this->GetFieldValue('firstname');
+//    $lastname = $this->GetFieldValue('lastname');
+    $fullname = $this->FullName();
     $email = $this->GetFieldValue('email');
     $sessionref = $this->GetFieldValue('sessionref');
     if (!$sessionref) {

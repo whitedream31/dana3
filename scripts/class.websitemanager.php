@@ -475,19 +475,21 @@ abstract class websitemanager {
   // DOWNLOADABLE FILES - SIDEBAR
   protected function GetDownloadableFilesSidebar() {
     $ret = array();
-    $showimg = false;
+    $showimg = true;
     $islistitem = true;
     $linkprefix = '';
-    $list = fileitem::GetCurrentList($showimg, $islistitem, $linkprefix);
+    $filelist = new fileitem();
+    $list = $filelist->GetCurrentList($showimg, $islistitem, $linkprefix);
     if ($list) {
       $ret[] = '<h3>Downloable Files</h3>';
       $ret[] = '<ul>';
       foreach ($list as $fileid => $filedetails) {
 //        $filename = $filedetails['DESC'];
         $title = $filedetails['TITLE'];
-        $icon = $filedetails['FILETYPE'];
+//        $icon = $filedetails['FILETYPE'];
+        $icon = $filedetails['IMAGE'];
         $filesize = $filedetails['FILESIZE'];
-        $ret[] = $icon . $title . ' <em>' . $filesize . '</em>';
+        $ret[] = $icon . $title . ' (<em>' . $filesize . '</em>)';
       }
       $ret[] = '</ul>';
     }

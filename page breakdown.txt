@@ -64,6 +64,8 @@ booking page
   sidebar - privatearea: login/logout link
   sidebar - downloadablefiles: list of files
 
+privatearea page
+
 calendar page
   main content: calendar viewer
   sidebar - articles: list of article headers (last 10)
@@ -71,17 +73,6 @@ calendar page
   sidebar - newsletters: list of active newsletters / subscription link
   sidebar - socialnetworks: list of social network contacts
   sidebar - calendar: summary (month / year)
-  sidebar - booking: link to booking page
-  sidebar - privatearea: login/logout link
-  sidebar - downloadablefiles: list of files
-
-privatearea page
-  main content: gallery viewer
-  sidebar - articles: list of article headers (last 10)
-  sidebar - guestbook: list of guestbooks (list of guestbook desc & count) & login / logout link
-  sidebar - newsletters: list of active newsletters / subscription link
-  sidebar - socialnetworks: list of social network contacts
-  sidebar - calendar: list of calendar entries
   sidebar - booking: link to booking page
   sidebar - privatearea: login/logout link
   sidebar - downloadablefiles: list of files
@@ -105,6 +96,7 @@ todo
   calendar: summary (month / year)
   booking: link to booking page
   privatearea: private area login/logout link
+
 
 
 define('CONTTYPE_MAIN', 'm');

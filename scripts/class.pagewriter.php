@@ -40,6 +40,7 @@ class pagewriter {
   private $errcount;
   private $log;
   private $shortname;
+
   public $pagelist;
   public $contact;
   public $errors;
@@ -83,7 +84,7 @@ class pagewriter {
         $this->AddError("Account {$this->account->key} does not exist");
       }
     } catch (Exception $e) {
-      $this->AddError("Exception: [{$e->code}] - {$e->message}");
+      $this->AddError("Exception: {$e->message}");
     }
     if ($this->errcount || in_array(PWOPT_TEST, $this->options)) {
       $this->WriteLogPage();

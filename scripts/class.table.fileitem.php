@@ -135,11 +135,13 @@ class fileitem extends idtable {
         $img = $line['iconurl'];
       }
       $icon = account::$instance->contact->AddSpecialLinkItem($label, '', $img, $islistitem, $linkprefix);
+      $image = account::$instance->contact->AddSpecialLinkItem(' ', '', $img, $islistitem, $linkprefix);
       $filesize = $this->GetFileSizeAsString($line['filesize']);
       $list[$id] = array(
         'DESC' => $line['filename'],
         'TITLE' => $line['title'],
         'FILETYPE' => $icon,
+        'IMAGE' => $image,
         'FILESIZE' => $filesize
       );
     }
