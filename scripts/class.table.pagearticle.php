@@ -30,6 +30,11 @@ class pagearticle extends page {
       'registervisitors', new formbuildercheckbox('registervisitors', '', 'Visitors Must Register'), $this);
   }
 
+  protected function InitFieldsForSideContent($worker) {
+    parent::InitFieldsForSideContent($worker);
+//    $this->InitFieldForContactSidebar($worker);
+  }
+
   public function AssignFieldProperties($worker, $isnew) {
     parent::AssignFieldProperties($worker, $isnew);
     $this->fldcancomment->description =

@@ -14,6 +14,7 @@ class pagecontact extends page {
   protected function AssignPageType() {
     $this->pgtype = PAGETYPE_CONTACT;
   }
+
   protected function AfterPopulateFields() {
     parent::AfterPopulateFields();
   }

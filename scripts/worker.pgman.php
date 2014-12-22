@@ -135,7 +135,8 @@ class workerpgman extends workerform {
       case ACT_EDIT:
       case ACT_NEW:
         $this->title = ($this->action == ACT_NEW) ? 'New Page' : 'Modify Page';
-        $this->table = $this->GetPageTable($this->pagetype, $this->itemid);
+        $pid = ($this->action == ACT_EDIT) ? $this->itemid : 0;
+        $this->table = $this->GetPageTable($this->pagetype, $pid);
         $this->table->InitForm($this, $this->action);
         $this->returnidname = $this->idname;
         $this->showroot = false;

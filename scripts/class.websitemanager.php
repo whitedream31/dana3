@@ -476,20 +476,22 @@ abstract class websitemanager {
   protected function GetDownloadableFilesSidebar() {
     $ret = array();
     $showimg = true;
-    $islistitem = true;
+    $islistitem = false;
     $linkprefix = '';
     $filelist = new fileitem();
     $list = $filelist->GetCurrentList($showimg, $islistitem, $linkprefix);
     if ($list) {
+      $script = $this->sourcepath . DIRECTORY_SEPARATOR . "downloadfile.php?rid=";
       $ret[] = '<h3>Downloable Files</h3>';
       $ret[] = '<ul>';
       foreach ($list as $fileid => $filedetails) {
-//        $filename = $filedetails['DESC'];
         $title = $filedetails['TITLE'];
+//        $filename = "<a href='files/" . $filedetails['DESC'] . "' title='click to download {$title}'>{$title}</a>";
+        $filename = "<a href='{$script}{$fileid}' title='click to download {$title}'>{$title}</a>";
 //        $icon = $filedetails['FILETYPE'];
         $icon = $filedetails['IMAGE'];
         $filesize = $filedetails['FILESIZE'];
-        $ret[] = $icon . $title . ' (<em>' . $filesize . '</em>)';
+        $ret[] = "<li>{$icon}{$filename} (<em>{$filesize}</em>)</li>";
       }
       $ret[] = '</ul>';
     }
