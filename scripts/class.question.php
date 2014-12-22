@@ -84,6 +84,29 @@ class questionmanager {
     return $result;
   }
 
+  private function DoShowQuestion($question, $url) {
+    $id = $question->id;
+    if ($id) { // && file_exists($url)) {
+//          $url = $path . DIRECTORY_SEPARATOR . $question->questionimage;
+      $ans1 = $question->answer1;
+      $ans2 = $question->answer2;
+      $ans3 = $question->answer3;
+      $ret =
+        "<div id='question'>\n" .
+        "  <p>For anti-spamming purposes, please answer the following question:</p>\n" .
+        "  <img src='{$url}' alt='oops, no image - please refresh the page!'>\n" .
+        "  <input name='{$this->fldanswer}' id='{$this->fldanswer}' type='text' size='10' maxlength='10' required>\n" .
+        "  <input type='hidden' name='{$this->fldqid}' id='{$this->fldqid}' value='{$id}' />\n" .
+        "  <input type='hidden' name='ans1' id='ans1' value='{$ans1}' />\n" .
+        "  <input type='hidden' name='ans2' id='ans2' value='{$ans2}' />\n" .
+        "  <input type='hidden' name='ans3' id='ans3' value='{$ans3}' />\n" .
+        "</div>\n";
+    } else {
+      $ret = false;
+    }
+    return $ret;
+  }
+
   // returns a random question, 
   // or 'true' if form has posted a correct answer
   // 'false' if no question has been found
@@ -96,20 +119,8 @@ class questionmanager {
       if ($id !== false) {
         $question = new questionitem($id);
         if ($question->exists) {
-          $url = $path . DIRECTORY_SEPARATOR . $question->questionimage;
-$ans1 = $question->answer1;
-$ans2 = $question->answer2;
-$ans3 = $question->answer3;
-          $value =
-            "<div id='question'>\n" .
-            "  <p>For anti-spamming purposes, please answer the following question:</p>\n" .
-            "  <img src='{$url}' alt='oops, no image - please refresh the page!'>\n" .
-            "  <input name='{$this->fldanswer}' id='{$this->fldanswer}' type='text' size='10' maxlength='10' required>\n" .
-            "  <input type='hidden' name='{$this->fldqid}' id='{$this->fldqid}' value='{$id}' />\n" .
-"  <input type='hidden' name='ans1' id='ans1' value='{$ans1}' />\n" .
-"  <input type='hidden' name='ans2' id='ans2' value='{$ans2}' />\n" .
-"  <input type='hidden' name='ans3' id='ans3' value='{$ans3}' />\n" .
-            "</div>\n";
+          $url = $path . '/' . $question->questionimage;
+          $value = $this->DoShowQuestion($question, $url);
         }
       }
       $ret = $value;
