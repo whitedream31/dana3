@@ -651,15 +651,15 @@ abstract class tagtable extends basetable {
   }
 
   protected function AssignFields() {
-    parent::AssignFields();
+//    parent::AssignFields();
     $this->taglist = array();
     $this->id = $this->AddField($this->idname, DT_ID);
     $this->tag = $this->AddField(FN_TAG, DT_TAG);
   }
 
-  protected function FindByTag($value) {
-    $line = database::Query('SELECT * FROM `' . $this->tablename . '` WHERE `tag` = "' . $value . '"');
-    $this->exists = ($line === false);
+  public function FindByTag($value) {
+    $line = database::SelectFromTableByField($this->tablename, $this->idname, $value);
+    $this->exists = ($line !== false);
     if ($this->exists) {
       $this->exists = true;
       $this->PopulateFields($line);
@@ -759,7 +759,6 @@ abstract class lookuptable extends idtable {
   protected function AssignFields() {
     $this->AddField(FN_ID, DT_ID);
     $this->AddField(FN_REF, DT_REF);
-    //$this->AddField('countryid', DT_FK);
     $this->AddField(FN_DESCRIPTION, DT_STRING);
     $this->AddField(FN_STATUS, DT_STATUS);
   }
