@@ -24,7 +24,7 @@ class wsm_guestbookpage extends websitemanager {
   private function DoGuestBookMainContent($groupid) {
     $ret = array();
     $guestbook = new guestbook($groupid);
-    if ($guestbook->exist) {
+    if ($guestbook->exists) {
       $entrylist = guestbookentry::GetList($groupid);
       $guestbookheading = $guestbook->GetFieldValue(FN_DESCRIPTION);
       if (!$guestbookheading) {
