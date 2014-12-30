@@ -87,22 +87,21 @@ class articleitem extends idtable {
     $result = database::$instance->Query($query);
     $line = $result->fetch_assoc();
     $category = $line['category'];
-    $id = $line['id'];
     $heading = $line['heading'];
     $ret[$id] = array(
       'id' => $id,
-      'accountid' => $line['accountid'],
-      'articletypeid' => $line['articletypeid'],
+//      'accountid' => $line['accountid'],
+//      'articletypeid' => $line['articletypeid'],
       'heading' => $heading,
-      'name' => $heading . '-' . $id,
-      'category' => $category,
-      'url' => $line['url'],
+      'name' => self::StringToPretty($heading) . '-' . $id,
+//      'category' => $category,
+//      'url' => $line['url'],
       'content' => $line['content'],
-      'expirydate' => $line['expirydate'],
+//      'expirydate' => $line['expirydate'],
       'stampupdated' => $line['stampupdated'],
-      'businessname' => $line['businessname'],
-      'nickname' => $line['nickname'],
-      'articletypedescription' => $line['articletypedescription']
+//      'businessname' => $line['businessname'],
+//      'nickname' => $line['nickname'],
+//      'articletypedescription' => $line['articletypedescription']
     );
     $result->free();
     return $ret;
@@ -129,18 +128,18 @@ class articleitem extends idtable {
         $heading = $line['heading'];
         $ret[$id] = array(
           'id' => $id,
-          'accountid' => $line['accountid'],
-          'articletypeid' => $line['articletypeid'],
+//          'accountid' => $line['accountid'],
+//          'articletypeid' => $line['articletypeid'],
           'heading' => $heading,
-          'name' => $heading . '-' . $id,
+          'name' => self::StringToPretty($heading) . '-' . $id,
           'category' => $category,
-          'url' => $line['url'],
+//          'url' => $line['url'],
           'content' => $line['content'],
-          'expirydate' => $line['expirydate'],
+//          'expirydate' => $line['expirydate'],
           'stampupdated' => $line['stampupdated'],
-          'businessname' => $line['businessname'],
-          'nickname' => $line['nickname'],
-          'articletypedescription' => $line['articletypedescription']
+//          'businessname' => $line['businessname'],
+//          'nickname' => $line['nickname'],
+//          'articletypedescription' => $line['articletypedescription']
         );
       }
     }

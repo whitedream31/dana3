@@ -21,7 +21,7 @@ class wsm_articlepage extends websitemanager {
     return PAGETYPE_ARTICLE;
   }
 
-  private function DoArticleContent() {
+/*  private function DoArticleContent() {
     $articlelist = $this->page->account->ArticleList();
     $list = array();
     //$currentcategory = '';
@@ -54,7 +54,7 @@ class wsm_articlepage extends websitemanager {
       $ret[] = '</section>';
     }
     return $ret;
-  }
+  } */
 
   protected function GetMainContent($groupid) {
     return $this->GetArticlesMain();
