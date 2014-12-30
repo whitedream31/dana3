@@ -13,7 +13,7 @@ require_once 'class.formbuilderdatagrid.php';
 
 class workeraccmanhoursavail extends workerform {
   protected $datagrid;
-  protected $workinghours;
+  protected $table;
   protected $workinghourslist;
   protected $fldhoursdescription;
   protected $fldis24hrs;
@@ -29,7 +29,7 @@ class workeraccmanhoursavail extends workerform {
   protected $fldaddhours;
 
   protected function InitForm() {
-    $this->workinghours = new hours($this->itemid);
+    $this->table = new hours($this->itemid);
     $this->icon = 'images/sect_account.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'working hours';
@@ -39,27 +39,27 @@ class workeraccmanhoursavail extends workerform {
       case ACT_NEW:
         $this->title = (($this->action == ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
         $this->fldhoursdescription = $this->AddField(
-          'description', new formbuildereditbox('description', '', 'Description'), $this->workinghours);
+          'description', new formbuildereditbox('description', '', 'Description'), $this->table);
         $this->fldis24hrs = $this->AddField(
-          'is24hrs', new formbuildercheckbox('is24hrs', '', 'Is Open Hours?'), $this->workinghours);
+          'is24hrs', new formbuildercheckbox('is24hrs', '', 'Is Open Hours?'), $this->table);
         $this->fldmonday = $this->AddField(
-          'monday', new formbuildereditbox('monday', '', 'Monday'), $this->workinghours);
+          'monday', new formbuildereditbox('monday', '', 'Monday'), $this->table);
         $this->fldtuesday = $this->AddField(
-          'tuesday', new formbuildereditbox('tuesday', '', 'Tuesday'), $this->workinghours);
+          'tuesday', new formbuildereditbox('tuesday', '', 'Tuesday'), $this->table);
         $this->fldwednesday = $this->AddField(
-          'wednesday', new formbuildereditbox('wednesday', '', 'Wednesday'), $this->workinghours);
+          'wednesday', new formbuildereditbox('wednesday', '', 'Wednesday'), $this->table);
         $this->fldthursday = $this->AddField(
-          'thursday', new formbuildereditbox('thursday', '', 'Thursday'), $this->workinghours);
+          'thursday', new formbuildereditbox('thursday', '', 'Thursday'), $this->table);
         $this->fldfriday = $this->AddField(
-          'friday', new formbuildereditbox('friday', '', 'Friday'), $this->workinghours);
+          'friday', new formbuildereditbox('friday', '', 'Friday'), $this->table);
         $this->fldsaturday = $this->AddField(
-          'saturday', new formbuildereditbox('saturday', '', 'Saturday'), $this->workinghours);
+          'saturday', new formbuildereditbox('saturday', '', 'Saturday'), $this->table);
         $this->fldsunday = $this->AddField(
-          'sunday', new formbuildereditbox('sunday', '', 'Sunday'), $this->workinghours);
+          'sunday', new formbuildereditbox('sunday', '', 'Sunday'), $this->table);
         $this->fldcomments = $this->AddField(
-          'comments', new formbuildertextarea('comments', '', 'Comments'), $this->workinghours);
+          'comments', new formbuildertextarea('comments', '', 'Comments'), $this->table);
         $this->fldactive = $this->AddField(
-          'active', new formbuildercheckbox('active', '', 'Is Active?'), $this->workinghours);
+          'active', new formbuildercheckbox('active', '', 'Is Active?'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
@@ -80,7 +80,7 @@ class workeraccmanhoursavail extends workerform {
 
         $this->buttonmode = array(BTN_BACK);
         $this->title = 'Manage Working Hours'; 
-        $this->workinghourslist = $this->AddField('workinghourslist', $this->datagrid, $this->workinghours);
+        $this->workinghourslist = $this->AddField('workinghourslist', $this->datagrid, $this->table);
         break;
     }
   }
@@ -102,14 +102,15 @@ class workeraccmanhoursavail extends workerform {
     switch ($this->action) {
       case ACT_EDIT:
       case ACT_NEW:
-        $ret = $this->fldhoursdescription->Save() + $this->fldis24hrs->Save() +
+        $ret =
+          $this->fldhoursdescription->Save() + $this->fldis24hrs->Save() +
           $this->fldmonday->Save() + $this->fldtuesday->Save() +
           $this->fldwednesday->Save() + $this->fldthursday->Save() + $this->fldfriday->Save() +
           $this->fldsaturday->Save() + $this->fldsunday->Save() + $this->fldcomments->Save() +
           $this->fldactive->Save();
         break;
       case ACT_CONFIRM:
-        $caption = $this->workinghours->GetFieldValue('description');
+        $caption = $this->table->GetFieldValue('description');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Item '{$caption}' removed");
         }
@@ -122,7 +123,11 @@ class workeraccmanhoursavail extends workerform {
   }
 
   protected function SaveToTable() {
-    return (int) $this->workinghours->StoreChanges();
+    if (!trim($this->fldhoursdescription->value)) {
+      $desc = ($this->fldis24hrs->value) ? 'New 24hr Opening Hours' : 'New Opening Hours';
+      $this->table->SetFieldValue(FN_DESCRIPTION, $desc);
+    }
+    return (int) $this->table->StoreChanges();
   }
 
   protected function AddErrorList() {
@@ -186,12 +191,12 @@ class workeraccmanhoursavail extends workerform {
   }
 
   protected function AssignItemRemove($confirmed) {
-    $caption = $this->workinghours->GetFieldValue('description');
+    $caption = $this->table->GetFieldValue('description');
     $this->NewSection(
       'confirmation', "Remove '{$caption}'",
       'This cannot be undone! Please click on the Confirm button to remove this.');
     $desc = $this->AddField(
-      'description', new formbuilderstatictext('description', '', 'Name of the area covered'), $this->workinghours);
+      'description', new formbuilderstatictext('description', '', 'Name of the area covered'), $this->table);
     $this->AssignFieldToSection('confirmation', 'description');
   }
 }

@@ -41,6 +41,7 @@ $_SESSION[SESS_IDGROUP] = 3;
   <![endif]-->
   <script type="text/javascript" src="../jscripts/jquery.js"></script>
   <script type="text/javascript" src="../jscripts/jquery-ui.js"></script>
+  <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
   <!--script type="text/javascript" src="../jscripts/accordion.js"></script-->
 </head>
 <body lang="en">

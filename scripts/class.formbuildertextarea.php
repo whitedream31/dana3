@@ -6,6 +6,7 @@ class formbuildertextarea extends formbuilderbase {
   public $rows;
   public $cols;
   public $placeholder;
+  public $enableeditor = true; //false;
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, FLDTYPE_TEXTAREA, $label);
@@ -21,8 +22,11 @@ class formbuildertextarea extends formbuilderbase {
   }
 
   public function GetControl() {
+//    if ($this->enableeditor && strpos($this->classname, ' editable') !== false) {
+      $this->classname .= ' editable';
+//    }
     return array(
-      "<textarea name='{$this->name}' id='{$this->id}'" .
+      "<textarea" .
         $this->IncludeAllAttributes() .
         $this->AddDisabled() . $this->AddReadOnly() . $this->AddRequired() . ">{$this->GetValue()}</textarea>"
     );

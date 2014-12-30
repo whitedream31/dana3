@@ -96,7 +96,8 @@ class workerresmanarticles extends workerform {
     switch ($this->action) {
       case ACT_EDIT:
       case ACT_NEW:
-        $ret = $this->fldheading->Save() + $this->fldcategory->Save() +
+        $ret =
+          $this->fldheading->Save() + $this->fldcategory->Save() +
           $this->fldcontent->Save();
         break;
       case ACT_CONFIRM:

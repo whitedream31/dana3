@@ -3,6 +3,11 @@
 /**
   * activity manager - calls worker classes / shows data in activity area
   * dana framework v.3
+
+note:
+  the mce editor works when $showtexteditor is true 
+  and each formbuildertextarea has $enableeditor = true
+
 */
 
 class activitymanager {
@@ -13,6 +18,7 @@ class activitymanager {
   protected $sitegroup;
   protected $resourcegroup;
   protected $showroot = true;
+  protected $showtextedior = true; //false;
 
   protected function AddGroup($idname, $icon, $caption, $desc) {
     $group = new activitygroup($idname);
@@ -209,6 +215,42 @@ class activitymanager {
     return (bool) $this->errorlist;
   }
 
+  private function TextEditorScript() {
+    return array(
+      '',
+      '<script>',
+      'tinymce.init({',
+      '  selector: "textarea.editable",',
+//      '  inline: true,',
+      '  plugins: [',
+      '    "advlist autolink autosave link lists charmap hr anchor pagebreak spellchecker",',
+      '    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",',
+      '    "table contextmenu directionality template textcolor paste textcolor colorpicker textpattern"',
+      '  ],',
+      '  style_formats: [',
+      '    {title: "Main Heading", block: "h2"},',
+      '    {title: "Sub Heading", block: "h3"},',
+      '  {title: "Section", block: "h4"}',
+//      '  {title: 'Example 1', inline: 'span', classes: 'example1'},',
+//      '  {title: 'Example 2', inline: 'span', classes: 'example2'},',
+//      '  {title: 'Table styles'},',
+//      '  {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}',
+      '  ],',
+      '  toolbar1: "bold italic underline strikethrough | ' .
+      'alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",',
+      '  toolbar2: "cut copy paste | searchreplace | bullist numlist | ' .
+      'outdent indent blockquote | undo redo | link unlink anchor code | ' .
+      'insertdatetime | forecolor backcolor",',
+      '  toolbar3: "table | hr removeformat | subscript superscript | ' .
+      'charmap | spellchecker | visualchars visualblocks nonbreaking template pagebreak",',
+      '  menubar: false,',
+      '  toolbar_items_size: "small",',
+      '});',
+      '</script>',
+      ''
+    );
+  }
+
   public function Show() {
     $idname = GetGet('in', GetPost('in', ''));
     $lines = $this->ProcessByIDName($idname);
@@ -235,6 +277,9 @@ class activitymanager {
     $ret[] = '      </div>';
     $ret[] = '    </section>';
     echo ArrayToString($ret);
+    if ($this->showtextedior) {
+      echo ArrayToString($this->TextEditorScript());
+    }
   }
 }
 

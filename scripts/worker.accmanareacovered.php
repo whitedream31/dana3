@@ -86,7 +86,10 @@ class workeraccareascovered extends workerform {
     switch ($this->action) {
       case ACT_EDIT:
       case ACT_NEW:
-        $ret = $this->fldareadescription->Save() + $this->fldpostalarea->Save() + $this->fldcountyid->Save();
+        $ret =
+          $this->fldareadescription->Save() +
+          $this->fldpostalarea->Save() +
+          $this->fldcountyid->Save();
         break;
       case ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('description');
@@ -102,6 +105,22 @@ class workeraccareascovered extends workerform {
   }
 
   protected function SaveToTable() {
+    if (trim($this->fldareadescription->value) == '') {
+      $pcode = (trim($this->fldpostalarea->value))
+        ? $this->fldpostalarea->value : false;
+      $county = ($this->fldcountyid->value > 0)
+        ? database::SelectDescriptionFromLookup('county', $this->fldcountyid->value) : false;
+      if ($pcode) {
+        if ($county) {
+          $desc = "{$county} ($pcode)";
+        }
+      } elseif ($county) {
+        $desc = $county;
+      } else {
+        $desc = 'All areas';
+      }
+      $this->table->SetFieldValue(FN_DESCRIPTION, $desc);
+    }
     return (int) $this->table->StoreChanges();
   }
 

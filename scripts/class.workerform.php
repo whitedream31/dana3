@@ -156,8 +156,21 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         $this->CheckForBlankValues();
       }
       if (!$this->PostFields() && $this->IsValid()) {
-        $this->SaveToTable();
-        $this->AddMessage("Changes Saved"); //to {$this->contextdescription} Saved");
+        switch ($this->SaveToTable()) {
+          case -1: // error - lasterror
+            $msg = 'Error: ' . $this->table->lasterror['msg'];
+            break;
+          case -2: // insert - new row
+            $msg = 'Added successfully';
+            break;
+          case 0: // no change
+            $msg = 'No changes found';
+            break;
+          default: // update - existing row updated
+            $msg = 'Changes saved successfully';
+            break;
+        }
+        $this->AddMessage($msg); //to {$this->contextdescription} Saved");
         $this->posted = true;
         $this->action = false;
         // re-init form

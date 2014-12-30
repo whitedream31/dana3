@@ -38,7 +38,7 @@ class formbuilderselect extends formbuildermultivalue {
   public function GetControl() {
     $this->selected = $this->value;
     $ret = array();
-    $ret[] = "<select name='{$this->name}'" .
+    $ret[] = "<select " . //name='{$this->name}'" .
       $this->IncludeAllAttributes() .
       $this->AddOption('multiple', $this->ismultiple) . ">";
     if ($this->includenone && $this->nonecaption) { //(!$this->value)) {

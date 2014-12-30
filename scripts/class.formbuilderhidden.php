@@ -14,7 +14,7 @@ class formbuilderhidden extends formbuilderbase {
 
   public function GetControl() {
     return array(
-      "<input type='hidden'" . $this->IncludeAllAttributes() . "value='{$this->GetValue()}'>"
+      "<input type='hidden'" . $this->IncludeAllAttributes() . " value='{$this->GetValue()}'>"
     );
   }
 }

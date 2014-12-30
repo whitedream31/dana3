@@ -83,8 +83,12 @@ abstract class formbuilderbase {
     return $ret;
   }
 
-  public function Save() {
-    $this->Post();
+  public function Save($frompost = true) {
+    if ($frompost) {
+      $this->Post();
+    } else {
+      $this->CheckPost(); // check it is valid and assign to table (SetFieldValue)
+    }
     return count($this->errors);
   }
   public function AddAttribute($name, $value) {
@@ -97,7 +101,11 @@ abstract class formbuilderbase {
     $this->AddAttribute('id', $this->id);
     $this->AddAttribute('name', $this->name);
     $this->AddAttribute('title', $this->title);
-    $this->AddAttribute('class', $this->classname);
+    if (is_array($this->classname)) {
+      $this->AddAttribute('class', implode(' ', $this->classname));
+    } else {
+      $this->AddAttribute('class', $this->classname);
+    }
     $this->AddAttribute('style', $this->style);
   }
 
