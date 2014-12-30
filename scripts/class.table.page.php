@@ -173,6 +173,7 @@ abstract class page extends idtable { //implements pagetype
   protected function InitFieldsForSideContent($worker) {
     $this->fldsidecontent = $worker->AddField(
       'sidecontent', new formbuildertextarea('sidecontent', '', 'Side Content'), $this);
+    $this->fldsidecontent->enableeditor = true;
   }
 
   protected function InitFieldForContactSidebar($worker) {

@@ -527,7 +527,7 @@ class account extends idtable {
   }
 
   protected function LoadArticles() {
-    require_once 'class.table.article.php';
+    require_once 'class.table.articleitem.php';
     $this->articlelist = articleitem::GetList($this->ID());
   }
 

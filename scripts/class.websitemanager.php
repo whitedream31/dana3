@@ -3,7 +3,7 @@ require_once 'define.php';
 require_once 'class.table.account.php';
 
 // list of types for creating and processing action queries
-define('AQ_ARTID', 'aid'); // show a specific article
+define('AQ_RID', 'rid'); // show a specific article
 define('AQ_ARTCAT', 'cat'); // show a list of articles that match the category
 define('AQ_LOGOUT', 'logout'); // log out (key specifies type) eg. v for visitor
 define('AQ_NEWSLETTERID', 'nid'); // showing a specific newsletter
@@ -206,6 +206,10 @@ abstract class websitemanager {
     return $gallery->BuildSlideShowList();
   }
 
+  protected function GetActionQuery($aq) {
+    return GetGet($aq);
+  }
+
   protected function GetSessionValue($session) {
     return (isset($_SESSION[$session])) ? $_SESSION[$session] : false;
   }
@@ -234,20 +238,17 @@ abstract class websitemanager {
   protected function GetArticlesMain() {
     $ret = array();
     if ($this->pgtype == PAGETYPE_ARTICLE) {
-      $cat = $this->GetActionQuery(AQ_ARTCAT);
-      $articles = articleitem::GetAllCurrentArticles(self::$account->ID(), $cat);
+      $rid = $this->GetActionQuery(AQ_RID);
+      if ($rid) {
+        $articles = articleitem::GetArticle($rid);
+      } else {
+        $cat = $this->GetActionQuery(AQ_ARTCAT);
+        $articles = articleitem::GetAllCurrentArticles(self::$account->ID(), $cat, $rid);
+      }
       // show just a list of categories with an action link
       $list = array();
       foreach($articles as $articleid => $article) {
-        $item = articleitem::MakeDisplayItem(
-          array(
-            'heading' => $article['heading'],
-            'content' => $article['content'],
-            'displaydate' => $article['stampupdated'],
-            'category' => $articles['category'],
-            'url' => $article['url']
-          )
-        );
+        $item = articleitem::MakeDisplayItem($article);
         $list[] = ArrayToString($item);
       }
       if ($list) {
@@ -354,7 +355,7 @@ abstract class websitemanager {
       foreach($articles as $articleid => $article) {
         $list[$articleid] = array('value' => $article['heading'], 'title' => 'click to see ' . $article['category']);
       }
-      $ret = $this->MakeSidebarList('Articles', $list, AQ_ARTID);
+      $ret = $this->MakeSidebarList('Articles', $list, AQ_RID);
     }
     return $ret;
   }

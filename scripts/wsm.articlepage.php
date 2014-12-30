@@ -22,10 +22,43 @@ class wsm_articlepage extends websitemanager {
   }
 
   private function DoArticleContent() {
-    return "<h3>TODO: ARTICLES</h3>";
+    $articlelist = $this->page->account->ArticleList();
+    $list = array();
+    //$currentcategory = '';
+//    $ret = array("<h3>TODO: ARTICLES</h3>");
+    $ret = array(); //$this->page->);
+    foreach($articlelist as $item) {
+      $expirydate = $item->GetFieldvalue('expirydate');
+      //if ($expirydate)
+      $newcat = $item->GetFieldvalue('category');
+      $list[$newcat][] = $item;
+    }
+
+    foreach($list as $catname => $items) {
+      $ret[] = '<section>';
+      $ret[] = "  <h2>{$catname}</h2>";
+      foreach($items as $item) {
+//        $id = $item->ID();
+        $dateadded = strtotime($item->GetFieldvalue('stampupdated'));
+        $content = $item->GetFieldvalue('content');
+        $heading = $item->GetFieldvalue('heading');
+//        $category = $item->GetFieldvalue('category');
+        $ret[] = "<div class='articleitem'>";
+        $ret[] = "  <h2>{$heading}</h2>";
+        $ret[] = "  <p class='articlepublished'>Published:{$dateadded}</p>";
+        $ret[] = $content;
+        $ret[] = '</div>';
+        $ret[] = '<hr>';
+//          "<p><b>URL:</b> " . $item->GetFieldvalue('url') . "</p>\n" .
+      }
+      $ret[] = '</section>';
+    }
+    return $ret;
   }
 
   protected function GetMainContent($groupid) {
-    return $this->DoArticleContent();
+    return $this->GetArticlesMain();
+//    return
+//      $this->DoArticleContent();
   }
 }

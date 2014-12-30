@@ -36,6 +36,11 @@ class articleitem extends idtable {
     $this->lastupdatedescription = $this->GetLastUpdateAsString();
   }
 
+  public function StoreChanges() {
+    $this->SetFieldValue('stampupdated', date('Y-m-d G:i:s'));
+    return parent::StoreChanges();
+  }
+
   protected function GetLastUpdateAsString() {
     return $this->FormatDateTime(DF_MEDIUMDATETIME, $this->GetFieldValue('stampupdated'));
   }
@@ -48,12 +53,18 @@ class articleitem extends idtable {
 
   // build article entry for display
   static public function MakeDisplayItem($values) {
-    $date = ($values['displaydate'])
-      ? "<span class='date'>" . FormatDateTime(DF_MEDIUMDATETIME, $values['displaydate']) . '</span>'
+    $displaydate = $values['stampupdated']; //displaydate'])
+    $date = ($displaydate)
+      ? "<span class='articledate'><strong>Published:</strong> " . articleitem::FormatDateTime(DF_MEDIUMDATETIME, $displaydate) . '</span>'
       : '';
+    $id = $values['id'];
+    $heading = $values['heading'];
+    $name = $values['name'];
+    $href = $_SERVER['PHP_SELF'] . '?rid=' . $id;
+    $link = "<a href='{$href}'>{$heading}</a>";
     $ret = array(
-      "<div class='listitem'>",
-      "  <h3>{$values['heading']}</h3>",
+      "<div class='listitem' name='{$name}'>",
+      "  <h3>{$link}</h3>",
       "  {$values['content']}"
     );
     if ($date) {
@@ -61,6 +72,39 @@ class articleitem extends idtable {
     }
 //            'category' => $articles['category'],
 //            'url' => $article['url']
+    return $ret;
+  }
+
+  static public function GetArticle($id = 0) {
+    $ret = array();
+    $query =
+      'SELECT i.`id`, i.`accountid`, i.`articletypeid`, i.`heading`, i.`category`, i.`url`, i.`content`, i.`expirydate`, i.`stampupdated`, ' .
+      'a.`businessname`, a.`nickname`, t.`description` AS articletypedescription ' .
+      'FROM `articleitem` i ' .
+      'INNER JOIN `articletype` t ON t.`id` = i.`articletypeid` ' .
+      'INNER JOIN `account` a ON a.`id` = i.`accountid` ' .
+      "WHERE i.`id` = {$id} ";
+    $result = database::$instance->Query($query);
+    $line = $result->fetch_assoc();
+    $category = $line['category'];
+    $id = $line['id'];
+    $heading = $line['heading'];
+    $ret[$id] = array(
+      'id' => $id,
+      'accountid' => $line['accountid'],
+      'articletypeid' => $line['articletypeid'],
+      'heading' => $heading,
+      'name' => $heading . '-' . $id,
+      'category' => $category,
+      'url' => $line['url'],
+      'content' => $line['content'],
+      'expirydate' => $line['expirydate'],
+      'stampupdated' => $line['stampupdated'],
+      'businessname' => $line['businessname'],
+      'nickname' => $line['nickname'],
+      'articletypedescription' => $line['articletypedescription']
+    );
+    $result->free();
     return $ret;
   }
 
@@ -80,12 +124,15 @@ class articleitem extends idtable {
     $result = database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $category = $line['category'];
-      if ($category == $cat) {
+      if ($category == $cat || $cat === false) {
         $id = $line['id'];
+        $heading = $line['heading'];
         $ret[$id] = array(
+          'id' => $id,
           'accountid' => $line['accountid'],
           'articletypeid' => $line['articletypeid'],
-          'heading' => $line['heading'],
+          'heading' => $heading,
+          'name' => $heading . '-' . $id,
           'category' => $category,
           'url' => $line['url'],
           'content' => $line['content'],
