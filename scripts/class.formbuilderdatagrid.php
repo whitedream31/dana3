@@ -163,12 +163,17 @@ class formbuilderdatagrid extends formbuilderbase {
 
   public function AddRow($id, $columns, $isvisible, $actions, $options = false) {
     $this->rows[$id] = array(
-      'columns' => $columns, 'visible' => $isvisible,
-      'actions' => $actions, 'options' => $options
+      'columns' => $columns,
+      'visible' => $isvisible,
+      'actions' => $actions,
+      'options' => $options
     );
   }
 
-  private function ShowRow($id, $idx, $columns, $actions, $visible, $options) {
+  private function ShowRow($id, $idx, $columns, $row) {
+    $actions = $row['actions'];
+    $visible = $row['visible'];
+    $options = $row['options'];
     $this->ignorefirstrow = (in_array(TBLOPT_IGNOREFIRSTROW, $actions));
     $showvisible = (in_array(TBLOPT_TOGGLEVISIBLE, $actions));
     $isfirst = ($idx == 1);
@@ -227,7 +232,7 @@ class formbuilderdatagrid extends formbuilderbase {
         $id = $rowid; //(isset($row['id'])) ? $row['id'] : $idx;
         $columns = $row['columns'];
         if (count($columns)) {
-          $ret[] = $this->ShowRow($id, $idx, $columns, $row['actions'], $row['visible'], $row['options']);
+          $ret[] = $this->ShowRow($id, $idx, $columns, $row);
         }
         $idx++;
       }

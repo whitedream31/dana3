@@ -11,9 +11,8 @@ class newsletteritem extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('acountid', DT_FK);
     $this->AddField('newsletterid', DT_FK);
-//    $this->AddField('newsletteritemtypeid', DT_FK);
+    $this->AddField('newsletteritemtypeid', DT_FK);
 //    $this->AddField('groupid', DT_FK);
     $this->AddField('heading', DT_STRING);
     $this->AddField('content', DT_TEXT);

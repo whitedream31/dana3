@@ -21,7 +21,7 @@ class hours extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField('accountid', DT_FK);
+    $this->accountid = $this->AddField(FN_ACCOUNTID, DT_FK);
     $this->is24hrs = $this->AddField('is24hrs', DT_BOOLEAN);
     $this->monday = $this->AddField('monday', DT_STRING);
     $this->tuesday = $this->AddField('tuesday', DT_STRING);

@@ -157,6 +157,15 @@ abstract class basetable {
     return $ret;
   }
 
+  /*
+   * StringToPretty
+   * Convert a string into a valid entity value. eg. 'This is a TEST' -> 'this-is-a-test'
+   * 
+   */
+  static public function StringToPretty($value) {
+    return urlencode(str_replace(' ', '-', trim(strtolower($value))));
+  }
+
   // no longer used?
   static public function GetFieldTypeByDataType($datatype) {
     switch ($datatype) {

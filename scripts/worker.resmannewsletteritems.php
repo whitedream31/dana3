@@ -17,12 +17,14 @@ class workerresmannewsletteritems extends workerform {
   protected $table;
   protected $fldheading;
   protected $fldcontent;
+  protected $fldnewsletterid;
 
   protected function InitForm() {
     $this->table = new newsletteritem($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Newsletter items';
+    $this->fldnewsletterid = new formbuilderhidden('newsletterid', $this->groupid);
     switch ($this->action) {
       case ACT_NEW:
       case ACT_EDIT:
@@ -61,7 +63,16 @@ class workerresmannewsletteritems extends workerform {
   }
 
   protected function SaveToTable() {
-    return (int) $this->table->StoreChanges();
+    $this->table->SetFieldValue('newslettertypeid', 1); // TODO: TEXT ONLY FOR NOW - add new types
+    $this->table->SetFieldValue('newsletterid', $this->groupid);
+    if (!trim($this->fldheading->value)) {
+      $this->table->SetFieldValue('heading', 'New Heading');
+    }
+    // back to parent worker
+    $ret = $this->SaveAndReset($this->table, IDNAME_MANAGENEWSLETTERS);
+    $_GET['rid'] = $this->groupid;
+    $_GET['action'] = ACT_EDIT;
+    return $ret;
   }
 
   protected function AddErrorList() {}

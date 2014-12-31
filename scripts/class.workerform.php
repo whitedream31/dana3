@@ -150,6 +150,27 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
 
   protected function CheckForBlankValues() {}
 
+  protected function SaveAndReset($table, $in) {
+    // back to parent worker
+    foreach($_POST as $pkey => $pval) {
+      unset($_POST[$pkey]);
+    }
+    foreach($_GET as $gkey => $gval) {
+      if ($gkey == 'rid') {
+        $_GET[$gkey] = $this->groupid;
+      } else {
+        unset($_GET[$gkey]);
+      }
+    }
+    $ret = ($table instanceof basetable) ? (int) $table->StoreChanges() : 0;
+    $this->itemid = $this->groupid;
+    $this->groupid = false;
+    $this->action = false;
+    $this->posting = false;
+    $this->idname = $in;
+    return $ret;
+  }
+
   public function Execute() {
     if ($this->posting) {
       if (($this->action == ACT_EDIT) || ($this->action == ACT_NEW)) {

@@ -32,7 +32,7 @@ class workerresmangalleries extends workerform {
       case ACT_NEW:
       case ACT_EDIT:
         //$this->tableitems = new galleryitems
-        $this->title = 'Modify Gallery';
+        $this->title = ($this->action == ACT_NEW) ? 'New Gallery' : 'Modify Gallery';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Gallery Title'), $this->table);
         if ($this->action == ACT_EDIT) {

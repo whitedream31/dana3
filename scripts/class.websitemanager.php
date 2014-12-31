@@ -144,34 +144,34 @@ abstract class websitemanager {
   // display content for the main area based on the content type (ct) and page type (pgtype)
   static public function ShowMainContent($ct, $groupid) {
     switch ($ct) {
-      case CTWM_MAINCONTENT: //
+      case CTWM_MAINCONTENT: // mc
         $ret = self::$instance->GetMainContent($groupid);
         break;
-      case CTWM_ARTICLES: // 1
+      case CTWM_ARTICLES: // art
         $ret = self::$instance->GetArticlesMain();
         break;
-      case CTWM_GUESTBOOK: // 2
+      case CTWM_GUESTBOOK: // gb
         $ret = self::$instance->GetGuestbookMain($groupid);
         break;
-      case CTWM_NEWSLETTERS: // 3
+      case CTWM_NEWSLETTERS: // nl
         $ret = self::$instance->GetNewsletterMain();
         break;
-      case CTWM_SOCIALNETWORK: // 4
+      case CTWM_SOCIALNETWORK: // sn
         $ret = self::$instance->GetSocialNetworkMain();
         break;
-      case CTWM_CALENDAR: // 5
+      case CTWM_CALENDAR: // cal
         $ret = self::$instance->GetCalendarMain();
         break;
-      case CTWM_BOOKING: // 6
+      case CTWM_BOOKING: // bk
         $ret = self::$instance->GetBookingMain();
         break;
-      case CTWM_PRIVATEAREA: // 7
+      case CTWM_PRIVATEAREA: // pa
         $ret = self::$instance->GetPrivateAreaMain();
         break;
-      case CTWM_DOWNLOADABLEFILES: // 8
+      case CTWM_DOWNLOADABLEFILES: // df
         $ret = self::$instance->GetDownloadableFilesMain();
         break;
-      case CTWM_INITIALCONTENT: // 9
+      case CTWM_INITIALCONTENT: // ic
         $ret = self::$instance->GetInitialContentMain();// $this->page->GetFieldValue('initialcontent');
         break;
       default:
@@ -404,20 +404,21 @@ abstract class websitemanager {
   // note: there is no newsletter page type so just show anyway on all pages
   // TODO: add newsletter page type?
   protected function GetNewsletterSidebar() {
-    $newsletters = newsletter::FindShowableNewslettersByAccount(self::$account->ID());
-    if ($newsletters) {
-      $list = array();
-      foreach($newsletters as $nlid => $nl) {
-        $title = $nl->GetFieldValue('title');
-        $display = $title . " - <small>{$nl->showdatedescription}</small>";
-        $list[$nlid] = array(
-          'value' => $display,
-          'title' => 'click to see ' . $title
-        );
+    $ret = array();
+    if ($this->page->GetFieldValue('incshownewsletters')) {
+      $newsletters = newsletter::FindShowableNewslettersByAccount(self::$account->ID());
+      if ($newsletters) {
+        $list = array();
+        foreach($newsletters as $nlid => $nl) {
+          $title = $nl->GetFieldValue('title');
+          $display = $title . " - <small>{$nl->showdatedescription}</small>";
+          $list[$nlid] = array(
+            'value' => $display,
+            'title' => 'click to see ' . $title
+          );
+        }
+        $ret = $this->MakeSidebarList('Newsletters', $list, AQ_NEWSLETTERID);
       }
-      $ret = $this->MakeSidebarList('Newsletters', $list, AQ_NEWSLETTERID);
-    } else {
-      $ret = array();
     }
     return $ret;
   }
@@ -476,25 +477,27 @@ abstract class websitemanager {
   // DOWNLOADABLE FILES - SIDEBAR
   protected function GetDownloadableFilesSidebar() {
     $ret = array();
-    $showimg = true;
-    $islistitem = false;
-    $linkprefix = '';
-    $filelist = new fileitem();
-    $list = $filelist->GetCurrentList($showimg, $islistitem, $linkprefix);
-    if ($list) {
-      $script = $this->sourcepath . DIRECTORY_SEPARATOR . "downloadfile.php?rid=";
-      $ret[] = '<h3>Downloable Files</h3>';
-      $ret[] = '<ul>';
-      foreach ($list as $fileid => $filedetails) {
-        $title = $filedetails['TITLE'];
-//        $filename = "<a href='files/" . $filedetails['DESC'] . "' title='click to download {$title}'>{$title}</a>";
-        $filename = "<a href='{$script}{$fileid}' title='click to download {$title}'>{$title}</a>";
-//        $icon = $filedetails['FILETYPE'];
-        $icon = $filedetails['IMAGE'];
-        $filesize = $filedetails['FILESIZE'];
-        $ret[] = "<li>{$icon}{$filename} (<em>{$filesize}</em>)</li>";
+    if ($this->page->GetFieldValue('showfiles')) {
+      $showimg = true;
+      $islistitem = false;
+      $linkprefix = '';
+      $filelist = new fileitem();
+      $list = $filelist->GetCurrentList($showimg, $islistitem, $linkprefix);
+      if ($list) {
+        $script = $this->sourcepath . DIRECTORY_SEPARATOR . "downloadfile.php?rid=";
+        $ret[] = '<h3>Downloable Files</h3>';
+        $ret[] = '<ul>';
+        foreach ($list as $fileid => $filedetails) {
+          $title = $filedetails['TITLE'];
+  //        $filename = "<a href='files/" . $filedetails['DESC'] . "' title='click to download {$title}'>{$title}</a>";
+          $filename = "<a href='{$script}{$fileid}' title='click to download {$title}'>{$title}</a>";
+  //        $icon = $filedetails['FILETYPE'];
+          $icon = $filedetails['IMAGE'];
+          $filesize = $filedetails['FILESIZE'];
+          $ret[] = "<li>{$icon}{$filename} (<em>{$filesize}</em>)</li>";
+        }
+        $ret[] = '</ul>';
       }
-      $ret[] = '</ul>';
     }
     return $ret;
   }

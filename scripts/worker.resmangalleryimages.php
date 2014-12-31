@@ -115,21 +115,7 @@ class workerresmangalleryimages extends workerform {
       }
     }
     // back to gallery worker
-    foreach($_POST as $pkey => $pval) {
-      unset($_POST[$pkey]);
-    }
-    foreach($_GET as $gkey => $gval) {
-      if ($gkey == 'rid') {
-        $_GET[$gkey] = $this->groupid;
-      } else {
-        unset($_GET[$gkey]);
-      }
-    }
-    $this->itemid = $this->groupid;
-    $this->groupid = false;
-    $this->action = false;
-    $this->posting = false;
-    $this->idname = IDNAME_MANAGEGALLERIES;
+    $this->SaveAndReset(false, IDNAME_MANAGEGALLERIES);
     return $ret;
   }
 

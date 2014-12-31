@@ -94,6 +94,11 @@ class workerresmannewsletters extends workerform {
   }
 
   protected function SaveToTable() {
+    if (!trim($this->fldtitle->value)) {
+      $date = strtotime($this->fldshowdate->value);
+      $desc = date('F Y', $date) . ' Newsletter';
+      $this->table->SetFieldValue('title', $desc);
+    }
     return (int) $this->table->StoreChanges(); //parent::StoreChanges(); //$this->table->StoreChanges();
   }
 
@@ -143,11 +148,12 @@ class workerresmannewsletters extends workerform {
     $list = $this->table->FindNewsletterItems();
     if ($list) {
       $actions = array(TBLOPT_DELETABLE, TBLOPT_MOVEUP, TBLOPT_MOVEDOWN);
+      $options = array('parentid' => $this->itemid); // newsletter id
       foreach($list as $itemid => $item) {
         $coldata = array(
           'DESC' => $item->GetFieldValue('heading', '<em>(untitled)</em>')
         );
-        $this->itemgrid->AddRow($itemid, $coldata, true, $actions);
+        $this->itemgrid->AddRow($itemid, $coldata, true, $actions, $options);
       }
     }
   }
@@ -209,7 +215,7 @@ class workerresmannewsletters extends workerform {
       // add item button
       $this->fldadditem = $this->AddField(
         'additem', new formbuilderbutton('additem', 'Add Item'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGENEWSLETTERITEMS . "&act=" . ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGENEWSLETTERITEMS . "&amp;pid={$this->itemid}&amp;act=" . ACT_NEW;
       $this->fldadditem->url = $url;
       $this->AssignFieldToSection('items', 'additem');
     }
