@@ -329,6 +329,7 @@ abstract class basetable {
         database::Query($query);
         if (!$this->exists) {
           $this->lastinsertid = $this->UpdateKey();
+          $this->exists = true; // exists now
         }
       } catch (Exception $e) {
         $this->lasterror = array(
