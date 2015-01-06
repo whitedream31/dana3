@@ -5,10 +5,14 @@ require_once 'class.formbuildertime.php';
 
 //require_once 'class.formbuilderfilewebimage.php';
 require_once 'class.formbuilderbutton.php';
+
 /**
   * activity worker for managing booking settings
   * dana framework v.3
 */
+
+define('DEFAULTHOURS_START', '09:00');
+define('DEFAULTHOURS_END', '17:00');
 
 // resource manage booking settings
 
@@ -113,11 +117,64 @@ class workerresmanbookingsettings extends workerform {
     return $ret;
   }
 
+  private function HasHours() {
+    return (bool)
+      $this->fldworkmondaystart->value + $this->fldworkmondayend->value +
+      $this->fldworktuesdaystart->value + $this->fldworktuesdayend->value +
+      $this->fldworkwednesdaystart->value + $this->fldworkwednesdayend->value +
+      $this->fldworkthursdaystart->value + $this->fldworkthursdayend->value +
+      $this->fldworkfridaystart->value + $this->fldworkfridayend->value +
+      $this->fldworksaturdaystart->value + $this->fldworksaturdayend->value +
+      $this->fldworksundaystart->value + $this->fldworksundayend->value;
+  }
+
+  private function AssignDefaultHours() {
+    $this->table->SetFieldValue('workmondaystart', DEFAULTHOURS_START);
+    $this->table->SetFieldValue('workmondayend', DEFAULTHOURS_END);
+    $this->table->SetFieldValue('worktuesdaystart', DEFAULTHOURS_START);
+    $this->table->SetFieldValue('worktuesdayend', DEFAULTHOURS_END);
+    $this->table->SetFieldValue('workwednesdaystart', DEFAULTHOURS_START);
+    $this->table->SetFieldValue('workwednesdayend-', DEFAULTHOURS_END);
+    $this->table->SetFieldValue('workthursdaystart', DEFAULTHOURS_START);
+    $this->table->SetFieldValue('workthursdayend', DEFAULTHOURS_END);
+    $this->table->SetFieldValue('workfridaystart', DEFAULTHOURS_START);
+    $this->table->SetFieldValue('workfridayend', DEFAULTHOURS_END);
+    $this->table->SetFieldValue('worksaturdaystart', false);
+    $this->table->SetFieldValue('worksaturdayend', false);
+    $this->table->SetFieldValue('worksundaystart', false);
+    $this->table->SetFieldValue('worksundayend', false);
+  }
+
   protected function SaveToTable() {
+    // check for blanks (and assign default values accordingly)
     if (!trim($this->flddescription->value)) {
       $this->table->SetFieldValue(FN_DESCRIPTION, 'New Settings');
     }
-    return $this->table->StoreChanges();
+    if (!$this->HasHours()) {
+      $this->AssignDefaultHours();
+    }
+    if (!IsBlank($this->fldprovisionalmessage->value)) {
+      $this->table->SetFieldValue('provisionalmessage',
+        'Thank you for booking with us. Please note this booking is UNCONFIRMED. Please ' .
+        'do not assume this booking has been made yet. We ' .
+        'will check to see if we can take this booking at the date and time stated. If so we will ' .
+        'send a confirmation message to you or offer a new date or time.');
+    }
+    if (!IsBlank($this->fldconfirmedmessage->value)) {
+      $this->table->SetFieldValue('confirmedmessage',
+        'Thank you for making a bookng with us. It is our pleasure to inform you that ' .
+        'we are confirming your booking with us at the date and time specified. We look ' .
+        'forward to see you.');
+    }
+    if (!IsBlank($this->fldcancelledmessage->value)) {
+      $this->table->SetFieldValue('cancelledmessage',
+        'With regret, this is a message to say we have cancelled your booking with you. ' .
+        'If you require another booking with us or wish to know more why the booking was ' .
+        'cancelled please contact us.');
+    }
+    // back to parent worker
+    return $this->SaveAndReset(false, IDNAME_MANAGEBOOKINGS);
+//    return $this->table->StoreChanges();
   }
 
   protected function AddErrorList() {}
@@ -151,8 +208,19 @@ class workerresmanbookingsettings extends workerform {
     $this->fldbookingtypeid->description = "Specify the type of bookings you would like to make.";
     $this->fldbookingtypeid->size = 3;
     $bookingtypelist = database::RetrieveLookupList('bookingtype', FN_DESCRIPTION, FN_REF, FN_ID);
+    if (IsBlank($this->fldbookingtypeid->value)) {
+//      reset($bookingtypelist);
+      $selectedid = false; //key($bookingtypelist);
+    } else {
+      $selectedid = $this->fldbookingtypeid->value;
+    }
+    $selected = (bool) $selectedid;
     foreach($bookingtypelist as $typeid => $typedescription) {
-      $this->fldbookingtypeid->AddValue($typeid, $typedescription);
+      if (!$selected) {
+        $selectedid = $typeid;
+        $selected = true;
+      }
+      $this->fldbookingtypeid->AddValue($typeid, $typedescription, $selectedid == $typeid);
     }
     $this->AssignFieldToSection('setting', 'bookingtypeid');
     // monday start time
@@ -231,8 +299,8 @@ class workerresmanbookingsettings extends workerform {
       'booking is made. Please make it clear the booking is unconfimed.';
     $this->fldprovisionalmessage->rows = 7;
     $this->fldprovisionalmessage->cols = 80;
-    $this->fldprovisionalmessage->placeholder =
-      'eg. Thank you for booking with us. Please note this booking is UNCONFIRMED. Please ' .
+    $this->fldprovisionalmessage->value =
+      'Thank you for booking with us. Please note this booking is UNCONFIRMED. Please ' .
       'do not assume this booking has been made yet. We ' .
       'will check to see if we can take this booking at the date and time stated. If so we will ' .
       'send a confirmation message to you or offer a new date or time.';
@@ -242,8 +310,8 @@ class workerresmanbookingsettings extends workerform {
       'Please type a message that will be sent to the client when you confirm the date ' .
       'and time of the booking. The message should clearly state the booking in confirmed. ' .
       'The rest of the message will state the booking details (date, time etc)';
-    $this->fldconfirmedmessage->placeholder =
-      'eg. Thank you for making a bookng with us. It is our pleasure to inform you that ' .
+    $this->fldconfirmedmessage->value =
+      'Thank you for making a bookng with us. It is our pleasure to inform you that ' .
       'we are confirming your booking with us at the date and time specified. We look ' .
       'forward to see you.';
     $this->fldconfirmedmessage->rows = 7;
@@ -253,7 +321,7 @@ class workerresmanbookingsettings extends workerform {
     $this->fldcancelledmessage->description =
       'Please type in a message to be sent to the client if you need to cancel the booking. ' .
       'Please make it clear the booking has been cancelled.';
-    $this->fldcancelledmessage->placeholder =
+    $this->fldcancelledmessage->value =
       'With regret, this is a message to say we have cancelled your booking with you. ' .
       'If you require another booking with us or wish to know more why the booking was ' .
       'cancelled please contact us.';
