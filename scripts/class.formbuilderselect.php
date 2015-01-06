@@ -36,7 +36,9 @@ class formbuilderselect extends formbuildermultivalue {
   }
 
   public function GetControl() {
-    $this->selected = $this->value;
+    if (IsBlank($this->selected)) {
+      $this->selected = $this->value;
+    }
     $ret = array();
     $ret[] = "<select " . //name='{$this->name}'" .
       $this->IncludeAllAttributes() .
