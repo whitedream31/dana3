@@ -42,6 +42,9 @@ define('FN_STATUS', 'status');
 define('FN_VISIBLE', 'visible');
 define('FN_ACCOUNTID', 'accountid');
 
+define('STORERESULT_INSERT', -2);
+define('STORERESULT_ERROR', -1);
+
 /**
   * base class for all table related classes
   * @abstract
@@ -320,7 +323,7 @@ abstract class basetable {
         $fldliststr = implode(', ', $fldlist);
         $valliststr = implode(', ', $vallist);
         $query = "INSERT INTO `{$this->tablename}` ({$fldliststr}) VALUES ({$valliststr})";
-        $cnt = -2;
+        $cnt = STORERESULT_INSERT; //-2;
       }
       try {
         database::Query($query);
@@ -332,7 +335,7 @@ abstract class basetable {
           'code' => $e->getCode(),
           'msg' => $e->getMessage()
         );
-        $cnt = -1;
+        $cnt = STORERESULT_ERROR; //-1;
       }
     }
     return $cnt;
@@ -635,7 +638,7 @@ abstract class linktable extends basetable {
 
   protected function KeyWithValue() {
     return '`' . $this->id1name . '` = ' . (int) $this->GetFieldValue($this->id1name) . ' AND ';
-      '`' . $this->id2name . '` = ' . (int) $this->GetFieldValue($this->id2name);
+//      '`' . $this->id2name . '` = ' . (int) $this->GetFieldValue($this->id2name);
   }
 
   protected function UpdateKey() {}
@@ -756,8 +759,13 @@ abstract class lookuptable extends idtable {
   public $description;
 
   function __construct($tablename, $id = 0) {
-    parent::__construct($tablename, $id);
-    $this->FindByKey($id);
+    if (is_int($id)) {
+      parent::__construct($tablename, $id);
+      $this->FindByKey($id);
+    } elseif (is_string($id)) {
+      parent::__construct($tablename);
+      $this->FindByRef($id);
+    }
   }
 
   protected function AfterPopulateFields() {

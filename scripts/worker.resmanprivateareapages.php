@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workerresmanprivateareapages extends workerform {
 //  protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $pageid;
   protected $fldpageid;
 

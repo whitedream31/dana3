@@ -23,7 +23,7 @@ require_once 'class.formbuilderbutton.php';
 */
 class workerresmannewsletters extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $tableitems;
 //  protected $areadescription;
   protected $fldtitle; // title of the newsletter

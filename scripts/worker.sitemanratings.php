@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workersitemanratings extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $areadescription;
   protected $fldratings;
   

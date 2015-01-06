@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workerresmanguestbookentry extends workerform {
 //  protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $fldheading;
   protected $fldshowonpage;
 

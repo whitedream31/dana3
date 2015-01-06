@@ -13,7 +13,7 @@ require_once 'class.formbuilderdatagrid.php';
 
 class workeraccmanhoursavail extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $workinghourslist;
   protected $fldhoursdescription;
   protected $fldis24hrs;

@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workerresmanbookingsettings extends workerform {
 //  protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $flddescription;
   protected $fldbookingtypeid;
   protected $fldworkmondaystart;
@@ -114,6 +114,9 @@ class workerresmanbookingsettings extends workerform {
   }
 
   protected function SaveToTable() {
+    if (!trim($this->flddescription->value)) {
+      $this->table->SetFieldValue(FN_DESCRIPTION, 'New Settings');
+    }
     return $this->table->StoreChanges();
   }
 

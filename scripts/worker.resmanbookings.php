@@ -20,7 +20,7 @@ bookingtype
 */
 
 class workerresmanbookings extends workerform {
-  protected $table;
+//  protected $table;
   protected $settinglist;
   protected $datagridsettings; // booking settings grid
   protected $datagridconfirmed; // current confirmed bookings
@@ -56,6 +56,7 @@ class workerresmanbookings extends workerform {
           'title', new formbuildereditbox('title', '', 'Booking Title'), $this->table);
         $this->fldstartdate = $this->AddField(
           'startdate', new formbuilderdate('startdate', '', 'Start Date'), $this->table);
+        
         $this->fldtimetext = $this->AddField(
           'timetext', new formbuildertime('timetext', '', 'Start Time'), $this->table);
         $this->fldclientname = $this->AddField(
@@ -249,8 +250,13 @@ class workerresmanbookings extends workerform {
       $this->fldbookingstateid->description =
         "Please select the bookings current state. The initial state is 'Provisional', " .      "meaning unconfirmed and may change later.";
       $statelist = database::RetrieveLookupList('bookingstate', FN_DESCRIPTION, FN_REF, FN_ID, "`mode` = 1");
+      $selectedid = ($this->fldbookingstateid->value);
+      if (!$selectedid) {
+        $selectedid = reset($statelist);
+      }
       foreach($statelist as $stateid => $statedescription) {
-        $this->fldbookingstateid->AddValue($stateid, $statedescription);
+        $selected = ($selectedid == $stateid);
+        $this->fldbookingstateid->AddValue($stateid, $statedescription, $selected);
       }
       $this->fldbookingstateid->size = 3;
       $this->AssignFieldToSection('entry', 'bookingstateid');

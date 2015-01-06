@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workerresmannewslettersubscribers extends workerform {
 //  protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $fldfirstname;
   protected $fldlastname;
   protected $fldemail;
@@ -59,9 +59,11 @@ class workerresmannewslettersubscribers extends workerform {
 
   protected function SaveToTable() {
     $ret = (int) $this->table->StoreChanges();
-    if ($this->action == ACT_NEW) {
+    if (($ret == STORERESULT_INSERT) && ($this->action == ACT_NEW)) {
       $this->table->SendInvite();
     }
+    // back to parent newsletter worker
+    $this->SaveAndReset(false, IDNAME_MANAGENEWSLETTERS);
     return $ret;
   }
 
@@ -79,16 +81,19 @@ class workerresmannewslettersubscribers extends workerform {
     $this->fldfirstname->description = "Specify the subscriber's first name.";
     $this->fldfirstname->size = 30;
     $this->fldfirstname->placeholder = 'eg. John';
+    $this->fldfirstname->required = true;
     $this->AssignFieldToSection('item', 'firstname');
     // last name
     $this->fldlastname->description = "Specify the subscriber's last name.";
     $this->fldlastname->size = 30;
     $this->fldlastname->placeholder = 'eg. Smith';
+    $this->fldlastname->required = true;
     $this->AssignFieldToSection('item', 'lastname');
     // email
     $this->fldemail->description = "Specify the subscriber's e-mail address.";
     $this->fldemail->size = 80;
     $this->fldemail->placeholder = 'eg. user@example.com';
+    $this->fldemail->required = true;
     $this->AssignFieldToSection('item', 'email');
   }
 

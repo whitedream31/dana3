@@ -10,6 +10,7 @@ define('BTN_BACK', 'bk');
 define('BTN_CONFIRM', 'cf');
 
 abstract class workerform extends workerbase { // activitybase {
+  protected $table;
   protected $contextdescription = '';
   protected $buttonmode = array(BTN_SUBMIT, BTN_CANCEL);
   protected $action = false;
@@ -61,6 +62,14 @@ abstract class workerform extends workerbase { // activitybase {
   protected function DoPrepare() {
     $this->AssignFormAction();
     $this->InitForm();
+  }
+
+  protected function AssignIfBlank($fld, $value) {
+    if ($fld instanceof formbuilderbase && $this->table instanceof basetable) {
+      if (!trim($fld->value)) {
+        $this->table->SetFieldValue($fld->name, $value);
+      }
+    }
   }
 
   protected function ShowDebugInfo() {

@@ -26,24 +26,30 @@ class newslettersubscriber extends idtable {
 
   public function SendInvite() {
     require_once 'class.table.emailhistory.php';
+    require_once 'class.table.emailmessage.php';
     $account = account::$instance;
-    $businessname = $account->GetFieldValue('businessname');
-    $nickname = $account->GetFieldValue('nickname');
+//    $businessname = $account->GetFieldValue('businessname');
+//    $nickname = $account->GetFieldValue('nickname');
 //    $firstname = $this->GetFieldValue('firstname');
 //    $lastname = $this->GetFieldValue('lastname');
-    $fullname = $this->FullName();
+//    $fullname = $this->FullName();
     $email = $this->GetFieldValue('email');
     $sessionref = $this->GetFieldValue('sessionref');
     if (!$sessionref) {
       // no sesion ref so make it now
       $sessionref = $this->GetSessionRef();
-      $this->SetFieldValue('sessionref', $sessionref);
     }
+    $this->SetFieldValue('sessionref', $sessionref);
     $replyaddress = $account->Contact()->GetFieldValue('email');
+
+    $em = new emailmessage('NLSUBSCRIBER');
+//    $content = $em->GetFieldValue('content');
+//    $formatted = $em->formattedcontent;
+
 //    $fromaddress = EMAIL_SUPPORT;
     $subject = 'Newsletter Invitation';
-    $message =
-      "Hello {$fullname},\r\n\r\n" .
+    $message = $em->formattedcontent;
+/*      "Hello {$fullname},\r\n\r\n" .
       "This is a message from {$businessname}.\r\n\r\n" .
       "You are invited to subcribe to our newsletter, that we will send " .
       "to you from time to time.\r\n\r\n" .
@@ -59,7 +65,7 @@ class newslettersubscriber extends idtable {
       "Please note:\r\n" .
       "The newsletter is provided and managed by MyLocalSmallBusiness.com " .
       "(also known as MLSB), who are registered with the Data Protection Registar, " .
-      "under the name of Whitedream Software.\r\n";
+      "under the name of Whitedream Software.\r\n"; */
     emailhistory::SendEmailMessage(
       ET_SUBSCRIBERINVITE, $email, $subject, $message, $replyaddress,
       $account->ID()

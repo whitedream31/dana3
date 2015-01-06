@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workerresmangalleryimages extends workerform {
 //  protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $fldtitle;
   protected $fldimage;
   protected $flddescription;

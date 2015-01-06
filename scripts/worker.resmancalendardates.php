@@ -10,7 +10,7 @@ require_once 'class.formbuilderbutton.php';
 */
 // resource manage calendar dates
 class workerresmancalendardates extends workerform {
-  protected $table;
+//  protected $table;
   protected $fldcalendartypeid;
   protected $flddescription;
   protected $fldstartdate;
@@ -82,7 +82,8 @@ class workerresmancalendardates extends workerform {
     switch ($this->action) {
       case ACT_NEW:
       case ACT_EDIT:
-        $ret = $this->flddescription->Save() + $this->fldcalendartypeid->Save() +
+        $ret =
+          $this->flddescription->Save() + $this->fldcalendartypeid->Save() +
           $this->fldstartdate->Save() + $this->fldstarttime->Save() +
           $this->fldenddate->Save() + $this->fldendtime->Save() + $this->fldexpirydate->Save() +
           $this->fldurl->Save() + $this->fldcontent->Save();
@@ -94,6 +95,7 @@ class workerresmancalendardates extends workerform {
   }
 
   protected function SaveToTable() {
+    AssignIfBlank($this->flddescription, 'New Event');
     return $this->table->StoreChanges();
   }
 

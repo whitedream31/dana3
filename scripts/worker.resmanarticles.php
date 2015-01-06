@@ -28,7 +28,7 @@ require_once 'class.formbuilderdatagrid.php';
 */
 class workerresmanarticles extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $articlelist;
   protected $fldheading;
   protected $fldcategory;

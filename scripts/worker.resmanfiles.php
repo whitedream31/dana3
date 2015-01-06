@@ -12,7 +12,7 @@ require_once 'class.formbuilderdatagrid.php';
 
 class workerresmanfiles extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $filelist;
   protected $fldtitle;
   protected $fldfilename;

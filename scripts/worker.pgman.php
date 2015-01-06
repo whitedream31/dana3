@@ -17,12 +17,10 @@ class workerpgman extends workerform {
   protected $pagedatagrid;
   protected $statusgrid;
   protected $newpagedatalist;
-  protected $table;
-
+//  protected $table;
   protected $fldstatusgrid;
   protected $fldpagelist;
   protected $fldnewpagelist;
-
   protected $pagetype;
   protected $pagemgt;
   protected $pagedescription;

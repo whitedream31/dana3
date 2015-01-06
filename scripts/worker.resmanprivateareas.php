@@ -13,7 +13,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workerresmanprivateareas extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $tableitems;
   protected $fldtitle;
   protected $fldprivateareas;

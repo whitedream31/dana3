@@ -14,7 +14,7 @@ require_once 'class.formbuilderbutton.php';
 
 class workeraccareascovered extends workerform {
   protected $datagrid;
-  protected $table;
+//  protected $table;
   protected $areadescription;
   protected $fldareascovered;
   protected $fldareadescription;
