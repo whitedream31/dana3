@@ -20,8 +20,9 @@ class newslettersubscriber extends idtable {
     $this->AddField(FN_STATUS, DT_STATUS);
   }
 
-  private function GetSessionRef() {
-    return session_id();
+  private function GetSessionRef($prefix) {
+    return uniqid($prefix);
+//    return session_id();
   }
 
   public function SendInvite() {
@@ -37,18 +38,18 @@ class newslettersubscriber extends idtable {
     $sessionref = $this->GetFieldValue('sessionref');
     if (!$sessionref) {
       // no sesion ref so make it now
-      $sessionref = $this->GetSessionRef();
+      $sessionref = $this->GetSessionRef($account->ID() . '-');
     }
-    $this->SetFieldValue('sessionref', $sessionref);
     $replyaddress = $account->Contact()->GetFieldValue('email');
 
     $em = new emailmessage('NLSUBSCRIBER');
+    $em->AddCustomField('subscriberref', $sessionref);
 //    $content = $em->GetFieldValue('content');
 //    $formatted = $em->formattedcontent;
 
 //    $fromaddress = EMAIL_SUPPORT;
     $subject = 'Newsletter Invitation';
-    $message = $em->formattedcontent;
+    $message = $em->GetFormattedText(); // reformat with custom field
 /*      "Hello {$fullname},\r\n\r\n" .
       "This is a message from {$businessname}.\r\n\r\n" .
       "You are invited to subcribe to our newsletter, that we will send " .
@@ -70,9 +71,12 @@ class newslettersubscriber extends idtable {
       ET_SUBSCRIBERINVITE, $email, $subject, $message, $replyaddress,
       $account->ID()
     );
+    $this->SetFieldValue('sessionref', $sessionref);
     // mark as inite sent in table
     $this->SetFieldValue(FN_STATUS, STATUS_WAITING); // mark as invite sent - waiting
     $this->StoreChanges();
+//echo "<p>MESSAGE=\n{$message}\n\nSESSIONREF='{$sessionref}'\n";
+//exit;
   }
 
   public function GetStatusAsString($usecolour = false, $status = false) {

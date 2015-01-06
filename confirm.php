@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <?php
-require_once 'class.database.php';
-require_once 'class.table.newslettersubscriber.php';
+require_once 'scripts/class.database.php';
+require_once 'scripts/class.table.newslettersubscriber.php';
 
 function ProcessNewsletterSubscription($ref) {
   $ln = database::SelectFromTableByField('newslettersubscriber', 'sessionref', $ref, FN_ID);
   $found = (bool) $ln;
   if ($found) {
-    $id = $ln[FN_ID];
+    $id = $ln;
     $subscriber = new newslettersubscriber($id);
     if ($subscriber->exists) {
       $subscriber->SetFieldValue(FN_STATUS, STATUS_ACTIVE);
@@ -58,13 +58,13 @@ function ProcessNewsletterUnSubscribe($ref) {
 function ProcessUnknownAction() {
   return array(
     'main' => 'Unknown Action',
-    'msg' => 'Sorry, the link you supplied is either corrupt or missing'
+    'msg' => 'Sorry, the address (or other information) you supplied is either corrupt or missing'
   );
 }
 
 // process action type and session reference
-$action = strtolower(GetPost('act'));
-$ref = GetPost('r'); // session ref
+$action = strtolower(GetGet('act'));
+$ref = GetGet('r'); // session ref
 switch ($action) {
   case 'n': // confirm newsletter subscription
     $lines = ProcessNewsletterSubscription($ref);

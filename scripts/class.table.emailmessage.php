@@ -9,7 +9,7 @@ class emailmessage extends lookuptable {
   public $tag;
   public $content;
   public $formattedcontent;
-
+  protected $customfields = array();
   private $placeholder;
 
   function __construct($id = 0) {
@@ -23,8 +23,13 @@ class emailmessage extends lookuptable {
   }
 
   protected function AfterPopulateFields() {
+    $this->GetFormattedText();
+  }
+
+  public function GetFormattedText() {
     $text = $this->GetFieldValue('content');
     $this->formattedcontent = $this->FormatText($text);
+    return $this->formattedcontent;
   }
 
   private function LookupTag($tag, $default = '') {
@@ -41,19 +46,27 @@ class emailmessage extends lookuptable {
           $ret = $account->Contact()->GetFieldValue($field);
           break;
         default :
-          $ret = $default;
+          $ret = 'TAG=' . $tag;
+//          $ret = (isset($this->customfields[$tag]))
+//            ? $this->customfields[$tag] : $default;
           break;
       }
     } else {
+      $ret = (isset($this->customfields[$tag]))
+        ? $this->customfields[$tag] : $default;
 /*    $ln = $this->FindByField('tag', $tag, false);
     if ($ln) {
       $table = $ln['tablename'];
       $field = $ln['fieldname'];
       $ret = "[{$table}].{$field}";
     } else { */
-      $ret = $default;
+//      $ret = $default;
     }
     return $ret;
+  }
+
+  public function AddCustomField($key, $value) {
+    $this->customfields[$key] = $value;
   }
 
   public function FormatLine($text) {

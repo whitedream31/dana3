@@ -3,12 +3,16 @@ include_once 'class.table.emailmessage.php';
 
 $account = account::StartInstance(542);
 
+$uid = uniqid($account->ID() . '-');
+
 $msg = new emailmessage(1);
+$msg->AddCustomField('subscriberref', $uid);
 
 echo "<h1>testing</h1>\n";
 
 $content = $msg->GetFieldValue('content');
-$formatted = nl2br($msg->formattedcontent);
+
+$formatted = nl2br($msg->GetFormattedText());
 
 /*
 $text = array(
