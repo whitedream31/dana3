@@ -147,4 +147,26 @@ class newslettersubscriber extends idtable {
     $result->free();
     return $list;
   }
+
+  // find all old rows for the account that are WAITING (not subscribed) for more than 1 month
+  // and mark them as cancelled (not shown in the control page)
+  public function CheckForOldSubscribers() {
+    $accountid = account::$instance->ID();
+    $status = STATUS_WAITING;
+    $cancelledstatus = STATUS_CANCELLED;
+    $query =
+      'SELECT `id` FROM `newslettersubscriber` ' .
+      "WHERE `accountid` = {$accountid} AND `status` = '{$status}' AND " .
+     '`datestarted` < (DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
+    $result = database::Query($query);
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $query =
+        'UPDATE `newslettersubscriber` ' .
+        "SET `status` = '{$cancelledstatus}' " .
+        "WHERE `id` = {$id}";
+      database::Query($query);
+    }
+    $result->free();
+  }
 }
