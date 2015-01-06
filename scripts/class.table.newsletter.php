@@ -103,11 +103,12 @@ class newsletter extends idtable {
 
   public function FindSubscribers() {
     $id = account::$instance->ID();
-    $status = STATUS_DELETED;
+    $statusdeleted = STATUS_DELETED;
+    $statuscancelled = STATUS_CANCELLED;
     $query = 
       "SELECT `id` FROM `newslettersubscriber` " .
       "WHERE `accountid` = {$id} " .
-      "AND NOT (`status` = '{$status}') " .
+      "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) " .
       'ORDER BY `status`, `datestarted` DESC';
     $result = database::Query($query);
     $list = array();

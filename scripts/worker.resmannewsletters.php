@@ -116,6 +116,7 @@ class workerresmannewsletters extends workerform {
       $this->AssignFieldToSection('newsletters', 'addnewsletter');
       // newsletter subscribers
       $item = new newslettersubscriber();
+      $item->CheckForOldSubscribers();
       $statusactive = $item->GetStatusAsString(true, STATUS_ACTIVE);
       $statuspending = $item->GetStatusAsString(true, STATUS_WAITING);
       $statussunsub = $item->GetStatusAsString(true, STATUS_UNSUBSCRIBED);
@@ -125,7 +126,9 @@ class workerresmannewsletters extends workerform {
           "subscribe to them, or have been invited by you. The status column states " .
           "<strong>'{$statusactive}'</strong> if the subscriber is sent your newsletters, " .
           "<strong>'{$statuspending}'</strong> if they have been sent an invitation but not responded, and " .
-          "<strong>'{$statussunsub}'</strong> if they not longer wish to be sent any new newsletters.");
+          "<strong>'{$statussunsub}'</strong> if they not longer wish to be sent any new newsletters. " .
+          '<strong>NOTE: Any visitors who have not confirmed after 1 month of being invited are ' .
+          'automatically removed.</strong>');
       $this->subscribergrid = $this->AddField(
         'subscribergrid', new formbuilderdatagrid('subscribergrid', '', 'Newsletter Subscribers'));
       $this->subscribergrid->SetIDName(IDNAME_MANAGENEWSLETTERSUBSCRIBERS);
