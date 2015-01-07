@@ -134,7 +134,7 @@ class workerresmanbookingsettings extends workerform {
     $this->table->SetFieldValue('worktuesdaystart', DEFAULTHOURS_START);
     $this->table->SetFieldValue('worktuesdayend', DEFAULTHOURS_END);
     $this->table->SetFieldValue('workwednesdaystart', DEFAULTHOURS_START);
-    $this->table->SetFieldValue('workwednesdayend-', DEFAULTHOURS_END);
+    $this->table->SetFieldValue('workwednesdayend', DEFAULTHOURS_END);
     $this->table->SetFieldValue('workthursdaystart', DEFAULTHOURS_START);
     $this->table->SetFieldValue('workthursdayend', DEFAULTHOURS_END);
     $this->table->SetFieldValue('workfridaystart', DEFAULTHOURS_START);
@@ -147,33 +147,33 @@ class workerresmanbookingsettings extends workerform {
 
   protected function SaveToTable() {
     // check for blanks (and assign default values accordingly)
-    if (!trim($this->flddescription->value)) {
+    if (IsBlank($this->flddescription->value)) {
       $this->table->SetFieldValue(FN_DESCRIPTION, 'New Settings');
     }
     if (!$this->HasHours()) {
       $this->AssignDefaultHours();
     }
-    if (!IsBlank($this->fldprovisionalmessage->value)) {
+    if (IsBlank($this->fldprovisionalmessage->value)) {
       $this->table->SetFieldValue('provisionalmessage',
         'Thank you for booking with us. Please note this booking is UNCONFIRMED. Please ' .
         'do not assume this booking has been made yet. We ' .
         'will check to see if we can take this booking at the date and time stated. If so we will ' .
         'send a confirmation message to you or offer a new date or time.');
     }
-    if (!IsBlank($this->fldconfirmedmessage->value)) {
+    if (IsBlank($this->fldconfirmedmessage->value)) {
       $this->table->SetFieldValue('confirmedmessage',
         'Thank you for making a bookng with us. It is our pleasure to inform you that ' .
         'we are confirming your booking with us at the date and time specified. We look ' .
         'forward to see you.');
     }
-    if (!IsBlank($this->fldcancelledmessage->value)) {
+    if (IsBlank($this->fldcancelledmessage->value)) {
       $this->table->SetFieldValue('cancelledmessage',
         'With regret, this is a message to say we have cancelled your booking with you. ' .
         'If you require another booking with us or wish to know more why the booking was ' .
         'cancelled please contact us.');
     }
     // back to parent worker
-    return $this->SaveAndReset(false, IDNAME_MANAGEBOOKINGS);
+    return $this->SaveAndReset($this->table, IDNAME_MANAGEBOOKINGS);
 //    return $this->table->StoreChanges();
   }
 

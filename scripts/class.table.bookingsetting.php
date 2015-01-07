@@ -16,6 +16,7 @@ class bookingsetting extends idtable {
     $this->AddField('accountid', DT_FK);
     $this->AddField(FN_DESCRIPTION, DT_DESCRIPTION);
     // bookingtypeid
+    $this->AddField('bookingtypeid', DT_FK);
 //    $this->AddField('unitname', DT_STRING);
 //    $this->AddField('unitsatatime', DT_INTEGER);
     $this->AddField('workmondaystart', DT_STRING);
