@@ -299,6 +299,7 @@ class workerresmanbookingsettings extends workerform {
       'booking is made. Please make it clear the booking is unconfimed.';
     $this->fldprovisionalmessage->rows = 7;
     $this->fldprovisionalmessage->cols = 80;
+    $this->fldprovisionalmessage->enableeditor = false;
     $this->fldprovisionalmessage->value =
       'Thank you for booking with us. Please note this booking is UNCONFIRMED. Please ' .
       'do not assume this booking has been made yet. We ' .
@@ -316,6 +317,7 @@ class workerresmanbookingsettings extends workerform {
       'forward to see you.';
     $this->fldconfirmedmessage->rows = 7;
     $this->fldconfirmedmessage->cols = 80;
+    $this->fldconfirmedmessage->enableeditor = false;
     $this->AssignFieldToSection('messages', 'confirmedmessage');
     // cancelled message
     $this->fldcancelledmessage->description =
@@ -327,6 +329,7 @@ class workerresmanbookingsettings extends workerform {
       'cancelled please contact us.';
     $this->fldcancelledmessage->rows = 7;
     $this->fldcancelledmessage->cols = 80;
+    $this->fldcancelledmessage->enableeditor = false;
     $this->AssignFieldToSection('messages', 'cancelledmessage');
   }
 

@@ -221,7 +221,7 @@ abstract class formbuilderbase {
       : array();
   }
 
-  protected function SetValue($value) {
+  public function SetValue($value) {
     $this->value = $value;
   }
 

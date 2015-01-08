@@ -23,8 +23,9 @@ class formbuildertextarea extends formbuilderbase {
 
   public function GetControl() {
 //    if ($this->enableeditor && strpos($this->classname, ' editable') !== false) {
+    if ($this->enableeditor) {
       $this->classname .= ' editable';
-//    }
+    }
     return array(
       "<textarea" .
         $this->IncludeAllAttributes() .

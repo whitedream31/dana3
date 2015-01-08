@@ -32,13 +32,16 @@ class booking extends idtable {
 //    $this->AddField('content', DT_TEXT); // ???
     // bookingdurationid
     $this->AddField('notes', DT_TEXT);
+    $this->AddField('confirmedbycontact', DT_BOOLEAN);
+    $this->AddField('confirmedbyclient', DT_BOOLEAN);
     $this->AddField('bookingstateid', DT_FK);
     $this->AddField(FN_STATUS, DT_STATUS);
     $this->bookingdatedescription = '';
   }
 
   protected function AfterPopulateFields() {
-    $this->bookingdatedescription = $this->FormatDateTime(DF_LONGDATETIME);
+    $this->bookingdatedescription =
+      $this->FormatDateTime(DF_LONGDATETIME, $this->GetFieldValue('startdate'));
   }
 
   protected function AssignDefaultFieldValues() {
@@ -105,13 +108,20 @@ class booking extends idtable {
     } else {
       $search = '(b.`confirmedbyclient` = 0) OR (b.`confirmedbycontact` = 0)';
     }
-    $query = 'SELECT b.`id`, b.`clientname`, b.`title`, b.`startdate`, b.`timetext`, bs.* ' .
+    /*
+     * note:
+     * provisional : confirmedbycontact = 1, confirmedbyclient = 0
+     * confirmed:    confirmedbycontact = 1, confirmedbyclient = 1
+     * cancelled:    confirmedbycontact = 0, confirmedbyclient = 0
+     */
+    $query =
+      'SELECT b.`id` AS bookingid, b.`clientname`, b.`title`, b.`startdate`, b.`timetext`, bs.* ' .
       'FROM `booking` b ' .
       'INNER JOIN `bookingstate` bs ON b.`bookingstateid` = bs.`id` ' .
       "WHERE b.`bookingsettingsid` = {$settingid} AND {$search} ORDER BY b.`startdate` DESC, b.`timetext`";
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
-      $id = $line['id'];
+      $id = $line['bookingid'];
       $ret[$id] = array(
         'clientname' => $line['clientname'],
         'title' => $line['title'],

@@ -56,7 +56,6 @@ class workerresmanbookings extends workerform {
           'title', new formbuildereditbox('title', '', 'Booking Title'), $this->table);
         $this->fldstartdate = $this->AddField(
           'startdate', new formbuilderdate('startdate', '', 'Start Date'), $this->table);
-        
         $this->fldtimetext = $this->AddField(
           'timetext', new formbuildertime('timetext', '', 'Start Time'), $this->table);
         $this->fldclientname = $this->AddField(
@@ -103,7 +102,8 @@ class workerresmanbookings extends workerform {
         $ret = $this->fldtitle->Save() + $this->fldstartdate->Save() + $this->fldtimetext->Save() +
           $this->fldclientname->Save() + $this->fldaddress->Save() + $this->fldpostcode->Save() +
           $this->fldtelephone->Save() + $this->fldemail->Save() +
-          $this->fldbookingstateid->Save() + $this->fldnotes->Save();
+          ((IsBlank($this->fldbookingstateid)) ? 0 : $this->fldbookingstateid->Save()) + 
+          $this->fldnotes->Save();
           break;
       default:
         $ret = true;
@@ -112,6 +112,21 @@ class workerresmanbookings extends workerform {
   }
 
   protected function SaveToTable() {
+    if ($this->action == ACT_NEW) {
+      $state = database::SelectFromTableByRef('bookingstate', '3PROVISIONAL');
+      $stateid = $state['id'];
+      $this->table->SetFieldValue('bookingstateid', $stateid);
+      $this->table->SetFieldValue('confirmedbycontact', 1);
+      $this->table->SetFieldValue('confirmedbyclient', 0);
+    }
+    $this->table->SetFieldValue('bookingsettingsid', $this->groupid);
+    if (IsBlank($this->fldtitle->value)) {
+      $date = strtotime($this->fldstartdate->value);
+      $time = (IsBlank($this->fldtimetext->value)) ? '' : ' ' . $this->fldtimetext->value;
+      $title =
+        'Booking for ' . $this->fldclientname->value . ' on ' . date('l, j F Y', $date) . $time;
+      $this->table->SetFieldValue('title', $title);
+    }
     return (int) $this->table->StoreChanges();
   }
 
@@ -137,11 +152,13 @@ class workerresmanbookings extends workerform {
     foreach ($this->settinglist as $settingid => $setting) {
       $settingdesc = $setting['description'];
       $settingref = strtolower($setting['bookingtyperef']);
-      $idname = $this->idname . '-' . $settingref;
+      if (strpos($this->idname, $settingref) === false) {
+        $idname = $this->idname . '-' . $settingref;
+      }
       $sectionname = 'bookings-' . $settingid;
       $this->NewSection(
         $sectionname, $settingdesc,
-        "Below are your bookings for {$settingdesc}. They are created either by visitors using the booking page (if you have one) " .
+        "Below are your bookings for <strong>{$settingdesc}</strong>. They are created either by visitors using the booking page (if you have one) " .
         'or you can add an entry using the button below the list.<br>New bookings will appear in the UNCONFIRMED bookings list. ' .
         'Both you AND the client must confirm the booking for it to appear in the CONFIRM booking list.');
       // confirmed datagrid
@@ -210,9 +227,10 @@ class workerresmanbookings extends workerform {
           'DESC' => $clientname,
           'TITLE' => $title,
           'DATE' => $entrydate,
-          'STATUS' => "<span style='color:{$statecolour}'>{$statedesc}</span>"
+          'STATE' => "<span style='background-color:{$statecolour}'>&nbsp;&nbsp;&nbsp;</span>&nbsp;" . $statedesc
         );
-        $datagrid->AddRow($itemid, $coldata, true, $actions);
+        $options['parentid'] = $settingid;
+        $datagrid->AddRow($itemid, $coldata, true, $actions, $options);
       }
     }
   }
@@ -231,7 +249,7 @@ class workerresmanbookings extends workerform {
     // title field
     $this->fldtitle->description =
       'This is the title of the entry. If you leave it blank ' .
-      'we will use the start date and setting type. Please keep it brief';
+      'we will use the start date and client name. <em>Please keep it brief.</em>';
     $this->fldtitle->size = 80;
     $this->fldtitle->placeholder = 'eg. hair appointment';
     $this->AssignFieldToSection('entry', 'title');
@@ -272,6 +290,7 @@ class workerresmanbookings extends workerform {
     $this->fldaddress->placeholder = 'eg. 12a High Street, Anytown, Anyshire';
     $this->fldaddress->rows = 4;
     $this->fldaddress->cols = 30;
+    $this->fldaddress->enableeditor = false;
     $this->AssignFieldToSection('client', 'address');
     // post code field
     $this->fldpostcode->description = 'Please type in the post code, if known.';
@@ -294,6 +313,7 @@ class workerresmanbookings extends workerform {
     $this->fldnotes->description = 'If you have any notes or comments you can type them here.';
     $this->fldnotes->rows = 8;
     $this->fldnotes->cols = 100;
+    $this->fldnotes->enableeditor = false;
     $this->AssignFieldToSection('notes', 'notes');
   }
 

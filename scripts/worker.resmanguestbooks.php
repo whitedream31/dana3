@@ -71,7 +71,15 @@ class workerresmanguestbooks extends workerform {
   }
 
   protected function SaveToTable() {
-    return (int) $this->table->StoreChanges(); //parent::StoreChanges(); //$this->table->StoreChanges();
+    if (IsBlank($this->fldgeneralmessage->value)) {
+      $this->table->SetFieldValue('generalmessage', 
+        'Please leave a comment about our business. It will appear on this page (if we like it).');
+    }
+    if (IsBlank($this->fldthankyoumessage->value)) {
+      $this->table->SetFieldValue('thankyoumessage',
+        'Thank you for your comment. Once it has been checked it should appear in the guest-book page shortly.');
+    }
+    return (int) $this->table->StoreChanges();
   }
 
   protected function AddErrorList() {}
@@ -133,6 +141,7 @@ class workerresmanguestbooks extends workerform {
       'Type in a message that will appear above in the visitor message box. A typical ' .
       'message would be to ask for comments about your business.';
     $this->fldgeneralmessage->rows = 5;
+    $this->fldgeneralmessage->enableeditor = false;
     $this->fldgeneralmessage->placeholder =
       'eg. Please leave a comment about our business. It will appear on this page (if we like it).';
     $this->AssignFieldToSection('guestbook', 'generalmessage');
@@ -142,6 +151,7 @@ class workerresmanguestbooks extends workerform {
       'your guest-book. A typical message would be to thank then for sending you a ' .
       'message and it will be read very soon.';
     $this->fldthankyoumessage->rows = 5;
+    $this->fldthankyoumessage->enableeditor = false;
     $this->fldthankyoumessage->placeholder =
       'eg. Thank you for your comment. Once it has been checked it should appear in the guest-book page shortly.';
     $this->AssignFieldToSection('guestbook', 'thankyoumessage');
