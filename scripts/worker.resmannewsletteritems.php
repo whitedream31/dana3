@@ -26,17 +26,17 @@ class workerresmannewsletteritems extends workerform {
     $this->contextdescription = 'Newsletter items';
     $this->fldnewsletterid = new formbuilderhidden('newsletterid', $this->groupid);
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Modify Newsletter Item';
         $this->fldheading = $this->AddField(
           'heading', new formbuildereditbox('heading', '', 'Item Heading'), $this->table);
         $this->fldcontent = $this->AddField(
           'content', new formbuildertextarea('content', '', 'Content'), $this->table);
-        $this->returnidname = IDNAME_MANAGENEWSLETTERS;
+        $this->returnidname = activitymanager::IDNAME_MANAGENEWSLETTERS;
         $this->showroot = false; 
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
 /*        $this->buttonmode = array(BTN_BACK);
@@ -52,8 +52,8 @@ class workerresmannewsletteritems extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldheading->Save() + $this->fldcontent->Save();
         break;
       default:
@@ -69,9 +69,9 @@ class workerresmannewsletteritems extends workerform {
       $this->table->SetFieldValue('heading', 'New Heading');
     }
     // back to parent worker
-    $ret = $this->SaveAndReset($this->table, IDNAME_MANAGENEWSLETTERS);
+    $ret = $this->SaveAndReset($this->table, activitymanager::IDNAME_MANAGENEWSLETTERS);
     $_GET['rid'] = $this->groupid;
-    $_GET['action'] = ACT_EDIT;
+    $_GET['action'] = workerbase::ACT_EDIT;
     return $ret;
   }
 

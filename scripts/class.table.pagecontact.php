@@ -12,7 +12,7 @@ class pagecontact extends page {
   protected $fldmapaddress;
 
   protected function AssignPageType() {
-    $this->pgtype = PAGETYPE_CONTACT;
+    $this->pgtype = self::PAGETYPE_CONTACT;
   }
 
   protected function AfterPopulateFields() {
@@ -22,16 +22,16 @@ class pagecontact extends page {
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
 //incemail  tinyint
-    $this->AddField('contactname', DT_STRING, 'Name');
-    $this->AddField('contactemail', DT_STRING, 'E-mail Address');
-    $this->AddField('contactsubject', DT_STRING, 'Subject');
-    $this->AddField('contactmessage', DT_STRING, 'Message');
+    $this->AddField('contactname', self::DT_STRING, 'Name');
+    $this->AddField('contactemail', self::DT_STRING, 'E-mail Address');
+    $this->AddField('contactsubject', self::DT_STRING, 'Subject');
+    $this->AddField('contactmessage', self::DT_STRING, 'Message');
 //    $this->AddField('inccontactinsidearea', DT_BOOLEAN);
-    $this->AddField('inccontactname', DT_BOOLEAN);
-    $this->AddField('incaddress', DT_BOOLEAN);
-    $this->AddField('inctelephone', DT_BOOLEAN);
-    $this->AddField('showmap', DT_BOOLEAN);
-    $this->AddField('mapaddress', DT_STRING);
+    $this->AddField('inccontactname', self::DT_BOOLEAN);
+    $this->AddField('incaddress', self::DT_BOOLEAN);
+    $this->AddField('inctelephone', self::DT_BOOLEAN);
+    $this->AddField('showmap', self::DT_BOOLEAN);
+    $this->AddField('mapaddress', self::DT_STRING);
   }
 
   protected function InitFieldsForMainContent($worker) {

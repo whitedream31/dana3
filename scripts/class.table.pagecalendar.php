@@ -11,16 +11,16 @@ class pagecalendar extends page {
   protected $fldgroupid;
 
   protected function AssignPageType() {
-    $this->pgtype = PAGETYPE_CALENDAR;
+    $this->pgtype = self::PAGETYPE_CALENDAR;
   }
 
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
-    $this->AddField('groupid', DT_FK);
+    $this->AddField('groupid', self::DT_FK);
   }
 
   private function GetDisplayTypeList() {
-    $statusactive = STATUS_ACTIVE;
+    $statusactive = self::STATUS_ACTIVE;
     $query =
       'SELECT * FROM `calendardisplaytype` ' .
       "WHERE  (`status` = '{$statusactive}') " .

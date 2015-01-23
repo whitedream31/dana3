@@ -2,7 +2,7 @@
 // BOOKING page container class for MyLocalSmallBusiness
 // written by Ian Stewart (c) 2012 Whitedream Software
 // created: 8 dec 2012
-// modified: 27 jul 2014
+// modified: 13 jan 2015
 
 require_once 'class.table.page.php';
 
@@ -10,6 +10,6 @@ require_once 'class.table.page.php';
 class pagebooking extends page {
 
   protected function AssignPageType() {
-    $this->pgtype = PAGETYPE_BOOKING;
+    $this->pgtype = self::PAGETYPE_BOOKING;
   }
 }

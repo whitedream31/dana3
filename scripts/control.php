@@ -22,7 +22,7 @@ pwd  ipsum
 
 $account = account::StartInstance(542); //322);
 
-$_SESSION[SESS_IDGROUP] = 3;
+$_SESSION[activitymanager::SESS_IDGROUP] = 3;
 
 ?>
 <!DOCTYPE html>

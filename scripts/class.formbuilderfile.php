@@ -34,13 +34,13 @@ $MIME_WEBIMAGES = array(
 );
 $MIME_WEBSITE = $MIME_WEBIMAGES + $MIME_DOCUMENTS;
 
-// file process error list
-define('FILEERROR_CANNOTMOVE', 1);
-
 class fileexception extends Exception {}
 
 // file field (non specific upload file) - FLDTYPE_FILE - derived from edit box so it gets size and maxlength
 class formbuilderfile extends formbuildereditbox {
+  // file process error list
+  const FILEERROR_CANNOTMOVE = 1;
+
   protected $keyid;
   public $usecurrentfile = false;
   public $acceptedfiletypes;
@@ -56,7 +56,7 @@ class formbuilderfile extends formbuildereditbox {
     ini_set('post_max_size', '64M');
     ini_set('upload_max_filesize', '64M');
     $this->targetfilename = $targetname;
-    $this->fieldtype = FLDTYPE_FILE;
+    $this->fieldtype = basetable::FLDTYPE_FILE;
     $this->acceptedfiletypes = array();
     $this->keyid = 0;
     $this->mediaid = -1; // no id
@@ -129,7 +129,7 @@ class formbuilderfile extends formbuildereditbox {
       $fileext = strtolower($pathinfo['extension']);
       $acceptedlist = array_values($this->acceptedfiletypes);
       if (!in_array($fileext, $acceptedlist)) {
-        $this->errors[ERRKEY_INVALIDFILE] = ERRVAL_INVALIDFILE;
+        $this->errors[self::ERRKEY_INVALIDFILE] = self::ERRVAL_INVALIDFILE;
       } else {
         if (!$this->targetfilename) {
           $this->targetfilename = $this->file["name"];
@@ -141,7 +141,7 @@ class formbuilderfile extends formbuildereditbox {
         if (move_uploaded_file($srcfile, $this->targetpath . $this->targetfilename)) { //$this->targetprefix . $this->targetfilename)) {
           parent::ProcessPost();
         } else {
-          $this->errors[] = FILEERROR_CANNOTMOVE;
+          $this->errors[] = self::FILEERROR_CANNOTMOVE;
         }
       }
     } elseif ($error != UPLOAD_ERR_NO_FILE) {
@@ -164,7 +164,7 @@ class formbuilderfile extends formbuildereditbox {
       if ($this->usecurrentfile) {
         $ret = true;
       } else {
-        $this->errors[ERRKEY_NOFILE] = ERRVAL_NOFILE;
+        $this->errors[self::ERRKEY_NOFILE] = self::ERRVAL_NOFILE;
       }
     } elseif ($this->file) {
       $pathinfo = $this->GetPathInfo($this->file["name"]); // basename
@@ -172,11 +172,11 @@ class formbuilderfile extends formbuildereditbox {
       $acceptedlist = array_values($this->acceptedfiletypes);
       $ret = $acceptedlist && (in_array($fileext, $acceptedlist));
       if (isset($php_errormsg)) {
-        $this->errors[ERRKEY_PHPERROR] =
+        $this->errors[self::ERRKEY_PHPERROR] =
           (substr_count('exceeds', $php_errormsg)) ? 'Your file is too big to upload' : $php_errormsg;
       }
       if (!$ret) {
-        $this->errors[ERRKEY_INVALIDFILE] = ERRVAL_INVALIDFILE;
+        $this->errors[self::ERRKEY_INVALIDFILE] = self::ERRVAL_INVALIDFILE;
       }
     } else {
       $ret = false;

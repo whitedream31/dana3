@@ -13,10 +13,10 @@ class areacovered extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField('accountid', DT_FK);
-    $this->description = $this->AddField('description', DT_STRING);
-    $this->postalarea = $this->AddField('postalarea', DT_STRING);
-    $this->countyid = $this->AddField('countyid', DT_FK);
+    $this->accountid = $this->AddField('accountid', self::DT_FK);
+    $this->description = $this->AddField('description', self::DT_STRING);
+    $this->postalarea = $this->AddField('postalarea', self::DT_STRING);
+    $this->countyid = $this->AddField('countyid', self::DT_FK);
   }
 
   protected function AssignDefaultFieldValue($name, $fld) {
@@ -36,7 +36,7 @@ class areacovered extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query =
       'SELECT `id`, `description` FROM `areacovered` ' .
       "WHERE (`accountid` = {$accountid}) AND " .
@@ -49,7 +49,7 @@ class areacovered extends idtable {
       $coldata = array(
         'DESC' => $line['description']
       );
-      $datagrid->AddRow($id, $coldata, true, array(TBLOPT_DELETABLE));
+      $datagrid->AddRow($id, $coldata, true, array(formbuilderdatagrid::TBLOPT_DELETABLE));
     }
     $result->free();
     return $list;

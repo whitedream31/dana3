@@ -7,25 +7,43 @@ require_once 'class.basetable.php';
  * part of the formbuilder class set
  */
 
-// error list - codes
-define('ERRKEY_PHPERROR', 'phperr'); // error from php ($php_errormsg)
-define('ERRKEY_VALUEREQUIRED', 'vreq');
-define('ERRKEY_IMAGETOOBIG', 'toobig');
-define('ERRKEY_INVALIDFILE', 'invfile');
-define('ERRKEY_PASSWORDMISMATCH', 'pwdmis');
-define('ERRKEY_OLDPASSWORD', 'oldpwd');
-define('ERRKEY_TOOSHORT', 'short');
-define('ERRKEY_NOFILE', 'nofile');
-// error list - messages
-define('ERRVAL_VALUEREQUIRED', 'Field required');
-define('ERRVAL_IMAGETOOBIG', 'Uploaded image is too big (please resize)');
-define('ERRVAL_INVALIDFILE', 'Invalid file type');
-define('ERRVAL_OLDPASSWORD', 'Your old password is incorrect');
-define('ERRVAL_PASSWORDMISMATCH', 'Your new password does not match the confirmation');
-define('ERRVAL_TOOSHORT', 'Too few characters');
-define('ERRVAL_NOFILE', 'No file selected');
+//// error list - codes
+//define('ERRKEY_PHPERROR', 'phperr'); // error from php ($php_errormsg)
+//define('ERRKEY_VALUEREQUIRED', 'vreq');
+//define('ERRKEY_IMAGETOOBIG', 'toobig');
+//define('ERRKEY_INVALIDFILE', 'invfile');
+//define('ERRKEY_PASSWORDMISMATCH', 'pwdmis');
+//define('ERRKEY_OLDPASSWORD', 'oldpwd');
+//define('ERRKEY_TOOSHORT', 'short');
+//define('ERRKEY_NOFILE', 'nofile');
+//// error list - messages
+//define('ERRVAL_VALUEREQUIRED', 'Field required');
+//define('ERRVAL_IMAGETOOBIG', 'Uploaded image is too big (please resize)');
+//define('ERRVAL_INVALIDFILE', 'Invalid file type');
+//define('ERRVAL_OLDPASSWORD', 'Your old password is incorrect');
+//define('ERRVAL_PASSWORDMISMATCH', 'Your new password does not match the confirmation');
+//define('ERRVAL_TOOSHORT', 'Too few characters');
+//define('ERRVAL_NOFILE', 'No file selected');
 
 abstract class formbuilderbase {
+  // error list - codes
+  const ERRKEY_PHPERROR = 'phperr'; // error from php ($php_errormsg)
+  const ERRKEY_VALUEREQUIRED = 'vreq';
+  const ERRKEY_IMAGETOOBIG = 'toobig';
+  const ERRKEY_INVALIDFILE = 'invfile';
+  const ERRKEY_PASSWORDMISMATCH = 'pwdmis';
+  const ERRKEY_OLDPASSWORD = 'oldpwd';
+  const ERRKEY_TOOSHORT = 'short';
+  const ERRKEY_NOFILE = 'nofile';
+  // error list - messages
+  const ERRVAL_VALUEREQUIRED = 'Field required';
+  const ERRVAL_IMAGETOOBIG = 'Uploaded image is too big (please resize)';
+  const ERRVAL_INVALIDFILE = 'Invalid file type';
+  const ERRVAL_OLDPASSWORD = 'Your old password is incorrect';
+  const ERRVAL_PASSWORDMISMATCH = 'Your new password does not match the confirmation';
+  const ERRVAL_TOOSHORT = 'Too few characters';
+  const ERRVAL_NOFILE = 'No file selected';
+
   public $id;
   public $table = false; // object of table its name is linked
   public $name;
@@ -157,7 +175,7 @@ abstract class formbuilderbase {
   protected function GetPostValue() {
     if (isset($_POST[$this->name])) {
       $postvalue = addslashes($_POST[$this->name]);
-      $removetags = ($this->fieldtype != FLDTYPE_TEXTAREA);
+      $removetags = ($this->fieldtype != basetable::FLDTYPE_TEXTAREA);
       $value = $this->SafeStringEscape($postvalue);
       if ($removetags) {
         $value = strip_tags($value);
@@ -272,13 +290,13 @@ abstract class formbuilderbase {
 
   public function GetFieldAsArray() {
     $ret = array();
-    if ($this->fieldtype == FLDTYPE_HIDDEN) {
+    if ($this->fieldtype == basetable::FLDTYPE_HIDDEN) {
       $ret[] = '<div>';
       $ret = array_merge($ret, $this->GetControl());
       $ret[] = '</div>';
     } else {
       $ret[] = "<div class='fsfielditem'>";
-      if ($this->fieldtype == FLDTYPE_CHECKBOX) {
+      if ($this->fieldtype == basetable::FLDTYPE_CHECKBOX) {
         $ret = array_merge($ret, $this->GetDescription());
         $ret[] = '<div>';
         $ret = array_merge($ret, $this->GetControl());

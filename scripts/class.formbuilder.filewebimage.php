@@ -28,7 +28,7 @@ class filewebimagefield extends filefield {
 
   protected function Init() {
     global $MIME_WEBIMAGES;
-    $this->fieldtype = FLDTYPE_FILEWEBIMAGES;
+    $this->fieldtype = basetable::FLDTYPE_FILEWEBIMAGES;
     $this->acceptedfiletypes = $MIME_WEBIMAGES;
     $this->previewthumbnail = '';
   }
@@ -78,7 +78,7 @@ class filewebimagefield extends filefield {
         list($this->srcwidth, $this->srcheight, $srctype) = getimagesize($srcfilename); // create new dimensions, keeping aspect ratio
         $imgsz = ($this->srcwidth * $this->srcheight * 24);
         if ($imgsz > 100 * 1024 * 1024) {
-          $this->errors[ERRKEY_IMAGETOOBIG] = ERRVAL_IMAGETOOBIG;
+          $this->errors[self::ERRKEY_IMAGETOOBIG] = self::ERRVAL_IMAGETOOBIG;
         } else {
           switch ($srctype) {
             case 1:   //  gif -> jpg

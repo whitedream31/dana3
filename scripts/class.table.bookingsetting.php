@@ -13,39 +13,39 @@ class bookingsetting extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField(FN_DESCRIPTION, DT_DESCRIPTION);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField(self::FN_DESCRIPTION, self::DT_DESCRIPTION);
     // bookingtypeid
-    $this->AddField('bookingtypeid', DT_FK);
+    $this->AddField('bookingtypeid', self::DT_FK);
 //    $this->AddField('unitname', DT_STRING);
 //    $this->AddField('unitsatatime', DT_INTEGER);
-    $this->AddField('workmondaystart', DT_STRING);
-    $this->AddField('workmondayend', DT_STRING);
+    $this->AddField('workmondaystart', self::DT_STRING);
+    $this->AddField('workmondayend', self::DT_STRING);
 //    $this->AddField('workmondayinterval', DT_INTEGER);
-    $this->AddField('worktuesdaystart', DT_STRING);
-    $this->AddField('worktuesdayend', DT_STRING);
+    $this->AddField('worktuesdaystart', self::DT_STRING);
+    $this->AddField('worktuesdayend', self::DT_STRING);
 //    $this->AddField('worktuesdayinterval', DT_INTEGER);
-    $this->AddField('workwednesdaystart', DT_STRING);
-    $this->AddField('workwednesdayend', DT_STRING);
+    $this->AddField('workwednesdaystart', self::DT_STRING);
+    $this->AddField('workwednesdayend', self::DT_STRING);
 //    $this->AddField('workwednesdayinterval', DT_INTEGER);
-    $this->AddField('workthursdaystart', DT_STRING);
-    $this->AddField('workthursdayend', DT_STRING);
+    $this->AddField('workthursdaystart', self::DT_STRING);
+    $this->AddField('workthursdayend', self::DT_STRING);
 //    $this->AddField('workthursdayinterval', DT_INTEGER);
-    $this->AddField('workfridaystart', DT_STRING);
-    $this->AddField('workfridayend', DT_STRING);
+    $this->AddField('workfridaystart', self::DT_STRING);
+    $this->AddField('workfridayend', self::DT_STRING);
 //    $this->AddField('workfridayinterval', DT_INTEGER);
-    $this->AddField('worksaturdaystart', DT_STRING);
-    $this->AddField('worksaturdayend', DT_STRING);
+    $this->AddField('worksaturdaystart', self::DT_STRING);
+    $this->AddField('worksaturdayend', self::DT_STRING);
 //    $this->AddField('worksaturdayinterval', DT_INTEGER);
-    $this->AddField('worksundaystart', DT_STRING);
-    $this->AddField('worksundayend', DT_STRING);
+    $this->AddField('worksundaystart', self::DT_STRING);
+    $this->AddField('worksundayend', self::DT_STRING);
 //    $this->AddField('worksundayinterval', DT_INTEGER);
-    $this->AddField('provisionalmessage', DT_STRING);
-    $this->AddField('confirmedmessage', DT_STRING);
-    $this->AddField('cancelledmessage', DT_STRING); // ?????
+    $this->AddField('provisionalmessage', self::DT_STRING);
+    $this->AddField('confirmedmessage', self::DT_STRING);
+    $this->AddField('cancelledmessage', self::DT_STRING); // ?????
     // addressrequired
     // typicaldurationid
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {

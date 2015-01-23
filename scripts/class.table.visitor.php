@@ -14,14 +14,14 @@ class visitor extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('username', DT_STRING);
-    $this->AddField('password', DT_STRING);
-    $this->AddField('displayname', DT_DESCRIPTION);
-    $this->AddField('session', DT_STRING);
-    $this->AddField('email', DT_STRING);
-    $this->AddField('startdate', DT_DATETIME);
-    $this->AddField('lastlogin', DT_DATETIME);
-    $this->AddField('status', DT_STRING);
+    $this->AddField('username', self::DT_STRING);
+    $this->AddField('password', self::DT_STRING);
+    $this->AddField('displayname', self::DT_DESCRIPTION);
+    $this->AddField('session', self::DT_STRING);
+    $this->AddField('email', self::DT_STRING);
+    $this->AddField('startdate', self::DT_DATETIME);
+    $this->AddField('lastlogin', self::DT_DATETIME);
+    $this->AddField(self::FN_STATUS, self::DT_STATUS);
   }
 
   public function AssignFormFields($formeditor, $idref) {
@@ -31,8 +31,10 @@ class visitor extends idtable {
   }
 
   protected function AfterPopulateFields() {
-    $this->startdatedescription = $this->FormatDate(DF_LONGDATETIME, $this->GetFieldValue('startdate'));
-    $this->lastlogindescription = $this->FormatDate(DF_LONGDATETIME, $this->GetFieldValue('lastlogin'), 'never');
+    $this->startdatedescription =
+      $this->FormatDate(self::DF_LONGDATETIME, $this->GetFieldValue('startdate'));
+    $this->lastlogindescription =
+      $this->FormatDate(self::DF_LONGDATETIME, $this->GetFieldValue('lastlogin'), 'never');
   }
 
   static public function GetList($groupid) {

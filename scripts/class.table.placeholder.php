@@ -12,9 +12,9 @@ class placeholder extends tagtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->tag = $this->AddField('tag', DT_STRING);
-    $this->AddField('tablename', DT_STRING);
-    $this->AddField('fieldname', DT_STRING);
+    $this->tag = $this->AddField('tag', self::DT_STRING);
+    $this->AddField('tablename', self::DT_STRING);
+    $this->AddField('fieldname', self::DT_STRING);
 //    $this->tablename = $this->AddField('tablename', DT_STRING);
 //    $this->fieldname = $this->AddField('fieldname', DT_STRING);
   }

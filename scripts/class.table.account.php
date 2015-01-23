@@ -9,14 +9,30 @@ require_once 'class.table.page.php';
 //require_once('scripts/class.image.php');
 
 //define('SEARCH_MAX', 500); // max number of results found
-define('SEARCH_WHAT', 16);
-define('SEARCH_WHERE', 8);
-define('SEARCH_TAG', 2);
-define('SEARCH_SPONSOR', 128);
+
+//define('SEARCH_WHAT', 16);
+//define('SEARCH_WHERE', 8);
+//define('SEARCH_TAG', 2);
+//define('SEARCH_SPONSOR', 128);
 
 // account table
 
 class account extends idtable {
+  const ACCSTATUS_UNCONFIRMED = 'uncon';
+  const ACCSTATUS_OFFLINE = 'off';
+  const ACCSTATUS_UNKNOWN = 'unknown';
+  const ACCSTATUS_NOTEXISTS = 'noacc';
+  const ACCSTATUS_EXPIRED = 'exp';
+  const ACCSTATUS_PUBLISHED = 'pub';
+  const ACCSTATUS_PENDING = 'pen';
+  const ACCSTATUS_MODIFIED = 'mod';
+  const ACCSTATUS_DELETED = 'del';
+
+  const SEARCH_WHAT = 16;
+  const SEARCH_WHERE = 8;
+  const SEARCH_TAG = 2;
+  const SEARCH_SPONSOR = 128;
+
   static public $instance;
   public $contact = null; // contact object
   public $theme = null; // theme object
@@ -155,7 +171,7 @@ class account extends idtable {
       $result = database::$instance->Query($query);
       while (($line = $result->fetch_assoc())) {
         $id = $line['id'];
-        $list[$id] = $this->AssignResultItem('what', $line, $list, $id, SEARCH_WHAT);
+        $list[$id] = $this->AssignResultItem('what', $line, $list, $id, self::SEARCH_WHAT);
       }
       $result->free();
     }
@@ -180,7 +196,7 @@ class account extends idtable {
       $result = database::$instance->Query($query);
       while (($line = $result->fetch_assoc())) { // && ($cnt < SEARCH_MAX)) {
         $id = $line['id'];
-        $list[$id] = $this->AssignResultItem('where', $line, $list, $id, SEARCH_WHERE);
+        $list[$id] = $this->AssignResultItem('where', $line, $list, $id, self::SEARCH_WHERE);
       }
       $result->free();
     }
@@ -198,7 +214,7 @@ class account extends idtable {
       while ($line = $result->fetch_assoc()) {
         $id = $line['id'];
         $tag = $line['tag'];
-        $list[$id] = $this->AssignResultItem('tag', $line, $list, $id, SEARCH_TAG);
+        $list[$id] = $this->AssignResultItem('tag', $line, $list, $id, self::SEARCH_TAG);
       }
       $result->free();
     }
@@ -217,7 +233,7 @@ class account extends idtable {
       $result = database::$instance->Query($query);
       while ($line = $result->fetch_assoc()) {
         $id = $line['accountid'];
-        $list[$id] = $this->AssignResultItem('sponsor', $line, $list, $id, SEARCH_SPONSOR);
+        $list[$id] = $this->AssignResultItem('sponsor', $line, $list, $id, self::SEARCH_SPONSOR);
       }
       $result->free();
     }
@@ -227,7 +243,7 @@ class account extends idtable {
     foreach($list as $id => $itm) {
       $cnt = $itm['count'];
       if ($itm['sponsor']) {
-        $cnt -= SEARCH_SPONSOR;
+        $cnt -= self::SEARCH_SPONSOR;
       }
       if ($cnt < $mincount) { // || (!isset($itm['where']))) {
         unset($list[$id]);
@@ -241,12 +257,12 @@ class account extends idtable {
     if ($termwhat) {
       $this->PerformWhatSearch($termwhat, $ret);
       $this->PerformTagSearch($termwhat, $ret);
-      $mincount += SEARCH_WHAT;
+      $mincount += self::SEARCH_WHAT;
     }
     if ($termwhere) {
       $this->PerformWhereSearch($termwhere, $ret);
       $this->PerformTagSearch($termwhere, $ret);
-      $mincount += SEARCH_WHERE;
+      $mincount += self::SEARCH_WHERE;
     }
     $this->PerformSponsorSearch($ret);
     $this->RemoveUnwantedFromSearchList($ret, $mincount);
@@ -321,39 +337,39 @@ class account extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('contactid', DT_FK);
-    $this->AddField('pagemgrid', DT_FK);
-    $this->AddField('themeid', DT_FK);
-    $this->AddField('hoursid', DT_FK);
-    $this->AddField('businessname', DT_STRING);
-    $this->AddField('tagline', DT_STRING);
-    $this->AddField('logomediaid', DT_FK);
-    $this->AddField('session', DT_STRING, FLDTYPE_HIDDEN);
-    $this->AddField('sidecontent', DT_STRING);
-    $this->AddField('businessinfo', DT_STRING);
-    $this->AddField('businesscategoryid', DT_FK);
-    $this->AddField('businesscategory2id', DT_FK);
-    $this->AddField('businesscategory3id', DT_FK);
-    $this->AddField('businesscategorylist', DT_STRING);
-    $this->AddField('website', DT_STRING);
-    $this->AddField('nickname', DT_STRING);
-    $this->AddField('showaddress', DT_BOOLEAN);
-    $this->AddField('showindirectory', DT_BOOLEAN);
-    $this->AddField('amountcharged', DT_FLOAT);
-    $this->AddField('amountpaid', DT_FLOAT);
-    $this->AddField('datestarted', DT_DATETIME);
-    $this->AddField('expirydate', DT_DATE);
-    $this->AddField('dateupdated', DT_DATETIME);
-    $this->AddField('newsletter', DT_BOOLEAN);
-    $this->AddField('hasrating', DT_BOOLEAN);
-    $this->AddField('showadverts', DT_BOOLEAN);
-    $this->AddField('published', DT_BOOLEAN);
-    $this->AddField('authorised', DT_BOOLEAN);
-    $this->AddField('modified', DT_BOOLEAN);
-    $this->AddField('confirmed', DT_BOOLEAN);
-    $this->AddField('deleted', DT_BOOLEAN);
-    $this->AddField('metakeywords', DT_STRING);
-    $this->AddField('metadescription', DT_STRING);
+    $this->AddField('contactid', self::DT_FK);
+    $this->AddField('pagemgrid', self::DT_FK);
+    $this->AddField('themeid', self::DT_FK);
+    $this->AddField('hoursid', self::DT_FK);
+    $this->AddField('businessname', self::DT_STRING);
+    $this->AddField('tagline', self::DT_STRING);
+    $this->AddField('logomediaid', self::DT_FK);
+    $this->AddField('session', self::DT_STRING, self::FLDTYPE_HIDDEN);
+    $this->AddField('sidecontent', self::DT_STRING);
+    $this->AddField('businessinfo', self::DT_STRING);
+    $this->AddField('businesscategoryid', self::DT_FK);
+    $this->AddField('businesscategory2id', self::DT_FK);
+    $this->AddField('businesscategory3id', self::DT_FK);
+    $this->AddField('businesscategorylist', self::DT_STRING);
+    $this->AddField('website', self::DT_STRING);
+    $this->AddField('nickname', self::DT_STRING);
+    $this->AddField('showaddress', self::DT_BOOLEAN);
+    $this->AddField('showindirectory', self::DT_BOOLEAN);
+    $this->AddField('amountcharged', self::DT_FLOAT);
+    $this->AddField('amountpaid', self::DT_FLOAT);
+    $this->AddField('datestarted', self::DT_DATETIME);
+    $this->AddField('expirydate', self::DT_DATE);
+    $this->AddField('dateupdated', self::DT_DATETIME);
+    $this->AddField('newsletter', self::DT_BOOLEAN);
+    $this->AddField('hasrating', self::DT_BOOLEAN);
+    $this->AddField('showadverts', self::DT_BOOLEAN);
+    $this->AddField('published', self::DT_BOOLEAN);
+    $this->AddField('authorised', self::DT_BOOLEAN);
+    $this->AddField('modified', self::DT_BOOLEAN);
+    $this->AddField('confirmed', self::DT_BOOLEAN);
+    $this->AddField('deleted', self::DT_BOOLEAN);
+    $this->AddField('metakeywords', self::DT_STRING);
+    $this->AddField('metadescription', self::DT_STRING);
   }
 
   public function GetRelativePath($leafname = '') {
@@ -415,10 +431,14 @@ class account extends idtable {
     // business category section
     $formeditor->AssignActiveFieldSet(FS_BUSINESSMAINCATEGORY, 'Business Category');
     // - build business categories
-    $businesscategory = $formeditor->AddDataField($this, 'businesscategoryid', 'Main Business Category', FLDTYPE_SELECT, true);
-    $categorygrouplist = database::RetrieveLookupList('businesscategorygroup', FN_DESCRIPTION, FN_REF, FN_ID, '');
+    $businesscategory = $formeditor->AddDataField(
+      $this, 'businesscategoryid', 'Main Business Category', self::FLDTYPE_SELECT, true);
+    $categorygrouplist = database::RetrieveLookupList(
+      'businesscategorygroup', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, '');
     foreach($categorygrouplist as $groupid =>$groupname) {
-      $categorylist = database::RetrieveLookupList('businesscategory', FN_DESCRIPTION, FN_REF, FN_ID, '`businesscategorygroupid` = ' . $groupid);
+      $categorylist = database::RetrieveLookupList(
+        'businesscategory', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID,
+        '`businesscategorygroupid` = ' . $groupid);
       foreach ($categorylist as $catid => $catdescription) {
         $businesscategory->AddToGroup($groupname, $catid, $catdescription);
       }
@@ -426,11 +446,13 @@ class account extends idtable {
 //    $bespokelist = $formeditor->AddDataField($this, 'businesscategorylist', 'Bespoke list of categories', FLDTYPE_EDITBOX, 80);
     // custom section
     $formeditor->AssignActiveFieldSet(FS_BUSINESSCUSTOM, 'Description and Logo');
-    $businessinfo = $formeditor->AddDataField($this, 'businessinfo', 'Brief Business Description', FLDTYPE_TEXTAREA, true);
+    $businessinfo = $formeditor->AddDataField(
+      $this, 'businessinfo', 'Brief Business Description', self::FLDTYPE_TEXTAREA, true);
     $businessinfo->cols= 80;
     $businessinfo->rows= 5;
     // set up logo field
-    $this->logo = $formeditor->AddDataField($this, 'logomediaid', 'Business Logo', FLDTYPE_FILEWEBIMAGES);
+    $this->logo = $formeditor->AddDataField(
+      $this, 'logomediaid', 'Business Logo', self::FLDTYPE_FILEWEBIMAGES);
     $this->logo->mediaid = $this->GetFieldValue('logomediaid');
     $media = $this->GetMediaDetails($this->logo->mediaid); // get the fk for media id
     if ($media) {
@@ -506,7 +528,7 @@ class account extends idtable {
 
     $this->businesscategorydescription = false;
     $this->rootpath = false;
-    $enddate = $this->showenddate[FA_VALUE];
+    $enddate = $this->showenddate[basetable::FA_VALUE];
     if ($enddate != '') {
       $this->expired = date('Y-m-d') > $enddate;
     } else {
@@ -597,7 +619,7 @@ class account extends idtable {
   // retrieve an existing page from its id
   public function FindPage($id) {
     $ret = null;
-    $pgtype = database::SelectFromTableByField('pagetype', FN_ID, $id, 'pgtype');
+    $pgtype = database::SelectFromTableByField('pagetype', basetable::FN_ID, $id, 'pgtype');
     switch ($pgtype) {
       case PAGECREATION_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
@@ -669,23 +691,23 @@ class account extends idtable {
   static public function GetStatus(
     $authorised, $published, $modified, $confirmed, $deleted) {
     if ($deleted) {
-      $ret = ACCSTATUS_DELETED;
+      $ret = self::ACCSTATUS_DELETED;
     } else if ($authorised) {
       if ($published) {
         if ($confirmed) {
           if ($modified) {
-            $ret = ACCSTATUS_MODIFIED;
+            $ret = self::ACCSTATUS_MODIFIED;
           } else {
-            $ret = ACCSTATUS_PUBLISHED;
+            $ret = self::ACCSTATUS_PUBLISHED;
           }
         } else {
-          $ret = ACCSTATUS_UNCONFIRMED;
+          $ret = self::ACCSTATUS_UNCONFIRMED;
         }
       } else {
-        $ret = ACCSTATUS_OFFLINE;
+        $ret = self::ACCSTATUS_OFFLINE;
       }
     } else {
-        $ret = ACCSTATUS_PENDING;
+        $ret = self::ACCSTATUS_PENDING;
     }
     return $ret;
   }
@@ -696,19 +718,19 @@ class account extends idtable {
 //    $status = $this->GetCurrentStatus(); //$this->GetFieldValue(FN_STATUS);
     if ($status) {
       switch ($status) {
-        case ACCSTATUS_MODIFIED:
+        case self::ACCSTATUS_MODIFIED:
           $ret = 'Modified';
           break;
-        case ACCSTATUS_UNCONFIRMED:
+        case self::ACCSTATUS_UNCONFIRMED:
           $ret = 'Un-Confirmed';
           break;
-        case ACCSTATUS_NOTEXISTS:
+        case self::ACCSTATUS_NOTEXISTS:
           $ret = 'Offline';
           break;
-        case ACCSTATUS_EXPIRED:
+        case self::ACCSTATUS_EXPIRED:
           $ret = 'Expired';
           break;
-        case ACCSTATUS_PUBLISHED:
+        case self::ACCSTATUS_PUBLISHED:
           $ret = 'Published';
           break;
 /*        case ACCSTATUS_PENDING:
@@ -717,7 +739,7 @@ class account extends idtable {
         case ACCSTATUS_DELETED:
           $ret = 'Deleted';
           break; */
-        case ACCSTATUS_OFFLINE:
+        case self::ACCSTATUS_OFFLINE:
           $ret = 'Offline';
           break;
         default: // ACCSTATUS_UNKNOWN:
@@ -909,7 +931,8 @@ class account extends idtable {
     if (!$this->businesscategorydescription) {
       $bcid = $this->GetFieldValue('businesscategoryid');
       $this->businesscategorydescription =
-        database::SelectFromTableByField('businesscategory', FN_ID, $bcid, 'description');
+        database::SelectFromTableByField(
+          'businesscategory', basetable::FN_ID, $bcid, 'description');
     }
     return $this->businesscategorydescription;
   }
@@ -918,7 +941,7 @@ class account extends idtable {
     //$mediaid = $this->GetFieldValue('logomediaid');
     if ($mediaid > 0) {
       $field = ($thumbnail) ? 'thumbnail' : 'imgname';
-      $filename = database::SelectFromTableByField('media', FN_ID, $mediaid, $field);
+      $filename = database::SelectFromTableByField('media', basetable::FN_ID, $mediaid, $field);
     } else {
       $filename = false;
     }

@@ -31,9 +31,9 @@ class workerresmancalendardates extends workerform {
     $this->contextdescription = 'Calendar Date management';
     $this->datagrid = new formbuilderdatagrid('calendardates', '', 'Calendar Datess');
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
-        $this->title = (($this->action == ACT_NEW) ? 'Create a New' : 'postaction a') . ' Calendar Date';
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
+        $this->title = (($this->action == workerbase::ACT_NEW) ? 'Create a New' : 'postaction a') . ' Calendar Date';
         // description
         $this->flddescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Title of Calendar Date'), $this->table);
@@ -64,15 +64,15 @@ class workerresmancalendardates extends workerform {
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Calendar Dates';
         $this->flddatagrid = $this->AddField('datagrid', $this->datagrid, $this->table);
         $this->fldaddentry = $this->AddField(
           'addentry', new formbuilderbutton('addentry', 'Add New Calendar Date'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddentry->url = $url;
       break;
     }
@@ -80,8 +80,8 @@ class workerresmancalendardates extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret =
           $this->flddescription->Save() + $this->fldcalendartypeid->Save() +
           $this->fldstartdate->Save() + $this->fldstarttime->Save() +
@@ -125,7 +125,7 @@ class workerresmancalendardates extends workerform {
     $this->datagrid->AddColumn('ENTRYTYPE', 'Entry Type', false);
     $list = $this->table->linkedpages;
     if ($list) {
-      $actions = array(TBLOPT_DELETABLE);
+      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
       foreach($list as $entry) {
         //$status = $this->table->StatusAsString();
         $coldata = array(
@@ -149,7 +149,8 @@ class workerresmancalendardates extends workerform {
     $this->AssignFieldToSection('calendardate', 'description');
     // calendar type id
     $this->fldcalendartypeid->description = 'Please choose the type of calendar entry';
-    $calendartypelist = database::RetrieveLookupList('calendartype', FN_DESCRIPTION, FN_REF, FN_ID);
+    $calendartypelist = database::RetrieveLookupList(
+      'calendartype', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID);
     foreach($calendartypelist as $typeid => $typedescription) {
       $this->fldcalendartypeid->AddValue($typeid, '&nbsp;' . $typedescription . '&nbsp;');
     }
@@ -187,7 +188,7 @@ class workerresmancalendardates extends workerform {
     $this->AssignFieldToSection('calendardate', 'content');
     /* page grid
     $this->pagegrid = new formbuilderdatagrid('pagegrid', '', 'Pages');
-    $this->pagegrid->SetIDName(IDNAME_MANAGEPRIVATEAREAPAGES);
+    $this->pagegrid->SetIDName(activitymanager::IDNAME_MANAGEPRIVATEAREAPAGES);
     $this->PopulatePrivatePagesGrid();
     $this->fldpagegrid = $this->AddField('pagegrid', $this->pagegrid);
     $this->fldpagegrid->description = 'Your pages available with this private area.';
@@ -195,7 +196,7 @@ class workerresmancalendardates extends workerform {
     // add page
     $this->fldaddpage = $this->AddField(
       'addpage', new formbuilderbutton('addpage', 'Assign Page To Private Area'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . IDNAME_MANAGEPRIVATEAREAPAGES . '&act=' . ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEPRIVATEAREAPAGES . '&act=' . ACT_NEW;
     $this->fldaddpage->url = $url;
     $this->AssignFieldToSection('pagegrid', 'addpage');
     */

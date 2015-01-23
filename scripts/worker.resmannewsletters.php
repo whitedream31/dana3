@@ -45,8 +45,8 @@ class workerresmannewsletters extends workerform {
     $this->contextdescription = 'newsletter management';
     $this->datagrid = new formbuilderdatagrid('newsletter', '', 'Newsletters Available');
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Modify Newsletter';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Newsletter Title'), $this->table);
@@ -58,22 +58,22 @@ class workerresmannewsletters extends workerform {
           'showtelephone', new formbuildercheckbox('showtelephone', '', 'Include telephone numbers?'), $this->table);
         $this->fldshowwebsite = $this->AddField(
           'showwebsite', new formbuildercheckbox('showwebsite', '', 'include your main website?'), $this->table);
-        if ($this->action == ACT_EDIT) {
+        if ($this->action == workerbase::ACT_EDIT) {
           $this->itemgrid = $this->AddField(
             'itemgrid', new formbuilderdatagrid('itemgrid', '', 'Newsletter Items'));
         }
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Newsletters'; 
         $this->flditems = $this->AddField('newsletters', $this->datagrid, $this->table);
         $this->fldaddnewsletter = $this->AddField(
           'addnewsletter', new formbuilderbutton('addnewsletter', 'Add New Newsletter'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddnewsletter->url = $url;
         break;
     }
@@ -81,8 +81,8 @@ class workerresmannewsletters extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret = $this->fldtitle->Save() + $this->fldshowdate->Save() +
           $this->fldshowaddress->Save() + $this->fldshowtelephone->Save() +
           $this->fldshowwebsite->Save();
@@ -117,9 +117,9 @@ class workerresmannewsletters extends workerform {
       // newsletter subscribers
       $item = new newslettersubscriber();
       $item->CheckForOldSubscribers();
-      $statusactive = $item->GetStatusAsString(true, STATUS_ACTIVE);
-      $statuspending = $item->GetStatusAsString(true, STATUS_WAITING);
-      $statussunsub = $item->GetStatusAsString(true, STATUS_UNSUBSCRIBED);
+      $statusactive = $item->GetStatusAsString(true, basetable::STATUS_ACTIVE);
+      $statuspending = $item->GetStatusAsString(true, newslettersubscriber::STATUS_WAITING);
+      $statussunsub = $item->GetStatusAsString(true, newslettersubscriber::STATUS_UNSUBSCRIBED);
       $this->NewSection(
         'subscribers', 'Managing newsletter subscribers',
         "Below are the visitors who have expressed interest in your newsletters and want to " .
@@ -131,14 +131,14 @@ class workerresmannewsletters extends workerform {
           'automatically removed.</strong>');
       $this->subscribergrid = $this->AddField(
         'subscribergrid', new formbuilderdatagrid('subscribergrid', '', 'Newsletter Subscribers'));
-      $this->subscribergrid->SetIDName(IDNAME_MANAGENEWSLETTERSUBSCRIBERS);
+      $this->subscribergrid->SetIDName(activitymanager::IDNAME_MANAGENEWSLETTERSUBSCRIBERS);
       $this->PopulateSubscribers();
       $this->subscribergrid->description = 'Below are the list of subscribers to your newsletter, and their status.';
       $this->AssignFieldToSection('subscribers', 'subscribergrid');
       // add subscribe button
       $this->fldaddsubscriber = $this->AddField(
         'addsubscriber', new formbuilderbutton('addsubscriber', 'Invite Subscriber'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGENEWSLETTERSUBSCRIBERS . "&act=" . ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_MANAGENEWSLETTERSUBSCRIBERS . "&act=" . workerbase::ACT_NEW;
       $this->fldaddsubscriber->url = $url;
       $this->AssignFieldToSection('subscribers', 'addsubscriber');
     }
@@ -150,7 +150,11 @@ class workerresmannewsletters extends workerform {
 //    $this->itemgrid->AddColumn('CONT', 'Con', false);
     $list = $this->table->FindNewsletterItems();
     if ($list) {
-      $actions = array(TBLOPT_DELETABLE, TBLOPT_MOVEUP, TBLOPT_MOVEDOWN);
+      $actions = array(
+        formbuilderdatagrid::TBLOPT_DELETABLE,
+        formbuilderdatagrid::TBLOPT_MOVEUP,
+        formbuilderdatagrid::TBLOPT_MOVEDOWN
+      );
       $options = array('parentid' => $this->itemid); // newsletter id
       foreach($list as $itemid => $item) {
         $coldata = array(
@@ -211,14 +215,14 @@ class workerresmannewsletters extends workerform {
       $this->NewSection(
         'items', 'Managing the newsletter items',
         "Below are the items (stories) that make up your newsletter. You can edit, delete or add a new item.");
-      $this->itemgrid->SetIDName(IDNAME_MANAGENEWSLETTERITEMS);
+      $this->itemgrid->SetIDName(activitymanager::IDNAME_MANAGENEWSLETTERITEMS);
       $this->PopulateItemGrid();
       $this->itemgrid->description = 'Below are the list of items to be used to make your newsletter.';
       $this->AssignFieldToSection('items', 'itemgrid');
       // add item button
       $this->fldadditem = $this->AddField(
         'additem', new formbuilderbutton('additem', 'Add Item'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGENEWSLETTERITEMS . "&amp;pid={$this->itemid}&amp;act=" . ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_MANAGENEWSLETTERITEMS . "&amp;pid={$this->itemid}&amp;act=" . workerbase::ACT_NEW;
       $this->fldadditem->url = $url;
       $this->AssignFieldToSection('items', 'additem');
     }

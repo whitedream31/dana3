@@ -1,19 +1,23 @@
 <?php
 require_once 'class.formbuildereditbox.php';
 
-define('DATEFMT_DMY', 'dmy');
-define('DATEFMT_MDY', 'mdy');
-define('DATEFMT_YMD', 'ymd');
+//define('DATEFMT_DMY', 'dmy');
+//define('DATEFMT_MDY', 'mdy');
+//define('DATEFMT_YMD', 'ymd');
 
 // date field - FLDTYPE_DATE - detrieved from edit box
 class formbuilderdate extends formbuildereditbox {
-  public $inputformat = DATEFMT_DMY;
-  public $outputformat = DATEFMT_YMD;
+  const DATEFMT_DMY = 'dmy';
+  const DATEFMT_MDY = 'mdy';
+  const DATEFMT_YMD = 'ymd';
+
+  public $inputformat = self::DATEFMT_DMY;
+  public $outputformat = self::DATEFMT_YMD;
   public $separator = '-';
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = FLDTYPE_DATE;
+    $this->fieldtype = basetable::FLDTYPE_DATE;
     $this->size = 10;
     $this->maxlength = 10;
   }
@@ -48,10 +52,10 @@ class formbuilderdate extends formbuildereditbox {
 
   protected function DateTypeToDateFormat($dt) {
     switch ($dt) {
-      case DATEFMT_DMY: // DMY
+      case self::DATEFMT_DMY: // DMY
         $ret = 'd' . $this->separator . 'm' . $this->separator . 'Y';
         break;
-      case DATEFMT_MDY: // MDY
+      case self::DATEFMT_MDY: // MDY
         $ret = 'm' . $this->separator . 'd' . $this->separator . 'Y';
         break;
       default: // DATEFMT_YMD: // YMD

@@ -16,17 +16,17 @@ class calendardate extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('calendartypeid', DT_FK);
-    $this->Addfield(FN_DESCRIPTION, DT_DESCRIPTION);
-    $this->AddField('startdate', DT_DATE);
-    $this->AddField('enddate', DT_DATE);
-    $this->AddField('starttime', DT_STRING);
-    $this->AddField('endtime', DT_STRING);
-    $this->AddField('expirydate', DT_DATE);
-    $this->AddField('url', DT_STRING);
-    $this->AddField('content', DT_TEXT);
-    $this->AddField(FN_STATUS, DT_STRING);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField('calendartypeid', self::DT_FK);
+    $this->Addfield(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
+    $this->AddField('startdate', self::DT_DATE);
+    $this->AddField('enddate', self::DT_DATE);
+    $this->AddField('starttime', self::DT_STRING);
+    $this->AddField('endtime', self::DT_STRING);
+    $this->AddField('expirydate', self::DT_DATE);
+    $this->AddField('url', self::DT_STRING);
+    $this->AddField('content', self::DT_TEXT);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
     $this->calendartype = false;
     $this->calendartypedescription = '';
     $this->startdatedescription = '';
@@ -37,9 +37,9 @@ class calendardate extends idtable {
     $this->calendartypedescription =
       database::SelectDescriptionFromLookup('calendartype', $this->GetFieldValue('calendartypeid'));
     $this->startdatedescription =
-      $this->FormatDateTime(DF_MEDIUMDATE, $this->GetFieldValue('startdate') . $this->GetFieldValue('starttime'));
+      $this->FormatDateTime(self::DF_MEDIUMDATE, $this->GetFieldValue('startdate') . $this->GetFieldValue('starttime'));
     $this->enddatedescription =
-      $this->FormatDateTime(DF_MEDIUMDATE, $this->GetFieldValue('enddate') . $this->GetFieldValue('endtime'));
+      $this->FormatDateTime(self::DF_MEDIUMDATE, $this->GetFieldValue('enddate') . $this->GetFieldValue('endtime'));
   }
 
   public function AssignDataGridColumns($datagrid) {
@@ -50,7 +50,7 @@ class calendardate extends idtable {
   }
 
   private function GetDateTime($date, $time) {
-    return ($date) ? trim($this->FormatDateTime(DF_SHORTDATE, $date) . ' '  . $time) : false;
+    return ($date) ? trim($this->FormatDateTime(self::DF_SHORTDATE, $date) . ' '  . $time) : false;
   }
 
   public function FormatDisplayTimes() {
@@ -73,7 +73,7 @@ class calendardate extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
 
     $query =
       'SELECT c.`id`, c.`description`, t.`description` AS entrytypedesc, ' .
@@ -82,7 +82,7 @@ class calendardate extends idtable {
       'INNER JOIN `calendartype` t ON t.`id` = c.`calendartypeid` ' .
       "WHERE c.`accountid` = {$accountid} and c.`status` = '{$status}' " .
       'ORDER BY c.`startdate` DESC, c.`enddate` DESC, c.`expirydate` DESC';
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {

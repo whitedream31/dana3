@@ -5,6 +5,10 @@
 */
 
 abstract class activitybase {
+  const ACTSTATUS_OK = 'ok';
+  const ACTSTATUS_WARNING = 'warn';
+  const ACTSTATUS_ERROR = 'err';
+
   public $idname;
   public $description;
 

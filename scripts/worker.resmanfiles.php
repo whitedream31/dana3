@@ -26,16 +26,16 @@ class workerresmanfiles extends workerform {
     $this->contextdescription = 'managing downloadable files';
     $this->datagrid = new formbuilderdatagrid('files', '', 'Files Available');
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
-        $this->title = (($this->action == ACT_EDIT) ? 'Modify' : 'New') . ' File';
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
+        $this->title = (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New') . ' File';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Title'), $this->table);
         $this->fldfilename = $this->AddField(
           'filename', new formbuilderfilewebsite('filename', '', 'Filename'), $this->table);
         $this->fldfilename->targetpath = account::$instance->GetRelativePath('files'); // get the filename based on the media/account tables
         $fname = $this->table->GetFieldValue('filename', null);
-        $this->fldfilename->targetfilename = ($this->action == ACT_EDIT)
+        $this->fldfilename->targetfilename = ($this->action == workerbase::ACT_EDIT)
           ? $fname
           : null;
 
@@ -47,22 +47,22 @@ $this->AssignFileDetails();
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
-        $this->buttonmode = array(BTN_CONFIRM, BTN_CANCEL);
+      case workerbase::ACT_REMOVE:
+        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove File';
         $this->fldtitle = $this->AddField(
           'title', new formbuilderstatictext('description', '', 'File to be removed'));
-        $this->action = ACT_CONFIRM;
+        $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddfile = $this->AddField(
           'addfile', new formbuilderbutton('addfile', 'Upload New File'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddfile->url = $url;
 
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Downloadable Files'; 
         $this->filelist = $this->AddField('filelist', $this->datagrid, $this->table);
         break;
@@ -77,7 +77,7 @@ $this->AssignFileDetails();
     if ((!$file) || (isset($file['error']) && $file['error'] == UPLOAD_ERR_NO_FILE)) {
       if ($this->itemid) {
         $file = database::SelectFromTableByField(
-          'fileitem', FN_ID, $this->itemid
+          'fileitem', basetable::FN_ID, $this->itemid
         );
         $this->fldfilename->file = array(
           'name' => $file['filename'], // $this->table->GetFieldValue('filename'),
@@ -104,12 +104,12 @@ $this->AssignFileDetails();
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret = $this->fldtitle->Save() + $this->fldfilename->Save() +
           $this->flddescription->Save();
         break;
-      case ACT_CONFIRM:
+      case workerbase::ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('title');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("File '{$caption}' removed");
@@ -150,8 +150,8 @@ $this->AssignFileDetails();
         $name = $this->GetTitleFromFilename($file['name']);
         $this->table->SetFieldValue('title', $name);
       }
-      if (!$this->table->GetFieldValue(FN_STATUS)) {
-        $this->table->SetFieldValue(FN_STATUS, STATUS_ACTIVE);
+      if (!$this->table->GetFieldValue(basetable::FN_STATUS)) {
+        $this->table->SetFieldValue(basetable::FN_STATUS, basetable::STATUS_ACTIVE);
       }
     }
     return (int) $this->table->StoreChanges();

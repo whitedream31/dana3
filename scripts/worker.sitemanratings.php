@@ -28,7 +28,7 @@ class workersitemanratings extends workerform {
     $this->contextdescription = 'rating management';
     $this->datagrid = new formbuilderdatagrid('ratings', '', 'Ratings');
     switch ($this->action) {
-      case ACT_EDIT:
+      case workerbase::ACT_EDIT:
         $this->title = 'Modify Reply';
         $this->fldcomment = $this->AddField(
           'comment', new formbuilderstatictext('comment', '', 'Comment'));
@@ -37,11 +37,11 @@ class workersitemanratings extends workerform {
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_NEW:
-      case ACT_REMOVE:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Ratings'; 
         $this->fldratings = $this->AddField('ratings', $this->datagrid, $this->table);
         break;
@@ -50,7 +50,7 @@ class workersitemanratings extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldreply->Save();
         break;
       default:

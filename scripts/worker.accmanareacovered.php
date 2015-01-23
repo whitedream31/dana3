@@ -29,38 +29,39 @@ class workeraccareascovered extends workerform {
     $this->contextdescription = 'areas covered';
     $this->datagrid = new formbuilderdatagrid('areascovered', '', 'Areas Covered');
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
-        $this->title = (($this->action == ACT_NEW) ? 'New' : 'Modify') . ' Area';
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
+        $this->title = (($this->action == workerbase::ACT_NEW) ? 'New' : 'Modify') . ' Area';
         $this->fldareadescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Description'), $this->table);
         $this->fldpostalarea = $this->AddField(
           'postalarea', new formbuildereditbox('postalarea', '', 'Postal Area'), $this->table);
         $this->fldcountyid = $this->AddField(
           'countyid', new formbuilderselect('countyid', '', 'Name of the County'), $this->table);
-        $countylist = database::RetrieveLookupList('county', FN_DESCRIPTION, FN_REF, FN_ID, "`countryid` = 2");
+        $countylist = database::RetrieveLookupList(
+          'county', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, "`countryid` = 2");
         foreach($countylist as $countyid => $countydescription) {
           $this->fldcountyid->AddValue($countyid, $countydescription);
         }
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
-        $this->buttonmode = array(BTN_CONFIRM, BTN_CANCEL);
+      case workerbase::ACT_REMOVE:
+        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove Area Cover'; 
         $this->fldareadescription = $this->AddField(
           'description', new formbuilderstatictext('description', '', 'Area to be removed'));
-        $this->action = ACT_CONFIRM;
+        $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddarea = $this->AddField(
           'addarea', new formbuilderbutton('addarea', 'Add Area'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddarea->url = $url;
 
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Areas Covered'; 
         $this->fldareascovered = $this->AddField('areascovered', $this->datagrid, $this->table);
         break;
@@ -69,7 +70,7 @@ class workeraccareascovered extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = STATUS_DELETED;
+      $status = basetable::STATUS_DELETED;
       $query =
         "UPDATE `areacovered` SET `status` = '{$status}' " .
         "WHERE `id` = {$itemid}";
@@ -84,14 +85,14 @@ class workeraccareascovered extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret =
           $this->fldareadescription->Save() +
           $this->fldpostalarea->Save() +
           $this->fldcountyid->Save();
         break;
-      case ACT_CONFIRM:
+      case workerbase::ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('description');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Item '{$caption}' removed");
@@ -119,7 +120,7 @@ class workeraccareascovered extends workerform {
       } else {
         $desc = 'All areas';
       }
-      $this->table->SetFieldValue(FN_DESCRIPTION, $desc);
+      $this->table->SetFieldValue(basetable::FN_DESCRIPTION, $desc);
     }
     return (int) $this->table->StoreChanges();
   }

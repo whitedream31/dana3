@@ -12,14 +12,14 @@ class pageguestbook extends page {
   protected $fldregistervisitors;
 
   protected function AssignPageType() {
-    $this->pgtype = PAGETYPE_GUESTBOOK;
+    $this->pgtype = self::PAGETYPE_GUESTBOOK;
   }
 
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
-    $this->AddField('groupid', DT_FK); // FK to guestbook table
-    $this->AddField('cancomment', DT_BOOLEAN, true);
-    $this->AddField('registervisitors', DT_BOOLEAN, true);
+    $this->AddField('groupid', self::DT_FK); // FK to guestbook table
+    $this->AddField('cancomment', self::DT_BOOLEAN, true);
+    $this->AddField('registervisitors', self::DT_BOOLEAN, true);
 //    $this->AddField('hascomments', DT_BOOLEAN);
   }
 

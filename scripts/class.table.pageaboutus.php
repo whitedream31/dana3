@@ -15,8 +15,8 @@ class pageaboutus extends page {
 
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
-    $this->AddField('showmap', DT_BOOLEAN, true);
-    $this->AddField('mapaddress', DT_STRING);
+    $this->AddField('showmap', self::DT_BOOLEAN, true);
+    $this->AddField('mapaddress', self::DT_STRING);
   }
 
   public function AssignFormFields($formeditor, $idref) {

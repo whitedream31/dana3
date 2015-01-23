@@ -45,8 +45,8 @@ class workerresmanbookingsettings extends workerform {
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Booking Settings';
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Settings For Bookings';
         $this->flddescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Settings Description'), $this->table);
@@ -86,10 +86,10 @@ class workerresmanbookingsettings extends workerform {
           'confirmedmessage', new formbuildertextarea('confirmedmessage', '', 'Confirmed Message'), $this->table);
         $this->fldcancelledmessage = $this->AddField(
           'cancelledmessage', new formbuildertextarea('cancelledmessage', '', 'Cancelled Message'), $this->table);
-        $this->returnidname = IDNAME_MANAGEBOOKINGS;
+        $this->returnidname = activitymanager::IDNAME_MANAGEBOOKINGS;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
         break;
@@ -98,8 +98,8 @@ class workerresmanbookingsettings extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->flddescription->Save() + $this->fldbookingtypeid->Save() +
           $this->fldworkmondaystart->Save() + $this->fldworkmondayend->Save() +
           $this->fldworktuesdaystart->Save() + $this->fldworktuesdayend->Save() +
@@ -148,7 +148,7 @@ class workerresmanbookingsettings extends workerform {
   protected function SaveToTable() {
     // check for blanks (and assign default values accordingly)
     if (IsBlank($this->flddescription->value)) {
-      $this->table->SetFieldValue(FN_DESCRIPTION, 'New Settings');
+      $this->table->SetFieldValue(basetable::FN_DESCRIPTION, 'New Settings');
     }
     if (!$this->HasHours()) {
       $this->AssignDefaultHours();
@@ -173,7 +173,7 @@ class workerresmanbookingsettings extends workerform {
         'cancelled please contact us.');
     }
     // back to parent worker
-    return $this->SaveAndReset($this->table, IDNAME_MANAGEBOOKINGS);
+    return $this->SaveAndReset($this->table, activitymanager::IDNAME_MANAGEBOOKINGS);
 //    return $this->table->StoreChanges();
   }
 
@@ -207,7 +207,8 @@ class workerresmanbookingsettings extends workerform {
     // setting type id
     $this->fldbookingtypeid->description = "Specify the type of bookings you would like to make.";
     $this->fldbookingtypeid->size = 3;
-    $bookingtypelist = database::RetrieveLookupList('bookingtype', FN_DESCRIPTION, FN_REF, FN_ID);
+    $bookingtypelist = database::RetrieveLookupList(
+      'bookingtype', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID);
     if (IsBlank($this->fldbookingtypeid->value)) {
 //      reset($bookingtypelist);
       $selectedid = false; //key($bookingtypelist);

@@ -4,6 +4,8 @@ require_once 'class.basetable.php';
 
 // newsletter subscribers
 class newslettersubscriber extends idtable {
+  const STATUS_WAITING = 'W'; // invited but not accepted yet
+  const STATUS_UNSUBSCRIBED = 'U'; // no longer subscribed
 
   function __construct($id = 0) {
     parent::__construct('newslettersubscriber', $id);
@@ -11,13 +13,13 @@ class newslettersubscriber extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('firstname', DT_STRING);
-    $this->AddField('lastname', DT_STRING);
-    $this->AddField('email', DT_STRING);
-    $this->AddField('datestarted', DT_DATETIME);
-    $this->AddField('sessionref', DT_STRING);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField('firstname', self::DT_STRING);
+    $this->AddField('lastname', self::DT_STRING);
+    $this->AddField('email', self::DT_STRING);
+    $this->AddField('datestarted', self::DT_DATETIME);
+    $this->AddField('sessionref', self::DT_STRING);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   private function GetSessionRef($prefix) {
@@ -68,12 +70,12 @@ class newslettersubscriber extends idtable {
       "(also known as MLSB), who are registered with the Data Protection Registar, " .
       "under the name of Whitedream Software.\r\n"; */
     emailhistory::SendEmailMessage(
-      ET_SUBSCRIBERINVITE, $email, $subject, $message, $replyaddress,
+      emailhistory::ET_SUBSCRIBERINVITE, $email, $subject, $message, $replyaddress,
       $account->ID()
     );
     $this->SetFieldValue('sessionref', $sessionref);
     // mark as inite sent in table
-    $this->SetFieldValue(FN_STATUS, STATUS_WAITING); // mark as invite sent - waiting
+    $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_WAITING); // mark as invite sent - waiting
     $this->StoreChanges();
 //echo "<p>MESSAGE=\n{$message}\n\nSESSIONREF='{$sessionref}'\n";
 //exit;
@@ -84,25 +86,25 @@ class newslettersubscriber extends idtable {
       $status = $this->GetFieldValue('status');
     }
     switch ($status) {
-      case STATUS_ACTIVE:
+      case self::STATUS_ACTIVE:
         $ret = 'Subscribed';
         if ($usecolour) {
           $ret = "<span style='color:#008C00'>{$ret}</span>";
         }
         break;
-      case STATUS_WAITING:
+      case self::STATUS_WAITING:
         $ret = 'Pending';
         if ($usecolour) {
           $ret = "<span style='color:#FF7F50'>{$ret}</span>";
         }
         break;
-      case STATUS_UNSUBSCRIBED:
+      case self::STATUS_UNSUBSCRIBED:
         $ret = 'Unsubscribed';
         if ($usecolour) {
           $ret = "<span style='color:#FF0000'>{$ret}</span>";
         }
         break;
-      case STATUS_DELETED:
+      case self::STATUS_DELETED:
         $ret = 'Deleted';
         if ($usecolour) {
           $ret = "<span style='color:#FF0000; font-weight: bold'>{$ret}</span>";
@@ -133,14 +135,14 @@ class newslettersubscriber extends idtable {
       'SELECT * FROM `newsletter` ' .
       "WHERE `accountid` = {$accountid} " .
       "ORDER BY `showdate` DESC";
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $coldata = array(
         'DESC' => $line['title'],
-        'SHOWDATE' => $this->FormatDateTime(DF_MEDIUMDATE, $this->GetFieldValue('startdate'), '<em>none</em>')
+        'SHOWDATE' => $this->FormatDateTime(self::DF_MEDIUMDATE, $this->GetFieldValue('startdate'), '<em>none</em>')
       );
       $datagrid->AddRow($id, $coldata, true, $actions);
     }
@@ -152,8 +154,8 @@ class newslettersubscriber extends idtable {
   // and mark them as cancelled (not shown in the control page)
   public function CheckForOldSubscribers() {
     $accountid = account::$instance->ID();
-    $status = STATUS_WAITING;
-    $cancelledstatus = STATUS_CANCELLED;
+    $status = self::STATUS_WAITING;
+    $cancelledstatus = newsletter::STATUS_CANCELLED;
     $query =
       'SELECT `id` FROM `newslettersubscriber` ' .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' AND " .

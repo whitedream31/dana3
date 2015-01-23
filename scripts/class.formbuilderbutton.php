@@ -9,7 +9,7 @@ class formbuilderbutton extends formbuildereditbox {
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = FLDTYPE_BUTTON;
+    $this->fieldtype = basetable::FLDTYPE_BUTTON;
     $this->inputtype = 'button';
     $this->size = 50;
     $this->classname = 'fieldbutton';

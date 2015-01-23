@@ -28,8 +28,8 @@ class workerresmangalleryimages extends workerform {
 //    $this->datagrid = new formbuilderdatagrid('galleryimage', '', 'Gallery Picture');
     $this->fldgalleryid = new formbuilderhidden('galleryid', $this->groupid); // //$table->GetFieldValue('galleryid'));
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Gallery Picture';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Picture Title'), $this->table);
@@ -56,14 +56,14 @@ class workerresmangalleryimages extends workerform {
 
         $this->flddescription = $this->AddField(
           'description', new formbuildertextarea('description', '', 'Description of Picture'), $this->table);
-        $this->returnidname = IDNAME_MANAGEGALLERIES; //$this->idname;
+        $this->returnidname = activitymanager::IDNAME_MANAGEGALLERIES; //$this->idname;
         $this->showroot = false;
 
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-/*        $this->buttonmode = array(BTN_BACK);
+/*        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Galleries'; 
         $this->fldgalleryimages = $this->AddField('gallery', $this->datagrid, $this->table);
         $this->fldaddimage = $this->AddField(
@@ -77,7 +77,7 @@ class workerresmangalleryimages extends workerform {
   protected function Notify($postsucceeded) {
     if ($postsucceeded) {
       echo "<p>SUCCEEDED</p>\n";
-//      $this->redirect = IDNAME_MANAGEGALLERIES;
+//      $this->redirect = activitymanager::IDNAME_MANAGEGALLERIES;
     } else {
       echo "<p>FAILED</p>\n";
     }
@@ -85,8 +85,8 @@ class workerresmangalleryimages extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldtitle->Save() + $this->fldimage->Save() + $this->flddescription->Save();
         break;
       default:
@@ -115,7 +115,7 @@ class workerresmangalleryimages extends workerform {
       }
     }
     // back to gallery worker
-    $this->SaveAndReset(false, IDNAME_MANAGEGALLERIES);
+    $this->SaveAndReset(false, activitymanager::IDNAME_MANAGEGALLERIES);
     return $ret;
   }
 
@@ -126,7 +126,7 @@ class workerresmangalleryimages extends workerform {
   }
 
   protected function AssignFieldDisplayProperties() {
-//    $this->datagridsettings->SetIDName(IDNAME_MANAGEGALLERIES);
+//    $this->datagridsettings->SetIDName(activitymanager::IDNAME_MANAGEGALLERIES);
 //    $this->datagrid->SetIDName($this->idname);
 /*    $this->NewSection(
       'galleryimage', 'Gallery Picture',

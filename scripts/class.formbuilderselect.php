@@ -11,7 +11,7 @@ class formbuilderselect extends formbuildermultivalue {
   public $nonecaption = 'None';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_SELECT, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_SELECT, $label);
   }
 
   public function SetNoneCaption($value) {

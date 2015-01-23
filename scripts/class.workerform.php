@@ -4,15 +4,15 @@
   * dana framework v.3
 */
 
-define('BTN_SUBMIT', 'sub');
-define('BTN_CANCEL', 'can');
-define('BTN_BACK', 'bk');
-define('BTN_CONFIRM', 'cf');
-
 abstract class workerform extends workerbase { // activitybase {
+  const BTN_SUBMIT = 'sub';
+  const BTN_CANCEL = 'can';
+  const BTN_BACK = 'bk';
+  const BTN_CONFIRM = 'cf';
+
   protected $table;
   protected $contextdescription = '';
-  protected $buttonmode = array(BTN_SUBMIT, BTN_CANCEL);
+  protected $buttonmode = array(self::BTN_SUBMIT, self::BTN_CANCEL);
   protected $action = false;
   protected $itemid = false;
   protected $groupid = false; // item parent
@@ -121,28 +121,28 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
       $this->AssignFieldDisplayProperties();
     } else {
       switch ($action) {
-        case ACT_EDIT:
+        case workerbase::ACT_EDIT:
           $this->DoEditor();
           break;
-        case ACT_NEW:
+        case workerbase::ACT_NEW:
           $this->DoNewItem();
           break;
-        case ACT_REMOVE:
+        case workerbase::ACT_REMOVE:
           $this->DoRemoveItem();
           break;
-        case ACT_CONFIRM:
+        case workerbase::ACT_CONFIRM:
           $this->DoConfirm();
           break;
-        case ACT_VISTOGGLE:
+        case workerbase::ACT_VISTOGGLE:
           $this->DoToggleVisibility();
           break;
-        case ACT_MOVEDOWN:
+        case workerbase::ACT_MOVEDOWN:
           $this->DoMoveItemDown();
           break;
-        case ACT_MOVEUP:
+        case workerbase::ACT_MOVEUP:
           $this->DoMoveItemup();
           break;
-        case ACT_NLSEND:
+        case workerbase::ACT_NLSEND:
           $this->DoNewsletterSend();
           break;
       }
@@ -181,8 +181,9 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
   }
 
   public function Execute() {
+//$this->ShowDebugInfo();
     if ($this->posting) {
-      if (($this->action == ACT_EDIT) || ($this->action == ACT_NEW)) {
+      if (($this->action == workerbase::ACT_EDIT) || ($this->action == workerbase::ACT_NEW)) {
         $this->CheckForBlankValues();
       }
       if (!$this->PostFields() && $this->IsValid()) {
@@ -377,16 +378,16 @@ $this->ProcessAction($this->action);
     $ret = array_merge($ret, $this->GetHiddenFields());
     // add submit / cancel
     $ret[] = "    <div class='activitysection'>";
-    if (in_array(BTN_SUBMIT, $this->buttonmode)) {
+    if (in_array(self::BTN_SUBMIT, $this->buttonmode)) {
       $ret[] = $this->GetSubmitButton();
     }
-    if (in_array(BTN_CANCEL, $this->buttonmode)) {
+    if (in_array(self::BTN_CANCEL, $this->buttonmode)) {
       $ret[] = $this->GetCancelButton();
     }
-    if (in_array(BTN_CONFIRM, $this->buttonmode)) {
+    if (in_array(self::BTN_CONFIRM, $this->buttonmode)) {
       $ret[] = $this->GetConfirmationButton();
     }
-    if (in_array(BTN_BACK, $this->buttonmode)) {
+    if (in_array(self::BTN_BACK, $this->buttonmode)) {
       $ret[] = $this->GetReturnButton();
     }
     $ret[] = "    </div>";

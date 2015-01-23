@@ -24,18 +24,19 @@ class workerresmanguestbookentry extends workerform {
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Guest-Book Entry';
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Moderate Guest-Book Entry';
         $this->fldentry = $this->AddField(
           'entry', new formbuilderstatictext('entry', '', 'Entry Details'));
         $this->fldshowonpage = $this->AddField(
           'showonpage', new formbuildercheckbox('showonpage', '', 'Show On Guest-Book Page?'));
-        $this->fldshowonpage->value = ($this->table->GetFieldValue(FN_STATUS) == STATUS_ACTIVE);
-        $this->returnidname = IDNAME_MANAGEGUESTBOOKS;
+        $this->fldshowonpage->value =
+          ($this->table->GetFieldValue(basetable::FN_STATUS) == basetable::STATUS_ACTIVE);
+        $this->returnidname = activitymanager::IDNAME_MANAGEGUESTBOOKS;
         $this->showroot = false; 
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
         break;
@@ -44,8 +45,8 @@ class workerresmanguestbookentry extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldshowonpage->Save();
         break;
       default:

@@ -19,17 +19,21 @@ function DoRunAction() {
     '       purpose but others are suited for a specific type of business.</p>' . CRNL .
     '    <p>The themes are grouped into three main areas. Click on the group name to see the themes.</p>' . CRNL .
     '    <ul>' . CRNL;
-  $suitabilitytypes = array(THEMESUITABAILTYTYPE_SIMPLE, THEMESUITABAILTYTYPE_REGULAR, THEMESUITABAILTYTYPE_ADVANCED);
+  $suitabilitytypes = array(
+    workersitechgtheme::THEMESUITABAILTYTYPE_SIMPLE,
+    workersitechgtheme::THEMESUITABAILTYTYPE_REGULAR,
+    workersitechgtheme::THEMESUITABAILTYTYPE_ADVANCED
+  );
   $ra = ReadSetting(RUNACTION, 0);
   $url = $_SERVER['PHP_SELF'] . '?ra=' . $ra . '&amp;' . THEMESUITABAILTY . '=';
   foreach($suitabilitytypes as $stid) {
     switch ($stid) {
       //case THEMESUITABAILTYTYPE_SIMPLE:
-      case THEMESUITABAILTYTYPE_REGULAR:
+      case workersitechgtheme::THEMESUITABAILTYTYPE_REGULAR:
         $stname = 'Regular';
         $stmessage = 'recommended if you have between 3 and 5 pages';
         break;
-      case THEMESUITABAILTYTYPE_ADVANCED:
+      case workersitechgtheme::THEMESUITABAILTYTYPE_ADVANCED:
         $stname = 'Advanced';
         $stmessage = 'recommended if you have lots (more than 5) pages';
         break;

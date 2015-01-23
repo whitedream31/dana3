@@ -6,6 +6,16 @@
 */
 
 abstract class workerbase {
+  const ACT_NEW = 'n';
+  const ACT_EDIT = 'e';
+  const ACT_REMOVE = 'r';
+  const ACT_CONFIRM = 'cf'; // booking
+  const ACT_CANCEL = 'cn';  // booking
+  const ACT_VISTOGGLE = 'v';
+  const ACT_MOVEDOWN = 'd';
+  const ACT_MOVEUP = 'u';
+  const ACT_NLSEND = 'ns';
+
   protected $icon;
   protected $title = 'worker title';
   protected $activitydescription = 'This is the default description';

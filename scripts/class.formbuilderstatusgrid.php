@@ -6,7 +6,7 @@ class formbuilderstatusgrid extends formbuilderbase {
   public $width = '400px';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_STATUSGRID, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_STATUSGRID, $label);
   }
 
   private function AddCells($list, $classname = '') {

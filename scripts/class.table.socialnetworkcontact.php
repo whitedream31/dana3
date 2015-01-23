@@ -21,12 +21,12 @@ class socialnetworkcontact extends idtable {
   }
 
   protected function AssignFields() {
-    $this->AddField('socialnetworktypeid', DT_FK);
-    $this->AddField('ref', DT_REF);
-    $this->AddField('username', DT_STRING);
-    $this->AddField('url', DT_STRING);
-    $this->AddField('dateadded', DT_DATE);
-    $this->AddField('visible', DT_BOOLEAN);
+    $this->AddField('socialnetworktypeid', self::DT_FK);
+    $this->AddField(self::FN_REF, self::DT_REF);
+    $this->AddField('username', self::DT_STRING);
+    $this->AddField('url', self::DT_STRING);
+    $this->AddField('dateadded', self::DT_DATE);
+    $this->AddField('visible', self::DT_BOOLEAN);
   }
 
   public function PopulateEmpty($id) {

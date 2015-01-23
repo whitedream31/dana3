@@ -14,11 +14,11 @@ class galleryitem extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('galleryid', DT_FK);
-    $this->AddField('title', DT_STRING);
-    $this->AddField('description', DT_STRING);
-    $this->AddField('largemediaid', DT_FK);
-    $this->AddField('enabled', DT_BOOLEAN);
+    $this->AddField('galleryid', self::DT_FK);
+    $this->AddField('title', self::DT_STRING);
+    $this->AddField('description', self::DT_DESCRIPTION);
+    $this->AddField('largemediaid', self::DT_FK);
+    $this->AddField('enabled', self::DT_BOOLEAN);
   }
 
   protected function AfterPopulateFields() {

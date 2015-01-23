@@ -12,14 +12,14 @@ class pagegeneral extends page {
   protected $fldmaincontent;
 
   protected function AssignPageType() {
-    $this->pgtype = PAGETYPE_GENERAL;
+    $this->pgtype = self::PAGETYPE_GENERAL;
   }
 
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
-    $this->AddField('maincontent', DT_TEXT); //, '', FLDTYPE_TEXTAREA);
-    $this->AddField('gengalleryid', DT_FK);
-    $this->AddField('galleryheight', DT_FK);
+    $this->AddField('maincontent', self::DT_TEXT); //, '', FLDTYPE_TEXTAREA);
+    $this->AddField('gengalleryid', self::DT_FK);
+    $this->AddField('galleryheight', self::DT_FK);
     //$this->AddField('gengallerystyleid', DT_FK);
   }
 

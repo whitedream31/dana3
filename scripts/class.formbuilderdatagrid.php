@@ -1,22 +1,38 @@
 <?php
 
-define('TBLOPT_IGNOREFIRSTROW', 'if');
-define('TBLOPT_TOGGLEVISIBLE', 'tv');
-define('TBLOPT_EDITABLE', ACT_EDIT);
-define('TBLOPT_DELETABLE', ACT_REMOVE);
-define('TBLOPT_MOVEDOWN', 'md');
-define('TBLOPT_MOVEUP', 'mu');
-define('TBLOPT_NEWITEM', ACT_NEW);
-define('TBLOPT_SENDNL', 'sn');
-define('TBLOPT_AUTHORISE', 'au'); // guestbook entry
+//define('TBLOPT_IGNOREFIRSTROW', 'if');
+//define('TBLOPT_TOGGLEVISIBLE', 'tv');
+//define('TBLOPT_EDITABLE', ACT_EDIT);
+//define('TBLOPT_DELETABLE', ACT_REMOVE);
+//define('TBLOPT_MOVEDOWN', 'md');
+//define('TBLOPT_MOVEUP', 'mu');
+//define('TBLOPT_NEWITEM', ACT_NEW);
+//define('TBLOPT_SENDNL', 'sn');
+//define('TBLOPT_AUTHORISE', 'au'); // guestbook entry
 
-define('ROWSTATE_ISTOP', 1);
-define('ROWSTATE_ISBOTTOM', 2);
-define('ROWSTATE_IGNORE', 4);
-define('ROWSTATE_VISHIDE', 8);
-define('ROWSTATE_VISSHOW', 16);
+//define('ROWSTATE_ISTOP', 1);
+//define('ROWSTATE_ISBOTTOM', 2);
+//define('ROWSTATE_IGNORE', 4);
+//define('ROWSTATE_VISHIDE', 8);
+//define('ROWSTATE_VISSHOW', 16);
 
 class formbuilderdatagrid extends formbuilderbase {
+  const ROWSTATE_ISTOP = 1;
+  const ROWSTATE_ISBOTTOM = 2;
+  const ROWSTATE_IGNORE = 4;
+  const ROWSTATE_VISHIDE = 8;
+  const ROWSTATE_VISSHOW = 16;
+
+  const TBLOPT_IGNOREFIRSTROW = 'if';
+  const TBLOPT_TOGGLEVISIBLE = 'tv';
+  const TBLOPT_EDITABLE = workerbase::ACT_EDIT;
+  const TBLOPT_DELETABLE = workerbase::ACT_REMOVE;
+  const TBLOPT_MOVEDOWN = 'md';
+  const TBLOPT_MOVEUP = 'mu';
+  const TBLOPT_NEWITEM = workerbase::ACT_NEW;
+  const TBLOPT_SENDNL = 'sn';
+  const TBLOPT_AUTHORISE = 'au'; // guestbook entry
+
   protected $script;
   public $idname;
 //  protected $table; // idtable
@@ -28,7 +44,7 @@ class formbuilderdatagrid extends formbuilderbase {
   protected $rowcount;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_DATAGRID, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_DATAGRID, $label);
   }
 
   public function SetIDName($idname) {
@@ -73,55 +89,55 @@ class formbuilderdatagrid extends formbuilderbase {
     $icon = false;
     $title = '';
     $ret = '';
-    if (!($state & ROWSTATE_IGNORE)) {
+    if (!($state & self::ROWSTATE_IGNORE)) {
       switch ($action) {
-        case TBLOPT_DELETABLE:
+        case self::TBLOPT_DELETABLE:
           $icon = 'act_remove.png';
           $title = 'click to remove';
           break;
-        case TBLOPT_TOGGLEVISIBLE:
-          if ($state & ROWSTATE_VISHIDE) {
+        case self::TBLOPT_TOGGLEVISIBLE:
+          if ($state & self::ROWSTATE_VISHIDE) {
             $icon = 'act_hide.png';
             $title = 'click to EXCLUDE from the website';
-          } else if ($state & ROWSTATE_VISSHOW) {
+          } else if ($state & self::ROWSTATE_VISSHOW) {
             $icon = 'act_show.png';
             $title = 'click to INCLUDE in the website';
           }
           break;
-        case TBLOPT_MOVEDOWN:
-          if (!($state & ROWSTATE_ISBOTTOM)) {
+        case self::TBLOPT_MOVEDOWN:
+          if (!($state & self::ROWSTATE_ISBOTTOM)) {
             $icon = 'act_movedn.png';
             $title = 'click to move down the list';
-            $action = ACT_MOVEDOWN;
+            $action = workerbase::ACT_MOVEDOWN;
           }
           break;
-        case TBLOPT_MOVEUP:
-          if (!($state & ROWSTATE_ISTOP)) {
+        case self::TBLOPT_MOVEUP:
+          if (!($state & self::ROWSTATE_ISTOP)) {
             $icon = 'act_moveup.png';
             $title = 'click to move up the list';
-            $action = ACT_MOVEUP;
+            $action = workerbase::ACT_MOVEUP;
           }
           break;
       }
     }
     switch ($action) {
-      case TBLOPT_EDITABLE:
+      case self::TBLOPT_EDITABLE:
         $icon = 'act_edit.png';
         $title = 'click to edit';
-        $action = ACT_EDIT;
+        $action = workerbase::ACT_EDIT;
         break;
-      case TBLOPT_NEWITEM:
+      case self::TBLOPT_NEWITEM:
         $icon = 'act_additem.png';
         $title = 'click to add';
-        $action = ACT_NEW;
+        $action = workerbase::ACT_NEW;
         break;
-      case TBLOPT_DELETABLE:
-        $action = ACT_REMOVE;
+      case self::TBLOPT_DELETABLE:
+        $action = workerbase::ACT_REMOVE;
         break;
-      case TBLOPT_SENDNL:
+      case self::TBLOPT_SENDNL:
         $icon = 'act_nlsend.png';
         $title = 'click to send the newsletter to subscribers';
-        $action = ACT_NLSEND;
+        $action = workerbase::ACT_NLSEND;
         break;
     }
     if ($icon) {
@@ -174,8 +190,8 @@ class formbuilderdatagrid extends formbuilderbase {
     $actions = $row['actions'];
     $visible = $row['visible'];
     $options = $row['options'];
-    $this->ignorefirstrow = (in_array(TBLOPT_IGNOREFIRSTROW, $actions));
-    $showvisible = (in_array(TBLOPT_TOGGLEVISIBLE, $actions));
+    $this->ignorefirstrow = (in_array(self::TBLOPT_IGNOREFIRSTROW, $actions));
+    $showvisible = (in_array(self::TBLOPT_TOGGLEVISIBLE, $actions));
     $isfirst = ($idx == 1);
     $issecond = ($idx == 2);
     $islast = ($idx == $this->rowcount);
@@ -185,32 +201,32 @@ class formbuilderdatagrid extends formbuilderbase {
       $col = ((isset($columns[$key]))) ? $columns[$key] : '';
       if ($column['editable']) {
         $parentid = (isset($options['parentid'])) ? $options['parentid'] : false;
-        $link = $this->GetActionButtons(TBLOPT_EDITABLE, 0, $id, $col, $parentid);
+        $link = $this->GetActionButtons(self::TBLOPT_EDITABLE, 0, $id, $col, $parentid);
         $list[] = "<td class='editable'>{$link}</td>";
       } elseif ($key == 'ACT') {
         $state = 0;
         if ($this->ignorefirstrow) {
           if ($isfirst) {
-            $state += ROWSTATE_IGNORE;
+            $state += self::ROWSTATE_IGNORE;
           } else if ($issecond) {
-            $state += ROWSTATE_ISTOP;
+            $state += self::ROWSTATE_ISTOP;
           }
         } else {
           if ($isfirst) {
-            $state += ROWSTATE_ISTOP;
+            $state += self::ROWSTATE_ISTOP;
           }
         }
         if ($showvisible) {
-          if (!($state & ROWSTATE_IGNORE)) {
+          if (!($state & self::ROWSTATE_IGNORE)) {
             if ($visible) {
-              $state += ROWSTATE_VISHIDE;
+              $state += self::ROWSTATE_VISHIDE;
             } else {
-              $state += ROWSTATE_VISSHOW;
+              $state += self::ROWSTATE_VISSHOW;
             }
           }
         }
         if ($islast) {
-          $state += ROWSTATE_ISBOTTOM;
+          $state += self::ROWSTATE_ISBOTTOM;
         }
         $hasaction = isset($column['actions']) && $column['actions'];
         $colactions = ($hasaction) ? $column['actions'] : $actions;

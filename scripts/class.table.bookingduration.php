@@ -11,9 +11,9 @@ class bookingduration extends lookuptable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('minutes', DT_INTEGER);
-    $this->AddField('hours', DT_INTEGER);
-    $this->AddField('days', DT_INTEGER);
+    $this->AddField('minutes', self::DT_INTEGER);
+    $this->AddField('hours', self::DT_INTEGER);
+    $this->AddField('days', self::DT_INTEGER);
   }
 
   protected function AfterPopulateFields() {

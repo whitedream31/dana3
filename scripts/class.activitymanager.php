@@ -11,6 +11,36 @@ note:
 */
 
 class activitymanager {
+  const SESS_CURRENTID = 'idgroup'; // section to show in control page
+  const SESS_GUEST = 'guest'; // guest id when using the guestbooks
+  // activity types
+  const IDNAME_CHANGEORGDETAILS = 'accchgorgdet';
+  const IDNAME_CHANGECONDETAILS = 'accchgcondet';
+  const IDNAME_CHANGELOGINPWD = 'accchglogin';
+  const IDNAME_MANAGEAREASCOVERED = 'accmanareacovered';
+  const IDNAME_MANAGEHOURSAVAILABLE = 'accmanhoursavail';
+  const IDNAME_MANAGEADDRESSES = 'accmanaddress';
+  const IDNAME_MANAGEPAGES = 'pgman';
+  const IDNAME_SITEPREVIEW = 'sitepreview';
+  const IDNAME_CHANGETHEME = 'sitechgtheme';
+  const IDNAME_SITEUPDATE = 'siteupdate';
+  const IDNAME_MANAGERATINGS = 'sitemanratings';
+  const IDNAME_MANAGEGALLERIES = 'resmangalleries';
+  const IDNAME_MANAGEGALLERYIMAGES = 'resmangalleryimages';
+  const IDNAME_MANAGEFILES = 'resmanfiles';
+  const IDNAME_MANAGEARTICLES = 'resmanarticles';
+  const IDNAME_MANAGENEWSLETTERS = 'resmannewsletters';
+  const IDNAME_MANAGENEWSLETTERITEMS = 'resmannewsletteritems';
+  const IDNAME_MANAGENEWSLETTERSUBSCRIBERS = 'resmannewslettersubscribers';
+  const IDNAME_MANAGEBOOKINGS = 'resmanbookings';
+  const IDNAME_MANAGEBOOKINGSETTINGS = 'resmanbookingsettings';
+  const IDNAME_MANAGEGUESTBOOKS = 'resmanguestbooks';
+  const IDNAME_MANAGEGUESTBOOKSENTRIES = 'resmanguestbookentry';
+  const IDNAME_MANAGEPRIVATEAREAS = 'resmanprivateareas';
+  const IDNAME_MANAGEPRIVATEAREAMEMBERS = 'resmanprivateareamembers';
+  const IDNAME_MANAGEPRIVATEAREAPAGES = 'resmanprivateareapages';
+  const IDNAME_MANAGECALENDARDATES = 'resmancalendardates';
+
   protected $errorlist = array();
   protected $message = array();
   protected $accountgroup;
@@ -42,29 +72,29 @@ class activitymanager {
       'accountdetails', 'images/sect_account.png', 'Account Details',
       'Change your account information, such as your name and contact details.');
     $this->AddItem(
-      $this->accountgroup, IDNAME_CHANGEORGDETAILS,
+      $this->accountgroup, self::IDNAME_CHANGEORGDETAILS,
       'Change Organisation Details', 'business name, categories etc');
     $this->AddItem(
-      $this->accountgroup, IDNAME_CHANGECONDETAILS,
+      $this->accountgroup, self::IDNAME_CHANGECONDETAILS,
       'Change Contact Details', 'your name/email address etc');
     $this->AddItem(
-      $this->accountgroup, IDNAME_CHANGELOGINPWD,
+      $this->accountgroup, self::IDNAME_CHANGELOGINPWD,
       'Change Login Password', 'the password to login into this site');
     $this->AddItem(
-      $this->accountgroup, IDNAME_MANAGEAREASCOVERED,
+      $this->accountgroup, self::IDNAME_MANAGEAREASCOVERED,
       'Manage Areas Covered', 'areas you operate your business');
     $this->AddItem(
-      $this->accountgroup, IDNAME_MANAGEHOURSAVAILABLE,
+      $this->accountgroup, self::IDNAME_MANAGEHOURSAVAILABLE,
       'Manage Hours Available', 'hours your business is open');
 //    $this->AddItem(
-//      $this->accountgroup, IDNAME_MANAGEADDRESSES,
+//      $this->accountgroup, self::IDNAME_MANAGEADDRESSES,
 //      'Manage Addresses', 'addresses you run your business from');
     // page group
     $this->pagegroup = $this->AddGroup(
       'pagemanager', 'images/sect_pages.png', 'Page Management',
       'Add, edit or delete your pages that make up your mini-website.');
     $this->AddItem(
-      $this->pagegroup, IDNAME_MANAGEPAGES,
+      $this->pagegroup, self::IDNAME_MANAGEPAGES,
       'Manage Pages', 'web-pages that make up you minisite');
 // datagrid here
 // Add New Page
@@ -73,44 +103,44 @@ class activitymanager {
       'sitemanager', 'images/sect_site.png', 'Site Management',
       'Preview your mini-website or change the look of your mini-website from dozens of designs.');
     $this->AddItem(
-      $this->sitegroup, IDNAME_SITEPREVIEW,
+      $this->sitegroup, self::IDNAME_SITEPREVIEW,
       'Preview Mini-Site', 'your minisite as it looks now');
     $this->AddItem(
-      $this->sitegroup, IDNAME_CHANGETHEME,
+      $this->sitegroup, self::IDNAME_CHANGETHEME,
       'Change Theme', 'appearance of your minisite');
     $this->AddItem(
-      $this->sitegroup, IDNAME_SITEUPDATE,
+      $this->sitegroup, self::IDNAME_SITEUPDATE,
       'Update Mini-Site', 'make recent changes live');
     $this->AddItem(
-      $this->sitegroup, IDNAME_MANAGERATINGS,
+      $this->sitegroup, self::IDNAME_MANAGERATINGS,
       'Manage Ratings', 'read / respond to customer comments');
     // resource group
     $this->resourcegroup = $this->AddGroup(
       'resource', 'images/sect_resources.png', 'Resources',
       'Resources are the features that your pages use to make your mini-website useful.');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGEGALLERIES,
+      $this->resourcegroup, self::IDNAME_MANAGEGALLERIES,
       'Manage Galleries', 'add/edit/remove pictures');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGEFILES,
+      $this->resourcegroup, self::IDNAME_MANAGEFILES,
       'Manage Downloadable Files', 'add/remove files that can be downloaded by visitors');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGEARTICLES,
+      $this->resourcegroup, self::IDNAME_MANAGEARTICLES,
       'Manage Articles', 'blogs/articles for visitors to read');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGENEWSLETTERS,
+      $this->resourcegroup, self::IDNAME_MANAGENEWSLETTERS,
       'Manage Newsletters', 'subscribers and add/edit/remove newsletters');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGEBOOKINGS,
+      $this->resourcegroup, self::IDNAME_MANAGEBOOKINGS,
       'Manage Bookings', 'review recent and upcoming appointments');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGEGUESTBOOKS,
+      $this->resourcegroup, self::IDNAME_MANAGEGUESTBOOKS,
       'Manage Guestbooks', 'read/remove comments from visitors');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGEPRIVATEAREAS,
+      $this->resourcegroup, self::IDNAME_MANAGEPRIVATEAREAS,
       'Manage Private Areas', 'add/edit/remove private pages and members');
     $this->AddItem(
-      $this->resourcegroup, IDNAME_MANAGECALENDARDATES,
+      $this->resourcegroup, self::IDNAME_MANAGECALENDARDATES,
       'Manage Special Dates', 'important dates for your business');
   }
 
@@ -179,7 +209,7 @@ class activitymanager {
 
   public function ShowAccordion() {
     if ($this->showroot) {
-      $active = ($_SESSION[SESS_IDGROUP]) ? $_SESSION[SESS_IDGROUP] : 1;
+      $active = ($_SESSION[self::SESS_IDGROUP]) ? $_SESSION[self::SESS_IDGROUP] : 1;
       echo implode("\n", array(
         "  <script type='text/javascript'>",
         "\$('#activitycontent').accordion({",
@@ -252,7 +282,7 @@ class activitymanager {
   }
 
   public function Show() {
-    $idname = GetGet('in', GetPost('in', ''));
+    $idname = GetGet('in', GetPost('in', self::IDNAME_CHANGEORGDETAILS)); //''));
     $lines = $this->ProcessByIDName($idname);
     $ret = array();
 

@@ -11,20 +11,33 @@ N - newsletters from accounts
 T - test message (only sent to me)
 */
 
-define('ET_NOTASSIGNED', '?'); // - not assigned
-define('ET_SYSTEM', 'S'); // - system messages to accounts (eg. welcome)
-define('ET_VISITOR', 'V'); // - messages to visitors
-define('ET_ACCCONTACT', 'C'); // - contact messages from account contact pages
-define('ET_ADMINCONTACT', 'M'); // - contact messages from mlsb.org to me
-define('ET_SPONSOR', 'P'); // - sponsor message - just added, confirmed
-define('ET_NEWSLETTER', 'N'); // - newsletters from accounts
-define('ET_SUBSCRIBERINVITE', 'I'); // - newsletter subscriber invite sent
-define('ET_RATED', 'R'); // - business rated
-define('ET_TEST', 'T'); // - test message (only sent to me)
+//define('ET_NOTASSIGNED', '?'); // - not assigned
+//define('ET_SYSTEM', 'S'); // - system messages to accounts (eg. welcome)
+//define('ET_VISITOR', 'V'); // - messages to visitors
+//define('ET_ACCCONTACT', 'C'); // - contact messages from account contact pages
+//define('ET_ADMINCONTACT', 'M'); // - contact messages from mlsb.org to me
+//define('ET_SPONSOR', 'P'); // - sponsor message - just added, confirmed
+//define('ET_NEWSLETTER', 'N'); // - newsletters from accounts
+//define('ET_SUBSCRIBERINVITE', 'I'); // - newsletter subscriber invite sent
+//define('ET_BOOKINGNOTIFICATION', 'B'); // send notifications for provisional booking
+//define('ET_RATED', 'R'); // - business rated
+//define('ET_TEST', 'T'); // - test message (only sent to me)
 
 define('EMAIL_SUPPORT', 'MLSB Support<support@mylocalsmallbusiness.com>');
 
 class emailhistory extends idtable {
+  const ET_NOTASSIGNED = '?'; // - not assigned
+  const ET_SYSTEM = 'S'; // - system messages to accounts (eg. welcome)
+  const ET_VISITOR = 'V'; // - messages to visitors
+  const ET_ACCCONTACT = 'C'; // - contact messages from account contact pages
+  const ET_ADMINCONTACT = 'M'; // - contact messages from mlsb.org to me
+  const ET_SPONSOR = 'P'; // - sponsor message - just added, confirmed
+  const ET_NEWSLETTER = 'N'; // - newsletters from accounts
+  const ET_SUBSCRIBERINVITE = 'I'; // - newsletter subscriber invite sent
+  const ET_BOOKINGNOTIFICATION = 'B'; // send notifications for provisional booking
+  const ET_RATED = 'R'; // - business rated
+  const ET_TEST = 'T'; // - test message (only sent to me)
+
   public $accountid;
   public $visitor;
   public $subject;
@@ -37,15 +50,15 @@ class emailhistory extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField('accountid', DT_FK);
-    $this->visitorid = $this->AddField('visitorid', DT_FK);
-    $this->emailtype = $this->AddField('emailtype', DT_STRING);
-    $this->subject = $this->AddField('subject', DT_STRING);
-    $this->stamp = $this->AddField('stamp', DT_DATETIME);
+    $this->accountid = $this->AddField('accountid', self::DT_FK);
+    $this->visitorid = $this->AddField('visitorid', self::DT_FK);
+    $this->emailtype = $this->AddField('emailtype', self::DT_STRING);
+    $this->subject = $this->AddField('subject', self::DT_STRING);
+    $this->stamp = $this->AddField('stamp', self::DT_DATETIME);
   }
 
   protected function AssignDefaultFieldValues() {
-    $this->AssignFieldDefaultValue('emailtype', ET_NOTASSIGNED, true);
+    $this->AssignFieldDefaultValue('emailtype', emailhistory::ET_NOTASSIGNED, true);
   }
 
   public function Show() {
@@ -57,23 +70,23 @@ class emailhistory extends idtable {
       $ty = $this->GetFieldValue('emailtype');
     }
     switch ($ty) {
-      case ET_SYSTEM: // 'S' - system messages to accounts (eg. welcome)
+      case emailhistory::ET_SYSTEM: // 'S' - system messages to accounts (eg. welcome)
         $ret = 'System'; break;
-      case ET_VISITOR: // 'V' - messages to visitors
+      case emailhistory::ET_VISITOR: // 'V' - messages to visitors
         $ret = 'Visitor'; break;
-      case ET_ACCCONTACT: //'C' - contact messages from account contact pages
+      case emailhistory::ET_ACCCONTACT: //'C' - contact messages from account contact pages
         $ret = 'Acc Contact'; break;
-      case ET_ADMINCONTACT: //'M' - contact messages from mlsb.org to me
+      case emailhistory::ET_ADMINCONTACT: //'M' - contact messages from mlsb.org to me
         $ret = 'Adm Contact'; break;
-      case ET_SPONSOR: //'P' - sponsor message - just added, confirmed
+      case emailhistory::ET_SPONSOR: //'P' - sponsor message - just added, confirmed
         $ret = 'Sponsor'; break;
-      case ET_NEWSLETTER: //'N' - newsletters from accounts
+      case emailhistory::ET_NEWSLETTER: //'N' - newsletters from accounts
         $ret = 'Newsletter'; break;
-      case ET_SUBSCRIBERINVITE: //'I' - newsletter subscriber (invite sent)
+      case emailhistory::ET_SUBSCRIBERINVITE: //'I' - newsletter subscriber (invite sent)
         $ret = 'Subscriber'; break;
-      case ET_RATED: // 'R' - business rated
+      case emailhistory::ET_RATED: // 'R' - business rated
         $ret = 'Rated'; break;
-      case ET_TEST: //'T' - test message (only sent to me)
+      case emailhistory::ET_TEST: //'T' - test message (only sent to me)
         $ret = 'Test'; break;
       default:
         $ret = 'Not assigned'; // ET_NOTASSIGNED - not assigned

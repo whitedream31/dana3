@@ -26,7 +26,7 @@ class wsm_guestbookpage extends websitemanager {
     $guestbook = new guestbook($groupid);
     if ($guestbook->exists) {
       $entrylist = guestbookentry::GetList($groupid);
-      $guestbookheading = $guestbook->GetFieldValue(FN_DESCRIPTION);
+      $guestbookheading = $guestbook->GetFieldValue(basetable::FN_DESCRIPTION);
       if (!$guestbookheading) {
         $guestbookheading = 'Guest Book';
       }

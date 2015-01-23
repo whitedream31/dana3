@@ -11,14 +11,14 @@ class media extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('imgid', DT_FK);
-    $this->AddField('imgtype', DT_STRING);
-    $this->AddField('imgsize', DT_INTEGER);
-    $this->AddField('height', DT_INTEGER);
-    $this->AddField('imgname', DT_STRING);
-    $this->AddField('originalname', DT_STRING);
-    $this->AddField('thumbnail', DT_STRING);
+    $this->AddField(self::FN_ACCOUNTID, self::DT_FK);
+    $this->AddField('imgid', self::DT_FK);
+    $this->AddField('imgtype', self::DT_STRING);
+    $this->AddField('imgsize', self::DT_INTEGER);
+    $this->AddField('height', self::DT_INTEGER);
+    $this->AddField('imgname', self::DT_STRING);
+    $this->AddField('originalname', self::DT_STRING);
+    $this->AddField('thumbnail', self::DT_STRING);
   }
 
 /*  public function StoreChanges() {

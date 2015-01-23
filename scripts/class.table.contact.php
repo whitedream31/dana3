@@ -28,32 +28,32 @@ class contact extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('title', DT_STRING);
-    $this->AddField('firstname', DT_STRING);
-    $this->AddField('lastname', DT_STRING);
-    $this->AddField('username', DT_STRING);
-    $this->AddField('password', DT_STRING);
-    $this->AddField('changepassword', DT_BOOLEAN);
-    $this->AddField('securityquestion', DT_STRING);
-    $this->AddField('securityanswer', DT_STRING);
-    $this->AddField('displayname', DT_STRING);
-    $this->AddField('position', DT_STRING);
-    $this->AddField('address', DT_STRING);
-    $this->AddField('town', DT_STRING);
-    $this->AddField('county', DT_STRING);
-    $this->AddField('countyid', DT_FK);
-    $this->AddField('countryid', DT_FK);
-    $this->AddField('postcode', DT_STRING);
-    $this->AddField('onlineonly', DT_BOOLEAN);
-    $this->AddField('telephone', DT_STRING);
-    $this->AddField('telephone2', DT_STRING);
-    $this->AddField('telephone3', DT_STRING);
-    $this->AddField('mobile', DT_STRING);
-    $this->AddField('fax', DT_STRING);
-    $this->AddField('email', DT_STRING);
-    $this->AddField('newsletter', DT_BOOLEAN);
-    $this->AddField('notifyrating', DT_BOOLEAN);
-    $this->AddField('datecreated', DT_DATETIME);
+    $this->AddField('title', self::DT_STRING);
+    $this->AddField('firstname', self::DT_STRING);
+    $this->AddField('lastname', self::DT_STRING);
+    $this->AddField('username', self::DT_STRING);
+    $this->AddField('password', self::DT_STRING);
+    $this->AddField('changepassword', self::DT_BOOLEAN);
+    $this->AddField('securityquestion', self::DT_STRING);
+    $this->AddField('securityanswer', self::DT_STRING);
+    $this->AddField('displayname', self::DT_STRING);
+    $this->AddField('position', self::DT_STRING);
+    $this->AddField('address', self::DT_STRING);
+    $this->AddField('town', self::DT_STRING);
+    $this->AddField('county', self::DT_STRING);
+    $this->AddField('countyid', self::DT_FK);
+    $this->AddField('countryid', self::DT_FK);
+    $this->AddField('postcode', self::DT_STRING);
+    $this->AddField('onlineonly', self::DT_BOOLEAN);
+    $this->AddField('telephone', self::DT_STRING);
+    $this->AddField('telephone2', self::DT_STRING);
+    $this->AddField('telephone3', self::DT_STRING);
+    $this->AddField('mobile', self::DT_STRING);
+    $this->AddField('fax', self::DT_STRING);
+    $this->AddField('email', self::DT_STRING);
+    $this->AddField('newsletter', self::DT_BOOLEAN);
+    $this->AddField('notifyrating', self::DT_BOOLEAN);
+    $this->AddField('datecreated', self::DT_DATETIME);
   }
 
   protected function AfterPopulateFields() {
@@ -201,7 +201,7 @@ class contact extends idtable {
       $accountid = $account->ID();
       $businessname = $account->GetFieldValue('businessname');
       emailhistory::SendEmailMessage(
-        ET_ACCCONTACT, $email, $sendersubject, $message, $senderemail, $accountid);
+        emailhistory::ET_ACCCONTACT, $email, $sendersubject, $message, $senderemail, $accountid);
       // send message to admin
       $msg = array(
         "Message sent from contact page of '{$businessname}'",
@@ -212,7 +212,8 @@ class contact extends idtable {
         $message
       );
       emailhistory::SendSystemEmailMessage(
-        ET_ACCCONTACT, "Contact Message ({$businessname})", ArrayToString($msg), $accountid, false, false);
+        emailhistory::ET_ACCCONTACT, "Contact Message ({$businessname})",
+        ArrayToString($msg), $accountid, false, false);
     }
     //SendContactMessage($contactemail, $email, $contactsubject, $contactmessage);
   }
@@ -220,8 +221,9 @@ class contact extends idtable {
   public function ChangePassword($newpassword, $temponly = false) {
     $changepassword = ($temponly ? 1 : 0);
     $password = addslashes($newpassword);
-    $query = 'UPDATE `contact` ' . 'SET `changepassword` = ' . $changepassword . ', `password` = "' . $password . '" ';
-    'WHERE `id` = ' . $this->ID();
+    $query =
+      "UPDATE `contact` SET `changepassword` = {$changepassword}, `password` = '{$password}' " .
+      'WHERE `id` = ' . $this->ID();
     database::$instance->Query($query) or die('Failed whilst updating password in contact table: ' . mysql_error());
     /*    if (account::$instance->FindByContactID($this->id->value))
      {

@@ -32,23 +32,23 @@ class workerresmanprivateareas extends workerform {
     $this->contextdescription = 'private area management';
     $this->datagrid = new formbuilderdatagrid('privatearea', '', 'Private Areas');
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
-        $this->title = (($this->action == ACT_NEW) ? 'Create a New' : 'Modify') . ' Private Area';
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
+        $this->title = (($this->action == workerbase::ACT_NEW) ? 'Create a New' : 'Modify') . ' Private Area';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Title of Private Area'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Private Areas'; 
         $this->fldprivateareas = $this->AddField('privateareas', $this->datagrid, $this->table);
         $this->fldaddprivatearea = $this->AddField(
           'addprivatearea', new formbuilderbutton('addprivatearea', 'Add New Private Area'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddprivatearea->url = $url;
         break;
     }
@@ -56,8 +56,8 @@ class workerresmanprivateareas extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldtitle->Save();
         break;
       default:
@@ -89,7 +89,7 @@ class workerresmanprivateareas extends workerform {
     $this->pagegrid->AddColumn('PAGETYPE', 'Page Type', false);
     $list = $this->table->linkedpages;
     if ($list) {
-      $actions = array(TBLOPT_DELETABLE);
+      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
       foreach($list as $page) {
         //$status = $this->table->StatusAsString();
         $coldata = array(
@@ -108,7 +108,7 @@ class workerresmanprivateareas extends workerform {
     $this->membergrid->AddColumn('EMAIL', 'E-Mail', false);
     $list = $this->table->linkedmembers;
     if ($list) {
-      $actions = array(TBLOPT_DELETABLE);
+      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
       foreach($list as $member) {
         //$status = $this->table->StatusAsString();
         $coldata = array(
@@ -139,7 +139,7 @@ class workerresmanprivateareas extends workerform {
     $this->AssignFieldToSection('privatearea', 'title');
     // page grid
     $this->pagegrid = new formbuilderdatagrid('pagegrid', '', 'Pages');
-    $this->pagegrid->SetIDName(IDNAME_MANAGEPRIVATEAREAPAGES);
+    $this->pagegrid->SetIDName(activitymanager::IDNAME_MANAGEPRIVATEAREAPAGES);
     $this->PopulatePrivatePagesGrid();
     $this->fldpagegrid = $this->AddField('pagegrid', $this->pagegrid);
     $this->fldpagegrid->description = 'Your pages available with this private area.';
@@ -147,12 +147,12 @@ class workerresmanprivateareas extends workerform {
     // add page
     $this->fldaddpage = $this->AddField(
       'addpage', new formbuilderbutton('addpage', 'Assign Page To Private Area'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . IDNAME_MANAGEPRIVATEAREAPAGES . '&act=' . ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEPRIVATEAREAPAGES . '&act=' . workerbase::ACT_NEW;
     $this->fldaddpage->url = $url;
     $this->AssignFieldToSection('pagegrid', 'addpage');
     // member grid
     $this->membergrid = new formbuilderdatagrid('PopulatePrivateMembersGrid();grid', '', 'Members');
-    $this->membergrid->SetIDName(IDNAME_MANAGEPRIVATEAREAMEMBERS);
+    $this->membergrid->SetIDName(activitymanager::IDNAME_MANAGEPRIVATEAREAMEMBERS);
     $this->PopulatePrivateMembersGrid();
     $this->fldmembergrid = $this->AddField('membergrid', $this->membergrid);
     $this->fldmembergrid->description = 'The members who can access this private area after logging in.';
@@ -160,7 +160,7 @@ class workerresmanprivateareas extends workerform {
     // add member
     $this->fldaddmember = $this->AddField(
       'addmember', new formbuilderbutton('addmember', 'Add New Member'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . IDNAME_MANAGEPRIVATEAREAMEMBERS . '&act=' . ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEPRIVATEAREAMEMBERS . '&act=' . workerbase::ACT_NEW;
     $this->fldaddmember->url = $url;
     $this->AssignFieldToSection('membergrid', 'addmember');
   }

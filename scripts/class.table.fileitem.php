@@ -17,15 +17,15 @@ class fileitem extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('title', DT_STRING);
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('filename', DT_STRING);
-    $this->AddField('filetypeid', DT_FK);
-    $this->AddField('filesize', DT_INTEGER);
-    $this->AddField(FN_DESCRIPTION, DT_STRING);
-    $this->AddField('stampadded', DT_DATETIME);
-    $this->AddField('stampupdated', DT_DATETIME);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('title', self::DT_STRING);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField('filename', self::DT_STRING);
+    $this->AddField('filetypeid', self::DT_FK);
+    $this->AddField('filesize', self::DT_INTEGER);
+    $this->AddField(basetable::FN_DESCRIPTION, self::DT_STRING);
+    $this->AddField('stampadded', self::DT_DATETIME);
+    $this->AddField('stampupdated', self::DT_DATETIME);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function GetFileTypeDescription() {
@@ -56,7 +56,7 @@ class fileitem extends idtable {
   }
 
   protected function GetLastUpdateAsString() {
-    return $this->FormatDateTime(DF_LONGDATETIME, $this->GetFieldValue('stampupdated'));
+    return $this->FormatDateTime(self::DF_LONGDATETIME, $this->GetFieldValue('stampupdated'));
   }
 
   protected function AfterPopulateFields() {
@@ -118,7 +118,7 @@ class fileitem extends idtable {
 
   public function GetCurrentList($showimg = false, $islistitem = true, $linkprefix = '') {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query =
       'SELECT i.*, t.`iconurl`, t.`description` AS filetypedesc FROM `fileitem` i ' .
       'INNER JOIN `filetype` t ON i.`filetypeid` = t.`id` ' .

@@ -21,37 +21,37 @@ class hours extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField(FN_ACCOUNTID, DT_FK);
-    $this->is24hrs = $this->AddField('is24hrs', DT_BOOLEAN);
-    $this->monday = $this->AddField('monday', DT_STRING);
-    $this->tuesday = $this->AddField('tuesday', DT_STRING);
-    $this->wednesday = $this->AddField('wednesday', DT_STRING);
-    $this->thursday = $this->AddField('thursday', DT_STRING);
-    $this->friday = $this->AddField('friday', DT_STRING);
-    $this->saturday = $this->AddField('saturday', DT_STRING);
-    $this->sunday = $this->AddField('sunday', DT_STRING);
-    $this->description = $this->AddField('description', DT_STRING);
-    $this->comments = $this->AddField('comments', DT_TEXT);
-    $this->active = $this->AddField('active', DT_BOOLEAN);
+    $this->accountid = $this->AddField(basetable::FN_ACCOUNTID, self::DT_FK);
+    $this->is24hrs = $this->AddField('is24hrs', self::DT_BOOLEAN);
+    $this->monday = $this->AddField('monday', self::DT_STRING);
+    $this->tuesday = $this->AddField('tuesday', self::DT_STRING);
+    $this->wednesday = $this->AddField('wednesday', self::DT_STRING);
+    $this->thursday = $this->AddField('thursday', self::DT_STRING);
+    $this->friday = $this->AddField('friday', self::DT_STRING);
+    $this->saturday = $this->AddField('saturday', self::DT_STRING);
+    $this->sunday = $this->AddField('sunday', self::DT_STRING);
+    $this->description = $this->AddField('description', self::DT_STRING);
+    $this->comments = $this->AddField('comments', self::DT_TEXT);
+    $this->active = $this->AddField('active', self::DT_BOOLEAN);
   }
 
   public function AssignFormFields($formeditor, $idref) {
     // business category section
     $formeditor->AssignActiveFieldSet(FS_OPENHOURS, 'Opening Hours');
     // - opening hours
-    $monday = $formeditor->AddDataField($this, 'monday', 'Monday', FLDTYPE_EDITBOX, 50);
+    $monday = $formeditor->AddDataField($this, 'monday', 'Monday', self::FLDTYPE_EDITBOX, 50);
     $monday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
-    $tuesday = $formeditor->AddDataField($this, 'tuesday', 'Tuesday', FLDTYPE_EDITBOX, 50);
+    $tuesday = $formeditor->AddDataField($this, 'tuesday', 'Tuesday', self::FLDTYPE_EDITBOX, 50);
     $tuesday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
-    $wednesday = $formeditor->AddDataField($this, 'wednesday', 'Wednesday', FLDTYPE_EDITBOX, 50);
+    $wednesday = $formeditor->AddDataField($this, 'wednesday', 'Wednesday', self::FLDTYPE_EDITBOX, 50);
     $wednesday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
-    $thursday = $formeditor->AddDataField($this, 'thursday', 'Thursday', FLDTYPE_EDITBOX, 50);
+    $thursday = $formeditor->AddDataField($this, 'thursday', 'Thursday', self::FLDTYPE_EDITBOX, 50);
     $thursday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
-    $friday = $formeditor->AddDataField($this, 'friday', 'Friday', FLDTYPE_EDITBOX, 50);
+    $friday = $formeditor->AddDataField($this, 'friday', 'Friday', self::FLDTYPE_EDITBOX, 50);
     $friday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
-    $saturday = $formeditor->AddDataField($this, 'saturday', 'Saturday', FLDTYPE_EDITBOX, 50);
+    $saturday = $formeditor->AddDataField($this, 'saturday', 'Saturday', self::FLDTYPE_EDITBOX, 50);
     $saturday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
-    $sunday = $formeditor->AddDataField($this, 'sunday', 'Sunday', FLDTYPE_EDITBOX, 50);
+    $sunday = $formeditor->AddDataField($this, 'sunday', 'Sunday', self::FLDTYPE_EDITBOX, 50);
     $sunday->description = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
   }
 
@@ -91,7 +91,7 @@ class hours extends idtable {
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $isactive = $line['active'];
-      $actions = ($isactive) ? array() : array(TBLOPT_DELETABLE);
+      $actions = ($isactive) ? array() : array(formbuilderdatagrid::TBLOPT_DELETABLE);
       $coldata = array(
         'DESC' => $line['description'],
         'ACTIVE' => ($isactive) ? 'YES' : 'no'

@@ -14,15 +14,15 @@ class pagegallery extends page {
   protected $fldimagesperpage;
 
   protected function AssignPageType() {
-    $this->pgtype = PAGETYPE_GALLERY;
+    $this->pgtype = self::PAGETYPE_GALLERY;
   }
 
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
     //hascomments  tinyint
-    $this->AddField('groupid', DT_FK);
-    $this->AddField('incdescription', DT_BOOLEAN, true);
-    $this->AddField('imagesperpage', DT_INTEGER, 12);
+    $this->AddField('groupid', self::DT_FK);
+    $this->AddField('incdescription', self::DT_BOOLEAN, true);
+    $this->AddField('imagesperpage', self::DT_INTEGER, 12);
   }
 
   protected function InitFieldsForMainContent($worker) {

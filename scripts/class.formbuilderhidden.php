@@ -9,7 +9,7 @@ require_once 'class.formbuilderbase.php';
 class formbuilderhidden extends formbuilderbase {
 
   function __construct($name, $value) {
-    parent::__construct($name, $value, FLDTYPE_HIDDEN, '');
+    parent::__construct($name, $value, basetable::FLDTYPE_HIDDEN, '');
   }
 
   public function GetControl() {

@@ -15,11 +15,11 @@ class pageproduct extends page {
 
   // assign table columns just used by this type of page
   protected function AssignPageTypeFields() {
-    $this->AddField('includespecialoffers', DT_BOOLEAN, true);
-    $this->AddField('includeprices', DT_BOOLEAN, true);
-    $this->AddField('includeimage', DT_BOOLEAN, true);
-    $this->AddField('includedelivery', DT_BOOLEAN, true);
-    $this->AddField('productsperpage', DT_INTEGER, 12);
+    $this->AddField('includespecialoffers', self::DT_BOOLEAN, true);
+    $this->AddField('includeprices', self::DT_BOOLEAN, true);
+    $this->AddField('includeimage', self::DT_BOOLEAN, true);
+    $this->AddField('includedelivery', self::DT_BOOLEAN, true);
+    $this->AddField('productsperpage', self::DT_INTEGER, 12);
   }
 
   public function AssignFormFields($formeditor, $idref) {

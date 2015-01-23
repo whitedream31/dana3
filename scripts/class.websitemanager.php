@@ -3,21 +3,43 @@ require_once 'define.php';
 require_once 'class.table.account.php';
 
 // list of types for creating and processing action queries
-define('AQ_RID', 'rid'); // show a specific article
-define('AQ_ARTCAT', 'cat'); // show a list of articles that match the category
-define('AQ_LOGOUT', 'logout'); // log out (key specifies type) eg. v for visitor
-define('AQ_NEWSLETTERID', 'nid'); // showing a specific newsletter
-define('AQ_CALENDARDATEID', 'calid'); // show calendar entry
-define('AQ_VISITORLOGOUT', 'vlo'); // logout for visitor
+//define('AQ_RID', 'rid'); // show a specific article
+//define('AQ_ARTCAT', 'cat'); // show a list of articles that match the category
+//define('AQ_LOGOUT', 'logout'); // log out (key specifies type) eg. v for visitor
+//define('AQ_NEWSLETTERID', 'nid'); // showing a specific newsletter
+//define('AQ_CALENDARDATEID', 'calid'); // show calendar entry
+//define('AQ_VISITORLOGOUT', 'vlo'); // logout for visitor
 
 // post form handlers
-define('PFH_GUESTBOOKVISITOR', 'visitorlogin'); // fields: username  password
-define('PFH_PRIVATEAREA', 'privatearealogin'); // fields: username  password
+//define('PFH_GUESTBOOKVISITOR', 'visitorlogin'); // fields: username  password
+//define('PFH_PRIVATEAREA', 'privatearealogin'); // fields: username  password
 
 
 // processes the dynamic parts of the pages of the mini-websites of the account holders
 
 abstract class websitemanager {
+// list of types for creating and processing action queries
+  const AQ_RID = 'rid'; // show a specific article
+  const AQ_ARTCAT = 'cat'; // show a list of articles that match the category
+  const AQ_LOGOUT = 'logout'; // log out (key specifies type) eg. v for visitor
+  const AQ_NEWSLETTERID = 'nid'; // showing a specific newsletter
+  const AQ_CALENDARDATEID = 'calid'; // show calendar entry
+  const AQ_VISITORLOGOUT = 'vlo'; // logout for visitor
+// post form handlers
+  const PFH_GUESTBOOKVISITOR = 'visitorlogin'; // fields: username  password
+  const PFH_PRIVATEAREA = 'privatearealogin'; // fields: username  password
+// content type for website manager class
+  const CTWM_MAINCONTENT = 'mc';
+  const CTWM_INITIALCONTENT = 'ic';
+  const CTWM_ARTICLES = 'art';
+  const CTWM_GUESTBOOK = 'gb';
+  const CTWM_NEWSLETTERS = 'nl';
+  const CTWM_SOCIALNETWORK = 'sn';
+  const CTWM_CALENDAR = 'cal';
+  const CTWM_BOOKING = 'bk';
+  const CTWM_PRIVATEAREA = 'pa';
+  const CTWM_DOWNLOADABLEFILES = 'df';
+
   static public $instance = false;
   static public $account;
   protected $pgtype; // page type (eg. 'gen'). assigned by derived class
@@ -55,37 +77,37 @@ abstract class websitemanager {
 
   static public function Initialise($accountid, $pgtype, $pageid, $groupid, $mode, $rootpath, $sourcepath) {
     switch ($pgtype) {
-      case PAGETYPE_GENERAL:
+      case page::PAGETYPE_GENERAL:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.generalpage.php';
         self::$instance = new wsm_generalpage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      case PAGETYPE_CONTACT:
+      case page::PAGETYPE_CONTACT:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.contactpage.php';
         self::$instance = new wsm_contactpage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      case PAGETYPE_GALLERY:
+      case page::PAGETYPE_GALLERY:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.gallerypage.php';
         self::$instance = new wsm_gallerypage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      case PAGETYPE_ARTICLE:
+      case page::PAGETYPE_ARTICLE:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.articlepage.php';
         self::$instance = new wsm_articlepage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      case PAGETYPE_GUESTBOOK:
+      case page::PAGETYPE_GUESTBOOK:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.guestbookpage.php';
         self::$instance = new wsm_guestbookpage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      case PAGETYPE_BOOKING:
+      case page::PAGETYPE_BOOKING:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.bookingpage.php';
         self::$instance = new wsm_bookingpage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      case PAGETYPE_CALENDAR:
+      case page::PAGETYPE_CALENDAR:
         require_once $sourcepath . DIRECTORY_SEPARATOR . 'wsm.calendarpage.php';
         self::$instance = new wsm_calendarpage($accountid, $pageid, $groupid, $mode, $rootpath, $sourcepath);
         break;
-      //case PAGETYPE_NEWSLETTER:
+      case page::PAGETYPE_NEWSLETTER:
+      case page::PAGETYPE_SOCIALNETWORK:
       //PAGETYPE_PRODUCT
-      //PAGETYPE_SOCIALNETWORK
       default:
         break;
     }
@@ -110,31 +132,31 @@ abstract class websitemanager {
   // display content for the sidebar based on the content type (ct) and page type (pgtype)
   static public function ShowSideContent($ct, $groupid) {
     switch ($ct) {
-      case CTWM_ARTICLES: // 1
+      case self::CTWM_ARTICLES: // 1
         $ret = self::$instance->GetArticleSidebar();
         break;
-      case CTWM_GUESTBOOK: // 2
+      case self::CTWM_GUESTBOOK: // 2
         $ret = self::$instance->GetGuestbookSidebar($groupid);
         break;
-      case CTWM_NEWSLETTERS: // 3
+      case self::CTWM_NEWSLETTERS: // 3
         $ret = self::$instance->GetNewsletterSidebar();
         break;
-      case CTWM_SOCIALNETWORK: // 4
+      case self::CTWM_SOCIALNETWORK: // 4
         $ret = self::$instance->GetSocialNetworkSidebar();
         break;
-      case CTWM_CALENDAR: // 5
+      case self::CTWM_CALENDAR: // 5
         $ret = self::$instance->GetCalendarSidebar();
         break;
-      case CTWM_BOOKING: // 6
+      case self::CTWM_BOOKING: // 6
         $ret = self::$instance->GetBookingSidebar();
         break;
-      case CTWM_PRIVATEAREA: // 7
+      case self::CTWM_PRIVATEAREA: // 7
         $ret = self::$instance->GetPrivateAreaSidebar();
         break;
-      case CTWM_DOWNLOADABLEFILES: // 8
+      case self::CTWM_DOWNLOADABLEFILES: // 8
         $ret = self::$instance->GetDownloadableFilesSidebar();
         break;
-      case CTWM_INITIALCONTENT: // 9        
+      case self::CTWM_INITIALCONTENT: // 9        
       default:
         $ret = array();
     }
@@ -144,34 +166,34 @@ abstract class websitemanager {
   // display content for the main area based on the content type (ct) and page type (pgtype)
   static public function ShowMainContent($ct, $groupid) {
     switch ($ct) {
-      case CTWM_MAINCONTENT: // mc
+      case self::CTWM_MAINCONTENT: // mc
         $ret = self::$instance->GetMainContent($groupid);
         break;
-      case CTWM_ARTICLES: // art
+      case self::CTWM_ARTICLES: // art
         $ret = self::$instance->GetArticlesMain();
         break;
-      case CTWM_GUESTBOOK: // gb
+      case self::CTWM_GUESTBOOK: // gb
         $ret = self::$instance->GetGuestbookMain($groupid);
         break;
-      case CTWM_NEWSLETTERS: // nl
+      case self::CTWM_NEWSLETTERS: // nl
         $ret = self::$instance->GetNewsletterMain();
         break;
-      case CTWM_SOCIALNETWORK: // sn
+      case self::CTWM_SOCIALNETWORK: // sn
         $ret = self::$instance->GetSocialNetworkMain();
         break;
-      case CTWM_CALENDAR: // cal
+      case self::CTWM_CALENDAR: // cal
         $ret = self::$instance->GetCalendarMain();
         break;
-      case CTWM_BOOKING: // bk
+      case self::CTWM_BOOKING: // bk
         $ret = self::$instance->GetBookingMain();
         break;
-      case CTWM_PRIVATEAREA: // pa
+      case self::CTWM_PRIVATEAREA: // pa
         $ret = self::$instance->GetPrivateAreaMain();
         break;
-      case CTWM_DOWNLOADABLEFILES: // df
+      case self::CTWM_DOWNLOADABLEFILES: // df
         $ret = self::$instance->GetDownloadableFilesMain();
         break;
-      case CTWM_INITIALCONTENT: // ic
+      case self::CTWM_INITIALCONTENT: // ic
         $ret = self::$instance->GetInitialContentMain();// $this->page->GetFieldValue('initialcontent');
         break;
       default:
@@ -238,11 +260,11 @@ abstract class websitemanager {
   protected function GetArticlesMain() {
     $ret = array();
     if ($this->pgtype == PAGETYPE_ARTICLE) {
-      $rid = $this->GetActionQuery(AQ_RID);
+      $rid = $this->GetActionQuery(self::AQ_RID);
       if ($rid) {
         $articles = articleitem::GetArticle($rid);
       } else {
-        $cat = $this->GetActionQuery(AQ_ARTCAT);
+        $cat = $this->GetActionQuery(self::AQ_ARTCAT);
         $articles = articleitem::GetAllCurrentArticles(self::$account->ID(), $cat, $rid);
       }
       // show just a list of categories with an action link
@@ -349,13 +371,13 @@ abstract class websitemanager {
           $list[$currentcategory] = array('value' => $currentcategory, 'title' => 'click to see all articles for ' . $currentcategory);
         }
       }
-      $ret = $this->MakeSidebarList('Article Categories', $list, AQ_ARTCAT);
+      $ret = $this->MakeSidebarList('Article Categories', $list, self::AQ_ARTCAT);
     } else {
       $list = array();
       foreach($articles as $articleid => $article) {
         $list[$articleid] = array('value' => $article['heading'], 'title' => 'click to see ' . $article['category']);
       }
-      $ret = $this->MakeSidebarList('Articles', $list, AQ_RID);
+      $ret = $this->MakeSidebarList('Articles', $list, self::AQ_RID);
     }
     return $ret;
   }
@@ -367,7 +389,7 @@ abstract class websitemanager {
   protected function GetGuestbookSidebar($guestbookid) {
     if ($this->pgtype == PAGETYPE_GUESTBOOK) {
       $ret = array('<h2>Guestbook</h2>');
-      $visitorsession = $this->GetSessionValue(SESS_GUEST); // find session for guest (if exists)
+      $visitorsession = $this->GetSessionValue(activitymanager::SESS_GUEST); // find session for guest (if exists)
       if ($visitorsession) {
         // the session id is the session key used when then registered
         // lookup the visitor table using the session key found
@@ -381,7 +403,7 @@ abstract class websitemanager {
         $displayname = $visitor->GetFieldValue('displayname');
         $ret[] = "<h3>Logged In</h3>";
         $ret[] = "<p>{$displayname}</p>";
-        $ret[] = $this->MakeActionLink(AQ_VISITORLOGOUT, 'v', 'Log Out', 'Click to Log Out');
+        $ret[] = $this->MakeActionLink(self::AQ_VISITORLOGOUT, 'v', 'Log Out', 'Click to Log Out');
       } else {
         $ret[] = '<h3>Visitor Login</h3>';
         $ret[] = "<form class='login' name='frmvisitorlogin'>";
@@ -389,7 +411,7 @@ abstract class websitemanager {
         $ret[] = "    <input name='username' type='editbox'></label>";
         $ret[] = "  <label for='password'>Password";
         $ret[] = "  <input name='password' type='password'></label>";
-        $ret[] = "  <input name='handler' type='hidden' value='" . PFH_GUESTBOOKVISITOR . "'>";
+        $ret[] = "  <input name='handler' type='hidden' value='" . self::PFH_GUESTBOOKVISITOR . "'>";
         $ret[] = "  <input name='submit' type='submit' value='Login'>";
         $ret[] = '</form>';
       }
@@ -417,7 +439,7 @@ abstract class websitemanager {
             'title' => 'click to see ' . $title
           );
         }
-        $ret = $this->MakeSidebarList('Newsletters', $list, AQ_NEWSLETTERID);
+        $ret = $this->MakeSidebarList('Newsletters', $list, self::AQ_NEWSLETTERID);
       }
     }
     return $ret;
@@ -447,7 +469,7 @@ abstract class websitemanager {
         );
     
       }
-      $ret = $this->MakeSidebarList('Important Dates', $list, AQ_CALENDARDATEID);
+      $ret = $this->MakeSidebarList('Important Dates', $list, self::AQ_CALENDARDATEID);
     } else {
       $ret = array();
     }
@@ -468,7 +490,7 @@ abstract class websitemanager {
     $ret[] = "  <input name='username' type='editbox'></label>";
     $ret[] = "  <label for='password'>Password";
     $ret[] = "  <input name='password' type='password'></label>";
-    $ret[] = "  <input name='handler' type='hidden' value='" . PFH_PRIVATEAREA . "'>";
+    $ret[] = "  <input name='handler' type='hidden' value='" . self::PFH_PRIVATEAREA . "'>";
     $ret[] = "  <input name='submit' type='submit' value='Login'>";
     $ret[] = '</form>';
     return $ret;

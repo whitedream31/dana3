@@ -8,18 +8,18 @@ class activitymenuitem extends activitybase {
   public $caption = '(caption)';
   public $targetidname = false;
   public $title = false;
-  public $status = STATUS_OK;
+  public $status = self::ACTSTATUS_OK;
   public $accesskey = false;
 
   protected function GetStatusImage() {
     switch($this->status) {
-      case STATUS_OK:
+      case self::ACTSTATUS_OK:
         $icon = 'st_ok.png';
         break;
-      case STATUS_WARNING:
+      case self::ACTSTATUS_WARNING:
         $icon = 'st_warn.png';
         break;
-      case STATUS_ERROR:
+      case self::ACTSTATUS_ERROR:
         $icon = 'st_err.png';
         break;
       default:

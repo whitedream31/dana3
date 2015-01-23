@@ -8,21 +8,21 @@ require_once 'class.basetable.php';
 
 //require_once('library.php');
 
-define('THEME_SIMPLE', 1);
-define('THEME_COMMON', 2);
-define('THEME_PRIME', 3);
-
-define('THEME_THUMBNAIL_WIDTH', 170);
-define('THEME_THUMBNAIL_HEIGHT', 220);
-
 // theme table class
 class theme extends idtable {
+//  const THEME_SIMPLE = 1;
+//  const THEME_COMMON = 2;
+//  const THEME_PRIME = 3;
+
+  const THEME_THUMBNAIL_WIDTH = 170;
+  const THEME_THUMBNAIL_HEIGHT = 220;
+
   public $ref;
   public $description;
   public $url;
   public $suitability;
 
-  public $exists;
+//  public $exists;
 
   function __construct($id = 0) {
     parent::__construct('theme', $id);
@@ -30,18 +30,18 @@ class theme extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField(FN_REF, DT_REF);
-    $this->AddField(FN_DESCRIPTION, DT_DESCRIPTION);
-    $this->AddField('url', DT_STRING);
-    $this->AddField('suitability', DT_INTEGER);
-    $this->AddField('pagewidth', DT_INTEGER);
-    $this->AddField('contentwidth', DT_INTEGER);
-    $this->AddField('sidewidth', DT_INTEGER);
+    $this->AddField(basetable::FN_REF, self::DT_REF);
+    $this->AddField(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
+    $this->AddField('url', self::DT_STRING);
+    $this->AddField('suitability', self::DT_INTEGER);
+    $this->AddField('pagewidth', self::DT_INTEGER);
+    $this->AddField('contentwidth', self::DT_INTEGER);
+    $this->AddField('sidewidth', self::DT_INTEGER);
   }
 
   protected function AfterPopulateFields() {
-    $this->ref = $this->GetFieldValue(FN_REF);
-    $this->description = $this->GetFieldValue(FN_DESCRIPTION);
+    $this->ref = $this->GetFieldValue(basetable::FN_REF);
+    $this->description = $this->GetFieldValue(basetable::FN_DESCRIPTION);
     $this->url = $this->GetFieldValue('url');
     $this->suitability = $this->GetFieldValue('suitability');
   }
@@ -68,8 +68,8 @@ class theme extends idtable {
       if (file_exists($imgfilename)) {
         $currentclass = ($id == $selectedthemeid) ? ' selectedtheme' : '';
         $tagid = "id='thm{$id}'";
-        $width = THEME_THUMBNAIL_WIDTH;
-        $height = THEME_THUMBNAIL_HEIGHT;
+        $width = self::THEME_THUMBNAIL_WIDTH;
+        $height = self::THEME_THUMBNAIL_HEIGHT;
         $img = "<img {$tagid} src='{$imgfilename}' alt='{$theme->description}'" .
           "width='{$width}' height='{$height}'>";
         $head = "<h3>{$theme->description}</h3>";

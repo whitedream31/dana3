@@ -19,8 +19,8 @@ class gallery extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('title', DT_STRING);
-    $this->AddField(FN_ACCOUNTID, DT_ID);
+    $this->AddField('title', self::DT_STRING);
+    $this->AddField(basetable::FN_ACCOUNTID, self::DT_FK);
   }
 
   protected function AfterPopulateFields() {
@@ -230,7 +230,7 @@ class gallery extends idtable {
       'SELECT * FROM `gallery` ' .
       "WHERE `accountid` = {$accountid} " .
       "ORDER BY `title`";
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
@@ -249,7 +249,7 @@ class gallery extends idtable {
   }
 
   public function AssignDataListRows($datalist) {
-    $statusactive = STATUS_ACTIVE;
+    $statusactive = self::STATUS_ACTIVE;
     $query =
       'SELECT `id`, `pgtype`, `description`, `help`, `homehelp` ' .
       'FROM `pagetype` ' .
@@ -265,7 +265,7 @@ class gallery extends idtable {
       $hint = $line['homehelp'];
       $icon = (file_exists($img)) ? "<img src='{$img}' width='32' height='32' alt='{$hint}'>" : '';
       $datalist->AddRow($id, array(
-        'icon' => $icon, 'edit' => $name, 'desc' => $desc, 'hint' => $hint, 'action' => ACT_NEW
+        'icon' => $icon, 'edit' => $name, 'desc' => $desc, 'hint' => $hint, 'action' => workerbase::ACT_NEW
       ));
     }
     $result->free();

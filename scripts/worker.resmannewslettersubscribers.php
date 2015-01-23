@@ -25,8 +25,8 @@ class workerresmannewslettersubscribers extends workerform {
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Invite Newsletter subscriber';
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Send Invitation to Subscribe to Newsletters';
         $this->fldfirstname = $this->AddField(
           'firstname', new formbuildereditbox('firstname', '', 'First Name'), $this->table);
@@ -34,10 +34,10 @@ class workerresmannewslettersubscribers extends workerform {
           'lastname', new formbuildereditbox('lastname', '', 'Last Name'), $this->table);
         $this->fldemail = $this->AddField(
           'email', new formbuildereditbox('email', '', 'E-Mail'), $this->table);
-        $this->returnidname = IDNAME_MANAGENEWSLETTERS;
+        $this->returnidname = activitymanager::IDNAME_MANAGENEWSLETTERS;
         $this->showroot = false; 
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
         break;
@@ -46,8 +46,8 @@ class workerresmannewslettersubscribers extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldfirstname->Save() + $this->fldlastname->Save() +
           $this->fldemail->Save();
         break;
@@ -59,11 +59,11 @@ class workerresmannewslettersubscribers extends workerform {
 
   protected function SaveToTable() {
     $ret = (int) $this->table->StoreChanges();
-    if (($ret == STORERESULT_INSERT) && ($this->action == ACT_NEW)) {
+    if (($ret == basetable::STORERESULT_INSERT) && ($this->action == workerbase::ACT_NEW)) {
       $this->table->SendInvite();
     }
     // back to parent newsletter worker
-    $this->SaveAndReset(false, IDNAME_MANAGENEWSLETTERS);
+    $this->SaveAndReset(false, activitymanager::IDNAME_MANAGENEWSLETTERS);
     return $ret;
   }
 

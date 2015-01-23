@@ -83,8 +83,22 @@ require_once 'class.basetable.php';
 require_once 'class.table.account.php';
 //require_once('class.formbuilder.php');
 
-// page class
-abstract class page extends idtable { //implements pagetype
+// page class - was abstract but requied during pagewriter class
+class page extends idtable { //implements pagetype
+  const PAGETYPE_GENERAL = 'gen';
+  const PAGETYPE_CONTACT = 'con';
+//define('PAGETYPE_ABOUTUS', 'abt');
+//  const PAGETYPE_PRODUCT = 'prd';
+  const PAGETYPE_GALLERY = 'gal';
+  const PAGETYPE_ARTICLE = 'art';
+  const PAGETYPE_GUESTBOOK = 'gbk';
+  const PAGETYPE_SOCIALNETWORK = 'soc';
+  const PAGETYPE_BOOKING = 'bk';
+  const PAGETYPE_CALENDAR = 'cal';
+  const PAGETYPE_NEWSLETTER = 'nl';
+//  const PAGETYPE_PRIVATEAREA = 'pvt'; // is a 'resource' rather than a page
+//define('PAGETYPE_SURVEY', 'svy');
+//define('PAGETYPE_MEDIA', 'md');
   protected $fldpagedescription;
   protected $fldheader;
   protected $fldinitialcontent;
@@ -119,33 +133,33 @@ abstract class page extends idtable { //implements pagetype
   protected function AssignFields() {
     parent::AssignFields();
     // [ALL] shared by all pages
-    $this->AddField('pagetypeid', DT_FK);
-    $this->AddField('pagemgrid', DT_FK);
-    $this->AddField('name', DT_STRING);
-    $this->AddField('description', DT_STRING);
-    $this->AddField('visible', DT_BOOLEAN, true);
-    $this->AddField('ishomepage', DT_BOOLEAN);
-    $this->AddField('header', DT_STRING);
-    $this->AddField('initialcontent', DT_TEXT, '', FLDTYPE_TEXTAREA);
-    $this->AddField('sidecontent', DT_TEXT, '', FLDTYPE_TEXTAREA);
+    $this->AddField('pagetypeid', self::DT_FK);
+    $this->AddField('pagemgrid', self::DT_FK);
+    $this->AddField('name', self::DT_STRING);
+    $this->AddField('description', self::DT_STRING);
+    $this->AddField('visible', self::DT_BOOLEAN, true);
+    $this->AddField('ishomepage', self::DT_BOOLEAN);
+    $this->AddField('header', self::DT_STRING);
+    $this->AddField('initialcontent', self::DT_TEXT, '', self::FLDTYPE_TEXTAREA);
+    $this->AddField('sidecontent', self::DT_TEXT, '', self::FLDTYPE_TEXTAREA);
 //    $this->AddField('maincontent', DT_TEXT); //, '', FLDTYPE_TEXTAREA);
 //    $this->AddField('incrss', DT_BOOLEAN, true);
-    $this->AddField('incshownewsletters', DT_BOOLEAN, true);
-    $this->AddField('incsocialnetwork', DT_BOOLEAN, true);
-    $this->AddField('inctranslation', DT_BOOLEAN, true);
-    $this->AddField('privateareaid', DT_FK);
-    $this->AddField('showhours', DT_BOOLEAN, true);
-    $this->AddField('showfiles', DT_BOOLEAN, true);
-    $this->AddField('footer', DT_STRING);
+    $this->AddField('incshownewsletters', self::DT_BOOLEAN, true);
+    $this->AddField('incsocialnetwork', self::DT_BOOLEAN, true);
+    $this->AddField('inctranslation', self::DT_BOOLEAN, true);
+    $this->AddField('privateareaid', self::DT_FK);
+    $this->AddField('showhours', self::DT_BOOLEAN, true);
+    $this->AddField('showfiles', self::DT_BOOLEAN, true);
+    $this->AddField('footer', self::DT_STRING);
 //    $this->AddField('category', DT_STRING);
-    $this->AddField('dateadded', DT_DATETIME);
-    $this->AddField('dateupdated', DT_DATETIME);
-    $this->AddField('pageorder', DT_INTEGER);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('dateadded', self::DT_DATETIME);
+    $this->AddField('dateupdated', self::DT_DATETIME);
+    $this->AddField('pageorder', self::DT_INTEGER);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
 //    $this->AddField('inccontactinsidearea', DT_BOOLEAN, true);
-    $this->AddField('inccontactname', DT_BOOLEAN, true);
-    $this->AddField('incaddress', DT_BOOLEAN, true);
-    $this->AddField('inctelephone', DT_BOOLEAN, true);
+    $this->AddField('inccontactname', self::DT_BOOLEAN, true);
+    $this->AddField('incaddress', self::DT_BOOLEAN, true);
+    $this->AddField('inctelephone', self::DT_BOOLEAN, true);
 //    $this->AddField('incemail', DT_BOOLEAN, false);
 //    $this->AddField('groupid', DT_FK);
 //    $this->AddField('guestbookid', DT_FK);
@@ -285,8 +299,7 @@ abstract class page extends idtable { //implements pagetype
     $this->ValidateFields();
   } */
 
-  // abstract protected function AssignPageDefaults();
-  abstract protected function AssignPageType();
+  protected function AssignPageType() {}
 
   protected function SaveFormField($fld) {
     return ($fld) ? $fld->Save() : true;
@@ -339,7 +352,7 @@ abstract class page extends idtable { //implements pagetype
       $this->SetFieldValue('name', $name);
       $pageorder = database::CountRows('page', '`pagemgrid` = ' . $pagemgrid);
       $this->SetFieldValue('pageorder', $pageorder);
-      $this->SetFieldValue(FN_STATUS, STATUS_ACTIVE);
+      $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_ACTIVE);
     }
     parent::StoreChanges();
     if (!$this->exists) {
@@ -461,27 +474,27 @@ class pagelist extends idtable {
   protected function AssignFields() {
     parent::AssignFields();
     // [ALL] shared by all pages
-    $this->AddField('pagetypeid', DT_FK);
-    $this->AddField('pagemgrid', DT_FK);
-    $this->AddField('name', DT_STRING);
-    $this->AddField('description', DT_STRING);
-    $this->AddField('visible', DT_BOOLEAN, true);
-    $this->AddField('ishomepage', DT_BOOLEAN);
-    $this->AddField('header', DT_STRING);
+    $this->AddField('pagetypeid', self::DT_FK);
+    $this->AddField('pagemgrid', self::DT_FK);
+    $this->AddField('name', self::DT_STRING);
+    $this->AddField('description', self::DT_STRING);
+    $this->AddField('visible', self::DT_BOOLEAN, true);
+    $this->AddField('ishomepage', self::DT_BOOLEAN);
+    $this->AddField('header', self::DT_STRING);
 //    $this->AddField('initialcontent', DT_TEXT, '', FLDTYPE_TEXTAREA);
 //    $this->AddField('sidecontent', DT_TEXT, '', FLDTYPE_TEXTAREA);
 //    $this->AddField('incrss', DT_BOOLEAN, true);
 //    $this->AddField('incshownewsletters', DT_BOOLEAN, true);
 //    $this->AddField('incsocialnetwork', DT_BOOLEAN, true);
 //    $this->AddField('inctranslation', DT_BOOLEAN, true);
-    $this->AddField('privateareaid', DT_FK);
-    $this->AddField('showfiles', DT_BOOLEAN, true);
+    $this->AddField('privateareaid', self::DT_FK);
+    $this->AddField('showfiles', self::DT_BOOLEAN, true);
 //    $this->AddField('footer', DT_STRING);
 //    $this->AddField('category', DT_STRING);
-    $this->AddField('dateadded', DT_DATETIME);
-    $this->AddField('dateupdated', DT_DATETIME);
-    $this->AddField('pageorder', DT_INTEGER);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('dateadded', self::DT_DATETIME);
+    $this->AddField('dateupdated', self::DT_DATETIME);
+    $this->AddField('pageorder', self::DT_INTEGER);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   public function SetAccount($account) {
@@ -493,18 +506,20 @@ class pagelist extends idtable {
   public function AssignFormFields($formeditor, $idref) {}
 
   public function GetCounters() {
-    $this->pagesavailable = database::$instance->SelectFromTableByField('pagemgr', FN_ID, $this->account->GetFieldvalue('pagemgrid'), 'pagesavailable');
+    $this->pagesavailable = 
+      database::$instance->SelectFromTableByField(
+        'pagemgr', basetable::FN_ID, $this->account->GetFieldvalue('pagemgrid'), 'pagesavailable');
     $this->pagecount = count($this->pages);
     $this->pagesleft = $this->pagesavailable - $this->pagecount;
   }
 
   protected function GetPageObject($pgtype, $pageid = 0) {
     switch ($pgtype) {
-      case PAGETYPE_GENERAL:
+      case self::PAGETYPE_GENERAL:
         require_once 'class.table.pagegeneral.php';
         $page = new pagegeneral($pageid);
         break;
-      case PAGETYPE_CONTACT:
+      case self::PAGETYPE_CONTACT:
         require_once 'class.table.pagecontact.php';
         $page = new pagecontact($pageid);
         break;
@@ -512,31 +527,31 @@ class pagelist extends idtable {
 //        require_once('class.table.pageaboutus.php');
 //          $this->pages[] = new pageaboutus($pageid);
 //          break;
-      case PAGETYPE_PRODUCT:
-        require_once 'class.table.pageproduct.php';
-        $page = new pageproduct($pageid);
-        break;
-      case PAGETYPE_GALLERY:
+//      case self::PAGETYPE_PRODUCT:
+//        require_once 'class.table.pageproduct.php';
+//        $page = new pageproduct($pageid);
+//        break;
+      case self::PAGETYPE_GALLERY:
         require_once 'class.table.pagegallery.php';
         $page = new pagegallery($pageid);
         break;
-      case PAGETYPE_ARTICLE:
+      case self::PAGETYPE_ARTICLE:
         require_once 'class.table.pagearticle.php';
         $page = new pagearticle($pageid);
         break;
-      case PAGETYPE_GUESTBOOK:
+      case self::PAGETYPE_GUESTBOOK:
         require_once 'class.table.pageguestbook.php';
         $page = new pageguestbook($pageid);
         break;
-      case PAGETYPE_SOCIALNETWORK:
+      case self::PAGETYPE_SOCIALNETWORK:
         require_once 'class.table.pagesocialnetwork.php';
         $page = new pagesocialnetwork($pageid);
         break;
-      case PAGETYPE_BOOKING:
+      case self::PAGETYPE_BOOKING:
         require_once 'class.table.pagebooking.php';
         $page = new pagebooking($pageid);
         break;
-      case PAGETYPE_CALENDAR:
+      case self::PAGETYPE_CALENDAR:
         require_once 'class.table.pagecalendar.php';
         $page = new pagecalendar($pageid);
         break;
@@ -549,7 +564,7 @@ class pagelist extends idtable {
   }
 
   protected function GetPrivatePages() {
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $accid = $this->account->ID();
     $query = 'SELECT pp.* FROM `privatepage` pp ' .
       'INNER JOIN `privatearea` pa ON pp.`privateareaid` = pa.`id` ' .
@@ -570,7 +585,7 @@ class pagelist extends idtable {
 
   protected function PopulateList($pgmgrid) {
     $privatepages = $this->GetPrivatePages();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $pid = (int) $pgmgrid;
     $query = 'SELECT p.`id`, pt.`pgtype` FROM `page` p ' .
       'INNER JOIN `pagetype` pt ON p.`pagetypeid` = pt.`id` ' .
@@ -617,14 +632,14 @@ class pagelist extends idtable {
   }
 
   // create a new page based on its type
-  static public function NewPage($pgtype = PAGETYPE_GENERAL, $pageid = 0) {
+  static public function NewPage($pgtype = self::PAGETYPE_GENERAL, $pageid = 0) {
     $ret = null;
     switch ($pgtype) {
-      case PAGETYPE_GENERAL: //gen
+      case self::PAGETYPE_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
         $ret = new pagegeneral($pageid);
         break;
-      case PAGETYPE_CONTACT: //con
+      case self::PAGETYPE_CONTACT: //con
         require_once 'class.table.pagecontact.php';
         $ret = new pagecontact($pageid);
         break;
@@ -632,31 +647,31 @@ class pagelist extends idtable {
 //        require_once('class.table.pageaboutus.php');
 //        $ret = new pageaboutus($pageid);
 //        break;
-      case PAGETYPE_PRODUCT: //prd
+      case self::PAGETYPE_PRODUCT: //prd
         require_once 'class.table.pageproduct.php';
         $ret = new pageproduct($pageid);
         break;
-      case PAGETYPE_GALLERY: //gal
+      case self::PAGETYPE_GALLERY: //gal
         require_once 'class.table.pagegallery.php';
         $ret = new pagegallery($pageid);
         break;
-      case PAGETYPE_ARTICLE: //art
+      case self::PAGETYPE_ARTICLE: //art
         require_once 'class.table.pagearticle.php';
         $ret = new pagearticle($pageid);
         break;
-      case PAGETYPE_GUESTBOOK: //gbk
+      case self::PAGETYPE_GUESTBOOK: //gbk
         require_once 'class.table.pageguestbook.php';
         $ret = new pageguestbook($pageid);
         break;
-      case PAGETYPE_SOCIALNETWORK: //soc
+      case self::PAGETYPE_SOCIALNETWORK: //soc
         require_once 'class.table.pagesocialnetwork.php';
         $ret = new pagesocialnetwork($pageid);
         break;
-      case PAGETYPE_BOOKING: //bk
+      case self::PAGETYPE_BOOKING: //bk
         require_once 'class.table.pagebooking.php';
         $ret = new pagebooking($pageid);
         break;
-      case PAGETYPE_CALENDAR: //cal
+      case self::PAGETYPE_CALENDAR: //cal
         require_once 'class.table.pagecalendar.php';
         $ret = new pagecalendar($pageid);
         break;
@@ -756,7 +771,7 @@ class pagelist extends idtable {
   public function AssignDataGridRows($datagrid) {
     $account = account::$instance;
     $pgmgrid = $account->GetFieldValue('pagemgrid');
-    $statusactive = STATUS_ACTIVE;
+    $statusactive = self::STATUS_ACTIVE;
     $query =
       'SELECT p.`id`, p.`description`, pt.`description` AS pgtype, `ishomepage`, `visible` ' .
       'FROM `page` p ' .
@@ -769,7 +784,9 @@ class pagelist extends idtable {
       $id = $line['id'];
       $pgtype = ($line['ishomepage']) ? '<strong>HOMEPAGE</strong>' : $line['pgtype'];
       $actions = array(
-        TBLOPT_TOGGLEVISIBLE, TBLOPT_DELETABLE, TBLOPT_IGNOREFIRSTROW, TBLOPT_MOVEUP, TBLOPT_MOVEDOWN
+        formbuilderdatagrid::TBLOPT_TOGGLEVISIBLE, formbuilderdatagrid::TBLOPT_DELETABLE, 
+        formbuilderdatagrid::TBLOPT_IGNOREFIRSTROW, formbuilderdatagrid::TBLOPT_MOVEUP, 
+        formbuilderdatagrid::TBLOPT_MOVEDOWN
       );
       $coldata = array(
         'DESC' => $line['description'],
@@ -782,7 +799,7 @@ class pagelist extends idtable {
   }
 
   public function AssignDataListRows($datalist) {
-    $statusactive = STATUS_ACTIVE;
+    $statusactive = self::STATUS_ACTIVE;
     $query =
       'SELECT `id`, `pgtype`, `description`, `help`, `homehelp` ' .
       'FROM `pagetype` ' .
@@ -798,7 +815,7 @@ class pagelist extends idtable {
       $hint = $line['homehelp'];
       $icon = (file_exists($img)) ? "<img src='{$img}' width='32' height='32' alt='{$hint}'>" : '';
       $datalist->AddRow($id, array(
-        'icon' => $icon, 'edit' => $name, 'desc' => $desc, 'hint' => $hint, 'action' => ACT_NEW
+        'icon' => $icon, 'edit' => $name, 'desc' => $desc, 'hint' => $hint, 'action' => workerbase::ACT_NEW
       ));
     }
     $result->free();

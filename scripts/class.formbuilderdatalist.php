@@ -9,7 +9,7 @@ class formbuilderdatalist extends formbuilderbase {
   protected $rowcount;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_DATALIST, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_DATALIST, $label);
   }
 
   public function SetIDName($idname) {
@@ -49,7 +49,7 @@ class formbuilderdatalist extends formbuilderbase {
 
   private function ShowRow($id, $rowitem) {
     $list = array();
-    $action = (isset($rowitem['action'])) ? $rowitem['action'] : ACT_EDIT;
+    $action = (isset($rowitem['action'])) ? $rowitem['action'] : workerbase::ACT_EDIT;
     $url = "{$this->script}?in={$this->idname}&rid={$id}&act={$action}";
     $hint = $rowitem['hint'];
     $link = "<a href='{$url}' title='{$hint}'>";

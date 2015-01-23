@@ -31,8 +31,8 @@ class workerresmanguestbooks extends workerform {
     $this->contextdescription = 'guest-book management';
     $this->datagrid = new formbuilderdatagrid('guestbook', '', 'Guest Books');
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         //$this->tableitems = new galleryitems
         $this->title = 'Modify Guest-book';
         $this->flddescription = $this->AddField(
@@ -44,15 +44,15 @@ class workerresmanguestbooks extends workerform {
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Guest-books'; 
         $this->fldguestbooks = $this->AddField('guestbook', $this->datagrid, $this->table);
         $this->fldaddguestbook = $this->AddField(
           'addguestbook', new formbuilderbutton('addguestbook', 'Add New Guest-book'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddguestbook->url = $url;
         break;
     }
@@ -60,8 +60,8 @@ class workerresmanguestbooks extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->flddescription->Save() + $this->fldgeneralmessage->Save() + $this->fldthankyoumessage->Save();
         break;
       default:
@@ -108,13 +108,14 @@ class workerresmanguestbooks extends workerform {
     $this->entrygrid->AddColumn('STATUS', 'Status', false);
     $list = $this->table->EntryList();
     if ($list) {
-      $actions = array(TBLOPT_DELETABLE, TBLOPT_AUTHORISE);
+      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE, formbuilderdatagrid::TBLOPT_AUTHORISE);
       foreach($list as $entry) {
         $status = $this->table->StatusAsString();
         $coldata = array(
           'DESC' => $entry->GetFieldValue('sendername'),
           'SUBJECT' => $entry->GetFieldValue('subject'),
-          'DATE' => $this->table->FormatDateTime(DF_SHORTDATETIME, $entry->GetFieldValue('datestamp')),
+          'DATE' => $this->table->FormatDateTime(
+            self::DF_SHORTDATETIME, $entry->GetFieldValue('datestamp')),
           'STATUS' => $status
         );
         $this->entrygrid->AddRow($entry->ID(), $coldata, true, $actions);
@@ -153,19 +154,20 @@ class workerresmanguestbooks extends workerform {
     $this->fldthankyoumessage->rows = 5;
     $this->fldthankyoumessage->enableeditor = false;
     $this->fldthankyoumessage->placeholder =
-      'eg. Thank you for your comment. Once it has been checked it should appear in the guest-book page shortly.';
+      'eg. Thank you for your comment. Once it has been checked it should appear ' .
+      'in the guest-book page shortly.';
     $this->AssignFieldToSection('guestbook', 'thankyoumessage');
     // entrygrid
     $this->entrygrid = new formbuilderdatagrid('entrygrid', '', 'Guest-book Entries');
     $this->fldentries = $this->AddField('entrygrid', $this->entrygrid);
-    $this->entrygrid->SetIDName(IDNAME_MANAGEGUESTBOOKSENTRIES);
+    $this->entrygrid->SetIDName(activitymanager::IDNAME_MANAGEGUESTBOOKSENTRIES);
     $this->PopulateEntryGrid();
     $this->entrygrid->description = 'Type in your reply to the comment. Please read the notice above.';
     $this->AssignFieldToSection('entrygrid', 'entrygrid');
     // add image button
     $this->fldaddimage = $this->AddField(
       'addimage', new formbuilderbutton('addimage', 'Add Picture'));
-    $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGEGUESTBOOKSENTRIES . "&act=" . ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_MANAGEGUESTBOOKSENTRIES . "&act=" . workerbase::ACT_NEW;
     $this->fldaddimage->url = $url;
 //    $this->AssignFieldToSection('imagegrid', 'addimage');
   }

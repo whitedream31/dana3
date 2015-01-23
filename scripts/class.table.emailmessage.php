@@ -2,10 +2,10 @@
 require_once 'class.basetable.php';
 require_once 'class.table.placeholder.php';
 
-define('PLACEHOLDER_START', '[%');
-define('PLACEHOLDER_END', '%]');
-
 class emailmessage extends lookuptable {
+  const PLACEHOLDER_START = '[%';
+  const PLACEHOLDER_END = '%]';
+
   public $tag;
   public $content;
   public $formattedcontent;
@@ -19,7 +19,7 @@ class emailmessage extends lookuptable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->content = $this->AddField('content', DT_STRING);
+    $this->content = $this->AddField('content', self::DT_STRING);
   }
 
   protected function AfterPopulateFields() {
@@ -70,11 +70,11 @@ class emailmessage extends lookuptable {
   }
 
   public function FormatLine($text) {
-    $offset = strlen(PLACEHOLDER_START);
+    $offset = strlen(self::PLACEHOLDER_START);
     do {
-      $posstart = strpos($text, PLACEHOLDER_START);
+      $posstart = strpos($text, self::PLACEHOLDER_START);
       if ($posstart != false) {
-        $posend = strpos($text, PLACEHOLDER_END, $posstart);
+        $posend = strpos($text, self::PLACEHOLDER_END, $posstart);
         if ($posend != false) {
           $len = $posend - $posstart - $offset;
           $tag = substr($text, $posstart + $offset, $len);

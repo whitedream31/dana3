@@ -13,19 +13,19 @@ class articleitem extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('articletypeid', DT_FK);
-    $this->AddField('heading', DT_STRING);
-    $this->AddField('category', DT_STRING);
-    $this->AddField('url', DT_STRING);
-    $this->AddField('content', DT_TEXT);
-    $this->AddField('stampadded', DT_DATETIME);
-    $this->AddField('stampupdated', DT_DATETIME);
-    $this->AddField('expirydate', DT_DATE);
-    $this->AddField('galleryid', DT_FK);
-    $this->AddField('allowcomments', DT_BOOLEAN);
-    $this->AddField('readcount', DT_INTEGER);
-    $this->AddField('visible', DT_BOOLEAN);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField('articletypeid', self::DT_FK);
+    $this->AddField('heading', self::DT_STRING);
+    $this->AddField('category', self::DT_STRING);
+    $this->AddField('url', self::DT_STRING);
+    $this->AddField('content', self::DT_TEXT);
+    $this->AddField('stampadded', self::DT_DATETIME);
+    $this->AddField('stampupdated', self::DT_DATETIME);
+    $this->AddField('expirydate', self::DT_DATE);
+    $this->AddField('galleryid', self::DT_FK);
+    $this->AddField('allowcomments', self::DT_BOOLEAN);
+    $this->AddField('readcount', self::DT_INTEGER);
+    $this->AddField('visible', self::DT_BOOLEAN);
     $this->lastupdatedescription = '';
     $this->articletypedescription = '';
   }
@@ -42,7 +42,7 @@ class articleitem extends idtable {
   }
 
   protected function GetLastUpdateAsString() {
-    return $this->FormatDateTime(DF_MEDIUMDATETIME, $this->GetFieldValue('stampupdated'));
+    return $this->FormatDateTime(self::DF_MEDIUMDATETIME, $this->GetFieldValue('stampupdated'));
   }
 
   public function CountItems() {
@@ -55,7 +55,8 @@ class articleitem extends idtable {
   static public function MakeDisplayItem($values) {
     $displaydate = $values['stampupdated']; //displaydate'])
     $date = ($displaydate)
-      ? "<span class='articledate'><strong>Published:</strong> " . articleitem::FormatDateTime(DF_MEDIUMDATETIME, $displaydate) . '</span>'
+      ? "<span class='articledate'><strong>Published:</strong> " .
+        articleitem::FormatDateTime(self::DF_MEDIUMDATETIME, $displaydate) . '</span>'
       : '';
     $id = $values['id'];
     $heading = $values['heading'];
@@ -109,7 +110,7 @@ class articleitem extends idtable {
 
   static public function GetAllCurrentArticles($accountid = 0, $cat = false) {
     $ret = array();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $acc = ($accountid) ? "AND i.`accountid` = {$accountid} " : '';
     $query =
       'SELECT i.`id`, i.`accountid`, i.`articletypeid`, i.`heading`, i.`category`, i.`url`, i.`content`, i.`expirydate`, i.`stampupdated`, ' .
@@ -173,13 +174,13 @@ class articleitem extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query =
       'SELECT * FROM `articleitem` ' .
       "WHERE (`accountid` = {$accountid}) AND " .
       "(`status` = '{$status}') " .
       'ORDER BY `stampadded` DESC';
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {

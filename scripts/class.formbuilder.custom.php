@@ -8,7 +8,7 @@
 
     function __construct($type, $name, $value, $label = '') {
       parent::__construct($name, $value, $label);
-      $this->fieldtype = FLDTYPE_EDITBOX;
+      $this->fieldtype = basetable::FLDTYPE_EDITBOX;
     }
 
     public function ShowControl($usehtml5 = false) {

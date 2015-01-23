@@ -7,7 +7,7 @@ class formbuildercheckbox extends formbuilderbase {
   public $tickedvalue = 'yes';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_CHECKBOX, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_CHECKBOX, $label);
   }
 
   protected function AddChecked() {
@@ -19,7 +19,8 @@ class formbuildercheckbox extends formbuilderbase {
   }
 
   protected function ConvertValue() {
-    return in_array(strtolower($this->value), array('t', 'y', 'true', 'yes', '1', 'on', $this->tickedvalue));
+    return in_array(
+      strtolower($this->value), array('t', 'y', 'true', 'yes', '1', 'on', $this->tickedvalue));
   }
 
   protected function ValidateValue() {

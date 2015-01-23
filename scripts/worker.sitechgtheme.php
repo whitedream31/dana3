@@ -11,10 +11,14 @@ require_once 'class.workerbase.php';
 // theme selection
 
 class workersitechgtheme extends workerbase {
+  const THEMESUITABAILTYTYPE_SIMPLE = 1;
+  const THEMESUITABAILTYTYPE_REGULAR = 2;
+  const THEMESUITABAILTYTYPE_ADVANCED = 3;
+
   protected $account = false;
   protected $theme;
   protected $themeid;
-  protected $themesuitability = THEMESUITABAILTYTYPE_SIMPLE;
+  protected $themesuitability = self::THEMESUITABAILTYTYPE_SIMPLE;
 
   function __construct() {
     parent::__construct();
@@ -40,17 +44,21 @@ class workersitechgtheme extends workerbase {
 
   private function GetThemeCompatibilityList() {
     $ret = array();
-    $suitabilitytypes = array(THEMESUITABAILTYTYPE_SIMPLE, THEMESUITABAILTYTYPE_REGULAR, THEMESUITABAILTYTYPE_ADVANCED);
+    $suitabilitytypes = array(
+      self::THEMESUITABAILTYTYPE_SIMPLE,
+      self::THEMESUITABAILTYTYPE_REGULAR,
+      self::THEMESUITABAILTYTYPE_ADVANCED
+    );
     $url = $_SERVER['PHP_SELF'] . '?in=' . $this->idname . '&amp;pid=';
     $ret[] = "    <ul>";
     foreach($suitabilitytypes as $stid) {
       switch ($stid) {
         //case THEMESUITABAILTYTYPE_SIMPLE:
-        case THEMESUITABAILTYTYPE_REGULAR:
+        case self::THEMESUITABAILTYTYPE_REGULAR:
           $stname = 'Regular';
           $stmessage = 'recommended if you have between 3 and 5 pages';
           break;
-        case THEMESUITABAILTYTYPE_ADVANCED:
+        case self::THEMESUITABAILTYTYPE_ADVANCED:
           $stname = 'Advanced';
           $stmessage = 'recommended if you have lots (more than 5) pages';
           break;
@@ -85,7 +93,7 @@ class workersitechgtheme extends workerbase {
         $currentclass = ($id == $selectedthemeid) ? ' selectedtheme' : '';
         $tagid = 'id="thm' . $id . '"';
         $img = '<img ' . $tagid . ' src="' . $imgfilename . '" alt="' . $theme->description . '" ' .
-          'width="' . THEME_THUMBNAIL_WIDTH . '" height="' . THEME_THUMBNAIL_HEIGHT . '">';
+          'width="' . theme::THEME_THUMBNAIL_WIDTH . '" height="' . theme::THEME_THUMBNAIL_HEIGHT . '">';
         $head = '<h3>' . $theme->description . '</h3>';
         $url = '<a href="' . $mainurl . $theme->ID() . '" title="click to choose ' . $theme->description . '">' . $head . $img . '</a>';
         $ret[] = '  <div class="themeitem' . $currentclass . '">' . $url . '</div>';

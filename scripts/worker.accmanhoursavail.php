@@ -35,9 +35,9 @@ class workeraccmanhoursavail extends workerform {
     $this->contextdescription = 'working hours';
     $this->datagrid = new formbuilderdatagrid('areascovered', '', 'Working Hours');
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
-        $this->title = (($this->action == ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
+        $this->title = (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
         $this->fldhoursdescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Description'), $this->table);
         $this->fldis24hrs = $this->AddField(
@@ -63,22 +63,22 @@ class workeraccmanhoursavail extends workerform {
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
-        $this->buttonmode = array(BTN_CONFIRM, BTN_CANCEL);
+      case workerbase::ACT_REMOVE:
+        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove Working Hours';
         $this->areadescription = $this->AddField(
           'description', new formbuilderstatictext('description', '', 'Working Hours to be removed'));
-        $this->action = ACT_CONFIRM;
+        $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddhours = $this->AddField(
           'addhours', new formbuilderbutton('addhours', 'Add New Set of Working Hours'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddhours->url = $url;
 
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Working Hours'; 
         $this->workinghourslist = $this->AddField('workinghourslist', $this->datagrid, $this->table);
         break;
@@ -87,7 +87,7 @@ class workeraccmanhoursavail extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = STATUS_DELETED;
+      $status = basetable::STATUS_DELETED;
       $query = "DELETE `hours` WHERE `id` = {$itemid}";
       database::Query($query);
       $ret= true;
@@ -100,8 +100,8 @@ class workeraccmanhoursavail extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret =
           $this->fldhoursdescription->Save() + $this->fldis24hrs->Save() +
           $this->fldmonday->Save() + $this->fldtuesday->Save() +
@@ -109,7 +109,7 @@ class workeraccmanhoursavail extends workerform {
           $this->fldsaturday->Save() + $this->fldsunday->Save() + $this->fldcomments->Save() +
           $this->fldactive->Save();
         break;
-      case ACT_CONFIRM:
+      case workerbase::ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('description');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Item '{$caption}' removed");
@@ -125,7 +125,7 @@ class workeraccmanhoursavail extends workerform {
   protected function SaveToTable() {
     if (!trim($this->fldhoursdescription->value)) {
       $desc = ($this->fldis24hrs->value) ? 'New 24hr Opening Hours' : 'New Opening Hours';
-      $this->table->SetFieldValue(FN_DESCRIPTION, $desc);
+      $this->table->SetFieldValue(basetable::FN_DESCRIPTION, $desc);
     }
     return (int) $this->table->StoreChanges();
   }

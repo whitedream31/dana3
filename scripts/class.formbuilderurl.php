@@ -6,7 +6,7 @@ class formbuilderurl extends formbuildereditbox {
 
   function __construct($name, $value, $label = '', $size = 80) {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = FLDTYPE_URL;
+    $this->fieldtype = basetable::FLDTYPE_URL;
     $this->size = $size;
     $this->maxlength = 200;
     $this->pattern = "https?://.+";

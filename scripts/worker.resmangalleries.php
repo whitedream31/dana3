@@ -29,28 +29,28 @@ class workerresmangalleries extends workerform {
     $this->contextdescription = 'gallery management';
     $this->datagrid = new formbuilderdatagrid('gallery', '', 'Galleries');
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         //$this->tableitems = new galleryitems
-        $this->title = ($this->action == ACT_NEW) ? 'New Gallery' : 'Modify Gallery';
+        $this->title = ($this->action == workerbase::ACT_NEW) ? 'New Gallery' : 'Modify Gallery';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Gallery Title'), $this->table);
-        if ($this->action == ACT_EDIT) {
+        if ($this->action == workerbase::ACT_EDIT) {
           $this->imagegrid = $this->AddField(
             'imagegrid', new formbuilderdatagrid('imagegrid', '', 'Gallery Images'));
         }
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Galleries'; 
         $this->fldgalleries = $this->AddField('gallery', $this->datagrid, $this->table);
         $this->fldaddgallery = $this->AddField(
           'addgallery', new formbuilderbutton('addgallery', 'Add New Gallery'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&amp;act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&amp;act=" . workerbase::ACT_NEW;
         $this->fldaddgallery->url = $url;
         break;
     }
@@ -58,8 +58,8 @@ class workerresmangalleries extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $ret = $this->fldtitle->Save();
         break;
       default:
@@ -95,7 +95,7 @@ class workerresmangalleries extends workerform {
     $this->table->PopulateItems();
     $list = $this->table->visibleitems;
     if ($list) {
-      $actions = array(TBLOPT_DELETABLE);
+      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
       $options = array('parentid' => $this->itemid); // parent of the images is the gallery (item id)
       $path = '../profiles/' . $this->account->GetFieldValue('nickname') . '/media/';
       foreach($list as $imageitem) {
@@ -127,14 +127,15 @@ class workerresmangalleries extends workerform {
     $this->AssignFieldToSection('gallery', 'title');
     // imagegrid
     if ($this->imagegrid) {
-      $this->imagegrid->SetIDName(IDNAME_MANAGEGALLERYIMAGES);
+      $this->imagegrid->SetIDName(activitymanager::IDNAME_MANAGEGALLERYIMAGES);
       $this->PopulateImageGrid();
       $this->imagegrid->description = 'Type in your reply to the comment. Please read the notice above.';
       $this->AssignFieldToSection('imagegrid', 'imagegrid');
       // add image button
       $this->fldaddimage = $this->AddField(
         'addimage', new formbuilderbutton('addimage', 'Add Picture'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . IDNAME_MANAGEGALLERYIMAGES . "&amp;pid={$this->itemid}&amp;act=" . ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_MANAGEGALLERYIMAGES .
+        "&amp;pid={$this->itemid}&amp;act=" . workerbase::ACT_NEW;
       $this->fldaddimage->url = $url;
       $this->AssignFieldToSection('imagegrid', 'addimage');
     }

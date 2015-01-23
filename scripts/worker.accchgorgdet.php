@@ -108,9 +108,12 @@ class workeraccchgorgdet extends workerform {
 
   protected function GetCategoryList() {
     $ret = array();
-    $categorygrouplist = database::RetrieveLookupList('businesscategorygroup', FN_DESCRIPTION, FN_REF, FN_ID, '');
+    $categorygrouplist = database::RetrieveLookupList(
+      'businesscategorygroup', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, '');
     foreach($categorygrouplist as $groupid =>$groupname) {
-      $categorylist = database::RetrieveLookupList('businesscategory', FN_DESCRIPTION, FN_REF, FN_ID, '`businesscategorygroupid` = ' . $groupid);
+      $categorylist = database::RetrieveLookupList(
+        'businesscategory', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID,
+        '`businesscategorygroupid` = ' . $groupid);
       foreach ($categorylist as $catid => $catdescription) {
         $ret[$groupname][$catid] = $catdescription;
       }

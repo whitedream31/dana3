@@ -4,7 +4,7 @@
   class formbuilderstatictext extends formbuilderbase {
 
     function __construct($name, $value, $label = '') {
-      parent::__construct($name, $value, FLDTYPE_STATIC, $label);
+      parent::__construct($name, $value, basetable::FLDTYPE_STATIC, $label);
     }
 
     public function GetControl() {

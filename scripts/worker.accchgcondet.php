@@ -62,7 +62,8 @@ class workeraccchgcondet extends workerform {
       'town', new formbuildereditbox('town', '', 'Name of your town or city'), $this->contact);
     $this->countyid = $this->AddField(
       'countyid', new formbuilderselect('countyid', '', 'Name of your county'), $this->contact);
-    $countylist = database::RetrieveLookupList('county', FN_DESCRIPTION, FN_REF, FN_ID, "`countryid` = 2");
+    $countylist = database::RetrieveLookupList(
+      'county', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, "`countryid` = 2");
     foreach($countylist as $countyid => $countydescription) {
       $this->countyid->AddValue($countyid, $countydescription);
     }

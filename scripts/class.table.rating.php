@@ -3,25 +3,25 @@
 require_once('class.basetable.php');
 require_once('class.table.account.php');
 
-define('RATE_EXCELLENT', 5);
-define('RATE_VERYGOOD', 4);
-define('RATE_GOOD', 3);
-define('RATE_POOR', 2);
-define('RATE_BAD', 1);
-define('RATE_NA', 0);
-
-define('RATINGTYPE_QUALITY', 'quality');
-define('RATINGTYPE_COST', 'cost');
-define('RATINGTYPE_WAITING', 'waiting');
-define('RATINGTYPE_AFTERSALE', 'aftersale');
-define('RATINGTYPE_PROFESSIONAL', 'professional');
-define('RATINGTYPE_CONTACT', 'contact');
-define('RATINGTYPE_GENERAL', 'general');
-define('RATINGTYPE_OVERALL', 'overall');
-define('RATINGTYPE_COUNT', 'count');
-define('RATINGTYPE_COMMENTS', 'comments');
-
 class rating extends idtable {
+  const RATE_EXCELLENT = 5;
+  const RATE_VERYGOOD = 4;
+  const RATE_GOOD = 3;
+  const RATE_POOR = 2;
+  const RATE_BAD = 1;
+  const RATE_NA = 0;
+
+  const RATINGTYPE_QUALITY = 'quality';
+  const RATINGTYPE_COST = 'cost';
+  const RATINGTYPE_WAITING = 'waiting';
+  const RATINGTYPE_AFTERSALE = 'aftersale';
+  const RATINGTYPE_PROFESSIONAL = 'professional';
+  const RATINGTYPE_CONTACT = 'contact';
+  const RATINGTYPE_GENERAL = 'general';
+  const RATINGTYPE_OVERALL = 'overall';
+  const RATINGTYPE_COUNT = 'count';
+  const RATINGTYPE_COMMENTS = 'comments';
+
   public $accountid;
   public $ipaddress;
   public $visitorid;
@@ -54,22 +54,22 @@ class rating extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField('accountid', DT_FK);
-    $this->ipaddress = $this->AddField('ipaddress', DT_STRING);
-    $this->visitorid = $this->AddField('visitorid', DT_FK);
-    $this->visitorname = $this->AddField('visitorname', DT_STRING);
-    $this->valuequality = $this->AddField('valuequality', DT_INTEGER);
-    $this->valuecost = $this->AddField('valuecost', DT_INTEGER);
-    $this->valuewaiting = $this->AddField('valuewaiting', DT_INTEGER);
-    $this->valueaftersale = $this->AddField('valueaftersale', DT_INTEGER);
-    $this->valueprofessional = $this->AddField('valueprofessional', DT_INTEGER);
-    $this->valuecontact = $this->AddField('valuecontact', DT_INTEGER);
-    $this->valuegeneral = $this->AddField('valuegeneral', DT_INTEGER);
-    $this->comment = $this->AddField('comment', DT_STRING);
-    $this->commentstamp = $this->AddField('commentstamp', DT_DATETIME);
-    $this->reply = $this->AddField('reply', DT_STRING);
-    $this->replystamp = $this->AddField('replystamp', DT_DATETIME);
-    $this->status = $this->AddField('status', DT_STATUS);
+    $this->accountid = $this->AddField(self::FN_ACCOUNTID, self::DT_FK);
+    $this->ipaddress = $this->AddField('ipaddress', self::DT_STRING);
+    $this->visitorid = $this->AddField('visitorid', self::DT_FK);
+    $this->visitorname = $this->AddField('visitorname', self::DT_STRING);
+    $this->valuequality = $this->AddField('valuequality', self::DT_INTEGER);
+    $this->valuecost = $this->AddField('valuecost', self::DT_INTEGER);
+    $this->valuewaiting = $this->AddField('valuewaiting', self::DT_INTEGER);
+    $this->valueaftersale = $this->AddField('valueaftersale', self::DT_INTEGER);
+    $this->valueprofessional = $this->AddField('valueprofessional', self::DT_INTEGER);
+    $this->valuecontact = $this->AddField('valuecontact', self::DT_INTEGER);
+    $this->valuegeneral = $this->AddField('valuegeneral', self::DT_INTEGER);
+    $this->comment = $this->AddField('comment', self::DT_STRING);
+    $this->commentstamp = $this->AddField('commentstamp', self::DT_DATETIME);
+    $this->reply = $this->AddField('reply', self::DT_STRING);
+    $this->replystamp = $this->AddField('replystamp', self::DT_DATETIME);
+    $this->status = $this->AddField(self::FN_STATUS, self::DT_STATUS);
   }
 
   public function AssignFormFields($formeditor, $idref) {
@@ -94,7 +94,7 @@ class rating extends idtable {
   }
 
   protected function AssignDefaultFieldValues() {
-    $this->AssignFieldDefaultValue(FN_STATUS, STATUS_ACTIVE, true);   
+    $this->AssignFieldDefaultValue(basetable::FN_STATUS, self::STATUS_ACTIVE, true);
   }
 
   public function ValidateFormFields($formeditor, $idref) {
@@ -148,31 +148,31 @@ class rating extends idtable {
     $valueprofessional, $valuecontact, $valuegeneral) {
     $value = 0;
     $count = 0;
-    if ($valuequality > RATE_NA) {
+    if ($valuequality > self::RATE_NA) {
       $value += $valuequality;
       $count++;
     }
-    if ($valuecost > RATE_NA) {
+    if ($valuecost > self::RATE_NA) {
       $value += $valuecost;
       $count++;
     }
-    if ($valuewaiting > RATE_NA) {
+    if ($valuewaiting > self::RATE_NA) {
       $value += $valuewaiting;
       $count++;
     }
-    if ($valueaftersale > RATE_NA) {
+    if ($valueaftersale > self::RATE_NA) {
       $value += $valueaftersale;
       $count++;
     }
-    if ($valueprofessional > RATE_NA) {
+    if ($valueprofessional > self::RATE_NA) {
       $value += $valueprofessional;
       $count++;
     }
-    if ($valuecontact > RATE_NA) {
+    if ($valuecontact > self::RATE_NA) {
       $value += $valuecontact;
       $count++;
     }
-    if ($valuegeneral > RATE_NA) {
+    if ($valuegeneral > self::RATE_NA) {
       $value += $valuegeneral;
       $count++;
     }
@@ -197,7 +197,7 @@ class rating extends idtable {
     $count = 0;
     $commentlist = array();
     $query = 'SELECT * FROM `rating` ' .
-      "WHERE `status` = '" . STATUS_ACTIVE . "' AND `accountid` = " . (int) $accountid .
+      "WHERE `status` = '" . self::STATUS_ACTIVE . "' AND `accountid` = " . (int) $accountid .
       " ORDER BY `commentstamp` DESC";
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
@@ -206,32 +206,32 @@ class rating extends idtable {
         $line['visitorid'], $line['visitorname'], $line['comment'], 
         $line['commentstamp'], $line['reply'], $line['replystamp']
       );
-      if ($line['valuequality'] > RATE_NA) {
+      if ($line['valuequality'] > self::RATE_NA) {
         $totalquality += $line['valuequality'];
         $totalqualitycount += 1;
       }
-      if ($line['valuecost'] > RATE_NA) {
+      if ($line['valuecost'] > self::RATE_NA) {
         $totalcost += $line['valuecost'];
         $totalcostcount += 1;
       }
-      if ($line['valuewaiting'] > RATE_NA) {
+      if ($line['valuewaiting'] > self::RATE_NA) {
         $totalwaiting += $line['valuewaiting'];
         $totalwaitingcount += 1;
       }
-      if ($line['valueaftersale'] > RATE_NA) {
+      if ($line['valueaftersale'] > self::RATE_NA) {
         $totalaftersale += $line['valueaftersale'];
         $totalaftersalecount += 1;
       }
-      if ($line['valueprofessional'] > RATE_NA) {
+      if ($line['valueprofessional'] > self::RATE_NA) {
         $totalprofessional += $line['valueprofessional'];
         $totalprofessionalcount += 1;
       }
-      if ($line['valuecontact'] > RATE_NA) {
+      if ($line['valuecontact'] > self::RATE_NA) {
         $totalcontact += $line['valuecontact'];
         $totalcontactcount += 1;
       }
       
-      if ($line['valuegeneral'] > RATE_NA) {
+      if ($line['valuegeneral'] > self::RATE_NA) {
         $totalgeneral += $line['valuegeneral'];
         $totalgeneralcount += 1;
       }
@@ -244,23 +244,23 @@ class rating extends idtable {
       $totalprofessional + $totalcontact + $totalgeneral);
     $overall = ($overalltotal) ? ($overalltotal / $overallcount) : 0;
     self::$statistics = array(
-      RATINGTYPE_QUALITY => ($totalqualitycount) ? ($totalquality / $totalqualitycount) : 0,
-      RATINGTYPE_QUALITY . 'count' => $totalqualitycount,
-      RATINGTYPE_COST => ($totalcostcount) ? ($totalcost / $totalcostcount) : 0,
-      RATINGTYPE_COST . 'count' => $totalcostcount,
-      RATINGTYPE_WAITING => ($totalwaitingcount) ? ($totalwaiting / $totalwaitingcount) : 0,
-      RATINGTYPE_WAITING . 'count' => $totalwaitingcount,
-      RATINGTYPE_AFTERSALE => ($totalaftersalecount) ? ($totalaftersale / $totalaftersalecount) : 0,
-      RATINGTYPE_AFTERSALE . 'count' => $totalaftersalecount,
-      RATINGTYPE_PROFESSIONAL => ($totalprofessionalcount) ? ($totalprofessional / $totalprofessionalcount) : 0,
-      RATINGTYPE_PROFESSIONAL . 'count' => $totalprofessionalcount,
-      RATINGTYPE_CONTACT => ($totalcontactcount) ? ($totalcontact / $totalcontactcount) : 0,
-      RATINGTYPE_CONTACT . 'count' => $totalcontactcount,
-      RATINGTYPE_GENERAL => ($totalgeneralcount) ? ($totalgeneral / $totalgeneralcount) : 0,
-      RATINGTYPE_GENERAL . 'count' => $totalgeneralcount,
-      RATINGTYPE_OVERALL => $overall,
-      RATINGTYPE_COUNT => $count,
-      RATINGTYPE_COMMENTS => $commentlist
+      self::RATINGTYPE_QUALITY => ($totalqualitycount) ? ($totalquality / $totalqualitycount) : 0,
+      self::RATINGTYPE_QUALITY . 'count' => $totalqualitycount,
+      self::RATINGTYPE_COST => ($totalcostcount) ? ($totalcost / $totalcostcount) : 0,
+      self::RATINGTYPE_COST . 'count' => $totalcostcount,
+      self::RATINGTYPE_WAITING => ($totalwaitingcount) ? ($totalwaiting / $totalwaitingcount) : 0,
+      self::RATINGTYPE_WAITING . 'count' => $totalwaitingcount,
+      self::RATINGTYPE_AFTERSALE => ($totalaftersalecount) ? ($totalaftersale / $totalaftersalecount) : 0,
+      self::RATINGTYPE_AFTERSALE . 'count' => $totalaftersalecount,
+      self::RATINGTYPE_PROFESSIONAL => ($totalprofessionalcount) ? ($totalprofessional / $totalprofessionalcount) : 0,
+      self::RATINGTYPE_PROFESSIONAL . 'count' => $totalprofessionalcount,
+      self::RATINGTYPE_CONTACT => ($totalcontactcount) ? ($totalcontact / $totalcontactcount) : 0,
+      self::RATINGTYPE_CONTACT . 'count' => $totalcontactcount,
+      self::RATINGTYPE_GENERAL => ($totalgeneralcount) ? ($totalgeneral / $totalgeneralcount) : 0,
+      self::RATINGTYPE_GENERAL . 'count' => $totalgeneralcount,
+      self::RATINGTYPE_OVERALL => $overall,
+      self::RATINGTYPE_COUNT => $count,
+      self::RATINGTYPE_COMMENTS => $commentlist
     );
   }
 
@@ -269,14 +269,16 @@ class rating extends idtable {
     $this->rated = false;
     $this->account = $account;
     $this->accountexists = ($account) ? $this->account->exists : false;
-    $status = $this->account->GetCurrentStatus();
-    $this->available = $this->accountexists && (($status == ACCSTATUS_PUBLISHED) || ($status == ACCSTATUS_MODIFIED));
+    $accstatus = $this->account->GetCurrentStatus();
+    $this->available =
+      $this->accountexists && 
+        (($accstatus == account::ACCSTATUS_PUBLISHED) || ($accstatus == account::ACCSTATUS_MODIFIED));
     if ($this->accountexists) {
       if ($this->available) {
         $businesname = $account->GetFieldValue('businessname');
         $this->title = "How good is &quot;{$businesname}&quot;?";
         $this->BuildStatistics();
-        $this->rated = (self::$statistics) ? (self::$statistics[RATINGTYPE_OVERALL] > RATE_NA) : false;
+        $this->rated = (self::$statistics) ? (self::$statistics[self::RATINGTYPE_OVERALL] > self::RATE_NA) : false;
       } else {
         $this->title = 'Currently Unavailable';
       }
@@ -293,7 +295,7 @@ class rating extends idtable {
   public function ShowCommentsMade() {
     $this->BuildStatistics();
     $statistics = self::$statistics; //$this->GetRating(true);
-    $commentlist = $statistics[RATINGTYPE_COMMENTS];
+    $commentlist = $statistics[self::RATINGTYPE_COMMENTS];
     $count = count($commentlist);
     if ($count) {      
       $countmsg = $count . ' Comment' . (($count > 1) ? 's' : '');
@@ -394,7 +396,7 @@ class rating extends idtable {
       $enddate = $line['enddate'];
       $desc = $line['description'];
       $status = $line['status'];
-      $class = ($status == STATUS_ACTIVE) ? " class='activerow'" : '';
+      $class = ($status == self::STATUS_ACTIVE) ? " class='activerow'" : '';
       $ret[] = "  <tr{$class}>";
       $ret[] = "    <td>{$startdate}</td>";
       $ret[] = "    <td>{$enddate}</td>";
@@ -464,17 +466,17 @@ class rating extends idtable {
   }
 
   static private function GetStatLine($value, $text = '') {
-    if ($value > RATE_NA) {
+    if ($value > self::RATE_NA) {
       switch ($value) {
-        case RATE_EXCELLENT:
+        case self::RATE_EXCELLENT:
           $rate = 'EXCELLENT'; break;
-        case RATE_VERYGOOD:
+        case self::RATE_VERYGOOD:
           $rate = 'Very Good'; break;
-        case RATE_GOOD:
+        case self::RATE_GOOD:
           $rate = 'Good'; break;
-        case RATE_POOR:
+        case self::RATE_POOR:
           $rate = 'Poor'; break;
-        case RATE_BAD:
+        case self::RATE_BAD:
           $rate = 'Bad'; break;
         default:
           $rate = 'n/a'; break;
@@ -522,12 +524,12 @@ class rating extends idtable {
     if (is_numeric($rating)) {
       $rating = floor($rating);
     }
-    $showratenowbtn = ($ratingtype == RATINGTYPE_OVERALL) && $showratenow;
+    $showratenowbtn = ($ratingtype == self::RATINGTYPE_OVERALL) && $showratenow;
     if ($rating > 0) {
-      $count = $statistics[RATINGTYPE_COUNT];
+      $count = $statistics[self::RATINGTYPE_COUNT];
       $countmsg = self::GetPlural($count, $count . ' rating');
       if ($showratenowbtn) {
-        $commentcount = count($statistics[RATINGTYPE_COMMENTS]);
+        $commentcount = count($statistics[self::RATINGTYPE_COMMENTS]);
         if ($commentcount) {
           $countmsg .= self::GetPlural($commentcount, " ({$commentcount} comment"). ')';
         }
@@ -541,7 +543,7 @@ class rating extends idtable {
         }
       }
       $ret = self::BuildStars($rating, $title, $ratenowbtn);
-    } elseif ($ratingtype == RATINGTYPE_OVERALL) {
+    } elseif ($ratingtype == self::RATINGTYPE_OVERALL) {
       $ratenowbtn = "<a href='rate.php?id=" . account::$instance->ID() . "' title='click to rate this business'>Rate</a>";
       $ret = "<p class='ratingcaption clear'>(not rated)&nbsp;{$ratenowbtn}</p>\n";
     } else {
@@ -564,37 +566,37 @@ class rating extends idtable {
   private function ProceesStats() {
     $overallcount = 0;
     $overalltotal = 0;
-    $valuequality = $this->GetFieldValue('value' . RATINGTYPE_QUALITY);
+    $valuequality = $this->GetFieldValue('value' . self::RATINGTYPE_QUALITY);
     if ($valuequality) {
       $overallcount++;
       $overalltotal += $valuequality;
     }
-    $valuecost = $this->GetFieldValue('value' . RATINGTYPE_COST);
+    $valuecost = $this->GetFieldValue('value' . self::RATINGTYPE_COST);
     if ($valuecost) {
       $overallcount++;
       $overalltotal += $valuecost;
     }
-    $valuewaiting = $this->GetFieldValue('value' . RATINGTYPE_WAITING);
+    $valuewaiting = $this->GetFieldValue('value' . self::RATINGTYPE_WAITING);
     if ($valuewaiting) {
       $overallcount++;
       $overalltotal += $valuewaiting;
     }
-    $valueaftersale = $this->GetFieldValue('value' . RATINGTYPE_AFTERSALE);
+    $valueaftersale = $this->GetFieldValue('value' . self::RATINGTYPE_AFTERSALE);
     if ($valueaftersale) {
       $overallcount++;
       $overalltotal += $valueaftersale;
     }
-    $valueprofessional = $this->GetFieldValue('value' . RATINGTYPE_PROFESSIONAL);
+    $valueprofessional = $this->GetFieldValue('value' . self::RATINGTYPE_PROFESSIONAL);
     if ($valueprofessional) {
       $overallcount++;
       $overalltotal += $valueprofessional;
     }
-    $valuecontact = $this->GetFieldValue('value' . RATINGTYPE_CONTACT);
+    $valuecontact = $this->GetFieldValue('value' . self::RATINGTYPE_CONTACT);
     if ($valuecontact) {
       $overallcount++;
       $overalltotal += $valuecontact;
     }
-    $valuegeneral = $this->GetFieldValue('value' . RATINGTYPE_GENERAL);
+    $valuegeneral = $this->GetFieldValue('value' . self::RATINGTYPE_GENERAL);
     if ($valuegeneral) {
       $overallcount++;
       $overalltotal += $valuegeneral;
@@ -610,7 +612,7 @@ class rating extends idtable {
     $ratingoverall = number_format($overall, 1);
     $ratingcomment = stripslashes($this->GetFieldValue('comment'));
     if ($ratingoverall > 0) {
-      $this->SetFieldValue('value' . RATINGTYPE_OVERALL, floor($ratingoverall));
+      $this->SetFieldValue('value' . self::RATINGTYPE_OVERALL, floor($ratingoverall));
       $ret = parent::StoreChanges();
       if ($ret > 0) {
         require_once 'class.table.history.php';
@@ -650,7 +652,7 @@ class rating extends idtable {
         $message = array_merge($message, $ratings);
         $msg = $this->FormatMessage($message);
         emailhistory::SendSystemEmailMessage(
-          ET_RATING, 'Business Rated', $msg, $accountid);
+          emailhistory::ET_RATING, 'Business Rated', $msg, $accountid);
         // send message to ACCOUNT HOLDER
         if ($this->account->Contact()->GetFieldValue('notifyrating')) {
           $firstname = $this->account->Contact()->GetFieldValue('firstname');
@@ -665,7 +667,7 @@ class rating extends idtable {
           $message[] = ' ';
           $msg = $this->FormatMessage($message);
           emailhistory::SendEmailMessage(
-            ET_RATING, $this->account->Contact()->GetFieldValue('email'),
+            emailhistory::ET_RATING, $this->account->Contact()->GetFieldValue('email'),
             'Your Business Was Rated', $msg, EMAIL_SUPPORT, $accountid);
         }
       }
@@ -706,7 +708,7 @@ class rating extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query =
       'SELECT * FROM `rating` ' .
       "WHERE (`accountid` = {$accountid}) AND " .

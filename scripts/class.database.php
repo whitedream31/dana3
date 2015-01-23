@@ -88,7 +88,8 @@ class database {
   }
 
   static public function RetrieveLookupList(
-    $tablename, $descriptionfield = FN_DESCRIPTION, $orderfield = FN_REF, $keyfield = FN_ID,
+    $tablename, $descriptionfield = 
+      basetable::FN_DESCRIPTION, $orderfield = basetable::FN_REF, $keyfield = basetable::FN_ID,
     $whereclause = "`status` = 'A'"
   ) {
     $query = 'SELECT `' . $keyfield . '`, `' . $descriptionfield . '` FROM `' . $tablename . '`' .
@@ -97,7 +98,8 @@ class database {
     return self::RetrieveLookupListByQuery($query, $keyfield, $descriptionfield);
   }
 
-  static public function RetrieveLookupListByQuery($query, $keyfield = FN_ID, $descriptionfield = FN_DESCRIPTION) {
+  static public function RetrieveLookupListByQuery(
+    $query, $keyfield = basetable::FN_ID, $descriptionfield = basetable::FN_DESCRIPTION) {
     $list = array();
     $result = self::Query($query);
     while ($line = $result->fetch_assoc()) {
@@ -160,7 +162,7 @@ class database {
   }
 
   static public function SelectDescriptionFromLookup($tablename, $id) {
-    return self::SelectFromTableByField($tablename, FN_ID, $id, FN_DESCRIPTION);
+    return self::SelectFromTableByField($tablename, basetable::FN_ID, $id, basetable::FN_DESCRIPTION);
   }
 
 /*  static public function UpdateRows($table, $columns, $where) {

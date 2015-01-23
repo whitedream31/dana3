@@ -4,12 +4,11 @@
 // created: 15 dec 2010
 // modified: 6 may 2014
 
-define('HIST_CONTACTMSG', 'cont');
-
-
 require_once 'class.basetable.php';
 
 class history extends idtable {
+//  const HIST_CONTACTMSG = 'cont';
+
   public $accountid;
   public $datestamp;
   public $reason;
@@ -21,10 +20,10 @@ class history extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField('accountid', DT_FK);
-    $this->datestamp = $this->AddField('datestamp', DT_DATETIME);
-    $this->reason = $this->AddField('reason', DT_STRING);
-    $this->details = $this->AddField('details', DT_STRING);
+    $this->accountid = $this->AddField('accountid', self::DT_FK);
+    $this->datestamp = $this->AddField('datestamp', self::DT_DATETIME);
+    $this->reason = $this->AddField('reason', self::DT_STRING);
+    $this->details = $this->AddField('details', self::DT_STRING);
   }
 
   private function CountHistory($accountid) {

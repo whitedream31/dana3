@@ -31,7 +31,7 @@ class formbuilderfilewebimage extends formbuilderfile {
 
   protected function Init() {
     global $MIME_WEBIMAGES;
-    $this->fieldtype = FLDTYPE_FILEWEBIMAGES;
+    $this->fieldtype = basetable::FLDTYPE_FILEWEBIMAGES;
     $this->acceptedfiletypes = $MIME_WEBIMAGES;
 //    $this->mediaid = -1; // no id
     $this->previewthumbnail = 'none';

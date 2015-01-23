@@ -14,25 +14,43 @@ define('PDIR', ".." . DIRECTORY_SEPARATOR); // parent directory
 
 //define('PORTAL_DOMAIN', 'mlsb.org');
 
-define('PWOPT_PROFILE', 'writeprofile');
-define('PWOPT_LIVE', 'writelive');
-define('PWOPT_TEST', 'test'); // for testing
+//define('PWOPT_PROFILE', 'writeprofile');
+//define('PWOPT_LIVE', 'writelive');
+//define('PWOPT_TEST', 'test'); // for testing
 
-define('LOG_INIT', 'init');
-define('LOG_FOUND_ACCOUNT', 'fndacc');
-define('LOG_FOUND_CONTACT', 'fndcnt');
-define('LOG_FOUND_THEME', 'fndthm');
-define('LOG_MAKE_DIRECTORY', 'mkdir');
-define('LOG_START_PROCESSOR', 'procstart');
-define('LOG_DELETEITEM', 'delitm');
-define('LOG_WRITE_PAGE', 'writepg');
-define('LOG_STOP_PROCESSOR', 'procstop');
-define('LOG_PAGESKIPPED', 'pageskipped');
-define('LOG_RES_COPIED', 'rescopied');
-define('LOG_ROOTPATH', 'rp');
-define('LOG_PERMISSIONS', 'perm');
+//define('LOG_INIT', 'init');
+//define('LOG_FOUND_ACCOUNT', 'fndacc');
+//define('LOG_FOUND_CONTACT', 'fndcnt');
+//define('LOG_FOUND_THEME', 'fndthm');
+//define('LOG_MAKE_DIRECTORY', 'mkdir');
+//define('LOG_START_PROCESSOR', 'procstart');
+//define('LOG_DELETEITEM', 'delitm');
+//define('LOG_WRITE_PAGE', 'writepg');
+//define('LOG_STOP_PROCESSOR', 'procstop');
+//define('LOG_PAGESKIPPED', 'pageskipped');
+//define('LOG_RES_COPIED', 'rescopied');
+//define('LOG_ROOTPATH', 'rp');
+//define('LOG_PERMISSIONS', 'perm');
 
 class pagewriter {
+  const PWOPT_PROFILE = 'writeprofile';
+  const PWOPT_LIVE = 'writelive';
+  const PWOPT_TEST = 'test'; // for testing
+
+  const LOG_INIT = 'init';
+  const LOG_FOUND_ACCOUNT = 'fndacc';
+  const LOG_FOUND_CONTACT = 'fndcnt';
+  const LOG_FOUND_THEME = 'fndthm';
+  const LOG_MAKE_DIRECTORY = 'mkdir';
+  const LOG_START_PROCESSOR = 'procstart';
+  const LOG_DELETEITEM = 'delitm';
+  const LOG_WRITE_PAGE = 'writepg';
+  const LOG_STOP_PROCESSOR = 'procstop';
+  const LOG_PAGESKIPPED = 'pageskipped';
+  const LOG_RES_COPIED = 'rescopied';
+  const LOG_ROOTPATH = 'rp';
+  const LOG_PERMISSIONS = 'perm';
+
   private $dsthandle;
   private $sectionprocessor;
   private $theme;
@@ -59,22 +77,22 @@ class pagewriter {
     $this->errcount = 0;
     $this->log = array();
     $this->sourcepath = getcwd() . DIRECTORY_SEPARATOR; // should be: mylocalsmallbusiness.com/scripts/
-    $this->testing = in_array(PWOPT_TEST, $options);
+    $this->testing = in_array(self::PWOPT_TEST, $options);
   }
 
   public function Execute() {
-    $this->AddToLog(LOG_INIT);
+    $this->AddToLog(self::LOG_INIT);
     try {
       $this->account = account::StartInstance();
       if ($this->account->exists) {
-        $this->AddToLog(LOG_FOUND_ACCOUNT, $this->account->GetFieldValue('businessname'));
+        $this->AddToLog(self::LOG_FOUND_ACCOUNT, $this->account->GetFieldValue('businessname'));
         $this->contact = $this->account->Contact();
         if ($this->contact->exists) {
-          $this->AddToLog(LOG_FOUND_CONTACT, $this->contact->FullContactName());
+          $this->AddToLog(self::LOG_FOUND_CONTACT, $this->contact->FullContactName());
           $this->pagelist = $this->account->GetPageList(true);
           $this->shortname = $this->account->GetFieldValue('nickname');
           if ($this->GetTheme()) {
-            $this->AddToLog(LOG_FOUND_THEME, $this->theme->GetFieldValue('description'));
+            $this->AddToLog(self::LOG_FOUND_THEME, $this->theme->GetFieldValue('description'));
             $this->MakeSite();
           }
         } else {
@@ -84,9 +102,9 @@ class pagewriter {
         $this->AddError("Account {$this->account->key} does not exist");
       }
     } catch (Exception $e) {
-      $this->AddError("Exception: {$e->message}");
+      $this->AddError("Exception: {$e->getMessage()}");
     }
-    if ($this->errcount || in_array(PWOPT_TEST, $this->options)) {
+    if ($this->errcount || in_array(self::PWOPT_TEST, $this->options)) {
       $this->WriteLogPage();
       exit;
     }
@@ -129,11 +147,11 @@ class pagewriter {
 //    $this->account->ProcessBusinessContentIntoTags();
 //    $this->account->ProcessPageContentsIntoTags();
 //    $this->rssfeedfilename = $this->rootpath . DIRECTORY_SEPARATOR . 'pages.xml';
-    if (in_array(PWOPT_PROFILE, $this->options)) {
-      $this->BuildPages(PWOPT_PROFILE);
+    if (in_array(self::PWOPT_PROFILE, $this->options)) {
+      $this->BuildPages(self::PWOPT_PROFILE);
     }
-    if (in_array(PWOPT_LIVE, $this->options)) {
-      $this->BuildPages(PWOPT_LIVE);
+    if (in_array(self::PWOPT_LIVE, $this->options)) {
+      $this->BuildPages(self::PWOPT_LIVE);
     }
 //    $this->account->UpdateAccountDate();
   }
@@ -144,7 +162,7 @@ class pagewriter {
 
   private function GetRootPath($mode) {
     switch($mode) {
-      case PWOPT_LIVE:
+      case self::PWOPT_LIVE:
         $modetype = 'LIVE';
         $ret = $this->GetLiveRootPath() . DIRECTORY_SEPARATOR; //realpath($this->GetLiveRootPath()) . DIRECTORY_SEPARATOR;
         break;
@@ -155,7 +173,7 @@ class pagewriter {
         $ret = realpath(PDIR) . DIRECTORY_SEPARATOR . 'profiles' . DIRECTORY_SEPARATOR . $this->shortname . DIRECTORY_SEPARATOR;
     }
     $this->rootpath = $ret;
-    $this->AddToLog(LOG_ROOTPATH, "Root path: {$modetype} = {$ret}");
+    $this->AddToLog(self::LOG_ROOTPATH, "Root path: {$modetype} = {$ret}");
     return $ret;
   }
 
@@ -163,11 +181,11 @@ class pagewriter {
     $ret = false;
     if (file_exists($path)) {
       $ret = true;
-      $this->AddToLog(LOG_MAKE_DIRECTORY, 'Directory exists: ' . $path);
+      $this->AddToLog(self::LOG_MAKE_DIRECTORY, 'Directory exists: ' . $path);
     } elseif (mkdir($path)) {
       chmod($path, 0755);
       $ret = true;
-      $this->AddToLog(LOG_MAKE_DIRECTORY, 'Directory created: ' . $path);
+      $this->AddToLog(self::LOG_MAKE_DIRECTORY, 'Directory created: ' . $path);
     } else {
       die("Could not create destination path '{$path}'!");
     }
@@ -176,7 +194,7 @@ class pagewriter {
 
   private function DeleteFile($filename) {
     if (file_exists($filename)) {
-      $this->AddToLog(LOG_DELETEITEM, $filename);
+      $this->AddToLog(self::LOG_DELETEITEM, $filename);
       unlink($filename); // delete file
     }
   }
@@ -220,7 +238,7 @@ class pagewriter {
       while ((($file = readdir($dh)) !== false) && $flg) {
         if ($file != '.' && $file != '..') {
           $fullpath = $path . '/' . $file;
-          $this->AddToLog(LOG_PERMISSIONS, $fullpath);
+          $this->AddToLog(self::LOG_PERMISSIONS, $fullpath);
           if (is_link($fullpath)) {
             $flg = false;
           } elseif (!is_dir($fullpath) && !chmod($fullpath, $filemode)) {
@@ -252,7 +270,7 @@ class pagewriter {
     $this->CopyImages($this->themepath, $this->rootpath); // copy the style sheet images
 //    $this->CopyImages(PDIR, $this->sourcepath, 'images' . DIRECTORY_SEPARATOR . 'lightbox'); // copy lightbox images
     // copy the media files (logo and images for galeries) to the live website
-    if ($this->mode != PWOPT_PROFILE) {
+    if ($this->mode != self::PWOPT_PROFILE) {
       // copy auxiliary files from profile
       $mediadir = PDIR . 'profiles' . DIRECTORY_SEPARATOR . $this->shortname;
       $this->CopyImages($mediadir, $this->rootpath, 'media');
@@ -260,22 +278,22 @@ class pagewriter {
     // create the section processor
 //    $this->sectionprocessor = new sectionprocessor($this);
     // write each page
-    $this->AddToLog(LOG_START_PROCESSOR);
+    $this->AddToLog(self::LOG_START_PROCESSOR);
     if (count($this->pagelist->pages)) {
       foreach($this->pagelist->pages as $page) {
-        $this->AddToLog(LOG_WRITE_PAGE, $page->GetFieldValue('description'));
+        $this->AddToLog(self::LOG_WRITE_PAGE, $page->GetFieldValue('description'));
         $this->WritePage($page, $htmlsrc);
       }
     } else {
-      $this->AddToLog(LOG_WRITE_PAGE, '** NO PAGE **');
+      $this->AddToLog(self::LOG_WRITE_PAGE, '** NO PAGE **');
       // TODO: add 404 error page using theme
       //$this->WritePage(false, $htmlsrc); // write no page message using current theme / template
     }
-    if ($this->mode != PWOPT_PROFILE) {
+    if ($this->mode != self::PWOPT_PROFILE) {
       $this->account->MarkAsUpdated(); // mark as no longer modified
     }
     $this->SetDirectoryPermissions($this->rootpath, 0755);
-    $this->AddToLog(LOG_STOP_PROCESSOR, 'page count=' . count($this->pagelist->pages));
+    $this->AddToLog(self::LOG_STOP_PROCESSOR, 'page count=' . count($this->pagelist->pages));
   }
 
   private function CopyStyleSheet($pathsrc, $pathdst, $filename) {
@@ -284,7 +302,7 @@ class pagewriter {
       unlink($dst);
     }
     if (copy($pathsrc . DIRECTORY_SEPARATOR . $filename, $dst)) {
-      $this->AddToLog(LOG_RES_COPIED, 'CSS Copied=' . $pathsrc . ' to ' . $pathdst);
+      $this->AddToLog(self::LOG_RES_COPIED, 'CSS Copied=' . $pathsrc . ' to ' . $pathdst);
     } else {
       $this->AddError("CSS file at '{$pathsrc}' NOT copied");
     }
@@ -294,7 +312,7 @@ class pagewriter {
     // ensure the paths have an ending backslash
     $pathsrc = realpath($pathsrc) . DIRECTORY_SEPARATOR . $dirname;
     $pathdst = realpath($pathdst) . DIRECTORY_SEPARATOR . $dirname;
-    $this->AddToLog(LOG_RES_COPIED, 'Copy Images=' . $pathsrc . ' to ' . $pathdst);
+    $this->AddToLog(self::LOG_RES_COPIED, 'Copy Images=' . $pathsrc . ' to ' . $pathdst);
     // ensure the destination directory exists
     $this->DeleteFilesInDirectory($pathdst);
     $this->MakeDirectory($pathdst);
@@ -316,7 +334,7 @@ class pagewriter {
   protected function WritePage($page, $htmlsrc) { //$htmlsrc, $pageid = 0) {
     $this->currentpage = $page; //$this->account->FindPage($pageid);
     if ($this->currentpage && $this->currentpage->exists && 
-      ($this->currentpage->GetFieldValue('status') == STATUS_ACTIVE) &&
+      ($this->currentpage->GetFieldValue('status') == basetable::STATUS_ACTIVE) &&
       $this->currentpage->GetFieldValue('visible')) {
       $this->ProcessPage($htmlsrc);
     }
@@ -325,28 +343,29 @@ class pagewriter {
   private function GetSectionProcessor($pagetype) {
     require_once 'class.sectionprocessor.php';
     switch ($pagetype) {
-      case PAGETYPE_GENERAL: // gen
+      case page::PAGETYPE_GENERAL: // gen
         $ret = new sectionprocessorgeneral($this);
         break;
-      case PAGETYPE_CONTACT: // con
+      case page::PAGETYPE_CONTACT: // con
         $ret = new sectionprocessorcontact($this);
         break;
       //case PAGETYPE_ABOUTUS: // abt
       //case PAGETYPE_PRODUCT: //prd
-      case PAGETYPE_GALLERY: //gal
+      case page::PAGETYPE_GALLERY: //gal
         $ret = new sectionprocessorgallery($this);
         break;
-      case PAGETYPE_ARTICLE: // blg
+      case page::PAGETYPE_ARTICLE: // blg
         $ret = new sectionprocessorarticles($this);
         break;
-      case PAGETYPE_GUESTBOOK: // gbk
+      case page::PAGETYPE_GUESTBOOK: // gbk
         $ret = new sectionprocessorguestbook($this);
         break;
-      //case PAGETYPE_SOCAILNETWORK: // snw
-      case PAGETYPE_BOOKING: // bk
-      case PAGETYPE_CALENDAR: // cal
-//      case PAGETYPE_PRIVATEAREA: // pvt
-      case PAGETYPE_SURVEY: // svy
+      case page::PAGETYPE_SOCIALNETWORK: // snw
+      case page::PAGETYPE_BOOKING: // bk
+      case page::PAGETYPE_CALENDAR: // cal
+      case page::PAGETYPE_NEWSLETTER: // nl
+//      case page::PAGETYPE_PRIVATEAREA: // pvt
+//      case page::PAGETYPE_SURVEY: // svy
       default:
         $ret = false;
         break;
@@ -374,7 +393,7 @@ class pagewriter {
       fclose($srchandle);
       fclose($this->dsthandle);
     } else {
-      $this->AddToLog(LOG_PAGESKIPPED, "Page type {$this->currentpage->pgtype} - ID: {$this->currentpage->ID()}");
+      $this->AddToLog(self::LOG_PAGESKIPPED, "Page type {$this->currentpage->pgtype} - ID: {$this->currentpage->ID()}");
     }
   }
 
@@ -475,8 +494,8 @@ class pagewriter {
     $ret[] = "</body>";
     $ret[] = "</html>";
     $msg = ArrayToString($ret);
-    if (in_array(PWOPT_PROFILE, $this->options)) {
-      if (in_array(PWOPT_TEST, $this->options)) {
+    if (in_array(self::PWOPT_PROFILE, $this->options)) {
+      if (in_array(self::PWOPT_TEST, $this->options)) {
         echo $msg;
       } elseif ($this->errors) {
         $this->account->EmailToSupport('Page Writer Error', $msg);

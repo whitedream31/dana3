@@ -11,12 +11,12 @@ class newsletteritem extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('newsletterid', DT_FK);
-    $this->AddField('newsletteritemtypeid', DT_FK);
+    $this->AddField('newsletterid', self::DT_FK);
+    $this->AddField('newsletteritemtypeid', self::DT_FK);
 //    $this->AddField('groupid', DT_FK);
-    $this->AddField('heading', DT_STRING);
-    $this->AddField('content', DT_TEXT);
-    $this->AddField('orderorder', DT_INTEGER);
+    $this->AddField('heading', self::DT_STRING);
+    $this->AddField('content', self::DT_TEXT);
+    $this->AddField('orderorder', self::DT_INTEGER);
 //    $this->AddField('url', DT_STRING);
   }
 }

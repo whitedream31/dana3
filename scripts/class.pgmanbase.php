@@ -1,11 +1,16 @@
 <?php
 
-define('PF_STANDARD', 0);
-define('PF_VISIBLE', 1);
-define('PF_MAINCONTENT', 2);
-define('PF_OPTIONS', 3);
+//define('PF_STANDARD', 0);
+//define('PF_VISIBLE', 1);
+//define('PF_MAINCONTENT', 2);
+//define('PF_OPTIONS', 3);
 
 abstract class pgmanbase {
+  const PF_STANDARD = 0;
+  const PF_VISIBLE = 1;
+  const PF_MAINCONTENT = 2;
+  const PF_OPTIONS = 3;
+
   protected $action;
   protected $fields;
   protected $pgman; // page manager object
@@ -36,7 +41,7 @@ abstract class pgmanbase {
   abstract protected function GetFieldGroups();
 
   private function InitEditorFields() {
-    if (in_array(PF_STANDARD, $this->fields)) {
+    if (in_array(self::PF_STANDARD, $this->fields)) {
       $this->pagedescription = $this->pgman->AddField(
         'description', new formbuildereditbox('description', '', 'Description'), $this->table);
       $this->header = $this->pgman->AddField(
@@ -46,11 +51,11 @@ abstract class pgmanbase {
       $this->sidecontent = $this->pgman->AddField(
         'sidecontent', new formbuildertextarea('sidecontent', '', 'General Side Content'), $this->table);
     }
-    if (in_array(PF_MAINCONTENT, $this->fields)) {
+    if (in_array(self::PF_MAINCONTENT, $this->fields)) {
       $this->maincontent = $this->pgman->AddField(
         'maincontent', new formbuildertextarea('maincontent', '', 'Main Content'), $this->table);
     }
-    if (in_array(PF_OPTIONS, $this->fields)) {
+    if (in_array(self::PF_OPTIONS, $this->fields)) {
       $this->incrss = $this->pgman->AddField(
         'incrss', new formbuildercheckbox('incrss', '', 'Include RSS Feed?'), $this->table);
       $this->incshownewsletters = $this->pgman->AddField(
@@ -62,7 +67,7 @@ abstract class pgmanbase {
       $this->showfiles = $this->pgman->AddField(
         'showfiles', new formbuildercheckbox('showfiles', '', 'Include Downloadable Files?'), $this->table);
     }
-    if (in_array(PF_VISIBLE, $this->fields)) {
+    if (in_array(self::PF_VISIBLE, $this->fields)) {
       $this->visible = $this->pgman->AddField(
         'visible', new formbuildercheckbox('visible', '', 'Visible? <small>(available to view in your site)</small>'), $this->table);
     }
@@ -70,8 +75,8 @@ abstract class pgmanbase {
   
   protected function InitFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->InitEditorFields();
         break;
     }
@@ -89,27 +94,27 @@ abstract class pgmanbase {
   
   public function SetupSectionList($pgman) {
     $this->pgman = $pgman;
-    if (in_array(PF_STANDARD, $this->fields)) {
+    if (in_array(self::PF_STANDARD, $this->fields)) {
 //      $this->pagedescription = $this->AddField('description', new formbuildereditbox('description', '', 'Description'), $table);
 //      $this->header = $this->AddField('header', new formbuildereditbox('header', '', 'Header'), $table);
 //      $this->initialcontent = $this->AddField('initialcontent', new formbuildertextarea('initialcontent', '', 'Initial Content'), $table);
 //      $this->sidecontent = $this->AddField('sidecontent', new formbuildertextarea('sidecontent', '', 'General Side Content'), $table);
     }
-    if (in_array(PF_MAINCONTENT, $this->fields)) {
+    if (in_array(self::PF_MAINCONTENT, $this->fields)) {
       $this->maincontent->rows = 30;
       $this->BindToSection(
         'sctmain', 'maincontent', $this->maincontent,
         'This is the main text of your page. This can be as long as you like. <strong>Please check your spelling and ' .
         'grammar carefully.</strong>');
     }
-    if (in_array(PF_OPTIONS, $this->fields)) {
+    if (in_array(self::PF_OPTIONS, $this->fields)) {
 //      $this->incrss = $this->AddField('incrss', new formbuildercheckbox('incrss', '', 'Include RSS Feed?'), $table);
 //      $this->incshownewsletters = $this->AddField('incshownewsletters', new formbuildercheckbox('incshownewsletters', '', 'Include Newsletters?'), $table);
 //      $this->incsocialnetwork = $this->AddField('incsocialnetwork', new formbuildercheckbox('incsocialnetwork', '', 'Include Social Network Links?'), $table);
 //      $this->inctranslation = $this->AddField('inctranslation', new formbuildercheckbox('inctranslation', '', 'Include Google Translation Tool?'), $table);
 //      $this->showfiles = $this->AddField('showfiles', new formbuildercheckbox('showfiles', '', 'Include Downloadable Files?'), $table);
     }
-    if (in_array(PF_VISIBLE, $this->fields)) {
+    if (in_array(self::PF_VISIBLE, $this->fields)) {
 //      $this->visible = $this->AddField('visible', new formbuildercheckbox('visible', '', 'Visible? <small>(available to view in your site)</small>'), $table);
     }
   }

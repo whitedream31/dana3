@@ -1,9 +1,9 @@
 <?php
 require_once 'class.formbuildereditbox.php';
 
-define('DATEFMT_DMY', 'dmy');
-define('DATEFMT_MDY', 'mdy');
-define('DATEFMT_YMD', 'ymd');
+//define('DATEFMT_DMY', 'dmy');
+//define('DATEFMT_MDY', 'mdy');
+//define('DATEFMT_YMD', 'ymd');
 
 // date field - FLDTYPE_DATE - detrieved from edit box
 class datefield extends editboxfield {
@@ -13,7 +13,7 @@ class datefield extends editboxfield {
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = FLDTYPE_DATE;
+    $this->fieldtype = basetable::FLDTYPE_DATE;
     $this->size = 10;
     $this->maxlength = 10;
   }

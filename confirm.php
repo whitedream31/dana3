@@ -4,13 +4,13 @@ require_once 'scripts/class.database.php';
 require_once 'scripts/class.table.newslettersubscriber.php';
 
 function ProcessNewsletterSubscription($ref) {
-  $ln = database::SelectFromTableByField('newslettersubscriber', 'sessionref', $ref, FN_ID);
+  $ln = database::SelectFromTableByField('newslettersubscriber', 'sessionref', $ref, basetable::FN_ID);
   $found = (bool) $ln;
   if ($found) {
     $id = $ln;
     $subscriber = new newslettersubscriber($id);
     if ($subscriber->exists) {
-      $subscriber->SetFieldValue(FN_STATUS, STATUS_ACTIVE);
+      $subscriber->SetFieldValue(basetable::FN_STATUS, basetable::STATUS_ACTIVE);
       $subscriber->StoreChanges();
       $fullname = $subscriber->FullName();
       $msg = "Thank you, {$fullname}, for subscribing to our newsletter.";
@@ -30,13 +30,13 @@ function ProcessNewsletterSubscription($ref) {
 }
 
 function ProcessNewsletterUnSubscribe($ref) {
-  $ln = database::SelectFromTableByField('newslettersubscriber', 'sessionref', $ref, FN_ID);
+  $ln = database::SelectFromTableByField('newslettersubscriber', 'sessionref', $ref, basetable::FN_ID);
   $found = (bool) $ln;
   if ($found) {
-    $id = $ln[FN_ID];
+    $id = $ln[basetable::FN_ID];
     $subscriber = new newslettersubscriber($id);
     if ($subscriber->exists) {
-      $subscriber->SetFieldValue(FN_STATUS, STATUS_UNSUBSCRIBED);
+      $subscriber->SetFieldValue(basetable::FN_STATUS, newslettersubscriber::STATUS_UNSUBSCRIBED);
       $subscriber->StoreChanges();
       $fullname = $subscriber->FullName();
       $msg = "{$fullname}, you have been unsubscribed from our newsletter. Thank you for your interest.";

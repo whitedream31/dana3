@@ -15,9 +15,9 @@ class privatearea extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('title', DT_DESCRIPTION);
-    $this->AddField(FN_STATUS, DT_STRING);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField('title', self::DT_DESCRIPTION);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {
@@ -34,7 +34,7 @@ class privatearea extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
 
     $query =
       'SELECT pa.`id`, pa.`title`, ' .
@@ -44,7 +44,7 @@ class privatearea extends idtable {
       'FROM `privatearea` pa ' .
       "WHERE pa.`accountid` = {$accountid} AND pa.`status` = '{$status}' " .
       'ORDER BY pa.`title`';
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {

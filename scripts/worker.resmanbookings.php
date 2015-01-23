@@ -49,8 +49,8 @@ class workerresmanbookings extends workerform {
     $this->contextdescription = 'booking management';
 
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
 //        $this->title = 'Modify Bookng Entry';
         $this->fldtitle = $this->AddField(
           'title', new formbuildereditbox('title', '', 'Booking Title'), $this->table);
@@ -69,7 +69,7 @@ class workerresmanbookings extends workerform {
         $this->fldemail = $this->AddField(
           'email', new formbuilderemail('email', '', 'Contact E-Mail'), $this->table);
         $this->fldemail->required = true;
-        if ($this->action == ACT_EDIT) {
+        if ($this->action == workerbase::ACT_EDIT) {
           $this->fldbookingstateid = $this->AddField(
             'bookingstateid', new formbuilderselect('bookingstateid', '', 'Current Booking State'), $this->table);
         }
@@ -78,10 +78,10 @@ class workerresmanbookings extends workerform {
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Bookings';
         // settings
         $this->datagridsettings = new formbuilderdatagrid('datagridsettings', '', 'Booking Settings');
@@ -97,8 +97,8 @@ class workerresmanbookings extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret = $this->fldtitle->Save() + $this->fldstartdate->Save() + $this->fldtimetext->Save() +
           $this->fldclientname->Save() + $this->fldaddress->Save() + $this->fldpostcode->Save() +
           $this->fldtelephone->Save() + $this->fldemail->Save() +
@@ -112,7 +112,7 @@ class workerresmanbookings extends workerform {
   }
 
   protected function SaveToTable() {
-    if ($this->action == ACT_NEW) {
+    if ($this->action == workerbase::ACT_NEW) {
       $state = database::SelectFromTableByRef('bookingstate', '3PROVISIONAL');
       $stateid = $state['id'];
       $this->table->SetFieldValue('bookingstateid', $stateid);
@@ -127,7 +127,13 @@ class workerresmanbookings extends workerform {
         'Booking for ' . $this->fldclientname->value . ' on ' . date('l, j F Y', $date) . $time;
       $this->table->SetFieldValue('title', $title);
     }
-    return (int) $this->table->StoreChanges();
+    $ret = (int) $this->table->StoreChanges();
+    if (($ret != basetable::STORERESULT_ERROR)) {
+      $this->table->SendBookingDetails($this->action == workerbase::ACT_NEW);
+    }
+    // back to parent newsletter worker
+    $this->SaveAndReset(false, activitymanager::IDNAME_MANAGENEWSLETTERS);
+    return $ret;
   }
 
   protected function AddErrorList() {}
@@ -139,13 +145,13 @@ class workerresmanbookings extends workerform {
       'clients. You can have as many booking settings as you wish but it is recommended to have only one for each booking type.');
     $this->PopulateSettings();
     // assign settings
-    $this->datagridsettings->SetIDName(IDNAME_MANAGEBOOKINGSETTINGS);
+    $this->datagridsettings->SetIDName(activitymanager::IDNAME_MANAGEBOOKINGSETTINGS);
     $this->fldsettings->description = 'Your booking Settings.';
     $this->AssignFieldToSection('settings', 'datagridsettings');
     // add setting button
     $this->fldaddsetting = $this->AddField(
       'addsetting', new formbuilderbutton('addsetting', 'Add Setting'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . IDNAME_MANAGEBOOKINGSETTINGS . '&act=' . ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEBOOKINGSETTINGS . '&act=' . workerbase::ACT_NEW;
     $this->fldaddsetting->url = $url;
     $this->AssignFieldToSection('settings', 'addsetting');
     // assign bookings for each setting
@@ -176,7 +182,7 @@ class workerresmanbookings extends workerform {
       // add booking button
       $this->fldaddbooking = $this->AddField(
         'addbooking', new formbuilderbutton('addbooking', 'Add Booking Entry'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&pid={$settingid}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&pid={$settingid}&act=" . workerbase::ACT_NEW;
         $this->fldaddbooking->url = $url;
         $this->AssignFieldToSection($sectionname, 'addbooking');
       //
@@ -219,7 +225,8 @@ class workerresmanbookings extends workerform {
       */
       foreach($list as $itemid => $item) {
         $clientname = IfBlank($item['clientname'], '<em>Not specified</em>');
-        $entrydate = $this->table->FormatDateTime(DF_MEDIUMDATE, $item['startdate'], '<em>none</em>') . ' ' . $item['timetext'];
+        $entrydate = $this->table->FormatDateTime(
+          self::DF_MEDIUMDATE, $item['startdate'], '<em>none</em>') . ' ' . $item['timetext'];
         $title = IfBlank($item['title'], $entrydate);
         $statedesc = IfBlank($item['statedesc'], '<em>none</em>');
         $statecolour = $item['statecolour'];
@@ -264,10 +271,11 @@ class workerresmanbookings extends workerform {
     $this->fldtimetext->placeholder = 'eg. 03:00';
     $this->AssignFieldToSection('entry', 'timetext');
     // booking state
-    if ($this->action == ACT_EDIT) {
+    if ($this->action == workerbase::ACT_EDIT) {
       $this->fldbookingstateid->description =
         "Please select the bookings current state. The initial state is 'Provisional', " .      "meaning unconfirmed and may change later.";
-      $statelist = database::RetrieveLookupList('bookingstate', FN_DESCRIPTION, FN_REF, FN_ID, "`mode` = 1");
+      $statelist = database::RetrieveLookupList(
+        'bookingstate', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID); //, "`mode` = 1");
       $selectedid = ($this->fldbookingstateid->value);
       if (!$selectedid) {
         $selectedid = reset($statelist);
@@ -324,7 +332,8 @@ class workerresmanbookings extends workerform {
     $this->AssignBlankFieldvalue(
       $this->fldtitle,
         $this->fldclientname . ' at ' .
-        $this->table->FormatDateTime(DF_MEDIUMDATE, $this->fldstartdate->value, '<em>none</em>')
+        $this->table->FormatDateTime(
+          self::DF_MEDIUMDATE, $this->fldstartdate->value, '<em>none</em>')
     );
   }
 }

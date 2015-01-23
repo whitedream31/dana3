@@ -13,23 +13,27 @@ class guestbookentry extends idtable {
   public $userdisplayname;
   public $comment;
 
+  const STATUS_NEW = 'N';
+  const STATUS_HIDDEN = 'H';
+
   function __construct($id = 0) {
     parent::__construct('guestbookentry', $id);
   }
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('guestbookid', DT_FK);
-    $this->AddField('visitorid', DT_FK);
-    $this->AddField('subject', DT_STRING);
-    $this->AddField('content', DT_TEXT);
-    $this->AddField('sendername', DT_STRING);
-    $this->AddField('datestamp', DT_DATETIME);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('guestbookid', self::DT_FK);
+    $this->AddField('visitorid', self::DT_FK);
+    $this->AddField('subject', self::DT_STRING);
+    $this->AddField('content', self::DT_TEXT);
+    $this->AddField('sendername', self::DT_STRING);
+    $this->AddField('datestamp', self::DT_DATETIME);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {
-    $this->datedescription = $this->FormatDateTime(DF_LONGDATETIME, $this->GetFieldValue('datestamp'));
+    $this->datedescription =
+      $this->FormatDateTime(self::DF_LONGDATETIME, $this->GetFieldValue('datestamp'));
   }
 
   public function GetEntryDetails() {
@@ -43,19 +47,19 @@ class guestbookentry extends idtable {
   public function StatusAsString($status = false) {
     $ret = '';
 //    $status = $this->GetFieldValue(FN_STATUS);
-    $status = ($status) ? $status : $this->GetFieldValue(FN_STATUS);
+    $status = ($status) ? $status : $this->GetFieldValue(basetable::FN_STATUS);
     if ($status) {
       switch ($status) {
-        case STATUS_ACTIVE:
+        case self::STATUS_ACTIVE:
           $ret = 'VISIBLE';
           break;
-        case STATUS_DELETED:
+        case self::STATUS_DELETED:
           $ret = 'Deleted';
           break;
-        case STATUS_NEW:
+        case self::STATUS_NEW:
           $ret = 'New';
           break;
-        case STATUS_HIDDEN:
+        case self::STATUS_HIDDEN:
           $ret = 'not shown';
           break;
       }
@@ -65,7 +69,7 @@ class guestbookentry extends idtable {
 
   static public function GetList($groupid) {
     $ret = array();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $result = database::$instance->Query(
       'SELECT `id` FROM guestbookentry ' .
       "WHERE `guestbookid` = {$groupid} AND `status` = '{$status}' " .

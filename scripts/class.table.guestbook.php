@@ -14,20 +14,20 @@ class guestbook extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->Addfield(FN_DESCRIPTION, DT_DESCRIPTION);
-    $this->AddField('generalmessage', DT_TEXT);
-    $this->AddField('registermessage', DT_TEXT);
-    $this->AddField('thankyoumessage', DT_TEXT);
-    $this->AddField('canregister', DT_BOOLEAN);
-    $this->AddField('registeredonly', DT_BOOLEAN);
-    $this->AddField('authorise', DT_BOOLEAN);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('accountid', self::DT_FK);
+    $this->Addfield(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
+    $this->AddField('generalmessage', self::DT_TEXT);
+    $this->AddField('registermessage', self::DT_TEXT);
+    $this->AddField('thankyoumessage', self::DT_TEXT);
+    $this->AddField('canregister', self::DT_BOOLEAN);
+    $this->AddField('registeredonly', self::DT_BOOLEAN);
+    $this->AddField('authorise', self::DT_BOOLEAN);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AssignDefaultFieldValues() {
-    $this->SetFieldValue(FN_DESCRIPTION, 'Guest Book');
-    $this->SetFieldValue(FN_STATUS, STATUS_ACTIVE);
+    $this->SetFieldValue(basetable::FN_DESCRIPTION, 'Guest Book');
+    $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_ACTIVE);
   }
 
   protected function LoadEntries() {
@@ -83,18 +83,18 @@ class guestbook extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query =
       'SELECT g.*, (SELECT COUNT(*) FROM `guestbookentry` e WHERE e.`guestbookid` = g.`id`) as entrycount ' .
       'FROM `guestbook` g ' .
       "WHERE g.`accountid` = {$accountid} AND `status` = '{$status}' " .
       'ORDER BY g.`description`';
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
-      $description = ($line[FN_DESCRIPTION]) ? $line[FN_DESCRIPTION] : '<em>none</em>';
+      $description = ($line[basetable::FN_DESCRIPTION]) ? $line[basetable::FN_DESCRIPTION] : '<em>none</em>';
       $coldata = array(
         'DESC' => $description,
         'COUNT' => $line['entrycount']

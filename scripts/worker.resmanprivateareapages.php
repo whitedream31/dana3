@@ -24,13 +24,13 @@ class workerresmanprivateareapages extends workerform {
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Manage private area pages';
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
         $this->title = 'Link pages with the private area';
-        $this->returnidname = IDNAME_MANAGEPRIVATEAREAS;
+        $this->returnidname = activitymanager::IDNAME_MANAGEPRIVATEAREAS;
         $this->showroot = false; 
         break;
-      case ACT_REMOVE:
+      case workerbase::ACT_REMOVE:
         break;
       default:
         break;
@@ -39,8 +39,8 @@ class workerresmanprivateareapages extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_NEW:
-      case ACT_EDIT:
+      case workerbase::ACT_NEW:
+      case workerbase::ACT_EDIT:
 //        $ret = $this->fldfirstname->Save() + $this->fldlastname->Save() +
 //          $this->fldemail->Save();
         break;
@@ -64,7 +64,7 @@ class workerresmanprivateareapages extends workerform {
     $ret = array();
     $account = account::$instance;
     $pagemgrid = $account->GetFieldValue('pagemgrid');
-    $status = STATUS_ACTIVE;
+    $status = basetable::STATUS_ACTIVE;
     $query =
       'SELECT p.`id`, pt.`pgtype` FROM `page` p ' .
       'INNER JOIN `pagetype` pt ON pt.`id` = p.`pagetypeid` ' .

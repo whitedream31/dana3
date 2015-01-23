@@ -9,58 +9,107 @@
 //require_once('galleryclass.php');
 //require_once('newsletterclass.php');
 
-// <head>
-define('SCT_TITLE', 'title');
-define('SCT_KEYWORDS', 'keywords');
-define('SCT_METADESCRIPTION', 'description');
-//  heading area
-define('SCT_NAVIGATION', 'navigation');
-define('SCT_LOGO', 'logo');
-define('SCT_HEADER', 'header');
-define('SCT_TAGLINE', 'tagline');
-define('SCT_INITIALCONTENT', 'initialcontent');
-define('SCT_MAINCONTENT', 'maincontent');
-define('SCT_ARTICLES', 'articles');
-define('SCT_GUESTBOOK', 'guestbook');
-define('SCT_NEWSLETTERS', 'newsletters');
-define('SCT_SOCIALNETWORKS', 'socialnetworks');
-define('SCT_TRANSLATION', 'translation');
-define('SCT_RSSFEED', 'rssfeed');
-define('SCT_CONTACTDETAILS', 'contactdetails');
-//define('SCT_DOWNLOADABLEFILES', 'downloadablefiles');
-define('SCT_SIDECONTENT', 'sidecontent');
-define('SCT_FOOTER', 'footer');
-define('SCT_ADDTHIS', 'addthis');
-define('SCT_METALINKS', 'metalinks');
-define('SCT_SCRIPT', 'script');
-define('SCT_CALLJS', 'calljs');
-define('SCT_ADVERT', 'advert');
+//// <head>
+//define('SCT_TITLE', 'title');
+//define('SCT_KEYWORDS', 'keywords');
+//define('SCT_METADESCRIPTION', 'description');
+////  heading area
+//define('SCT_NAVIGATION', 'navigation');
+//define('SCT_LOGO', 'logo');
+//define('SCT_HEADER', 'header');
+//define('SCT_TAGLINE', 'tagline');
+//define('SCT_INITIALCONTENT', 'initialcontent');
+//define('SCT_MAINCONTENT', 'maincontent');
+//define('SCT_ARTICLES', 'articles');
+//define('SCT_GUESTBOOK', 'guestbook');
+//define('SCT_NEWSLETTERS', 'newsletters');
+//define('SCT_SOCIALNETWORKS', 'socialnetworks');
+//define('SCT_TRANSLATION', 'translation');
+//define('SCT_RSSFEED', 'rssfeed');
+//define('SCT_CONTACTDETAILS', 'contactdetails');
+////define('SCT_DOWNLOADABLEFILES', 'downloadablefiles');
+//define('SCT_SIDECONTENT', 'sidecontent');
+//define('SCT_FOOTER', 'footer');
+//define('SCT_ADDTHIS', 'addthis');
+//define('SCT_METALINKS', 'metalinks');
+//define('SCT_SCRIPT', 'script');
+//define('SCT_CALLJS', 'calljs');
+//define('SCT_ADVERT', 'advert');
 
 // id name of sections
-define('HTMLID_LOGO', 'logoimg'); // business logo
-define('HTMLID_NAVIGATION', 'menu'); // navigation (menu) of pages
-define('HTMLID_INITIALCONTENT', 'inittext');
-define('HTMLID_MAINCONTENT', 'maintext');
-define('HTMLID_ARTICLE', 'art');
-define('HTMLID_GUESTBOOK', 'guestbook');
-define('HTMLID_NEWSLETTER', 'newsletter');
-define('HTMLID_SOCIALNETWORK', 'socialnetwork');
-define('HTMLID_CALENDAR', 'calendar');
-define('HTMLID_BOOKING', 'booking');
-define('HTMLID_PRIVATEAREA', 'privatearea');
-define('HTMLID_TRANSLATION', 'translation');
-define('HTMLID_RSSFEED', 'rssfeed');
-define('HTMLID_CONTACTDETAILS', 'contactdetails');
-define('HTMLID_DOWNLOADABLEFILES', 'downloadablefiles');
-define('HTMLID_SIDECONTENT', 'sidetext');
-define('HTMLID_PAGEFOOTER', 'pagefooter');
-define('HTMLID_ADDTHIS', 'addthis');
+//define('HTMLID_LOGO', 'logoimg'); // business logo
+//define('HTMLID_NAVIGATION', 'menu'); // navigation (menu) of pages
+//define('HTMLID_INITIALCONTENT', 'inittext');
+//define('HTMLID_MAINCONTENT', 'maintext');
+//define('HTMLID_ARTICLE', 'art');
+//define('HTMLID_GUESTBOOK', 'guestbook');
+//define('HTMLID_NEWSLETTER', 'newsletter');
+//define('HTMLID_SOCIALNETWORK', 'socialnetwork');
+//define('HTMLID_CALENDAR', 'calendar');
+//define('HTMLID_BOOKING', 'booking');
+//define('HTMLID_PRIVATEAREA', 'privatearea');
+//define('HTMLID_TRANSLATION', 'translation');
+//define('HTMLID_RSSFEED', 'rssfeed');
+//define('HTMLID_CONTACTDETAILS', 'contactdetails');
+//define('HTMLID_DOWNLOADABLEFILES', 'downloadablefiles');
+//define('HTMLID_SIDECONTENT', 'sidetext');
+//define('HTMLID_PAGEFOOTER', 'pagefooter');
+//define('HTMLID_ADDTHIS', 'addthis');
 
-define('CONTENTAREATYPE_SIDEBAR', 's');
-define('CONTENTAREATYPE_MAIN', 'm');
+//define('CONTENTAREATYPE_SIDEBAR', 's');
+//define('CONTENTAREATYPE_MAIN', 'm');
 
 // base class for the section processor
 abstract class sectionprocessor {
+  // <head>
+  const SCT_TITLE = 'title';
+  const SCT_KEYWORDS = 'keywords';
+  const SCT_METADESCRIPTION = 'description';
+  //  heading area
+  const SCT_NAVIGATION = 'navigation';
+  const SCT_LOGO = 'logo';
+  const SCT_HEADER = 'header';
+  const SCT_TAGLINE = 'tagline';
+  const SCT_INITIALCONTENT = 'initialcontent';
+  const SCT_MAINCONTENT = 'maincontent';
+  const SCT_ARTICLES = 'articles';
+  const SCT_GUESTBOOK = 'guestbook';
+  const SCT_NEWSLETTERS = 'newsletters';
+  const SCT_SOCIALNETWORKS = 'socialnetworks';
+  const SCT_TRANSLATION = 'translation';
+  const SCT_RSSFEED = 'rssfeed';
+  const SCT_CONTACTDETAILS = 'contactdetails';
+  //const SCT_DOWNLOADABLEFILES = 'downloadablefiles';
+  const SCT_SIDECONTENT = 'sidecontent';
+  const SCT_FOOTER = 'footer';
+  const SCT_ADDTHIS = 'addthis';
+  const SCT_METALINKS = 'metalinks';
+  const SCT_SCRIPT = 'script';
+  const SCT_CALLJS = 'calljs';
+  const SCT_ADVERT = 'advert';
+  // id name of sections
+  const HTMLID_LOGO = 'logoimg'; // business logo
+  const HTMLID_NAVIGATION = 'menu'; // navigation (menu) of pages
+  const HTMLID_INITIALCONTENT = 'inittext';
+  const HTMLID_MAINCONTENT = 'maintext';
+  const HTMLID_ARTICLE = 'art';
+  const HTMLID_GUESTBOOK = 'guestbook';
+  const HTMLID_NEWSLETTER = 'newsletter';
+  const HTMLID_SOCIALNETWORK = 'socialnetwork';
+  const HTMLID_CALENDAR = 'calendar';
+  const HTMLID_BOOKING = 'booking';
+  const HTMLID_PRIVATEAREA = 'privatearea';
+  const HTMLID_TRANSLATION = 'translation';
+  const HTMLID_RSSFEED = 'rssfeed';
+  const HTMLID_CONTACTDETAILS = 'contactdetails';
+  const HTMLID_DOWNLOADABLEFILES = 'downloadablefiles';
+  const HTMLID_SIDECONTENT = 'sidetext';
+  const HTMLID_PAGEFOOTER = 'pagefooter';
+  const HTMLID_ADDTHIS = 'addthis';
+
+  const CONTENTAREATYPE_SIDEBAR = 's';
+  const CONTENTAREATYPE_MAIN = 'm';
+
   protected $pagewriter;
   protected $mode;
   protected $rootpath;
@@ -210,61 +259,61 @@ abstract class sectionprocessor {
     $this->sectiontag = $tag;
     $this->sectionclass = $class;
     switch ($sectioname) {
-      case SCT_TITLE:
+      case self::SCT_TITLE:
         $ret = $this->GetSectionPageTitle();
         break;
-      case SCT_KEYWORDS:
+      case self::SCT_KEYWORDS:
         $ret = $this->GetSectionKeywords();
         break;
-      case SCT_METADESCRIPTION:
+      case self::SCT_METADESCRIPTION:
         $ret = $this->GetSectionMetaDescription();
         break;
-      case SCT_NAVIGATION:
+      case self::SCT_NAVIGATION:
         $ret = $this->GetSectionNavigation();
         break;
-      case SCT_LOGO:
+      case self::SCT_LOGO:
         $ret = $this->GetSectionLogo();
         break;
-      case SCT_HEADER:
+      case self::SCT_HEADER:
         $ret = $this->GetSectionHeader(); // DONE
         break;
-      case SCT_TAGLINE:
+      case self::SCT_TAGLINE:
         $ret = $this->GetSectionTagline();
         break;
-      case SCT_INITIALCONTENT:
+      case self::SCT_INITIALCONTENT:
         $ret = $this->GetSectionInitialcontent(); // DONE
         break;
-      case SCT_MAINCONTENT:
+      case self::SCT_MAINCONTENT:
         $ret = $this->GetSectionMainContent();
         break;
-      case SCT_TRANSLATION:
+      case self::SCT_TRANSLATION:
         $ret = $this->GetSectionTranslation();
         break;
-      case SCT_RSSFEED:
+      case self::SCT_RSSFEED:
         $ret = $this->GetSectionRSSFeed();
         break;
-      case SCT_CONTACTDETAILS:
+      case self::SCT_CONTACTDETAILS:
         $ret = $this->GetSectionContactDetails();
         break;
-      case SCT_SIDECONTENT:
+      case self::SCT_SIDECONTENT:
         $ret = $this->GetSectionSideContent(); // DONE
         break;
-      case SCT_FOOTER:
+      case self::SCT_FOOTER:
         $ret = $this->GetSectionFooter(); // DONE
         break;
-      case SCT_ADDTHIS:
+      case self::SCT_ADDTHIS:
         $ret = $this->GetSectionAddthis();
         break;
-      case SCT_METALINKS:
+      case self::SCT_METALINKS:
         $ret = $this->GetSectionMetalinks();
         break;
-      case SCT_SCRIPT:
+      case self::SCT_SCRIPT:
         $ret = $this->GetSectionScript();
         break;
-      case SCT_ADVERT:
+      case self::SCT_ADVERT:
         $ret = $this->GetSectionAdvert();
         break;
-      case SCT_CALLJS:
+      case self::SCT_CALLJS:
         $ret = $this->GetCallJS();
         break;
       default:
@@ -306,8 +355,8 @@ abstract class sectionprocessor {
   }
 
   private function GetSectionInitialcontent() {
-    $value = $this->DoGetWebsiteContent(CTWM_INITIALCONTENT, CONTENTAREATYPE_MAIN);
-    return $this->MakeTag($value, '', HTMLID_INITIALCONTENT);
+    $value = $this->DoGetWebsiteContent(websitemanager::CTWM_INITIALCONTENT, self::CONTENTAREATYPE_MAIN);
+    return $this->MakeTag($value, '', self::HTMLID_INITIALCONTENT);
   }
 
   private function GetSectionMainContent() {
@@ -322,7 +371,8 @@ abstract class sectionprocessor {
       $this->MakeTag($this->DoGetWebsiteContent(CT_PRIVATEAREA, CONTENTAREATYPE_MAIN), '', HTMLID_PRIVATEAREA),
       $this->MakeTag($this->DoGetWebsiteContent(CT_DOWNLOADABLEFILES, CONTENTAREATYPE_MAIN), '', HTMLID_DOWNLOADABLEFILES)
     ); */
-    return $this->MakeTag($this->DoGetWebsiteContent(CTWM_MAINCONTENT, CONTENTAREATYPE_MAIN), '', HTMLID_MAINCONTENT);
+    return $this->MakeTag($this->DoGetWebsiteContent(
+      websitemanager::CTWM_MAINCONTENT, self::CONTENTAREATYPE_MAIN), '', self::HTMLID_MAINCONTENT);
 //    return $this->MakeTag($this->page->GetFieldValue('maincontent'), '', HTMLID_MAINCONTENT);
 //    return ArrayToString($list);
   }
@@ -346,17 +396,17 @@ abstract class sectionprocessor {
 
   private function GetSectionContactDetails() {
     return $this->MakeTag(
-      $this->page->GetContactInfo(), '', HTMLID_CONTACTDETAILS);
+      $this->page->GetContactInfo(), '', self::HTMLID_CONTACTDETAILS);
   }
 
   // get content from database via the website manager
   // it is only fetched at runtime, when the visitor requests the page
   protected function DoGetWebsiteContent($ct, $areatype) {
     switch ($areatype) {
-      case CONTENTAREATYPE_SIDEBAR:
+      case self::CONTENTAREATYPE_SIDEBAR:
         $ret = "<?php websitemanager::ShowSideContent('{$ct}', {$this->groupid}); ?>";
         break;
-      case CONTENTAREATYPE_MAIN:
+      case self::CONTENTAREATYPE_MAIN:
         $ret = "<?php websitemanager::ShowMainContent('{$ct}', {$this->groupid}); ?>";
         break;
       default:
@@ -368,15 +418,32 @@ abstract class sectionprocessor {
   // fetch all side content
   private function GetSectionSideContent() {
     $list = array(
-      $this->MakeTag($this->page->GetSidebarContent(), '', HTMLID_SIDECONTENT),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_ARTICLES, CONTENTAREATYPE_SIDEBAR), '', HTMLID_ARTICLE),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_GUESTBOOK, CONTENTAREATYPE_SIDEBAR), '', HTMLID_GUESTBOOK),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_NEWSLETTERS, CONTENTAREATYPE_SIDEBAR), '', HTMLID_NEWSLETTER),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_SOCIALNETWORK, CONTENTAREATYPE_SIDEBAR), '', HTMLID_SOCIALNETWORK),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_CALENDAR, CONTENTAREATYPE_SIDEBAR), '', HTMLID_CALENDAR),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_BOOKING, CONTENTAREATYPE_SIDEBAR), '', HTMLID_BOOKING),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_PRIVATEAREA, CONTENTAREATYPE_SIDEBAR), '', HTMLID_PRIVATEAREA),
-      $this->MakeTag($this->DoGetWebsiteContent(CTWM_DOWNLOADABLEFILES, CONTENTAREATYPE_SIDEBAR), '', HTMLID_DOWNLOADABLEFILES)
+      $this->MakeTag(
+        $this->page->GetSidebarContent(), '', self::HTMLID_SIDECONTENT),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_ARTICLES, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_ARTICLE),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_GUESTBOOK, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_GUESTBOOK),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_NEWSLETTERS, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_NEWSLETTER),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_SOCIALNETWORK, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_SOCIALNETWORK),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_CALENDAR, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_CALENDAR),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_BOOKING, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_BOOKING),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_PRIVATEAREA, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_PRIVATEAREA),
+      $this->MakeTag(
+        $this->DoGetWebsiteContent(
+          websitemanager::CTWM_DOWNLOADABLEFILES, self::CONTENTAREATYPE_SIDEBAR), '', self::HTMLID_DOWNLOADABLEFILES)
     );
     return ArrayToString($list);
   }
@@ -389,7 +456,7 @@ abstract class sectionprocessor {
         "<p class='designname'>Originally designed by <a title='Free CSS Templates' href='http://www.freecsstemplates.org'>Free CSS Templates</a>.",
         "<small>Modified by <a title='whitedream software' href='http://whitedreamsoftware.co.uk'>Whitedream Software</a>.</small> ",
         "&mdash; <a title='click to sign up' href='http://mylocalsmallbusiness.com'><strong>FREE Mini Websites</strong></a></p>"
-      ), '', HTMLID_PAGEFOOTER);
+      ), '', self::HTMLID_PAGEFOOTER);
   }
 
   private function GetSectionAddthis() {
@@ -451,7 +518,7 @@ abstract class sectionprocessor {
         $ret1 = array("  <h2>Downloads</h2>", "  <ul>");
         $ret2 = array_merge($ret1, $list);
         $ret2[] = "  </ul>";
-        $ret = $this->MakeTag(ArrayToString($ret2), 'div', HTMLID_DOWNLOADABLEFILES);
+        $ret = $this->MakeTag(ArrayToString($ret2), 'div', self::HTMLID_DOWNLOADABLEFILES);
       } else {
         $ret = false;
       }
@@ -542,7 +609,7 @@ abstract class sectionprocessor {
         }
       }
       $nav[] = "</ul>";
-      $ret = $this->MakeTag($nav, 'nav', HTMLID_NAVIGATION, $this->sectionclass);
+      $ret = $this->MakeTag($nav, 'nav', self::HTMLID_NAVIGATION, $this->sectionclass);
     } else {
       $ret = '';
     }
@@ -564,7 +631,7 @@ abstract class sectionprocessor {
         } else {
           $url = $img;
         }
-        self::$cache_logo = $this->MakeTag($url, 'div', HTMLID_LOGO, $this->sectionclass);
+        self::$cache_logo = $this->MakeTag($url, 'div', self::HTMLID_LOGO, $this->sectionclass);
       }
     }
     return self::$cache_logo;
@@ -596,7 +663,7 @@ abstract class sectionprocessor {
           $list[] = "    <li><a {$link} target='_blank'>{$img}{$desc}</a></li>";
         }
         $list[] = "  </ul>";
-        $ret = $this->MakeTag(ArrayToString($list), 'div', HTMLID_NEWSLETTER);
+        $ret = $this->MakeTag(ArrayToString($list), 'div', self::HTMLID_NEWSLETTER);
         self::$cache_newsletter = $ret;
       } else {
         $ret = '<p>TODO: link to subscribe to newsletters';
@@ -633,7 +700,7 @@ abstract class sectionprocessor {
             "</li>";
         }
         $list[] = "  </ul>\n";
-        $ret = $this->MakeTag(ArrayToString($list), 'div', HTMLID_SOCIALNETWORK);
+        $ret = $this->MakeTag(ArrayToString($list), 'div', self::HTMLID_SOCIALNETWORK);
       } else {
         $ret = false;
       }
@@ -682,7 +749,7 @@ abstract class sectionprocessor {
       "</script>",
       "<script src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit\"></script>"
     );
-    return $this->MakeTag($ret, 'div', HTMLID_TRANSLATION);
+    return $this->MakeTag($ret, 'div', self::HTMLID_TRANSLATION);
   }
 
   private function DoRSSPage() {
@@ -693,7 +760,7 @@ abstract class sectionprocessor {
         "  <a href=\"{$this->pagewriter->rssfeedfilename}\" target=\"_self\" title=\"page rss feed\">\n" .
         "    <img src=\"{$this->rootpath}images/rss.png\" alt=\"Page RSS Feed\" /><span>Page Feed</span>\n" .
         "  </a>\n";
-      $ret = $this->MakeTag($rss, 'div', HTMLID_RSSFEED);
+      $ret = $this->MakeTag($rss, 'div', self::HTMLID_RSSFEED);
     } else {
       $ret = '';
     }
@@ -709,7 +776,7 @@ abstract class sectionprocessor {
       $result->close();
       if ($line) {
         $ret = $this->MakeTag(
-          "  <h2>Share This Page</h2>\n" . $line['content'] . "\n", 'div', HTMLID_ADDTHIS, 'addthis');
+          "  <h2>Share This Page</h2>\n" . $line['content'] . "\n", 'div', self::HTMLID_ADDTHIS, 'addthis');
       } else {
         $ret = false;
       }

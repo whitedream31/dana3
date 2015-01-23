@@ -43,9 +43,9 @@ class workerresmanarticles extends workerform {
     $this->contextdescription = 'managing articles';
     $this->datagrid = new formbuilderdatagrid('articles', '', 'Articles Available');
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
-        $this->title = (($this->action == ACT_EDIT) ? 'Modify' : 'New') . ' Article';
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
+        $this->title = (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New') . ' Article';
         $this->fldheading = $this->AddField(
           'heading', new formbuildereditbox('heading', '', 'Heading'), $this->table);
         $this->fldheading->required = true;
@@ -57,22 +57,22 @@ class workerresmanarticles extends workerform {
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
-        $this->buttonmode = array(BTN_CONFIRM, BTN_CANCEL);
+      case workerbase::ACT_REMOVE:
+        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove Article';
         $this->fldheading = $this->AddField(
           'heading', new formbuilderstatictext('heading', '', 'Article to be removed'));
-        $this->action = ACT_CONFIRM;
+        $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddarticle = $this->AddField(
           'addarticle', new formbuilderbutton('addarticle', 'Add Article'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . ACT_NEW;
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddarticle->url = $url;
 
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Articles'; 
         $this->articlelist = $this->AddField('articlelist', $this->datagrid, $this->table);
         break;
@@ -81,7 +81,7 @@ class workerresmanarticles extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = STATUS_DELETED;
+      $status = basetable::STATUS_DELETED;
       $query = 'DELETE `articleitem` WHERE `id` = ' . $itemid;
       database::Query($query);
       $ret= true;
@@ -94,13 +94,13 @@ class workerresmanarticles extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret =
           $this->fldheading->Save() + $this->fldcategory->Save() +
           $this->fldcontent->Save();
         break;
-      case ACT_CONFIRM:
+      case workerbase::ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('heading');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Article '{$caption}' removed");

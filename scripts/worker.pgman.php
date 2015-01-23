@@ -109,12 +109,12 @@ class workerpgman extends workerform {
     $this->pagetype = GetGet('pt', GetPost('pt', false));
     if (!$this->pagetype) {
       switch ($this->action) {
-        case ACT_EDIT:
+        case workerbase::ACT_EDIT:
           $this->pagetype = ($this->itemid > 0)
             ? $this->GetPageTypeFromPageID($this->itemid)
             : PAGETYPE_GENERAL;
           break;
-        case ACT_NEW:
+        case workerbase::ACT_NEW:
           $this->pagetype = ($this->itemid > 0)
             ? $this->GetPageTypeFromPageTypeID($this->itemid)
             : PAGETYPE_GENERAL;
@@ -130,34 +130,34 @@ class workerpgman extends workerform {
     $this->statusgrid = new formbuilderstatusgrid('statusgrid', '', 'Page Status');
     $this->newpagedatalist = new formbuilderdatalist('newpagelist', '', 'Choose a New Page Type');
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
-        $this->title = ($this->action == ACT_NEW) ? 'New Page' : 'Modify Page';
-        $pid = ($this->action == ACT_EDIT) ? $this->itemid : 0;
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
+        $this->title = ($this->action == workerbase::ACT_NEW) ? 'New Page' : 'Modify Page';
+        $pid = ($this->action == workerbase::ACT_EDIT) ? $this->itemid : 0;
         $this->table = $this->GetPageTable($this->pagetype, $pid);
         $this->table->InitForm($this, $this->action);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_REMOVE:
-        $this->buttonmode = array(BTN_CONFIRM, BTN_CANCEL);
+      case workerbase::ACT_REMOVE:
+        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove Page';
         $this->pagedescription = $this->AddField(
           'description', new formbuilderstatictext('description', '', 'Page to be removed'));
-        $this->action = ACT_CONFIRM;
+        $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case ACT_MOVEUP:
+      case workerbase::ACT_MOVEUP:
         $this->DoMoveUp();
         break;
-      case ACT_MOVEDOWN:
+      case workerbase::ACT_MOVEDOWN:
         $this->DoMoveDown();
         break;
       default: // show datagrid
         $this->table = new pagelist();
         $this->table->SetAccount($this->account);
-        $this->buttonmode = array(BTN_BACK);
+        $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Pages';
         $this->returnidname = false;
 
@@ -180,7 +180,7 @@ class workerpgman extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = STATUS_DELETED;
+      $status = basetable::STATUS_DELETED;
       $query = "UPDATE `page` SET `status` = '{$status}' " .
       "WHERE `id` = {$itemid}";
       database::Query($query);
@@ -195,13 +195,13 @@ class workerpgman extends workerform {
   // return true if error
   protected function PostFields() {
     switch ($this->action) {
-      case ACT_EDIT:
-      case ACT_NEW:
+      case workerbase::ACT_EDIT:
+      case workerbase::ACT_NEW:
         $ret = false; // the table object will deal with this
 //        $ret = $this->pagedescription->Save() + 
 //          $this->postalarea->Save() + $this->countyid->Save();
         break;
-      case ACT_CONFIRM:
+      case workerbase::ACT_CONFIRM:
         $caption = $this->page->GetFieldValue('description');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Page '{$caption}' removed");

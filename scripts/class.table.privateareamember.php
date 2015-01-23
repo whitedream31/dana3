@@ -14,19 +14,21 @@ class privateareamember extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('username', DT_STRING);
-    $this->AddField('password', DT_STRING);
-    $this->AddField('displayname', DT_DESCRIPTION);
-    $this->AddField('email', DT_STRING);
-    $this->AddField('startdate', DT_DATETIME);
-    $this->AddField('lastlogin', DT_DATETIME);
-    $this->AddField('status', DT_STRING);
+    $this->AddField(self::FN_ACCOUNTID, self::DT_FK);
+    $this->AddField('username', self::DT_STRING);
+    $this->AddField('password', self::DT_STRING);
+    $this->AddField('displayname', self::DT_DESCRIPTION);
+    $this->AddField('email', self::DT_STRING);
+    $this->AddField('startdate', self::DT_DATETIME);
+    $this->AddField('lastlogin', self::DT_DATETIME);
+    $this->AddField(self::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {
-    $this->startdatedescription = $this->FormatDateTime(DF_LONGDATETIME, $this->GetFieldValue('startdate'));
-    $this->lastlogindescription = $this->FormatDateTime(DF_LONGDATETIME, $this->GetFieldValue('lastlogin'), 'never');
+    $this->startdatedescription =
+      $this->FormatDateTime(self::DF_LONGDATETIME, $this->GetFieldValue('startdate'));
+    $this->lastlogindescription =
+      $this->FormatDateTime(self::DF_LONGDATETIME, $this->GetFieldValue('lastlogin'), 'never');
   }
 
   public function GetDisplayDescription() {
@@ -36,7 +38,7 @@ class privateareamember extends idtable {
 
   static public function GetList($groupid) {
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $ret = array();
     $query =
       'SELECT pam.`id` FROM `privateareamember` pam ' .

@@ -14,7 +14,7 @@ class formbuildereditbox extends formbuilderbase {
   public $inputtype = 'text';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_EDITBOX, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_EDITBOX, $label);
   }
 
   protected function AddAttributesAndValues() {

@@ -6,7 +6,7 @@ class radiofield extends multivaluefield {
   public $selected;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_RADIO, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_RADIO, $label);
   }
 
   public function GetControl() {

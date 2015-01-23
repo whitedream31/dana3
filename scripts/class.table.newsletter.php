@@ -12,7 +12,7 @@ class newsletteritemtype extends lookuptable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('help', DT_STRING);
+    $this->AddField('help', self::DT_STRING);
   }
 
   protected function AfterPopulateFields() {
@@ -27,6 +27,8 @@ class newsletter extends idtable {
   public $showdatedescription;
   public $help;
 
+  const STATUS_CANCELLED = 'C'; // invited but not accepted after 30 days
+
   function __construct($id = 0) {
     parent::__construct('newsletter', $id);
   }
@@ -34,26 +36,26 @@ class newsletter extends idtable {
   protected function AfterPopulateFields() {
     $this->showdate = $this->GetFieldValue('showdate');
 //    $date = strtotime($this->showdate);
-    $this->showdatedescription = basetable::FormatDateTime(DF_MEDIUMDATE, $this->showdate);
+    $this->showdatedescription = basetable::FormatDateTime(self::DF_MEDIUMDATE, $this->showdate);
   }
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('title', DT_STRING);
-    $this->AddField('showdate', DT_DATE);
-    $this->AddField('datelastsent', DT_DATE);
-    $this->AddField('showaddress', DT_BOOLEAN);
-    $this->AddField('showtelephone', DT_BOOLEAN);
-    $this->AddField('showwebsite', DT_BOOLEAN);
-    $this->AddField('footertext', DT_STRING);
-    $this->AddField('style', DT_STRING);
-    $this->AddField('newsletterformatid', DT_FK);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField(self::FN_ACCOUNTID, self::DT_FK);
+    $this->AddField('title', self::DT_STRING);
+    $this->AddField('showdate', self::DT_DATE);
+    $this->AddField('datelastsent', self::DT_DATE);
+    $this->AddField('showaddress', self::DT_BOOLEAN);
+    $this->AddField('showtelephone', self::DT_BOOLEAN);
+    $this->AddField('showwebsite', self::DT_BOOLEAN);
+    $this->AddField('footertext', self::DT_STRING);
+    $this->AddField('style', self::DT_STRING);
+    $this->AddField('newsletterformatid', self::DT_FK);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
   }
 
   static public function FindNewslettersByAccount($accountid) {
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query = 
       "SELECT `id` FROM `newsletter` " .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
@@ -68,7 +70,7 @@ class newsletter extends idtable {
   }
 
   static public function FindShowableNewslettersByAccount($accountid) {
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query = 
       "SELECT `id` FROM `newsletter` " .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
@@ -86,7 +88,7 @@ class newsletter extends idtable {
 
   public function FindNewsletterItems() {
     $id = $this->ID();
-//    $status = STATUS_ACTIVE;
+//    $status = self::STATUS_ACTIVE;
     $query = 
       "SELECT `id` FROM `newsletteritem` " .
       "WHERE `newsletterid` = {$id} " .
@@ -103,8 +105,8 @@ class newsletter extends idtable {
 
   public function FindSubscribers() {
     $id = account::$instance->ID();
-    $statusdeleted = STATUS_DELETED;
-    $statuscancelled = STATUS_CANCELLED;
+    $statusdeleted = self::STATUS_DELETED;
+    $statuscancelled = self::STATUS_CANCELLED;
     $query = 
       "SELECT `id` FROM `newslettersubscriber` " .
       "WHERE `accountid` = {$id} " .
@@ -132,14 +134,14 @@ class newsletter extends idtable {
       'SELECT * FROM `newsletter` ' .
       "WHERE `accountid` = {$accountid} " .
       "ORDER BY `showdate` DESC";
-    $actions = array(TBLOPT_DELETABLE);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $coldata = array(
         'DESC' => $line['title'],
-        'SHOWDATE' => $this->FormatDateTime(DF_MEDIUMDATE, $line['showdate'], '<em>none</em>')
+        'SHOWDATE' => $this->FormatDateTime(self::DF_MEDIUMDATE, $line['showdate'], '<em>none</em>')
       );
       $datagrid->AddRow($id, $coldata, true, $actions);
     }

@@ -2,10 +2,11 @@
 require_once 'class.database.php';
 require_once 'class.basetable.php';
 
-define('DEFAULT_STATE_REF', 'PROVISIONAL');
 
 // booking class
 class booking extends idtable {
+  const STATUS_WAITING = 'w';
+  const DEFAULT_STATE_REF = 'PROVISIONAL';
 
   public $bookingdatedescription;
 
@@ -15,37 +16,37 @@ class booking extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', DT_FK);
-    $this->AddField('bookingsettingsid', DT_FK);
-    $this->AddField('clientname', DT_STRING);
+    $this->AddField('accountid', self::DT_FK);
+    $this->AddField('bookingsettingsid', self::DT_FK);
+    $this->AddField('clientname', self::DT_STRING);
     // clientid
     //$this->AddField('addressid', DT_FK);
-    $this->AddField('address', DT_STRING);
-    $this->AddField('telephone', DT_STRING);
-    $this->AddField('email', DT_STRING);
-    $this->AddField('title', DT_STRING);
-    $this->AddField('datestamp', DT_DATETIME);
-    $this->AddField('startdate', DT_DATE);
-    $this->AddField('timetext', DT_STRING);
+    $this->AddField('address', self::DT_STRING);
+    $this->AddField('telephone', self::DT_STRING);
+    $this->AddField('email', self::DT_STRING);
+    $this->AddField('title', self::DT_STRING);
+    $this->AddField('datestamp', self::DT_DATETIME);
+    $this->AddField('startdate', self::DT_DATE);
+    $this->AddField('timetext', self::DT_STRING);
     // bookingdurationid
 //    $this->AddField('duration', DT_INTEGER); // ????
 //    $this->AddField('content', DT_TEXT); // ???
     // bookingdurationid
-    $this->AddField('notes', DT_TEXT);
-    $this->AddField('confirmedbycontact', DT_BOOLEAN);
-    $this->AddField('confirmedbyclient', DT_BOOLEAN);
-    $this->AddField('bookingstateid', DT_FK);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField('notes', self::DT_TEXT);
+    $this->AddField('confirmedbycontact', self::DT_BOOLEAN);
+    $this->AddField('confirmedbyclient', self::DT_BOOLEAN);
+    $this->AddField('bookingstateid', self::DT_FK);
+    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
     $this->bookingdatedescription = '';
   }
 
   protected function AfterPopulateFields() {
     $this->bookingdatedescription =
-      $this->FormatDateTime(DF_LONGDATETIME, $this->GetFieldValue('startdate'));
+      $this->FormatDateTime(self::DF_LONGDATETIME, $this->GetFieldValue('startdate'));
   }
 
   protected function AssignDefaultFieldValues() {
-    $staterow = database::SelectFromTableByRef('bookingstate', DEFAULT_STATE_REF);
+    $staterow = database::SelectFromTableByRef('bookingstate', self::DEFAULT_STATE_REF);
     $stateid = (int) $staterow['id'];
     $this->SetFieldValue('bookingstateid', $stateid);
   }
@@ -53,7 +54,7 @@ class booking extends idtable {
   public function GetActiveSettingsList() {
     $ret = array();
     $accountid = account::$instance->ID();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query =
       'SELECT bs.`id`, bs.`description`, bt.`ref` AS bookingtyperef, bt.`description` AS bookingtype ' .
       'FROM `bookingsetting` bs ' .
@@ -101,6 +102,34 @@ class booking extends idtable {
     return $ret;
   }
 */
+
+  public function SendBookingDetails() {
+    require_once 'class.table.emailhistory.php';
+    require_once 'class.table.emailmessage.php';
+    $account = account::$instance;
+    $email = $this->GetFieldValue('email');
+    $sessionref = $this->GetFieldValue('sessionref');
+    if (!$sessionref) {
+      // no sesion ref so make it now
+      $sessionref = $this->GetSessionRef($account->ID() . '-');
+    }
+    $replyaddress = $account->Contact()->GetFieldValue('email');
+
+    $em = new emailmessage('BKNOTIFICATION');
+    $em->AddCustomField('notificationref', $sessionref);
+
+    $subject = 'Booking Notification';
+    $message = $em->GetFormattedText(); // reformat with custom field
+    emailhistory::SendEmailMessage(
+      emailhistory::ET_BOOKINGNOTIFICATION, $email, $subject, $message, $replyaddress,
+      $account->ID()
+    );
+    $this->SetFieldValue('notificationref', $sessionref);
+    // mark as inite sent in table
+    $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_WAITING); // mark as invite sent - waiting
+    $this->StoreChanges();
+  }
+
   public function FindBookingEntries($settingid, $confirmed) {
     $ret = array();
     if ($confirmed) {
@@ -138,7 +167,7 @@ class booking extends idtable {
 
   static public function GetList($accountid) {
     $ret = array();
-    $status = STATUS_ACTIVE;
+    $status = self::STATUS_ACTIVE;
     $query = 'SELECT `id` FROM `booking` ' .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}'" .
       ' ORDER BY `datestamp` DESC';

@@ -9,7 +9,7 @@ class formbuildertextarea extends formbuilderbase {
   public $enableeditor = true; //false;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, FLDTYPE_TEXTAREA, $label);
+    parent::__construct($name, $value, basetable::FLDTYPE_TEXTAREA, $label);
     $this->rows = 20;
     $this->cols = 60;
   }

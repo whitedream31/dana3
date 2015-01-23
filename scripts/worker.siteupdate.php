@@ -46,31 +46,31 @@ class workersiteupdate extends workerbase {
     $showlive = false;
     $statusclass = 'statuserror';
     switch ($status) {
-      case ACCSTATUS_MODIFIED:
-        $update = "<a href='" . $_SERVER['PHP_SELF'] . $url .= '?in=' . IDNAME_SITEUPDATE . "' title='update your account now'>Update</a>";
+      case account::ACCSTATUS_MODIFIED:
+        $update = "<a href='" . $_SERVER['PHP_SELF'] . $livelink .= '?in=' . activitymanager::IDNAME_SITEUPDATE . "' title='update your account now'>Update</a>";
         $msg = "Your account has been modified. Please {$update} your pages to reflect recent changes.";
         $showpreview = true;
-        $showlive = true; // different to 'preview sitesite' worker
+        $showlive = true; // different to 'preview site' worker
         break;
-      case ACCSTATUS_UNCONFIRMED:
+      case account::ACCSTATUS_UNCONFIRMED:
         $msg = 'You have not confirmed your account. We recently sent you an e-mail asking you to confirm your account. Please check your e-mail and find the message.';
         $showpreview = true;
         break;
-      case ACCSTATUS_NOTEXISTS:
-      case ACCSTATUS_OFFLINE:
+      case account::ACCSTATUS_NOTEXISTS:
+      case account::ACCSTATUS_OFFLINE:
         $msg = 'Your account is currently offline and not available to view the live mini-website.';
         break;
-      case ACCSTATUS_PUBLISHED:
+      case account::ACCSTATUS_PUBLISHED:
         $msg = 'Your account is currently active and online for everyone to see.';
         $showpreview = true;
         $showlive = true;
         $statusclass = 'statusok';
         break;
-      case ACCSTATUS_PENDING:
+      case account::ACCSTATUS_PENDING:
         $msg = 'Your account has not been authorised yet. We will authorise your account as soon as possible. Check your e-mail to see if we have sent you a message.';
         $showpreview = true;
         break;
-      case ACCSTATUS_DELETED:
+      case account::ACCSTATUS_DELETED:
         $msg = 'Sorry, but your account has been marked DELETED and will be removed shortly. If you wish to keep your account please contact us.';
         break;
       default: // ACCSTATUS_UNKNOWN:

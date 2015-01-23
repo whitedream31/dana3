@@ -23,33 +23,110 @@ function __autoload($classname) {
 require_once 'define.php';
 require_once 'class.database.php';
 
-define('FA_VALUE', 'value');
-define('FA_NAME', 'name');
-define('FA_DATATYPE', 'dt');
-define('FA_MODIFIED', 'md');
-define('FA_FORMDETAILS', 'fd'); // true - form details assigned (appears in form for editing)
-define('FA_FIELDTYPE', 'ft');
-define('FA_LABEL', 'lbl');
-define('FA_DESCRIPTION', 'desc');
-define('FA_REQUIRED', 'required');
-define('FA_DEFAULT', 'default');
+//define('FA_VALUE', 'value');
+//define('FA_NAME', 'name');
+//define('FA_DATATYPE', 'dt');
+//define('FA_MODIFIED', 'md');
+//define('FA_FORMDETAILS', 'fd'); // true - form details assigned (appears in form for editing)
+//define('FA_FIELDTYPE', 'ft');
+//define('FA_LABEL', 'lbl');
+//define('FA_DESCRIPTION', 'desc');
+//define('FA_REQUIRED', 'required');
+//define('FA_DEFAULT', 'default');*/
 
-define('FN_ID', 'id');
-define('FN_REF', 'ref');
-define('FN_DESCRIPTION', 'description');
-define('FN_TAG', 'tag');
-define('FN_STATUS', 'status');
-define('FN_VISIBLE', 'visible');
-define('FN_ACCOUNTID', 'accountid');
+//define('FN_ID', 'id');
+//define('FN_REF', 'ref');
+//define('FN_DESCRIPTION', 'description');
+//define('FN_TAG', 'tag');
+//define('FN_STATUS', 'status');
+//define('FN_VISIBLE', 'visible');
+//define('FN_ACCOUNTID', 'accountid');
 
-define('STORERESULT_INSERT', -2);
-define('STORERESULT_ERROR', -1);
+//define('STORERESULT_INSERT', -2);
+//define('STORERESULT_ERROR', -1);
 
 /**
   * base class for all table related classes
   * @abstract
 */
 abstract class basetable {
+  const STATUS_ACTIVE = 'A';
+  const STATUS_DELETED = 'D';
+  const STORERESULT_INSERT = -2;
+  const STORERESULT_ERROR = -1;
+
+//  case STATUS_PENDING:
+//  case STATUS_UNCONFIRMED:
+//  case STATUS_COMPLETED:
+//  case STATUS_INACTIVE:
+
+  const FA_VALUE = 'value';
+  const FA_NAME = 'name';
+  const FA_DATATYPE = 'dt';
+  const FA_MODIFIED = 'md';
+  const FA_FORMDETAILS = 'fd'; // true - form details assigned (appears in form for editing)
+  const FA_FIELDTYPE = 'ft';
+  const FA_LABEL = 'lbl';
+  const FA_DESCRIPTION = 'desc';
+  const FA_REQUIRED = 'required';
+  const FA_DEFAULT = 'default';
+
+  const FN_ID = 'id';
+  const FN_REF = 'ref';
+  const FN_DESCRIPTION = 'description';
+  const FN_TAG = 'tag';
+  const FN_STATUS = 'status';
+  const FN_VISIBLE = 'visible';
+  const FN_ACCOUNTID = 'accountid';
+
+  const DF_SHORTDATE = 'sd';
+  const DF_SHORTDATETIME = 'sdt';
+  const DF_LONGDATETIME = 'ldt';
+  const DF_MEDIUMDATETIME = 'mdt';
+  const DF_MEDIUMDATE = 'md';
+
+  const DT_STRING = 's';
+  const DT_TEXT = 't';
+  const DT_INTEGER = 'i';
+  const DT_FLOAT = 'f';
+  const DT_DATE = 'd';
+  const DT_DATETIME = 'dt';
+  const DT_BOOLEAN = 'b';
+  const DT_FILEIMG = 'fi';
+  const DT_FILEWEB = 'fw';
+  const DT_FILEANY = 'fa';
+  const DT_ID = 'id';
+  const DT_FK = 'fk';
+  const DT_TAG = 'tag';
+  const DT_REF = 'ref';
+  const DT_STATUS = 'st';
+  const DT_DESCRIPTION = 'desc';
+// basic field types for controls
+  const FLDTYPE_NONE = 'x';
+  const FLDTYPE_HIDDEN = 'h';
+  const FLDTYPE_EDITBOX = 'eb';
+  const FLDTYPE_TEXTAREA = 'ta';
+  const FLDTYPE_CHECKBOX = 'cb';
+  const FLDTYPE_FILE = 'f';
+  const FLDTYPE_PASSWORD = 'p';
+// multiple value types
+  const FLDTYPE_RADIO = 'rb';
+  const FLDTYPE_SELECT = 's';
+// special types
+  const FLDTYPE_DATE = 'd';
+  const FLDTYPE_TIME = 't';
+  const FLDTYPE_FILEWEBSITE = 'fw';
+  const FLDTYPE_FILEWEBIMAGES = 'fwi';
+  const FLDTYPE_EMAIL = 'e';
+  const FLDTYPE_URL = 'u';
+  const FLDTYPE_TELEPHONE = 'tel';
+  const FLDTYPE_BUTTON = 'btn';
+  const FLDTYPE_CUSTOM = 'ctm';
+  const FLDTYPE_STATIC = 'st';
+  const FLDTYPE_DATAGRID = 'dg';
+  const FLDTYPE_DATALIST = 'dl';
+  const FLDTYPE_STATUSGRID = 'sg';
+
   public $tablename;
   public $exists;
 
@@ -58,6 +135,14 @@ abstract class basetable {
   public $lastinsertid = 0;
   public $lasterror = false;
 
+//define('STATUS_WAITING', 'W'); // newsletters - invited but not accepted yet
+//define('STATUS_UNSUBSCRIBED', 'U'); // newsletters - no longer subscribed
+//define('STATUS_NEW', 'N'); // new item - guestbook entries
+//define('STATUS_HIDDEN', 'H'); // hide item - guestbook entries
+
+  /**
+   * @param $tablename
+   */
   function __construct($tablename) {
     $this->tablename = $tablename;
     $this->fieldlist = array();
@@ -71,15 +156,18 @@ abstract class basetable {
 
   // override if necessary
   protected function AssignDefaultFieldValue($name, $fld) {
-    $this->SetFieldValue($name, $fld[FA_DEFAULT]);
+    $this->SetFieldValue($name, $fld[self::FA_DEFAULT]);
   }
 
+  /**
+   *
+   */
   public function ValidateFields() {
     foreach ($this->fieldlist as $fld) {
-      $name = $fld[FA_NAME];
+      $name = $fld[self::FA_NAME];
       $fld = $this->fieldlist[$name];
-      if (isset($fld[FA_REQUIRED])) {
-        $value = $this->fieldlist[$name][FA_VALUE];
+      if (isset($fld[self::FA_REQUIRED])) {
+        $value = $this->fieldlist[$name][self::FA_VALUE];
         if ($value) {
           $this->AssignDefaultFieldValue($name, $fld);
         }
@@ -90,6 +178,13 @@ abstract class basetable {
   public function PerformSearch($termwhat, $termwhere) {}
 
   // no longer used?
+  /**
+   * @param $text
+   * @param $list
+   * @param $directmatchvalue
+   * @param $substrvalue
+   * @return int
+     */
   protected function FindInList($text, $list, $directmatchvalue, $substrvalue) {
     $haystack = preg_replace("/[^0-9a-z ]/", '', strtolower(trim($text)));
     $ret = 0;
@@ -113,15 +208,19 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $name
+   * @return int
+     */
   public function FieldExists($name) {
     return isset($this->fieldlist[$name]);
   }
 
   public function SetFieldValue($name, $value) {
     if ($this->FieldExists($name)) {
-      if ($this->fieldlist[$name][FA_VALUE] != $value) {
-        $this->fieldlist[$name][FA_MODIFIED] = true;
-        $this->fieldlist[$name][FA_VALUE] = $value; //stripslashes($value);
+      if ($this->fieldlist[$name][self::FA_VALUE] != $value) {
+        $this->fieldlist[$name][self::FA_MODIFIED] = true;
+        $this->fieldlist[$name][self::FA_VALUE] = $value; //stripslashes($value);
         $ret = 1;
       } else {
         $ret = 0;
@@ -132,11 +231,16 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $name
+   * @param string $default
+   * @return bool|string
+     */
   public function GetFieldValue($name, $default = '') {
     if ($this->FieldExists($name)) {
-      $ret = $this->fieldlist[$name][FA_VALUE];
+      $ret = $this->fieldlist[$name][self::FA_VALUE];
       if ($ret === null) {
-        $ret = $this->fieldlist[$name][FA_DEFAULT];
+        $ret = $this->fieldlist[$name][self::FA_DEFAULT];
       } else {
         if (!$ret && $default) {
           $ret = $default;
@@ -148,11 +252,17 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $name
+   * @param $value
+   * @param bool $modify
+   * @return bool
+     */
   public function AssignFieldDefaultValue($name, $value, $modify = false) {
     if (isset($this->fieldlist[$name])) {
-      $this->fieldlist[$name][FA_VALUE] = $value;
-      $this->fieldlist[$name][FA_DEFAULT] = $value;
-      $this->fieldlist[$name][FA_MODIFIED] = $modify;
+      $this->fieldlist[$name][self::FA_VALUE] = $value;
+      $this->fieldlist[$name][self::FA_DEFAULT] = $value;
+      $this->fieldlist[$name][self::FA_MODIFIED] = $modify;
       $ret = $value;
     } else {
       $ret = false;
@@ -170,73 +280,88 @@ abstract class basetable {
   }
 
   // no longer used?
+  /**
+   * @param $datatype
+   * @return string
+     */
   static public function GetFieldTypeByDataType($datatype) {
     switch ($datatype) {
-      case DT_STRING:
-        $ret = FLDTYPE_EDITBOX;
+      case self::DT_STRING:
+        $ret = self::FLDTYPE_EDITBOX;
         break;
-      case DT_TEXT:
-        $ret = FLDTYPE_TEXTAREA;
+      case self::DT_TEXT:
+        $ret = self::FLDTYPE_TEXTAREA;
         break;
-      case DT_INTEGER:
-        $ret = FLDTYPE_EDITBOX;
+      case self::DT_INTEGER:
+        $ret = self::FLDTYPE_EDITBOX;
         break;
-      case DT_FLOAT:
-        $ret = FLDTYPE_EDITBOX;
+      case self::DT_FLOAT:
+        $ret = self::FLDTYPE_EDITBOX;
         break;
-      case DT_DATE:
-        $ret = FLDTYPE_DATE;
+      case self::DT_DATE:
+        $ret = self::FLDTYPE_DATE;
         break;
-      case DT_DATETIME:
-        $ret = FLDTYPE_NONE;
+      case self::DT_DATETIME:
+        $ret = self::FLDTYPE_NONE;
         break;
-      case DT_BOOLEAN:
-        $ret = FLDTYPE_CHECKBOX;
+      case self::DT_BOOLEAN:
+        $ret = self::FLDTYPE_CHECKBOX;
         break;
-      case DT_FILEIMG:
-        $ret = FLDTYPE_FILEWEBIMAGES;
+      case self::DT_FILEIMG:
+        $ret = self::FLDTYPE_FILEWEBIMAGES;
         break;
-      case DT_FILEWEB:
-        $ret = FLDTYPE_FILEWEBSITE;
+      case self::DT_FILEWEB:
+        $ret = self::FLDTYPE_FILEWEBSITE;
         break;
-      case DT_FILEANY:
-        $ret = FLDTYPE_FILE;
+      case self::DT_FILEANY:
+        $ret = self::FLDTYPE_FILE;
         break;
-      case DT_ID:
-        $ret = FLDTYPE_HIDDEN;
+      case self::DT_ID:
+        $ret = self::FLDTYPE_HIDDEN;
         break;
-      case DT_REF:
-        $ret = FLDTYPE_NONE;
+      case self::DT_REF:
+        $ret = self::FLDTYPE_NONE;
         break;
-      case DT_DESCRIPTION:
-        $ret = FLDTYPE_NONE;
+      case self::DT_DESCRIPTION:
+        $ret = self::FLDTYPE_NONE;
         break;
-      case DT_FK:
-        $ret = FLDTYPE_HIDDEN;
+      case self::DT_FK:
+        $ret = self::FLDTYPE_HIDDEN;
         break;
       default:
-        $ret = FLDTYPE_NONE;
+        $ret = self::FLDTYPE_NONE;
         break;
     }
     return $ret;
   }
 
+  /**
+   *
+   */
   protected function BeforePopulateFields() {}
 
+  /**
+   *
+   */
   protected function AfterPopulateFields() {}
 
   protected function PopulateFields($line) {
     $this->BeforePopulateFields();
     foreach ($this->fieldlist as $fld) {
-      $name = $fld[FA_NAME];
+      $name = $fld[self::FA_NAME];
       if (isset($this->fieldlist[$name])) {
         $value = (isset($line[$name])) ? $line[$name] : false;
-        $this->fieldlist[$name][FA_VALUE] = ($value) ? stripslashes($value) : false;
+        $this->fieldlist[$name][self::FA_VALUE] = ($value) ? stripslashes($value) : false;
       }
     }
     $this->AfterPopulateFields();
   }
 
+  /**
+   * @param $value
+   * @param bool $removetags
+   * @return string
+     */
   static protected function GetFromUser($value, $removetags = true) {
     $ret = self::SafeStringEscape(addslashes($value));
     if ($removetags) {
@@ -245,6 +370,10 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $value
+   * @return string
+     */
   static function SafeStringEscape($value) {
     $len = strlen($value);
     $escapecount = 0;
@@ -285,17 +414,20 @@ abstract class basetable {
   // -2 - New Row Created
   //  0 - No Changes Made
   // +n - Update Made to Row with 'n' fields modified
+  /**
+   * @return int
+   */
   public function StoreChanges() {
     $setlist = array();
     $cnt = 0;
     foreach ($this->fieldlist as $fld) {
-      $name = $fld[FA_NAME];
+      $name = $fld[self::FA_NAME];
 //      $removetags = ($fld[FA_FIELDTYPE] != FLDTYPE_TEXTAREA);
 //      $this->GetPost($name, $removetags); // this is done by the form builder class
-      if ($this->fieldlist[$name][FA_MODIFIED]) {
-        $value = $this->fieldlist[$name][FA_VALUE];
+      if ($this->fieldlist[$name][self::FA_MODIFIED]) {
+        $value = $this->fieldlist[$name][self::FA_VALUE];
         $setlist[$name] = $value;
-        $this->fieldlist[$name][FA_MODIFIED] = false;
+        $this->fieldlist[$name][self::FA_MODIFIED] = false;
         $cnt++;
       }
     }
@@ -323,7 +455,7 @@ abstract class basetable {
         $fldliststr = implode(', ', $fldlist);
         $valliststr = implode(', ', $vallist);
         $query = "INSERT INTO `{$this->tablename}` ({$fldliststr}) VALUES ({$valliststr})";
-        $cnt = STORERESULT_INSERT; //-2;
+        $cnt = self::STORERESULT_INSERT; //-2;
       }
       try {
         database::Query($query);
@@ -336,26 +468,34 @@ abstract class basetable {
           'code' => $e->getCode(),
           'msg' => $e->getMessage()
         );
-        $cnt = STORERESULT_ERROR; //-1;
+        $cnt = self::STORERESULT_ERROR; //-1;
       }
     }
     return $cnt;
   }
 
+  /**
+   *
+   */
   public function NewRow() {
     foreach ($this->fieldlist as $fld) {
-      $name = $fld[FA_NAME];
-      $this->fieldlist[$name][FA_VALUE] = $this->fieldlist[$name][FA_DEFAULT];
-      $this->fieldlist[$name][FA_MODIFIED] = false;
+      $name = $fld[self::FA_NAME];
+      $this->fieldlist[$name][self::FA_VALUE] = $this->fieldlist[$name][self::FA_DEFAULT];
+      $this->fieldlist[$name][self::FA_MODIFIED] = false;
     }
     $this->exists = false;
   }
 
+  /**
+   * @param $name
+   * @param $value
+   * @return int
+     */
   protected function ParseValue($name, $value) {
     $ret = $value;
     if (isset($this->fieldlist[$name])) {
-      switch ($this->fieldlist[$name][FA_DATATYPE]) {
-        case DT_BOOLEAN :
+      switch ($this->fieldlist[$name][self::FA_DATATYPE]) {
+        case self::DT_BOOLEAN :
           $ret = ($value = 'yes') ? 1 : 0;
           break;
       }
@@ -363,9 +503,12 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param string $prefix
+   */
   public function GetPostedFields($prefix = 'fld') {
     foreach ($this->fieldlist as $fld) {
-      $name = $fld[FA_NAME];
+      $name = $fld[self::FA_NAME];
       $postvalue = $this->GetPost($prefix . $name);
       if ($postvalue !== false) {
         $this->SetFieldValue($name, $postvalue);
@@ -373,6 +516,11 @@ abstract class basetable {
     }
   }
 
+  /**
+   * @param $name
+   * @param bool $removetags
+   * @return bool|int
+     */
   public function GetPost($name, $removetags = true) {
     if (isset($_POST[$name])) {
       $postval = $this->GetFromUser($_POST[$name], $removetags);
@@ -384,28 +532,38 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $value
+   * @return bool
+     */
   static protected function IfNotBlank($value) {
     return trim($value) and strtolower($value) != 'na';
   }
 
+  /**
+   * @param $formattype
+   * @param $value
+   * @param string $defaultvalue
+   * @return bool|string
+     */
   static public function FormatDateTime($formattype, $value, $defaultvalue = '') {
     $ret = $defaultvalue;
     if ($value) {
       $time = (is_string($value)) ? strtotime($value) : $value;
       switch ($formattype) {
-        case DF_LONGDATETIME:
+        case self::DF_LONGDATETIME:
           $ret = date('D, jS F Y h:i a', $time);
           break;
-        case DF_MEDIUMDATETIME:
+        case self::DF_MEDIUMDATETIME:
           $ret = date('j F Y h:i a', $time);
           break;
-        case DF_MEDIUMDATE:
+        case self::DF_MEDIUMDATE:
           $ret = date('jS F Y', $time);
           break;
-        case DF_SHORTDATE:
+        case self::DF_SHORTDATE:
           $ret = date('d M Y', $time);
           break;
-        case DF_SHORTDATETIME:
+        case self::DF_SHORTDATETIME:
           $ret = date('d M Y H:i', $time);
           break;
       }
@@ -413,43 +571,60 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $datatype
+   */
   protected function GetDefaultOnDataType($datatype) {
     switch ($datatype) {
-      case DT_FK:
-      case DT_INTEGER:
-      case DT_FLOAT:
+      case self::DT_FK:
+      case self::DT_INTEGER:
+      case self::DT_FLOAT:
         $ret = 0;
         break;
-      case DT_DATETIME:
+      case self::DT_DATETIME:
         $ret = date('Y-m-d');
         break;
-      case DT_BOOLEAN:
+      case self::DT_BOOLEAN:
         $ret = false;
         break;
-      case DT_ID:
+      case self::DT_ID:
         $ret = -1;
         break;
-      case DT_STATUS:
-        $ret = STATUS_ACTIVE;
+      case self::DT_STATUS:
+        $ret = self::STATUS_ACTIVE;
       default:
         $ret = '';
     }
+    return $ret;
   }
 
+  /**
+   * @param $name
+   * @param $datatype
+   * @param null $default
+   * @param null $fieldtype
+   * @return mixed
+     */
   protected function AddField($name, $datatype, $default = null, $fieldtype = null) {
     if (!$fieldtype) {
       $fieldtype = $this->GetFieldTypeByDataType($datatype);
     }
     $defvalue = ($default) ? $default : $this->GetDefaultOnDataType($datatype);
     $this->fieldlist[$name] = array(
-      FA_NAME => $name, FA_VALUE => $defvalue, FA_DATATYPE => $datatype,
-      FA_FIELDTYPE => $fieldtype, FA_FORMDETAILS => false,
-      FA_DEFAULT => $defvalue, FA_MODIFIED => false
+      self::FA_NAME => $name, self::FA_VALUE => $defvalue, self::FA_DATATYPE => $datatype,
+//      self::FA_FIELDTYPE => $fieldtype, self::FA_FORMDETAILS => false,
+      self::FA_DEFAULT => $defvalue, self::FA_MODIFIED => false
     );
     return $this->fieldlist[$name];
   }
 
   // no longer used?
+  /**
+   * @param $name
+   * @param $label
+   * @param $desc
+   * @param bool $required
+   * @return bool
   protected function AssignFormDetails($name, $label, $desc, $required = false) {
     if (isset($this->fieldlist[$name])) {
       $field = $this->fieldlist[$name];
@@ -463,12 +638,22 @@ abstract class basetable {
     }
     return $ret;
   }
+   */
 
+  /**
+   *
+   */
   protected function AssignDefaultFieldValues() {}
 
   // find a row based on the $fieldname and $value
   // if $exists is true it returns the state of $this exists and populates the fieldlist
   // if $exists is false it returns the $line array of columns from the database table
+  /**
+   * @param $fieldname
+   * @param $value
+   * @param bool $exists
+   * @return bool
+     */
   public function FindByField($fieldname, $value, $exists = true) {
     $line = database::SelectFromTableByField($this->tablename, $fieldname, $value);
     if ($exists) {
@@ -486,28 +671,40 @@ abstract class basetable {
     return $ret;
   }
 
+  /**
+   * @param $fieldname
+   * @return bool
+     */
   public function FieldIsModified($fieldname) {
-    return (bool) $this->fieldlist[$fieldname][FA_MODIFIED];
+    return (bool) $this->fieldlist[$fieldname][self::FA_MODIFIED];
   }
 
-  public function MarkAsDeleted() { //$flg = true) {
-    $status = ($flg) ? STATUS_DELETED : '';
-    $this->SetFieldValue(FN_STATUS, $status);
+  /**
+   *
+   */
+  public function MarkAsDeleted($flg = true) {
+    $status = ($flg) ? self::STATUS_DELETED : '';
+    $this->SetFieldValue(self::FN_STATUS, $status);
     $this->StoreChanges();
   }
 
+  /**
+   * @param bool $status
+   * @return string
+     */
   public function StatusAsString($status = false) {
     $ret = '';
 //    $status = $this->GetFieldValue(FN_STATUS);
-    $status = ($status) ? $status : $this->GetFieldValue(FN_STATUS);
+    $status = ($status) ? $status : $this->GetFieldValue(self::FN_STATUS);
     if ($status) {
       switch ($status) {
-        case STATUS_ACTIVE:
+        case self::STATUS_ACTIVE:
           $ret = 'Active';
           break;
-        case STATUS_DELETED:
+        case self::STATUS_DELETED:
           $ret = 'Deleted';
           break;
+/*
         case STATUS_PENDING:
           $ret = 'Pending';
           break;
@@ -520,6 +717,7 @@ abstract class basetable {
         case STATUS_INACTIVE:
           $ret = 'Inactive';
           break;
+ */
       }
     }
     return $ret;
@@ -540,38 +738,38 @@ abstract class idtable extends basetable {
   }
 
   protected function AssignFields() {
-    $this->AddField(FN_ID, DT_ID);
+    $this->AddField(self::FN_ID, self::DT_ID);
   }
 
   public function FindByKey($value) {
-    return $this->FindByField(FN_ID, $value);
+    return $this->FindByField(self::FN_ID, $value);
   }
 
   public function FindByRef($value) {
-    return $this->FindByField(FN_REF, $value);
+    return $this->FindByField(self::FN_REF, $value);
   }
 
   public function ID() {
-    return (int) $this->GetFieldValue(FN_ID);
+    return (int) $this->GetFieldValue(self::FN_ID);
   }
 
   public function StoreChanges() {
-    if ($this->FieldExists(FN_ACCOUNTID) && isset(account::$instance)) {
-      if (!$this->GetFieldValue(FN_ACCOUNTID)) {
-        $this->SetFieldValue(FN_ACCOUNTID, account::$instance->ID());
+    if ($this->FieldExists(self::FN_ACCOUNTID) && isset(account::$instance)) {
+      if (!$this->GetFieldValue(self::FN_ACCOUNTID)) {
+        $this->SetFieldValue(self::FN_ACCOUNTID, account::$instance->ID());
       }
     }
     return parent::StoreChanges();
   }
 
   public function IsVisible() {
-    $visible = $this->GetFieldValue(FN_VISIBLE);
+    $visible = $this->GetFieldValue(self::FN_VISIBLE);
     if ($visible === false) {
-      $status = $this->GetFieldValue(FN_STATUS);
+      $status = $this->GetFieldValue(self::FN_STATUS);
       if ($status === false) {
         $ret = true; // no visible or status fields
       } else {
-        $ret = $status == STATUS_ACTIVE;
+        $ret = $status == self::STATUS_ACTIVE;
       }
     } else {
       $ret = (bool) $visible;
@@ -582,12 +780,12 @@ abstract class idtable extends basetable {
   //abstract public function AssignFormFields($formeditor, $idref); // delete this after replacing it with...
 
   protected function KeyWithValue() {
-    return '`' . FN_ID . '` = ' . $this->ID();
+    return '`' . self::FN_ID . '` = ' . $this->ID();
   }
 
   protected function UpdateKey() {
     $ret = database::LastInsertID();
-    $this->SetFieldValue(FN_ID, $ret);
+    $this->SetFieldValue(self::FN_ID, $ret);
     return $ret;
   }
 
@@ -621,8 +819,8 @@ abstract class linktable extends basetable {
 
   protected function AssignFields() {
     //parent::AssignFields();
-    $this->id1 = $this->AddField($this->id1name, DT_ID);
-    $this->id2 = $this->AddField($this->id2name, DT_ID);
+    $this->id1 = $this->AddField($this->id1name, self::DT_ID);
+    $this->id2 = $this->AddField($this->id2name, self::DT_ID);
   }
 
   protected function FindByKey($value1, $value2) {
@@ -666,8 +864,8 @@ abstract class tagtable extends basetable {
   protected function AssignFields() {
 //    parent::AssignFields();
     $this->taglist = array();
-    $this->id = $this->AddField($this->idname, DT_ID);
-    $this->tag = $this->AddField(FN_TAG, DT_TAG);
+    $this->id = $this->AddField($this->idname, self::DT_ID);
+    $this->tag = $this->AddField(self::FN_TAG, self::DT_TAG);
   }
 
   public function FindByTag($value) {
@@ -682,7 +880,7 @@ abstract class tagtable extends basetable {
 
   protected function KeyWithValue() {
     return '`' . $this->idname . '` = ' . (int) $this->GetFieldValue($this->idname) . ' AND ';
-      '`' . FN_TAG . '` = ' . $this->GetFieldValue($this->FNTAG);
+      '`' . self::FN_TAG . '` = ' . $this->GetFieldValue($this->FNTAG);
   }
 
   protected function UpdateKey() {}
@@ -775,10 +973,10 @@ abstract class lookuptable extends idtable {
   }
 
   protected function AssignFields() {
-    $this->AddField(FN_ID, DT_ID);
-    $this->AddField(FN_REF, DT_REF);
-    $this->AddField(FN_DESCRIPTION, DT_STRING);
-    $this->AddField(FN_STATUS, DT_STATUS);
+    $this->AddField(self::FN_ID, self::DT_ID);
+    $this->AddField(self::FN_REF, self::DT_REF);
+    $this->AddField(self::FN_DESCRIPTION, self::DT_STRING);
+    $this->AddField(self::FN_STATUS, self::DT_STATUS);
   }
 
   public function AssignFormFields($formeditor, $idref) {
@@ -787,6 +985,6 @@ abstract class lookuptable extends idtable {
   }
 
   protected function KeyWithValue() {
-    return '`' . FN_ID . '` = ' . $this->ID();
+    return '`' . self::FN_ID . '` = ' . $this->ID();
   }
 }
