@@ -34,7 +34,7 @@ class workerresmannewslettersubscribers extends workerform {
           'lastname', new formbuildereditbox('lastname', '', 'Last Name'), $this->table);
         $this->fldemail = $this->AddField(
           'email', new formbuildereditbox('email', '', 'E-Mail'), $this->table);
-        $this->returnidname = activitymanager::IDNAME_MANAGENEWSLETTERS;
+        $this->returnidname = activitymanager::IDNAME_RESOURCES_NEWSLETTERS;
         $this->showroot = false; 
         break;
       case workerbase::ACT_REMOVE:
@@ -63,7 +63,7 @@ class workerresmannewslettersubscribers extends workerform {
       $this->table->SendInvite();
     }
     // back to parent newsletter worker
-    $this->SaveAndReset(false, activitymanager::IDNAME_MANAGENEWSLETTERS);
+    $this->SaveAndReset(false, activitymanager::IDNAME_RESOURCES_NEWSLETTERS);
     return $ret;
   }
 

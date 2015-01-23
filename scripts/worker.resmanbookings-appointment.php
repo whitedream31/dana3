@@ -127,7 +127,7 @@ class workerresmanbookingsappointment extends workerform {
         'Booking for ' . $this->fldclientname->value . ' on ' . date('l, j F Y', $date) . $time;
       $this->table->SetFieldValue('title', $title);
     }
-    return $this->SaveAndReset($this->table, activitymanager::IDNAME_MANAGEBOOKINGS);
+    return $this->SaveAndReset($this->table, activitymanager::IDNAME_RESOURCES_BOOKINGS);
 //    return (int) $this->table->StoreChanges();
   }
 
@@ -140,13 +140,13 @@ class workerresmanbookingsappointment extends workerform {
       'clients. You can have as many booking settings as you wish but it is recommended to have only one for each booking type.');
     $this->PopulateSettings();
     // assign settings
-    $this->datagridsettings->SetIDName(activitymanager::IDNAME_MANAGEBOOKINGSETTINGS);
+    $this->datagridsettings->SetIDName(activitymanager::IDNAME_RESOURCES_BOOKINGSETTINGS);
     $this->fldsettings->description = 'Your booking Settings.';
     $this->AssignFieldToSection('settings', 'datagridsettings');
     // add setting button
     $this->fldaddsetting = $this->AddField(
       'addsetting', new formbuilderbutton('addsetting', 'Add Setting'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEBOOKINGSETTINGS . '&act=' . workerbase::ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_RESOURCES_BOOKINGSETTINGS . '&act=' . workerbase::ACT_NEW;
     $this->fldaddsetting->url = $url;
     $this->AssignFieldToSection('settings', 'addsetting');
     // assign bookings for each setting
@@ -317,7 +317,7 @@ class workerresmanbookingsappointment extends workerform {
     $this->fldnotes->cols = 100;
     $this->fldnotes->enableeditor = false;
     $this->AssignFieldToSection('notes', 'notes');
-    $this->returnidname = activitymanager::IDNAME_MANAGEBOOKINGS;
+    $this->returnidname = activitymanager::IDNAME_RESOURCES_BOOKINGS;
   }
 
   protected function AssignItemRemove($confirmed) {

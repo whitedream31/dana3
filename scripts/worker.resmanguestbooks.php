@@ -160,14 +160,14 @@ class workerresmanguestbooks extends workerform {
     // entrygrid
     $this->entrygrid = new formbuilderdatagrid('entrygrid', '', 'Guest-book Entries');
     $this->fldentries = $this->AddField('entrygrid', $this->entrygrid);
-    $this->entrygrid->SetIDName(activitymanager::IDNAME_MANAGEGUESTBOOKSENTRIES);
+    $this->entrygrid->SetIDName(activitymanager::IDNAME_RESOURCES_GUESTBOOKSENTRIES);
     $this->PopulateEntryGrid();
     $this->entrygrid->description = 'Type in your reply to the comment. Please read the notice above.';
     $this->AssignFieldToSection('entrygrid', 'entrygrid');
     // add image button
     $this->fldaddimage = $this->AddField(
       'addimage', new formbuilderbutton('addimage', 'Add Picture'));
-    $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_MANAGEGUESTBOOKSENTRIES . "&act=" . workerbase::ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_RESOURCES_GUESTBOOKSENTRIES . "&act=" . workerbase::ACT_NEW;
     $this->fldaddimage->url = $url;
 //    $this->AssignFieldToSection('imagegrid', 'addimage');
   }

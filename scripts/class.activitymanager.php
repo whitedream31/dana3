@@ -14,32 +14,39 @@ class activitymanager {
   const SESS_CURRENTID = 'idgroup'; // section to show in control page
   const SESS_GUEST = 'guest'; // guest id when using the guestbooks
   // activity types
-  const IDNAME_CHANGEORGDETAILS = 'accchgorgdet';
-  const IDNAME_CHANGECONDETAILS = 'accchgcondet';
-  const IDNAME_CHANGELOGINPWD = 'accchglogin';
-  const IDNAME_MANAGEAREASCOVERED = 'accmanareacovered';
-  const IDNAME_MANAGEHOURSAVAILABLE = 'accmanhoursavail';
+  const IDNAME_ACCMGT_SUMMARY = 'summary';
+  const IDNAME_ACCMNT_ORGDETAILS = 'accchgorgdet'; // your business
+  const IDNAME_ACCMNT_CONDETAILS = 'accchgcondet'; // your details
+  const IDNAME_ACCMNT_LOGINPWD = 'accchglogin'; // password
+  
+  const IDNAME_PAGE_MANAGE = 'pgman'; // pages
+  const IDNAME_PAGE_NEW = 'newpage'; // add new page
+  const IDNAME_PAGE_CHANGETHEME = 'sitechgtheme'; // change theme
+
+  const IDNAME_RESOURCES_SUMMARY = 'ressummary'; // resources
+  const IDNAME_RESOURCES_GALLERIES = 'resmangalleries'; // galleries
+  const IDNAME_RESOURCES_NEWSLETTERS = 'resmannewsletters'; // newsletters
+  const IDNAME_RESOURCES_GUESTBOOKS = 'resmanguestbooks'; // guestbooks
+  const IDNAME_RESOURCES_BOOKINGS = 'resmanbookings'; // bookings
+  const IDNAME_RESOURCES_PRIVATEAREAS = 'resmanprivateareas'; // private areas
+  const IDNAME_RESOURCES_CALENDARDATES = 'resmancalendardates'; // special dates
+  const IDNAME_RESOURCES_ARTICLES = 'resmanarticles'; // articles / blogs
+  const IDNAME_RESOURCES_RATINGS = 'sitemanratings'; // ratings
+  const IDNAME_ACCMNT_AREASCOVERED = 'accmanareacovered'; // areas covered
+  const IDNAME_ACCMNT_HOURSAVAILABLE = 'accmanhoursavail';
+//
   const IDNAME_MANAGEADDRESSES = 'accmanaddress';
-  const IDNAME_MANAGEPAGES = 'pgman';
   const IDNAME_SITEPREVIEW = 'sitepreview';
-  const IDNAME_CHANGETHEME = 'sitechgtheme';
   const IDNAME_SITEUPDATE = 'siteupdate';
-  const IDNAME_MANAGERATINGS = 'sitemanratings';
-  const IDNAME_MANAGEGALLERIES = 'resmangalleries';
-  const IDNAME_MANAGEGALLERYIMAGES = 'resmangalleryimages';
-  const IDNAME_MANAGEFILES = 'resmanfiles';
-  const IDNAME_MANAGEARTICLES = 'resmanarticles';
-  const IDNAME_MANAGENEWSLETTERS = 'resmannewsletters';
-  const IDNAME_MANAGENEWSLETTERITEMS = 'resmannewsletteritems';
-  const IDNAME_MANAGENEWSLETTERSUBSCRIBERS = 'resmannewslettersubscribers';
-  const IDNAME_MANAGEBOOKINGS = 'resmanbookings';
-  const IDNAME_MANAGEBOOKINGSETTINGS = 'resmanbookingsettings';
-  const IDNAME_MANAGEGUESTBOOKS = 'resmanguestbooks';
-  const IDNAME_MANAGEGUESTBOOKSENTRIES = 'resmanguestbookentry';
-  const IDNAME_MANAGEPRIVATEAREAS = 'resmanprivateareas';
-  const IDNAME_MANAGEPRIVATEAREAMEMBERS = 'resmanprivateareamembers';
-  const IDNAME_MANAGEPRIVATEAREAPAGES = 'resmanprivateareapages';
-  const IDNAME_MANAGECALENDARDATES = 'resmancalendardates';
+//
+  const IDNAME_RESOURCES_GALLERYIMAGES = 'resmangalleryimages';
+  const IDNAME_RESOURCES_FILES = 'resmanfiles';
+  const IDNAME_RESOURCES_NEWSLETTERITEMS = 'resmannewsletteritems';
+  const IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS = 'resmannewslettersubscribers';
+  const IDNAME_RESOURCES_BOOKINGSETTINGS = 'resmanbookingsettings';
+  const IDNAME_RESOURCES_GUESTBOOKSENTRIES = 'resmanguestbookentry';
+  const IDNAME_RESOURCES_PRIVATEAREAMEMBERS = 'resmanprivateareamembers';
+  const IDNAME_RESOURCES_PRIVATEAREAPAGES = 'resmanprivateareapages';
 
   protected $errorlist = array();
   protected $message = array();

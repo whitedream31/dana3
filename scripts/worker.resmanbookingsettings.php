@@ -86,7 +86,7 @@ class workerresmanbookingsettings extends workerform {
           'confirmedmessage', new formbuildertextarea('confirmedmessage', '', 'Confirmed Message'), $this->table);
         $this->fldcancelledmessage = $this->AddField(
           'cancelledmessage', new formbuildertextarea('cancelledmessage', '', 'Cancelled Message'), $this->table);
-        $this->returnidname = activitymanager::IDNAME_MANAGEBOOKINGS;
+        $this->returnidname = activitymanager::IDNAME_RESOURCES_BOOKINGS;
         $this->showroot = false;
         break;
       case workerbase::ACT_REMOVE:
@@ -173,7 +173,7 @@ class workerresmanbookingsettings extends workerform {
         'cancelled please contact us.');
     }
     // back to parent worker
-    return $this->SaveAndReset($this->table, activitymanager::IDNAME_MANAGEBOOKINGS);
+    return $this->SaveAndReset($this->table, activitymanager::IDNAME_RESOURCES_BOOKINGS);
 //    return $this->table->StoreChanges();
   }
 

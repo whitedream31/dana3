@@ -188,7 +188,7 @@ class workerresmancalendardates extends workerform {
     $this->AssignFieldToSection('calendardate', 'content');
     /* page grid
     $this->pagegrid = new formbuilderdatagrid('pagegrid', '', 'Pages');
-    $this->pagegrid->SetIDName(activitymanager::IDNAME_MANAGEPRIVATEAREAPAGES);
+    $this->pagegrid->SetIDName(activitymanager::IDNAME_RESOURCES_PRIVATEAREAPAGES);
     $this->PopulatePrivatePagesGrid();
     $this->fldpagegrid = $this->AddField('pagegrid', $this->pagegrid);
     $this->fldpagegrid->description = 'Your pages available with this private area.';
@@ -196,7 +196,7 @@ class workerresmancalendardates extends workerform {
     // add page
     $this->fldaddpage = $this->AddField(
       'addpage', new formbuilderbutton('addpage', 'Assign Page To Private Area'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEPRIVATEAREAPAGES . '&act=' . ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_RESOURCES_PRIVATEAREAPAGES . '&act=' . ACT_NEW;
     $this->fldaddpage->url = $url;
     $this->AssignFieldToSection('pagegrid', 'addpage');
     */

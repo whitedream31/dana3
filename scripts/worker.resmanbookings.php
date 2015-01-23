@@ -132,7 +132,7 @@ class workerresmanbookings extends workerform {
       $this->table->SendBookingDetails($this->action == workerbase::ACT_NEW);
     }
     // back to parent newsletter worker
-    $this->SaveAndReset(false, activitymanager::IDNAME_MANAGENEWSLETTERS);
+    $this->SaveAndReset(false, activitymanager::IDNAME_RESOURCES_NEWSLETTERS);
     return $ret;
   }
 
@@ -145,13 +145,13 @@ class workerresmanbookings extends workerform {
       'clients. You can have as many booking settings as you wish but it is recommended to have only one for each booking type.');
     $this->PopulateSettings();
     // assign settings
-    $this->datagridsettings->SetIDName(activitymanager::IDNAME_MANAGEBOOKINGSETTINGS);
+    $this->datagridsettings->SetIDName(activitymanager::IDNAME_RESOURCES_BOOKINGSETTINGS);
     $this->fldsettings->description = 'Your booking Settings.';
     $this->AssignFieldToSection('settings', 'datagridsettings');
     // add setting button
     $this->fldaddsetting = $this->AddField(
       'addsetting', new formbuilderbutton('addsetting', 'Add Setting'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_MANAGEBOOKINGSETTINGS . '&act=' . workerbase::ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_RESOURCES_BOOKINGSETTINGS . '&act=' . workerbase::ACT_NEW;
     $this->fldaddsetting->url = $url;
     $this->AssignFieldToSection('settings', 'addsetting');
     // assign bookings for each setting

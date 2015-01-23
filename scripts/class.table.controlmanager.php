@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-require_once 'class.table.controlitem';
+require_once 'class.table.controlitem.php';
 
 /**
  * Description of class
@@ -14,26 +14,26 @@ require_once 'class.table.controlitem';
  * @author ians
  */
 class controlmanager extends idtable {
-  const SESSION_ACTIVEITEMID = 'activeitemid';
+  const SESSION_ACTIVEITEMID = 'in';
 
-  const CM_ACCMGT_SUMMARY = 'CM_ACCMGT_SUMMARY';
-  const CM_ACCMGT_BUSINESS = 'CM_ACCMGT_BUSINESS';
-  const CM_ACCMGT_CONTACT = 'CM_ACCMGT_CONTACT';
-  const CM_ACCMGT_AREASCOVERED = 'CM_ACCMGT_AREASCOVERED';
-  const CM_ACCMGT_HOURS = 'CM_ACCMGT_HOURS';
-  const CM_ACCMGT_PASSWORD = 'CM_ACCMGT_PASSWORD';
-  const CM_PAGES_SUMMARY = 'CM_PAGES_SUMMARY';
-  const CM_PAGES_NEWPAGE = 'CM_PAGES_NEWPAGE';
-  const CM_PAGES_CHANGETHEME = 'CM_PAGES_CHANGETHEME';
-  const CM_RESOURCES_SUMMARY = 'CM_RESOURCES_SUMMARY';
-  const CM_RESOURCES_GALLERIES = 'CM_RESOURCES_GALLERIES';
-  const CM_RESOURCES_NEWSLETTERS = 'CM_RESOURCES_NEWSLETTERS';
-  const CM_RESOURCES_GUESTBOOKS = 'CM_RESOURCES_GUESTBOOKS';
-  const CM_RESOURCES_BOOKINGS = 'CM_RESOURCES_BOOKINGS';
-  const CM_RESOURCES_PRIVATEAREAS = 'CM_RESOURCES_PRIVATEAREAS';
-  const CM_RESOURCES_CALENDAR = 'CM_RESOURCES_CALENDAR';
-  const CM_RESOURCES_ARTICLES = 'CM_RESOURCES_ARTICLES';
-  const CM_RESOURCES_RATINGS = 'CM_RESOURCES_RATINGS';
+//  const CM_ACCMGT_SUMMARY = 'CM_ACCMGT_SUMMARY';
+//  const CM_ACCMGT_BUSINESS = 'CM_ACCMGT_BUSINESS';
+//  const CM_ACCMGT_CONTACT = 'CM_ACCMGT_CONTACT';
+//  const CM_ACCMGT_AREASCOVERED = 'CM_ACCMGT_AREASCOVERED';
+//  const CM_ACCMGT_HOURS = 'CM_ACCMGT_HOURS';
+//  const CM_ACCMGT_PASSWORD = 'CM_ACCMGT_PASSWORD';
+//  const CM_PAGES_SUMMARY = 'CM_PAGES_SUMMARY';
+//  const CM_PAGES_NEWPAGE = 'CM_PAGES_NEWPAGE';
+//  const CM_PAGES_CHANGETHEME = 'CM_PAGES_CHANGETHEME';
+//  const CM_RESOURCES_SUMMARY = 'CM_RESOURCES_SUMMARY';
+//  const CM_RESOURCES_GALLERIES = 'CM_RESOURCES_GALLERIES';
+//  const CM_RESOURCES_NEWSLETTERS = 'CM_RESOURCES_NEWSLETTERS';
+//  const CM_RESOURCES_GUESTBOOKS = 'CM_RESOURCES_GUESTBOOKS';
+//  const CM_RESOURCES_BOOKINGS = 'CM_RESOURCES_BOOKINGS';
+//  const CM_RESOURCES_PRIVATEAREAS = 'CM_RESOURCES_PRIVATEAREAS';
+//  const CM_RESOURCES_CALENDAR = 'CM_RESOURCES_CALENDAR';
+//  const CM_RESOURCES_ARTICLES = 'CM_RESOURCES_ARTICLES';
+//  const CM_RESOURCES_RATINGS = 'CM_RESOURCES_RATINGS';
 
   static public $instance;
   static public $list = array();
@@ -48,7 +48,7 @@ class controlmanager extends idtable {
       if (isset($_SESSION[self::SESSION_ACTIVEITEMID])) {
         self::$activeactionname = $_SESSION[self::SESSION_ACTIVEITEMID];
       } else {
-        self::$activeactionname = self::CM_ACCMGT_SUMMARY; // default
+        self::$activeactionname = activitymanager::IDNAME_ACCMGT_SUMMARY; //CM_ACCMGT_SUMMARY; // default
       }
     }
     self::PopulateItems();

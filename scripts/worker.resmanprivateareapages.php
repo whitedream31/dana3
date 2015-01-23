@@ -27,7 +27,7 @@ class workerresmanprivateareapages extends workerform {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
         $this->title = 'Link pages with the private area';
-        $this->returnidname = activitymanager::IDNAME_MANAGEPRIVATEAREAS;
+        $this->returnidname = activitymanager::IDNAME_RESOURCES_PRIVATEAREAS;
         $this->showroot = false; 
         break;
       case workerbase::ACT_REMOVE:
