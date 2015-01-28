@@ -126,6 +126,7 @@ abstract class basetable {
   const FLDTYPE_DATAGRID = 'dg';
   const FLDTYPE_DATALIST = 'dl';
   const FLDTYPE_STATUSGRID = 'sg';
+  const FLDTYPE_SUMMARYBOX = 'sb';
 
   public $tablename;
   public $exists;

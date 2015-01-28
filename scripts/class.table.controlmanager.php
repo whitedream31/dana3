@@ -38,7 +38,9 @@ class controlmanager extends idtable {
   static public $instance;
   static public $list = array();
   static public $activeactionname;
-
+  static public $currentidname;
+  static public $activitymanager;
+  
   function __construct($id = 0) {
     parent::__construct('controlmanager', $id);
     if (isset($_GET[self::SESSION_ACTIVEITEMID])) {
@@ -48,9 +50,11 @@ class controlmanager extends idtable {
       if (isset($_SESSION[self::SESSION_ACTIVEITEMID])) {
         self::$activeactionname = $_SESSION[self::SESSION_ACTIVEITEMID];
       } else {
-        self::$activeactionname = activitymanager::IDNAME_ACCMGT_SUMMARY; //CM_ACCMGT_SUMMARY; // default
+        self::$activeactionname = 'IDNAME_ACCMGT_SUMMARY'; // default
       }
     }
+    self::$currentidname = constant('activitymanager::' . self::$activeactionname);
+    self::$activitymanager = new activitymanager();
     self::PopulateItems();
   }
 
@@ -166,7 +170,8 @@ class controlmanager extends idtable {
   }
 
   static public function ShowActiveItem() {
-    $ret = array('<h2>Active Item</h2>');
-    echo ArrayToString($ret);
+    echo self::$activitymanager->Show();
+//    $ret = array('<h2>Active Item</h2>', "<p>" . self::$currentidname . "</p>");
+//    echo ArrayToString($ret);
   }
 }

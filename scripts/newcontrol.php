@@ -82,7 +82,6 @@ controlmanager::ShowControlMenu();
     <div id="controlworkarea">
 <?php
 controlmanager::ShowActiveItem();
-//$activitymanager->Show();
 ?>
     </div>
     <div style="float:none; clear: both;">&nbsp;</div>
@@ -91,8 +90,8 @@ controlmanager::ShowActiveItem();
       <p id="links"><a href="privacy.html">Privacy Policy</a> | <a href="tc.html">Terms of Use</a></p>
     </footer>
   </div>
-<?php
+<!-- ?php
 //$activitymanager->ShowAccordion();
-?>
+?-->
 </body>
 </html>

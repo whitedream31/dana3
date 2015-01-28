@@ -139,7 +139,7 @@ class workerresmanprivateareas extends workerform {
     $this->AssignFieldToSection('privatearea', 'title');
     // page grid
     $this->pagegrid = new formbuilderdatagrid('pagegrid', '', 'Pages');
-    $this->pagegrid->SetIDName(activitymanager::IDNAME_RESOURCES_PRIVATEAREAPAGES);
+    $this->pagegrid->SetIDName('IDNAME_RESOURCES_PRIVATEAREAPAGES');
     $this->PopulatePrivatePagesGrid();
     $this->fldpagegrid = $this->AddField('pagegrid', $this->pagegrid);
     $this->fldpagegrid->description = 'Your pages available with this private area.';
@@ -147,12 +147,12 @@ class workerresmanprivateareas extends workerform {
     // add page
     $this->fldaddpage = $this->AddField(
       'addpage', new formbuilderbutton('addpage', 'Assign Page To Private Area'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_RESOURCES_PRIVATEAREAPAGES . '&act=' . workerbase::ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=IDNAME_RESOURCES_PRIVATEAREAPAGES&act=' . workerbase::ACT_NEW;
     $this->fldaddpage->url = $url;
     $this->AssignFieldToSection('pagegrid', 'addpage');
     // member grid
     $this->membergrid = new formbuilderdatagrid('PopulatePrivateMembersGrid();grid', '', 'Members');
-    $this->membergrid->SetIDName(activitymanager::IDNAME_RESOURCES_PRIVATEAREAMEMBERS);
+    $this->membergrid->SetIDName('IDNAME_RESOURCES_PRIVATEAREAMEMBERS');
     $this->PopulatePrivateMembersGrid();
     $this->fldmembergrid = $this->AddField('membergrid', $this->membergrid);
     $this->fldmembergrid->description = 'The members who can access this private area after logging in.';
@@ -160,7 +160,7 @@ class workerresmanprivateareas extends workerform {
     // add member
     $this->fldaddmember = $this->AddField(
       'addmember', new formbuilderbutton('addmember', 'Add New Member'));
-    $url = $_SERVER['PHP_SELF'] . '?in=' . activitymanager::IDNAME_RESOURCES_PRIVATEAREAMEMBERS . '&act=' . workerbase::ACT_NEW;
+    $url = $_SERVER['PHP_SELF'] . '?in=IDNAME_RESOURCES_PRIVATEAREAMEMBERS&act=' . workerbase::ACT_NEW;
     $this->fldaddmember->url = $url;
     $this->AssignFieldToSection('membergrid', 'addmember');
   }

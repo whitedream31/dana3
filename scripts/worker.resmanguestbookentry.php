@@ -33,7 +33,7 @@ class workerresmanguestbookentry extends workerform {
           'showonpage', new formbuildercheckbox('showonpage', '', 'Show On Guest-Book Page?'));
         $this->fldshowonpage->value =
           ($this->table->GetFieldValue(basetable::FN_STATUS) == basetable::STATUS_ACTIVE);
-        $this->returnidname = activitymanager::IDNAME_RESOURCES_GUESTBOOKS;
+        $this->returnidname = 'IDNAME_RESOURCES_GUESTBOOKS';
         $this->showroot = false; 
         break;
       case workerbase::ACT_REMOVE:

@@ -33,7 +33,7 @@ class workerresmannewsletteritems extends workerform {
           'heading', new formbuildereditbox('heading', '', 'Item Heading'), $this->table);
         $this->fldcontent = $this->AddField(
           'content', new formbuildertextarea('content', '', 'Content'), $this->table);
-        $this->returnidname = activitymanager::IDNAME_MANAGENEWSLETTERS;
+        $this->returnidname = 'IDNAME_MANAGENEWSLETTERS';
         $this->showroot = false; 
         break;
       case workerbase::ACT_REMOVE:
@@ -69,7 +69,7 @@ class workerresmannewsletteritems extends workerform {
       $this->table->SetFieldValue('heading', 'New Heading');
     }
     // back to parent worker
-    $ret = $this->SaveAndReset($this->table, activitymanager::IDNAME_MANAGENEWSLETTERS);
+    $ret = $this->SaveAndReset($this->table, 'IDNAME_MANAGENEWSLETTERS');
     $_GET['rid'] = $this->groupid;
     $_GET['action'] = workerbase::ACT_EDIT;
     return $ret;

@@ -40,7 +40,7 @@ class workersitepreview extends workerbase {
     $statusclass = 'statuserror';
     switch ($status) {
       case account::ACCSTATUS_MODIFIED:
-        $update = "<a href='" . $_SERVER['PHP_SELF'] . $url .= '?in=' . activitymanager::IDNAME_SITEUPDATE . "' title='update your account now'>Update</a>";
+        $update = "<a href='" . $_SERVER['PHP_SELF'] . "?in=IDNAME_SITEUPDATE' title='update your account now'>Update</a>";
         $msg = "Your account has been modified. Please {$update} your pages to reflect recent changes.";
         $showpreview = true;
         break;

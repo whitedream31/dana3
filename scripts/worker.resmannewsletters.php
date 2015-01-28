@@ -131,14 +131,14 @@ class workerresmannewsletters extends workerform {
           'automatically removed.</strong>');
       $this->subscribergrid = $this->AddField(
         'subscribergrid', new formbuilderdatagrid('subscribergrid', '', 'Newsletter Subscribers'));
-      $this->subscribergrid->SetIDName(activitymanager::IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS);
+      $this->subscribergrid->SetIDName('IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS');
       $this->PopulateSubscribers();
       $this->subscribergrid->description = 'Below are the list of subscribers to your newsletter, and their status.';
       $this->AssignFieldToSection('subscribers', 'subscribergrid');
       // add subscribe button
       $this->fldaddsubscriber = $this->AddField(
         'addsubscriber', new formbuilderbutton('addsubscriber', 'Invite Subscriber'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS . "&act=" . workerbase::ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . "?in=IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS&act=" . workerbase::ACT_NEW;
       $this->fldaddsubscriber->url = $url;
       $this->AssignFieldToSection('subscribers', 'addsubscriber');
     }
@@ -215,14 +215,14 @@ class workerresmannewsletters extends workerform {
       $this->NewSection(
         'items', 'Managing the newsletter items',
         "Below are the items (stories) that make up your newsletter. You can edit, delete or add a new item.");
-      $this->itemgrid->SetIDName(activitymanager::IDNAME_RESOURCES_NEWSLETTERITEMS);
+      $this->itemgrid->SetIDName('IDNAME_RESOURCES_NEWSLETTERITEMS');
       $this->PopulateItemGrid();
       $this->itemgrid->description = 'Below are the list of items to be used to make your newsletter.';
       $this->AssignFieldToSection('items', 'itemgrid');
       // add item button
       $this->fldadditem = $this->AddField(
         'additem', new formbuilderbutton('additem', 'Add Item'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_RESOURCES_NEWSLETTERITEMS . "&amp;pid={$this->itemid}&amp;act=" . workerbase::ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . "?in=IDNAME_RESOURCES_NEWSLETTERITEMS&amp;pid={$this->itemid}&amp;act=" . workerbase::ACT_NEW;
       $this->fldadditem->url = $url;
       $this->AssignFieldToSection('items', 'additem');
     }

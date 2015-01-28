@@ -1,6 +1,7 @@
 <?php
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
+require_once 'class.formbuildersummarybox.php';
 //require_once 'class.formbuildereditbox.php';
 //require_once 'class.formbuilderselect.php';
 //require_once 'class.formbuildertextarea.php';
@@ -14,13 +15,16 @@ require_once 'class.workerbase.php';
 // account change org details
 
 class workeraccsummary extends workerform {
-//  protected $fldbusinessname;
-//  protected $fldtagline;
-//  protected $fldbusinessinfo;
-//  protected $fldwebsite;
+  protected $fldorgdetails;
+  protected $fldlogomediaid;
+
 //  protected $fldbusinesscategoryid;
 //  protected $fldbusinesscategory2id;
 //  protected $fldbusinesscategory3id;
+
+  protected function BlankValue($value, $default) {
+    return ($value) ? $value : $default;
+  }
 
   protected function InitForm() {
     $this->title = 'Account Summary';
@@ -28,42 +32,24 @@ class workeraccsummary extends workerform {
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'account summary stuff';
 
-    $this->fldbusinessname = $this->AddField(
-      'businessname',
-      new formbuildereditbox('businessname', '', 'Organisation Name'),
-      $this->account);
-    $this->fldtagline = $this->AddField(
-      'tagline',
-      new formbuildereditbox('tagline', '', 'Tagline'),
-      $this->account);
-    $this->fldbusinesscategoryid = $this->AddField(
-      'businesscategoryid',
-      new formbuilderselect('businesscategoryid', '', 'Main type of business'),
-      $this->account);
-    $this->fldbusinesscategory2id = $this->AddField(
-      'businesscategory2id', new formbuilderselect('businesscategory2id', '', 'Secondary type of business'),
-      $this->account);
-    $this->fldbusinesscategory3id = $this->AddField(
-      'businesscategory3id', new formbuilderselect('businesscategory3id', '', 'Other type of business'),
-      $this->account);
-    // populate the business types
-    $categorylist = $this->GetCategoryList();
-    $this->fldbusinesscategoryid->AddToGroup('', 0, 'none');
-    $this->fldbusinesscategory2id->AddToGroup('', 0, 'none');
-    $this->fldbusinesscategory3id->AddToGroup('', 0, 'none');
-    foreach($categorylist as $catgroupname => $catgrouplist) {
-      foreach($catgrouplist as $catid => $catdescription) {
-        $this->fldbusinesscategoryid->AddToGroup($catgroupname, $catid, $catdescription);
-        $this->fldbusinesscategory2id->AddToGroup($catgroupname, $catid, $catdescription);
-        $this->fldbusinesscategory3id->AddToGroup($catgroupname, $catid, $catdescription);
-      }
-    }
-    $this->fldbusinessinfo = $this->AddField(
-      'businessinfo', new formbuildertextarea('businessinfo', '', 'Brief Description'),
-      $this->account);
-    $this->fldwebsite = $this->AddField(
-      'website', new formbuilderurl('website', '', 'Main Web Site (if any)'),
-      $this->account);
+    $this->fldorgdetails = $this->AddField(
+      'orgdetails',
+      new formbuildersummarybox('orgdetails', '', 'org label'),
+      $this->account
+    );
+    $this->fldorgdetails->AddItemWithField('orgname', 'Organisation Name', 'businessname');
+    $this->fldorgdetails->AddItemLookup(
+      'orgbusinesscategoryid1', 'Business Type #1', 'businesscategory', 'businesscategoryid', basetable::FN_DESCRIPTION, '<em>(none)</em>');
+    $this->fldorgdetails->AddItemLookup(
+      'orgbusinesscategoryid2', 'Business Type #2', 'businesscategory', 'businesscategoryid2', basetable::FN_DESCRIPTION, '<em>(none)</em>');
+    $this->fldorgdetails->AddItemLookup(
+      'orgbusinesscategoryid3', 'Business Type #3', 'businesscategory', 'businesscategoryid3', basetable::FN_DESCRIPTION, '<em>(none)</em>');
+    $this->fldorgdetails->AddItemWithField('orgwebsite', 'Website', 'website', '<em>(none)</em>');
+    $this->fldorgdetails->AddItemWithField('orginfo', 'Brief Description', 'businessinfo');
+
+    $this->fldorgdetails->AddItem(
+      'orgaddress', 'Home Location', account::$instance->contact->FullAddress(), '<em>(unknown</em>');
+
     // logo
     $this->fldlogomediaid = $this->AddField(
       'logomediaid', new formbuilderfilewebimage('logomediaid', '', 'Business Logo'), $this->account);
@@ -79,6 +65,24 @@ class workeraccsummary extends workerform {
       ($media) ? $media['thumbnail'] : 'none',
       ($media) ? $media['filename'] : false
     );
+
+//    $this->fldtagline = $this->AddField(
+//      'tagline',
+//      new formbuildereditbox('tagline', '', 'Tagline'),
+//      $this->account);
+
+    // populate the business types
+//    $categorylist = array(); //$this->GetCategoryList();
+//    $this->fldbusinesscategoryid->AddToGroup('', 0, 'none');
+//    $this->fldbusinesscategory2id->AddToGroup('', 0, 'none');
+//    $this->fldbusinesscategory3id->AddToGroup('', 0, 'none');
+//    foreach($categorylist as $catgroupname => $catgrouplist) {
+//      foreach($catgrouplist as $catid => $catdescription) {
+//        $this->fldbusinesscategoryid->AddToGroup($catgroupname, $catid, $catdescription);
+//        $this->fldbusinesscategory2id->AddToGroup($catgroupname, $catid, $catdescription);
+//        $this->fldbusinesscategory3id->AddToGroup($catgroupname, $catid, $catdescription);
+//      }
+//    }
   }
 
   protected function PostFields() {
@@ -110,47 +114,38 @@ class workeraccsummary extends workerform {
     // add sections
     $this->NewSection(
       'orggroup', 'Organisation Details', 'Your business information.');
-    $this->NewSection(
-      'contgroup', 'Your Details', 'Your contact information.');
-    $this->NewSection(
-      'logo', 'Business Logo', 
-      'Please specify a picture that represents your organisation, if you have one. This is shown next to your organisation name on each page of your website.');
-    // add org fields
-    // - business name
-    $this->fldbusinessname->description = 'Please enter the name of your organisation';
-    $this->fldbusinessname->required = true;
-    $this->fldbusinessname->size = 80;
-    $this->fldbusinessname->pattern = ".{3,100}"; // min 3, max 100
-    $this->AssignFieldToSection('orggroup', 'businessname');
-    // - tagline
-    $this->fldtagline->description = 'Please enter a tagline (i.e. company slogan), if you have one';
-    $this->fldtagline->required = false;
-    $this->fldtagline->size = 80;
-    $this->fldtagline->maxlength = 100;
-    $this->fldtagline->placeholder = 'a short phase here';
-    $this->AssignFieldToSection('orggroup', 'tagline');
-    $this->fldwebsite->description = "If you have another (larger) website that you would like to link and help promote, please specify it here. <strong>Please include the prefix: &quot;http://&quot;</strong>";
-    $this->AssignFieldToSection('orggroup', 'website');
-    // - business types
-    $this->fldbusinesscategoryid->description = 'Please choose your primary type of business';
-    $this->fldbusinesscategoryid->required = true;
-    $this->fldbusinesscategoryid->pattern = ".{6,50}";
-    $this->AssignFieldToSection('contgroup', 'businesscategoryid');
-    $this->fldbusinesscategory2id->description = 'Please choose your secondary type of business';
-    $this->fldbusinesscategory2id->required = false;
-    $this->fldbusinesscategory2id->pattern = ".{6,50}";
-    $this->AssignFieldToSection('contgroup', 'businesscategory2id');
-    $this->fldbusinesscategory3id->description = 'Please choose your third type of business';
-    $this->fldbusinesscategory3id->required = false;
-    $this->fldbusinesscategory3id->pattern = ".{6,50}";
-    $this->AssignFieldToSection('contgroup', 'businesscategory3id');
-    $this->fldbusinessinfo->description = 'Provide a short description of your business';
-    $this->fldbusinessinfo->required = false;
-    $this->fldbusinessinfo->cols = 120;
-    $this->AssignFieldToSection('contgroup', 'businessinfo');
+//    $this->NewSection(
+//      'contgroup', 'Your Details', 'Your contact information.');
 
+    $this->fldorgdetails->description = 'The name of your organisation';
+    $this->AssignFieldToSection('orggroup', 'orgdetails');
+
+    // add org fields
+    // logo
     $this->fldlogomediaid->description = 'Please select a image file to upload for your business, if you have one.';
-    $this->AssignFieldToSection('logo', 'logomediaid');
+    $this->fldlogomediaid->isreadonly = true;
+    $this->AssignFieldToSection('orggroup', 'logomediaid');
+    // - tagline
+//    $this->fldtagline->description = 'Please enter a tagline (i.e. company slogan), if you have one';
+//    $this->fldtagline->required = false;
+//    $this->fldtagline->size = 80;
+//    $this->fldtagline->maxlength = 100;
+//    $this->fldtagline->placeholder = 'a short phase here';
+//    $this->AssignFieldToSection('orggroup', 'tagline');
+
+    // - business types
+//    $this->fldbusinesscategoryid->description = 'Please choose your primary type of business';
+//    $this->fldbusinesscategoryid->required = true;
+//    $this->fldbusinesscategoryid->pattern = ".{6,50}";
+//    $this->AssignFieldToSection('contgroup', 'businesscategoryid');
+//    $this->fldbusinesscategory2id->description = 'Please choose your secondary type of business';
+//    $this->fldbusinesscategory2id->required = false;
+//    $this->fldbusinesscategory2id->pattern = ".{6,50}";
+//    $this->AssignFieldToSection('contgroup', 'businesscategory2id');
+//    $this->fldbusinesscategory3id->description = 'Please choose your third type of business';
+//    $this->fldbusinesscategory3id->required = false;
+//    $this->fldbusinesscategory3id->pattern = ".{6,50}";
+//    $this->AssignFieldToSection('contgroup', 'businesscategory3id');
   }
 
 }

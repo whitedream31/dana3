@@ -79,19 +79,19 @@ class activitymanager {
       'accountdetails', 'images/sect_account.png', 'Account Details',
       'Change your account information, such as your name and contact details.');
     $this->AddItem(
-      $this->accountgroup, self::IDNAME_CHANGEORGDETAILS,
+      $this->accountgroup, 'IDNAME_ACCMNT_ORGDETAILS',
       'Change Organisation Details', 'business name, categories etc');
     $this->AddItem(
-      $this->accountgroup, self::IDNAME_CHANGECONDETAILS,
+      $this->accountgroup, 'IDNAME_ACCMNT_CONDETAILS',
       'Change Contact Details', 'your name/email address etc');
     $this->AddItem(
-      $this->accountgroup, self::IDNAME_CHANGELOGINPWD,
+      $this->accountgroup, 'IDNAME_ACCMNT_LOGINPWD',
       'Change Login Password', 'the password to login into this site');
     $this->AddItem(
-      $this->accountgroup, self::IDNAME_MANAGEAREASCOVERED,
+      $this->accountgroup, 'IDNAME_ACCMNT_AREASCOVERED',
       'Manage Areas Covered', 'areas you operate your business');
     $this->AddItem(
-      $this->accountgroup, self::IDNAME_MANAGEHOURSAVAILABLE,
+      $this->accountgroup, 'IDNAME_ACCMNT_HOURSAVAILABLE',
       'Manage Hours Available', 'hours your business is open');
 //    $this->AddItem(
 //      $this->accountgroup, self::IDNAME_MANAGEADDRESSES,
@@ -101,7 +101,7 @@ class activitymanager {
       'pagemanager', 'images/sect_pages.png', 'Page Management',
       'Add, edit or delete your pages that make up your mini-website.');
     $this->AddItem(
-      $this->pagegroup, self::IDNAME_MANAGEPAGES,
+      $this->pagegroup, 'IDNAME_PAGE_MANAGE',
       'Manage Pages', 'web-pages that make up you minisite');
 // datagrid here
 // Add New Page
@@ -110,44 +110,44 @@ class activitymanager {
       'sitemanager', 'images/sect_site.png', 'Site Management',
       'Preview your mini-website or change the look of your mini-website from dozens of designs.');
     $this->AddItem(
-      $this->sitegroup, self::IDNAME_SITEPREVIEW,
+      $this->sitegroup, 'IDNAME_SITEPREVIEW',
       'Preview Mini-Site', 'your minisite as it looks now');
     $this->AddItem(
-      $this->sitegroup, self::IDNAME_CHANGETHEME,
+      $this->sitegroup, 'IDNAME_PAGE_CHANGETHEME',
       'Change Theme', 'appearance of your minisite');
     $this->AddItem(
-      $this->sitegroup, self::IDNAME_SITEUPDATE,
+      $this->sitegroup, 'IDNAME_SITEUPDATE',
       'Update Mini-Site', 'make recent changes live');
     $this->AddItem(
-      $this->sitegroup, self::IDNAME_MANAGERATINGS,
+      $this->sitegroup, 'IDNAME_RESOURCES_RATINGS',
       'Manage Ratings', 'read / respond to customer comments');
     // resource group
     $this->resourcegroup = $this->AddGroup(
       'resource', 'images/sect_resources.png', 'Resources',
       'Resources are the features that your pages use to make your mini-website useful.');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGEGALLERIES,
+      $this->resourcegroup, 'IDNAME_RESOURCES_GALLERIES',
       'Manage Galleries', 'add/edit/remove pictures');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGEFILES,
+      $this->resourcegroup, 'IDNAME_RESOURCES_FILES',
       'Manage Downloadable Files', 'add/remove files that can be downloaded by visitors');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGEARTICLES,
+      $this->resourcegroup, 'IDNAME_RESOURCES_ARTICLES',
       'Manage Articles', 'blogs/articles for visitors to read');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGENEWSLETTERS,
+      $this->resourcegroup, 'IDNAME_RESOURCES_NEWSLETTERS',
       'Manage Newsletters', 'subscribers and add/edit/remove newsletters');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGEBOOKINGS,
+      $this->resourcegroup, 'IDNAME_RESOURCES_BOOKINGS',
       'Manage Bookings', 'review recent and upcoming appointments');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGEGUESTBOOKS,
+      $this->resourcegroup, 'IDNAME_RESOURCES_GUESTBOOKS',
       'Manage Guestbooks', 'read/remove comments from visitors');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGEPRIVATEAREAS,
+      $this->resourcegroup, 'IDNAME_RESOURCES_PRIVATEAREAS',
       'Manage Private Areas', 'add/edit/remove private pages and members');
     $this->AddItem(
-      $this->resourcegroup, self::IDNAME_MANAGECALENDARDATES,
+      $this->resourcegroup, 'IDNAME_RESOURCES_CALENDARDATES',
       'Manage Special Dates', 'important dates for your business');
   }
 
@@ -162,6 +162,7 @@ class activitymanager {
   }
 
   protected function ProcessByIDName($idname) {
+//echo "<h2>idname = {$idname}</h2>\n";
     $ret = array();
     try {
       if ($idname) {
@@ -289,7 +290,8 @@ class activitymanager {
   }
 
   public function Show() {
-    $idname = GetGet('in', GetPost('in', self::IDNAME_CHANGEORGDETAILS)); //''));
+    $idname = controlmanager::$currentidname;
+//    $idname = GetGet('in', GetPost('in', self::IDNAME_CHANGEORGDETAILS)); //''));
     $lines = $this->ProcessByIDName($idname);
     $ret = array();
 

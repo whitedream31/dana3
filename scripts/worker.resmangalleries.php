@@ -127,14 +127,14 @@ class workerresmangalleries extends workerform {
     $this->AssignFieldToSection('gallery', 'title');
     // imagegrid
     if ($this->imagegrid) {
-      $this->imagegrid->SetIDName(activitymanager::IDNAME_RESOURCES_GALLERYIMAGES);
+      $this->imagegrid->SetIDName('IDNAME_RESOURCES_GALLERYIMAGES');
       $this->PopulateImageGrid();
       $this->imagegrid->description = 'Type in your reply to the comment. Please read the notice above.';
       $this->AssignFieldToSection('imagegrid', 'imagegrid');
       // add image button
       $this->fldaddimage = $this->AddField(
         'addimage', new formbuilderbutton('addimage', 'Add Picture'));
-      $url = $_SERVER['PHP_SELF'] . "?in=" . activitymanager::IDNAME_RESOURCES_GALLERYIMAGES .
+      $url = $_SERVER['PHP_SELF'] . "?in=IDNAME_RESOURCES_GALLERYIMAGES" .
         "&amp;pid={$this->itemid}&amp;act=" . workerbase::ACT_NEW;
       $this->fldaddimage->url = $url;
       $this->AssignFieldToSection('imagegrid', 'addimage');

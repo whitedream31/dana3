@@ -56,7 +56,7 @@ class workerresmangalleryimages extends workerform {
 
         $this->flddescription = $this->AddField(
           'description', new formbuildertextarea('description', '', 'Description of Picture'), $this->table);
-        $this->returnidname = activitymanager::IDNAME_MANAGEGALLERIES; //$this->idname;
+        $this->returnidname = 'IDNAME_MANAGEGALLERIES';
         $this->showroot = false;
 
         break;
@@ -115,7 +115,7 @@ class workerresmangalleryimages extends workerform {
       }
     }
     // back to gallery worker
-    $this->SaveAndReset(false, activitymanager::IDNAME_MANAGEGALLERIES);
+    $this->SaveAndReset(false, 'IDNAME_MANAGEGALLERIES');
     return $ret;
   }
 

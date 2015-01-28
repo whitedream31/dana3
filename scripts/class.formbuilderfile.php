@@ -197,11 +197,15 @@ class formbuilderfile extends formbuildereditbox {
     } else {
       $ret = array();
     }
+    $filebutton = ($this->isreadonly)
+      ? array()
+      : array(
+          "<input type='file' name='{$this->name}' id='{$this->id}' value='{$this->GetValue()}'" .
+          $this->IncludeAllAttributes() .
+          $this->AddDisabled() . $this->AddReadOnly() . $this->AddRequired() . " >"
+        );
     return array_merge(
-      array(
-        "<input type='file' name='{$this->name}' id='{$this->id}' value='{$this->GetValue()}'" .
-        $this->IncludeAllAttributes() .
-        $this->AddDisabled() . $this->AddReadOnly() . $this->AddRequired() . " >"), 
+      $filebutton,
       $ret
     );
   }

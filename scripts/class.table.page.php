@@ -515,43 +515,43 @@ class pagelist extends idtable {
 
   protected function GetPageObject($pgtype, $pageid = 0) {
     switch ($pgtype) {
-      case self::PAGETYPE_GENERAL:
+      case page::PAGETYPE_GENERAL:
         require_once 'class.table.pagegeneral.php';
         $page = new pagegeneral($pageid);
         break;
-      case self::PAGETYPE_CONTACT:
+      case page::PAGETYPE_CONTACT:
         require_once 'class.table.pagecontact.php';
         $page = new pagecontact($pageid);
         break;
-//      case PAGETYPE_ABOUTUS:
+//      case page::PAGETYPE_ABOUTUS:
 //        require_once('class.table.pageaboutus.php');
 //          $this->pages[] = new pageaboutus($pageid);
 //          break;
-//      case self::PAGETYPE_PRODUCT:
+//      case page::PAGETYPE_PRODUCT:
 //        require_once 'class.table.pageproduct.php';
 //        $page = new pageproduct($pageid);
 //        break;
-      case self::PAGETYPE_GALLERY:
+      case page::PAGETYPE_GALLERY:
         require_once 'class.table.pagegallery.php';
         $page = new pagegallery($pageid);
         break;
-      case self::PAGETYPE_ARTICLE:
+      case page::PAGETYPE_ARTICLE:
         require_once 'class.table.pagearticle.php';
         $page = new pagearticle($pageid);
         break;
-      case self::PAGETYPE_GUESTBOOK:
+      case page::PAGETYPE_GUESTBOOK:
         require_once 'class.table.pageguestbook.php';
         $page = new pageguestbook($pageid);
         break;
-      case self::PAGETYPE_SOCIALNETWORK:
+      case page::PAGETYPE_SOCIALNETWORK:
         require_once 'class.table.pagesocialnetwork.php';
         $page = new pagesocialnetwork($pageid);
         break;
-      case self::PAGETYPE_BOOKING:
+      case page::PAGETYPE_BOOKING:
         require_once 'class.table.pagebooking.php';
         $page = new pagebooking($pageid);
         break;
-      case self::PAGETYPE_CALENDAR:
+      case page::PAGETYPE_CALENDAR:
         require_once 'class.table.pagecalendar.php';
         $page = new pagecalendar($pageid);
         break;
