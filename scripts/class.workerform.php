@@ -377,25 +377,27 @@ $this->ProcessAction($this->action);
     $ret[] = "    <div class='clear'>&nbsp;</div>";
     $ret = array_merge($ret, $this->GetHiddenFields());
     // add submit / cancel
-    $ret[] = "    <div class='activitysection'>";
-    if (in_array(self::BTN_SUBMIT, $this->buttonmode)) {
-      $ret[] = $this->GetSubmitButton();
+    if (is_array($this->buttonmode) && count($this->buttonmode)) {
+      $ret[] = "    <div class='activitysection'>";
+      if (in_array(self::BTN_SUBMIT, $this->buttonmode)) {
+        $ret[] = $this->GetSubmitButton();
+      }
+      if (in_array(self::BTN_CANCEL, $this->buttonmode)) {
+        $ret[] = $this->GetCancelButton();
+      }
+      if (in_array(self::BTN_CONFIRM, $this->buttonmode)) {
+        $ret[] = $this->GetConfirmationButton();
+      }
+      if (in_array(self::BTN_BACK, $this->buttonmode)) {
+        $ret[] = $this->GetReturnButton();
+      }
+      $ret[] = "    </div>";
     }
-    if (in_array(self::BTN_CANCEL, $this->buttonmode)) {
-      $ret[] = $this->GetCancelButton();
-    }
-    if (in_array(self::BTN_CONFIRM, $this->buttonmode)) {
-      $ret[] = $this->GetConfirmationButton();
-    }
-    if (in_array(self::BTN_BACK, $this->buttonmode)) {
-      $ret[] = $this->GetReturnButton();
-    }
-    $ret[] = "    </div>";
     $ret[] = "  </form>";
     return $ret;
   }
 
   public function Show() {
-    echo implode("\r\n", $this->AsArray());
+    echo ArrayToString($this->AsArray());
   }
 }

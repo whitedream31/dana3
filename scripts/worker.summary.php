@@ -34,7 +34,7 @@ class workeraccsummary extends workerform {
 
     $this->fldorgdetails = $this->AddField(
       'orgdetails',
-      new formbuildersummarybox('orgdetails', '', 'org label'),
+      new formbuildersummarybox('orgdetails', '', 'Your Business Summary'),
       $this->account
     );
     $this->fldorgdetails->AddItemWithField('orgname', 'Organisation Name', 'businessname');
@@ -49,6 +49,8 @@ class workeraccsummary extends workerform {
 
     $this->fldorgdetails->AddItem(
       'orgaddress', 'Home Location', account::$instance->contact->FullAddress(), '<em>(unknown</em>');
+    $this->fldorgdetails->worker = $this;
+    $this->fldorgdetails->changeidname = 'IDNAME_ACCMNT_ORGDETAILS';
 
     // logo
     $this->fldlogomediaid = $this->AddField(
@@ -65,24 +67,7 @@ class workeraccsummary extends workerform {
       ($media) ? $media['thumbnail'] : 'none',
       ($media) ? $media['filename'] : false
     );
-
-//    $this->fldtagline = $this->AddField(
-//      'tagline',
-//      new formbuildereditbox('tagline', '', 'Tagline'),
-//      $this->account);
-
-    // populate the business types
-//    $categorylist = array(); //$this->GetCategoryList();
-//    $this->fldbusinesscategoryid->AddToGroup('', 0, 'none');
-//    $this->fldbusinesscategory2id->AddToGroup('', 0, 'none');
-//    $this->fldbusinesscategory3id->AddToGroup('', 0, 'none');
-//    foreach($categorylist as $catgroupname => $catgrouplist) {
-//      foreach($catgrouplist as $catid => $catdescription) {
-//        $this->fldbusinesscategoryid->AddToGroup($catgroupname, $catid, $catdescription);
-//        $this->fldbusinesscategory2id->AddToGroup($catgroupname, $catid, $catdescription);
-//        $this->fldbusinesscategory3id->AddToGroup($catgroupname, $catid, $catdescription);
-//      }
-//    }
+    $this->buttonmode = array();
   }
 
   protected function PostFields() {
@@ -116,11 +101,8 @@ class workeraccsummary extends workerform {
       'orggroup', 'Organisation Details', 'Your business information.');
 //    $this->NewSection(
 //      'contgroup', 'Your Details', 'Your contact information.');
-
     $this->fldorgdetails->description = 'The name of your organisation';
     $this->AssignFieldToSection('orggroup', 'orgdetails');
-
-    // add org fields
     // logo
     $this->fldlogomediaid->description = 'Please select a image file to upload for your business, if you have one.';
     $this->fldlogomediaid->isreadonly = true;
@@ -132,20 +114,6 @@ class workeraccsummary extends workerform {
 //    $this->fldtagline->maxlength = 100;
 //    $this->fldtagline->placeholder = 'a short phase here';
 //    $this->AssignFieldToSection('orggroup', 'tagline');
-
-    // - business types
-//    $this->fldbusinesscategoryid->description = 'Please choose your primary type of business';
-//    $this->fldbusinesscategoryid->required = true;
-//    $this->fldbusinesscategoryid->pattern = ".{6,50}";
-//    $this->AssignFieldToSection('contgroup', 'businesscategoryid');
-//    $this->fldbusinesscategory2id->description = 'Please choose your secondary type of business';
-//    $this->fldbusinesscategory2id->required = false;
-//    $this->fldbusinesscategory2id->pattern = ".{6,50}";
-//    $this->AssignFieldToSection('contgroup', 'businesscategory2id');
-//    $this->fldbusinesscategory3id->description = 'Please choose your third type of business';
-//    $this->fldbusinesscategory3id->required = false;
-//    $this->fldbusinesscategory3id->pattern = ".{6,50}";
-//    $this->AssignFieldToSection('contgroup', 'businesscategory3id');
   }
 
 }

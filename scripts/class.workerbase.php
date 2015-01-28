@@ -79,6 +79,14 @@ abstract class workerbase {
     return $this->GetCustomButton($caption, $this->returncaption, $url);
   }
 
+  public function GetControlButton($idname, $caption) {
+    $url = $_SERVER['PHP_SELF'];
+    if ($idname) {
+      $url .= '?in=' . $idname;
+    }
+    return $this->GetCustomButton($caption, $caption, $url);
+  }
+
   abstract protected function DoPrepare();
   abstract public function Execute();
   abstract public function AsArray();
