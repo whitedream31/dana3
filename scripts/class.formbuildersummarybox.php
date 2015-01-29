@@ -45,7 +45,11 @@ class formbuildersummarybox extends formbuilderbase {
         $value = $item['default'];
       }
       $ret[] = '  <tr>';
-      $ret[] = "    <td class='summaryboxcaption'>{$caption}</td>";
+      if ($caption) {
+        $ret[] = "    <td class='summaryboxcaption'>{$caption}</td>";
+      } else {
+        $ret[] = "    <td></td>";
+      }
       $ret[] = "    <td class='summaryboxvalue'>{$value}</td>";
       $ret[] = '  </tr>';
     }

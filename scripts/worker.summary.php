@@ -17,41 +17,43 @@ require_once 'class.formbuildersummarybox.php';
 class workeraccsummary extends workerform {
   protected $fldorgdetails;
   protected $fldlogomediaid;
-
-//  protected $fldbusinesscategoryid;
-//  protected $fldbusinesscategory2id;
-//  protected $fldbusinesscategory3id;
-
-  protected function BlankValue($value, $default) {
-    return ($value) ? $value : $default;
-  }
+  protected $fldpagesummarylist;
+  protected $fldareascovered;
 
   protected function InitForm() {
     $this->title = 'Account Summary';
     $this->icon = 'images/sect_account.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'account summary stuff';
-
+    // organisation details
     $this->fldorgdetails = $this->AddField(
       'orgdetails',
       new formbuildersummarybox('orgdetails', '', 'Your Business Summary'),
       $this->account
     );
+    $none = '<em>(none)</em>';
+    $unknown = '<em>(unknown</em>';
     $this->fldorgdetails->AddItemWithField('orgname', 'Organisation Name', 'businessname');
+    $this->fldorgdetails->AddItemWithField('orgnickname', 'MLSB Nickname', 'nickname');
     $this->fldorgdetails->AddItemLookup(
-      'orgbusinesscategoryid1', 'Business Type #1', 'businesscategory', 'businesscategoryid', basetable::FN_DESCRIPTION, '<em>(none)</em>');
-    $this->fldorgdetails->AddItemLookup(
-      'orgbusinesscategoryid2', 'Business Type #2', 'businesscategory', 'businesscategoryid2', basetable::FN_DESCRIPTION, '<em>(none)</em>');
-    $this->fldorgdetails->AddItemLookup(
-      'orgbusinesscategoryid3', 'Business Type #3', 'businesscategory', 'businesscategoryid3', basetable::FN_DESCRIPTION, '<em>(none)</em>');
-    $this->fldorgdetails->AddItemWithField('orgwebsite', 'Website', 'website', '<em>(none)</em>');
-    $this->fldorgdetails->AddItemWithField('orginfo', 'Brief Description', 'businessinfo');
+      'orgtheme', 'Current Theme', 'theme',
+      'themeid', basetable::FN_DESCRIPTION, $unknown);
 
+    $this->fldorgdetails->AddItemLookup(
+      'orgbusinesscategoryid1', 'Business Type #1', 'businesscategory',
+      'businesscategoryid', basetable::FN_DESCRIPTION, $none);
+    $this->fldorgdetails->AddItemLookup(
+      'orgbusinesscategoryid2', 'Business Type #2', 'businesscategory',
+      'businesscategoryid2', basetable::FN_DESCRIPTION, $none);
+    $this->fldorgdetails->AddItemLookup(
+      'orgbusinesscategoryid3', 'Business Type #3', 'businesscategory',
+      'businesscategoryid3', basetable::FN_DESCRIPTION, $none);
+    $this->fldorgdetails->AddItemWithField('orgwebsite', 'Main Website', 'website', $none);
+    $this->fldorgdetails->AddItemWithField('orginfo', 'Brief Description', 'businessinfo');
     $this->fldorgdetails->AddItem(
-      'orgaddress', 'Home Location', account::$instance->contact->FullAddress(), '<em>(unknown</em>');
+      'orgaddress', 'Home Location', account::$instance->contact->FullAddress(), $unknown);
     $this->fldorgdetails->worker = $this;
     $this->fldorgdetails->changeidname = 'IDNAME_ACCMNT_ORGDETAILS';
-
     // logo
     $this->fldlogomediaid = $this->AddField(
       'logomediaid', new formbuilderfilewebimage('logomediaid', '', 'Business Logo'), $this->account);
@@ -67,32 +69,61 @@ class workeraccsummary extends workerform {
       ($media) ? $media['thumbnail'] : 'none',
       ($media) ? $media['filename'] : false
     );
+
+    // pages
+    $pagelist = $this->account->GetPageList();
+    $pagestats = $pagelist->GetPrettyPageStats();
+    $this->fldpagesummarylist = $this->AddField(
+      'pagesummarylist',
+      new formbuildersummarybox('pagesummarylist', '', 'Your Page Summary'),
+      $this->account
+    );
+    $this->fldpagesummarylist->AddItem(
+      'total', 'Total pages you have available',
+      "<div style='width: 20px;text-align:right'>" . $pagestats['available'] . "</div>"
+    );
+    $this->fldpagesummarylist->AddItem(
+      'used', 'Pages used so far',
+      "<div style='width: 20px;text-align:right'>" . $pagestats['count'] . "</div>"
+    );
+    $this->fldpagesummarylist->AddItem(
+      'left', 'Pages left',
+      "<div style='width: 20px;text-align:right'>" . $pagestats['left'] . "</div>"
+    );
+    $this->fldpagesummarylist->worker = $this;
+    $this->fldpagesummarylist->changecaption = 'Manage Pages';
+    $this->fldpagesummarylist->changeidname = 'IDNAME_PAGE_MANAGE';
+    // areas covered
+    $areascovered = $this->account->AreaCoveredList();
+    $this->fldareascovered = $this->AddField(
+      'areascoveredlist',
+      new formbuildersummarybox('areascoveredlist', '', 'Areas Covered'),
+      $this->account
+    );
+    foreach ($areascovered as $areaid => $areascovered) {
+      $this->fldareascovered->AddItem(
+        'areacovered-' . $areaid,
+        '',
+        $areascovered->GetFieldValue(basetable::FN_DESCRIPTION)
+      );
+    }
+    $this->fldareascovered->worker = $this;
+    $this->fldareascovered->changecaption = 'Manage Areas Covered';
+    $this->fldareascovered->changeidname = 'IDNAME_ACCMNT_AREASCOVERED';
+
+    // hide buttons (summary only)
     $this->buttonmode = array();
   }
 
   protected function PostFields() {
-//    return
-//      $this->fldbusinessname->Save() + $this->fldtagline->Save() +
-//      $this->fldbusinesscategoryid->Save() + $this->fldbusinesscategory2id->Save() +
-//      $this->fldbusinesscategory3id->Save() + $this->fldbusinessinfo->Save() +
-//      $this->fldwebsite->Save() + $this->fldlogomediaid->Save();
+    return 0;
   }
 
   protected function SaveToTable() {
-//    $this->account->UpdateLogoMedia($this->fldlogomediaid, false);
-//    $this->showroot = $this->account->StoreChanges();
-//    return (int) $this->showroot;
+    return 0;
   }
 
   protected function AddErrorList() {
-//    $this->AddErrors($this->fldbusinessname->errors);
-//    $this->AddErrors($this->fldtagline->errors);
-//    $this->AddErrors($this->fldbusinesscategoryid->errors);
-//    $this->AddErrors($this->fldbusinesscategory2id->errors);
-//    $this->AddErrors($this->fldbusinesscategory3id->errors);
-//    $this->AddErrors($this->fldbusinessinfo->errors);
-//    $this->AddErrors($this->fldwebsite->errors);
-//    $this->AddErrors($this->fldlogomediaid->errors);
   }
 
   protected function AssignFieldDisplayProperties() {
@@ -107,13 +138,14 @@ class workeraccsummary extends workerform {
     $this->fldlogomediaid->description = 'Please select a image file to upload for your business, if you have one.';
     $this->fldlogomediaid->isreadonly = true;
     $this->AssignFieldToSection('orggroup', 'logomediaid');
-    // - tagline
-//    $this->fldtagline->description = 'Please enter a tagline (i.e. company slogan), if you have one';
-//    $this->fldtagline->required = false;
-//    $this->fldtagline->size = 80;
-//    $this->fldtagline->maxlength = 100;
-//    $this->fldtagline->placeholder = 'a short phase here';
-//    $this->AssignFieldToSection('orggroup', 'tagline');
+    // page summary
+    $this->NewSection(
+      'pagesummary', 'Page Summary', 'Below is a summary of your pages that make up your mini-site.');
+    $this->AssignFieldToSection('pagesummary', 'pagesummarylist');
+    // areas covered
+    $this->NewSection(
+      'areascoveredsummary', 'Areas Covered', 'Your contact information.');
+    $this->AssignFieldToSection('areascoveredsummary', 'areascoveredlist');
   }
 
 }

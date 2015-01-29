@@ -30,28 +30,39 @@ class areacovered extends idtable {
     }
   }
 
-  public function AssignDataGridColumns($datagrid) {
-    $datagrid->AddColumn('DESC', 'Description', true);
-  }
-
-  public function AssignDataGridRows($datagrid) {
-    $accountid = account::$instance->ID();
+  static public function GetList($accountid) {
+    $ret = array();
     $status = self::STATUS_ACTIVE;
     $query =
       'SELECT `id`, `description` FROM `areacovered` ' .
       "WHERE (`accountid` = {$accountid}) AND " .
       "(`status` = '{$status}') " .
       'ORDER BY `description`';
-    $list = array();
-    $result = database::Query($query);
+    $result = database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
+      $itm = new areacovered($id);
+      if ($itm->exists) {
+        $ret[$id] = $itm;
+      }
+    }
+    $result->free();
+    return $ret;
+  }
+
+  public function AssignDataGridColumns($datagrid) {
+    $datagrid->AddColumn('DESC', 'Description', true);
+  }
+
+  public function AssignDataGridRows($datagrid) {
+    $accountid = account::$instance->ID();
+    $list = self::GetList($accountid);
+    foreach($list as $id => $item) {
       $coldata = array(
-        'DESC' => $line['description']
+        'DESC' => $item->GetFieldValue('description')
       );
       $datagrid->AddRow($id, $coldata, true, array(formbuilderdatagrid::TBLOPT_DELETABLE));
     }
-    $result->free();
     return $list;
   }
 
