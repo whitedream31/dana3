@@ -110,4 +110,48 @@ class hours extends idtable {
     return $ret;
   }
 
+  public function GetActiveRow() {
+    return $this->CheckActiveRow();
+  }
+
+  public function MakeDefaultRow() {
+    $hour = new hours();
+    $hour->SetFieldValue(basetable::FN_ACCOUNTID, account::$instance->ID());
+    $hour->SetFieldValue(basetable::FN_DESCRIPTION, 'New Opening Hours');
+    $hour->SetFieldValue('active', 1);
+    $hour->StoreChanges();
+    return $hour->ID();
+  }
+
+  public function CheckActiveRow() {
+    $activeid = false;
+    $accountid = account::$instance->ID();
+    // find rows that are active
+    $query = "SELECT `id`, `active` FROM `hours` WHERE `accountid` = {$accountid} ORDER BY `id`";
+    $found = false;
+    $list = array();
+    $result = database::Query($query);
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $isactive = $line['active'];
+      if ($isactive & !$found) {
+        $found = true;
+        $activeid = $id;
+      } elseif ($isactive && $found) { // is currently active but already found, change to 'off'
+        $list[$id] = 0;
+      }
+    }
+    $result->free();
+    if (count($list)) {
+      foreach($list as $id => $value) {
+        $query = "UPDATE FROM `hours` SET `active` = {$value} WHERE `id` = {$id}";
+        database::Query($query);
+      }
+    }
+    // if no active row found then make one
+    if (!$found) {
+      $activeid = $this->MakeDefaultRow();
+    }
+    return $activeid;
+  }
 }

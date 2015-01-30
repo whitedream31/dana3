@@ -37,7 +37,8 @@ class workeraccmanhoursavail extends workerform {
     switch ($this->action) {
       case workerbase::ACT_EDIT:
       case workerbase::ACT_NEW:
-        $this->title = (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
+        $this->title =
+          (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
         $this->fldhoursdescription = $this->AddField(
           'description', new formbuildereditbox('description', '', 'Description'), $this->table);
         $this->fldis24hrs = $this->AddField(
@@ -127,7 +128,11 @@ class workeraccmanhoursavail extends workerform {
       $desc = ($this->fldis24hrs->value) ? 'New 24hr Opening Hours' : 'New Opening Hours';
       $this->table->SetFieldValue(basetable::FN_DESCRIPTION, $desc);
     }
-    return (int) $this->table->StoreChanges();
+    $ret = (int) $this->table->StoreChanges();
+    $this->table->CheckActiveRow(); // ensure only one row is active
+    account::$instance->SetFieldValue('hoursid', $this->table->ID());
+    account::$instance->StoreChanges();
+    return $ret;
   }
 
   protected function AddErrorList() {
@@ -137,11 +142,13 @@ class workeraccmanhoursavail extends workerform {
     $this->datagrid->SetIDName($this->idname);
     $this->NewSection(
       'workinghours', 'What hours are you available?',
-      'Please specify a simple set of opening hours (eg. 9am to 5pm) for each day, or leave blank if closed.');
+      'Please specify a simple set of opening hours (eg. 9am to 5pm) for each ' .
+      'day, or leave blank if closed.');
     $this->workinghourslist->description = 'Areas your business covers';
     $this->AssignFieldToSection('workinghours', 'workinghourslist');
     if ($this->fldaddhours) {
-      $this->fldaddhours->description = 'Click this button to add a new set of working hours for your business';
+      $this->fldaddhours->description =
+        'Click this button to add a new set of working hours for your business';
       $this->AssignFieldToSection('workinghours', 'addhours');
     }
   }
@@ -155,17 +162,24 @@ class workeraccmanhoursavail extends workerform {
 
   protected function AssignItemEditor($isnew) {
     $title = ($isnew) ? 'New Working Hours' : 'Changing Working Hours';
-    $desc = 'If you are open, please type in your opening hours (eg. 9am to 5pm). <strong>Leave blank if you are closed.</strong>';
+    $desc =
+      'If you are open, please type in your opening hours (eg. 9am to 5pm). ' .
+      '<strong>Leave blank if you are closed.</strong>';
     $hrs = 'eg. 9am to 5pm';
     $this->NewSection(
       'workinghours', $title,
-      'Please specify <strong>either</strong> the postal code <strong>or</strong> the county name the area.');
+      'Please specify <strong>either</strong> the postal code <strong>or</strong> ' .
+      'the county name the area.');
     // description field
-    $this->fldhoursdescription->description = 'The caption to display to your visitors (ie. name of the area). You can leave this blank and the system will fill this in for you.';
+    $this->fldhoursdescription->description =
+      'The caption to display to your visitors (ie. name of the area). You can ' .
+      'leave this blank and the system will fill this in for you.';
     $this->fldhoursdescription->size = 100;
     $this->AssignFieldToSection('workinghours', 'description');
     // is24hrs field
-    $this->fldis24hrs->description = 'Is your business open all the time? (eg. online or offer emergency callouts). If so, please leave the hours blank or state when the office is open etc.';
+    $this->fldis24hrs->description =
+      'Is your business open all the time? (eg. online or offer emergency ' .
+      'callouts). If so, please leave the hours blank or state when the office is open etc.';
     $this->AssignFieldToSection('workinghours', 'is24hrs');
     // monday field
     $this->AssignDay($this->fldmonday, 'monday', $desc, $hrs);
@@ -182,7 +196,9 @@ class workeraccmanhoursavail extends workerform {
     // sunday field
     $this->AssignDay($this->fldsunday, 'sunday', $desc, $hrs);
     // comments field
-    $this->fldcomments->description = 'Please specify any comments you would like to tell any customers about the opening hours (eg. not open on bank holidays)';
+    $this->fldcomments->description =
+      'Please specify any comments you would like to tell any customers about the ' .
+      'opening hours (eg. not open on bank holidays)';
     $this->fldcomments->rows = 10;
     $this->AssignFieldToSection('workinghours', 'comments');
     // active field

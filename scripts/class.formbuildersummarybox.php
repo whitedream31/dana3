@@ -12,11 +12,13 @@ class formbuildersummarybox extends formbuilderbase {
   }
 
   public function AddItem($key, $caption, $value, $default = '') {
-    $this->list[$key] = array(
-      'caption' => $caption,
-      'value' => $value,
-      'default' => $default
-    );
+    if (!IsBlank($value)) {
+      $this->list[$key] = array(
+        'caption' => $caption,
+        'value' => $value,
+        'default' => $default
+      );
+    }
   }
 
   public function AddItemWithField($key, $caption, $fieldname, $default = '') {

@@ -165,8 +165,8 @@ class activitymanager {
 //echo "<h2>idname = {$idname}</h2>\n";
     $ret = array();
     try {
-      if ($idname) {
-        $script = "worker.{$idname}.php";
+      if ($idname) { // constant('activitymanager::' . self::$activeactionname);
+        $script = 'worker.' . constant('activitymanager::' . $idname) . '.php'; //"worker.{$idname}.php";
         if (file_exists($script)) {
           $worker = false;
           include $script; // create worker as an object

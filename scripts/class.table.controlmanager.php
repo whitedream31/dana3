@@ -53,7 +53,7 @@ class controlmanager extends idtable {
         self::$activeactionname = 'IDNAME_ACCMGT_SUMMARY'; // default
       }
     }
-    self::$currentidname = constant('activitymanager::' . self::$activeactionname);
+    self::$currentidname = self::$activeactionname; //constant('activitymanager::' . self::$activeactionname);
     self::$activitymanager = new activitymanager();
     self::PopulateItems();
   }

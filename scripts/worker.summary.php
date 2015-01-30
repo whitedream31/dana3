@@ -110,6 +110,29 @@ class workeraccsummary extends workerform {
     $this->fldareascovered->worker = $this;
     $this->fldareascovered->changecaption = 'Manage Areas Covered';
     $this->fldareascovered->changeidname = 'IDNAME_ACCMNT_AREASCOVERED';
+    // hours available
+    $hours = $this->account->hours;
+    $this->fldhours = $this->AddField(
+      'hourslist',
+      new formbuildersummarybox('hourslist', '', 'Hours Available'),
+      $this->account
+    );
+    $this->fldhours->AddItemWithField('hoursdesc', 'Description', basetable::FN_DESCRIPTION);
+    if ($hours->is24hrs) {
+      $this->fldhours->AddItem('hours24hrs', 'Open', '24 hours / online only');
+    } else {
+      $this->fldhours->AddItemWithField('hoursmonday', 'Monday', 'monday');
+      $this->fldhours->AddItemWithField('hourstuesday', 'Tuesday', 'tuesday');
+      $this->fldhours->AddItemWithField('hourswednesday', 'Wednesday', 'wednesday');
+      $this->fldhours->AddItemWithField('hoursthursday', 'Thursday', 'thursday');
+      $this->fldhours->AddItemWithField('hoursfriday', 'Friday', 'friday');
+      $this->fldhours->AddItemWithField('hourssaturday', 'Saturday', 'saturday');
+      $this->fldhours->AddItemWithField('hourssunday', 'Sunday', 'sunday');
+    }
+    $this->fldhours->AddItemWithField('hourscomments', 'Comments', 'comments');
+    $this->fldareascovered->worker = $this;
+    $this->fldareascovered->changecaption = 'Manage Areas Covered';
+    $this->fldareascovered->changeidname = 'IDNAME_ACCMNT_AREASCOVERED';
 
     // hide buttons (summary only)
     $this->buttonmode = array();
@@ -146,6 +169,10 @@ class workeraccsummary extends workerform {
     $this->NewSection(
       'areascoveredsummary', 'Areas Covered', 'Your contact information.');
     $this->AssignFieldToSection('areascoveredsummary', 'areascoveredlist');
+    // hours available
+    $this->NewSection(
+      'hourssummary', 'Hours Available', 'Your Opening Hours');
+    $this->AssignFieldToSection('hourssummary', 'hourslist');
   }
 
 }
