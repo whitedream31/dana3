@@ -115,24 +115,28 @@ class workeraccsummary extends workerform {
     $this->fldhours = $this->AddField(
       'hourslist',
       new formbuildersummarybox('hourslist', '', 'Hours Available'),
-      $this->account
+      $hours
     );
     $this->fldhours->AddItemWithField('hoursdesc', 'Description', basetable::FN_DESCRIPTION);
-    if ($hours->is24hrs) {
-      $this->fldhours->AddItem('hours24hrs', 'Open', '24 hours / online only');
+    if ($hours) {
+      if ($hours->GetFieldValue('is24hrs')) {
+        $this->fldhours->AddItem('hours24hrs', 'Open', '24 hours / online only');
+      } else {
+        $this->fldhours->AddItemWithField('hoursmonday', 'Monday', 'monday');
+        $this->fldhours->AddItemWithField('hourstuesday', 'Tuesday', 'tuesday');
+        $this->fldhours->AddItemWithField('hourswednesday', 'Wednesday', 'wednesday');
+        $this->fldhours->AddItemWithField('hoursthursday', 'Thursday', 'thursday');
+        $this->fldhours->AddItemWithField('hoursfriday', 'Friday', 'friday');
+        $this->fldhours->AddItemWithField('hourssaturday', 'Saturday', 'saturday');
+        $this->fldhours->AddItemWithField('hourssunday', 'Sunday', 'sunday');
+      }
+      $this->fldhours->AddItemWithField('hourscomments', 'Comments', 'comments');
     } else {
-      $this->fldhours->AddItemWithField('hoursmonday', 'Monday', 'monday');
-      $this->fldhours->AddItemWithField('hourstuesday', 'Tuesday', 'tuesday');
-      $this->fldhours->AddItemWithField('hourswednesday', 'Wednesday', 'wednesday');
-      $this->fldhours->AddItemWithField('hoursthursday', 'Thursday', 'thursday');
-      $this->fldhours->AddItemWithField('hoursfriday', 'Friday', 'friday');
-      $this->fldhours->AddItemWithField('hourssaturday', 'Saturday', 'saturday');
-      $this->fldhours->AddItemWithField('hourssunday', 'Sunday', 'sunday');
+      $this->fldhours->AddItem('hours24hrs', 'Open', $none);
     }
-    $this->fldhours->AddItemWithField('hourscomments', 'Comments', 'comments');
-    $this->fldareascovered->worker = $this;
-    $this->fldareascovered->changecaption = 'Manage Areas Covered';
-    $this->fldareascovered->changeidname = 'IDNAME_ACCMNT_AREASCOVERED';
+    $this->fldhours->worker = $this;
+    $this->fldhours->changecaption = 'Manage Hours Availability';
+    $this->fldhours->changeidname = 'IDNAME_ACCMNT_HOURSAVAILABLE';
 
     // hide buttons (summary only)
     $this->buttonmode = array();

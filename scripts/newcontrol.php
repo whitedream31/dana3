@@ -49,6 +49,7 @@ $account = account::StartInstance(542); //322);
   <![endif]-->
   <script type="text/javascript" src="../jscripts/jquery.js"></script>
   <script type="text/javascript" src="../jscripts/jquery-ui.js"></script>
+  <script type="text/javascript" src="../jscripts/helpers.js"></script>
   <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
   <!--script type="text/javascript" src="../jscripts/accordion.js"></script-->
 </head>

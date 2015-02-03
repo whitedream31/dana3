@@ -129,9 +129,9 @@ class workeraccmanhoursavail extends workerform {
       $this->table->SetFieldValue(basetable::FN_DESCRIPTION, $desc);
     }
     $ret = (int) $this->table->StoreChanges();
-    $this->table->CheckActiveRow(); // ensure only one row is active
-    account::$instance->SetFieldValue('hoursid', $this->table->ID());
-    account::$instance->StoreChanges();
+    $hoursid = $this->table->CheckActiveRow(); // ensure only one row is active
+    account::$instance->GetHours($hoursid); // reassign the hours id to the account table
+    $ret += account::$instance->StoreChanges();
     return $ret;
   }
 

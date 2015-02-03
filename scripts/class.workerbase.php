@@ -67,7 +67,7 @@ abstract class workerbase {
       $event = "javascript:window.open('{$url}', '_self');";
     }
     $click = 'onclick="' . $event . '"';
-    return "<input type='button' title='{$caption}' class='actionbutton' value='{$value}' {$click} />";
+    return "<input type='button' title='{$caption}' class='fieldbutton' value='{$value}' {$click} />";
   }
 
   protected function GetReturnButton() {

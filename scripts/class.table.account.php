@@ -345,6 +345,7 @@ class account extends idtable {
     $this->AddField('tagline', self::DT_STRING);
     $this->AddField('logomediaid', self::DT_FK);
     $this->AddField('session', self::DT_STRING, self::FLDTYPE_HIDDEN);
+    $this->AddField('hoursid', self::DT_FK);
     $this->AddField('sidecontent', self::DT_STRING);
     $this->AddField('businessinfo', self::DT_STRING);
     $this->AddField('businesscategoryid', self::DT_FK);
@@ -507,8 +508,10 @@ class account extends idtable {
       $this->SetFieldValue('logomediaid', $this->media->ID());
     }
     if ($this->hours) {
-      $this->hours->StoreChanges();
-      $this->SetFieldValue('hoursid', $this->hours->ID());
+      $update = $this->hours->StoreChanges();
+      if ($update) {
+        $this->SetFieldValue('hoursid', $this->hours->ID());
+      }
     }
     return parent::StoreChanges();
   }
@@ -534,8 +537,14 @@ class account extends idtable {
     } else {
       $this->expired = false;
     }
-    $this->hoursid = (int) $this->GetFieldValue('hoursid');
+    $this->GetHours();
+  }
+
+  public function GetHours($newhourid = 0) {
+    $this->hoursid = ($newhourid) ? $newhourid : (int) $this->GetFieldValue('hoursid');
+    $this->SetFieldValue('hoursid', $this->hoursid); // update, if neccessary
     $this->hours = new hours($this->hoursid);
+    return $this->hours;
   }
 
   protected function LoadGalleryGroups() {

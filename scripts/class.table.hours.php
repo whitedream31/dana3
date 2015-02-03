@@ -144,7 +144,7 @@ class hours extends idtable {
     $result->free();
     if (count($list)) {
       foreach($list as $id => $value) {
-        $query = "UPDATE FROM `hours` SET `active` = {$value} WHERE `id` = {$id}";
+        $query = "UPDATE `hours` SET `active` = {$value} WHERE `id` = {$id}";
         database::Query($query);
       }
     }
