@@ -20,6 +20,7 @@ class formbuilderdate extends formbuildereditbox {
     $this->fieldtype = basetable::FLDTYPE_DATE;
     $this->size = 10;
     $this->maxlength = 10;
+    $this->classname = 'datepicker';
   }
 
   protected function ValidateValue() {
