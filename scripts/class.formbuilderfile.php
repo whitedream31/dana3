@@ -48,6 +48,7 @@ class formbuilderfile extends formbuildereditbox {
   public $targetpath;
   //public $targetprefix = 'file';
   public $posted;
+  public $isnofile = false; // true if no file specified
   public $file;
   public $mediaid; // hidden control id value
 
@@ -159,12 +160,13 @@ class formbuilderfile extends formbuildereditbox {
 
   protected function ValidateValue() {
     $ret = false;
-    if ($this->file['error'] == UPLOAD_ERR_NO_FILE) {
+    $this->isnofile = ($this->file['error'] == UPLOAD_ERR_NO_FILE);
+    if ($this->isnofile) {
       $this->usecurrentfile = ($this->keyid);
-      if ($this->usecurrentfile) {
-        $ret = true;
-      } else {
+      if (!$this->usecurrentfile && $this->required) {
         $this->errors[self::ERRKEY_NOFILE] = self::ERRVAL_NOFILE;
+      } else {
+        $ret = true;
       }
     } elseif ($this->file) {
       $pathinfo = $this->GetPathInfo($this->file["name"]); // basename

@@ -18,7 +18,7 @@ class workeraccchgorgdet extends workerform {
   protected $fldtagline;
   protected $fldbusinessinfo;
   protected $fldwebsite;
-  protected $fldbusinesscategoryid;
+  protected $fldbusinesscategory1id;
   protected $fldbusinesscategory2id;
   protected $fldbusinesscategory3id;
 
@@ -27,46 +27,50 @@ class workeraccchgorgdet extends workerform {
     $this->icon = 'images/sect_account.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'account details';
-
     $this->fldbusinessname = $this->AddField(
-      'businessname',
+      'fldbusinessname',
       new formbuildereditbox('businessname', '', 'Organisation Name'),
       $this->account);
     $this->fldtagline = $this->AddField(
-      'tagline',
+      'fldtagline',
       new formbuildereditbox('tagline', '', 'Tagline'),
       $this->account);
-    $this->fldbusinesscategoryid = $this->AddField(
-      'businesscategoryid',
+    $this->fldwebsite = $this->AddField(
+      'fldwebsite', new formbuilderurl('website', '', 'Main Web Site (if any)'),
+      $this->account);
+    $this->fldbusinesscategory1id = $this->AddField(
+      'fldbusinesscategory1id',
       new formbuilderselect('businesscategoryid', '', 'Main type of business'),
       $this->account);
     $this->fldbusinesscategory2id = $this->AddField(
-      'businesscategory2id', new formbuilderselect('businesscategory2id', '', 'Secondary type of business'),
+      'fldbusinesscategory2id',
+      new formbuilderselect('businesscategory2id', '', 'Secondary type of business'),
       $this->account);
     $this->fldbusinesscategory3id = $this->AddField(
-      'businesscategory3id', new formbuilderselect('businesscategory3id', '', 'Other type of business'),
+      'fldbusinesscategory3id',
+      new formbuilderselect('businesscategory3id', '', 'Other type of business'),
+      $this->account);
+    $this->fldbusinessinfo = $this->AddField(
+      'fldbusinessinfo',
+      new formbuildertextarea('businessinfo', '', 'Brief Description'),
       $this->account);
     // populate the business types
     $categorylist = $this->GetCategoryList();
-    $this->fldbusinesscategoryid->AddToGroup('', 0, 'none');
+    $this->fldbusinesscategory1id->AddToGroup('', 0, 'none');
     $this->fldbusinesscategory2id->AddToGroup('', 0, 'none');
     $this->fldbusinesscategory3id->AddToGroup('', 0, 'none');
     foreach($categorylist as $catgroupname => $catgrouplist) {
       foreach($catgrouplist as $catid => $catdescription) {
-        $this->fldbusinesscategoryid->AddToGroup($catgroupname, $catid, $catdescription);
+        $this->fldbusinesscategory1id->AddToGroup($catgroupname, $catid, $catdescription);
         $this->fldbusinesscategory2id->AddToGroup($catgroupname, $catid, $catdescription);
         $this->fldbusinesscategory3id->AddToGroup($catgroupname, $catid, $catdescription);
       }
     }
-    $this->fldbusinessinfo = $this->AddField(
-      'businessinfo', new formbuildertextarea('businessinfo', '', 'Brief Description'),
-      $this->account);
-    $this->fldwebsite = $this->AddField(
-      'website', new formbuilderurl('website', '', 'Main Web Site (if any)'),
-      $this->account);
     // logo
     $this->fldlogomediaid = $this->AddField(
-      'logomediaid', new formbuilderfilewebimage('logomediaid', '', 'Business Logo'), $this->account);
+      'fldlogomediaid',
+      new formbuilderfilewebimage('logomediaid', '', 'Business Logo'),
+      $this->account);
     $this->fldlogomediaid->mediaid = $this->account->GetFieldValue('logomediaid');
     $media = $this->GetTargetNameFromMedia($this->fldlogomediaid->mediaid); // get the fk for media id
     if ($media) {
@@ -84,7 +88,7 @@ class workeraccchgorgdet extends workerform {
   protected function PostFields() {
     return
       $this->fldbusinessname->Save() + $this->fldtagline->Save() +
-      $this->fldbusinesscategoryid->Save() + $this->fldbusinesscategory2id->Save() +
+      $this->fldbusinesscategory1id->Save() + $this->fldbusinesscategory2id->Save() +
       $this->fldbusinesscategory3id->Save() + $this->fldbusinessinfo->Save() +
       $this->fldwebsite->Save() + $this->fldlogomediaid->Save();
   }
@@ -98,7 +102,7 @@ class workeraccchgorgdet extends workerform {
   protected function AddErrorList() {
     $this->AddErrors($this->fldbusinessname->errors);
     $this->AddErrors($this->fldtagline->errors);
-    $this->AddErrors($this->fldbusinesscategoryid->errors);
+    $this->AddErrors($this->fldbusinesscategory1id->errors);
     $this->AddErrors($this->fldbusinesscategory2id->errors);
     $this->AddErrors($this->fldbusinesscategory3id->errors);
     $this->AddErrors($this->fldbusinessinfo->errors);
@@ -137,35 +141,39 @@ class workeraccchgorgdet extends workerform {
     $this->fldbusinessname->required = true;
     $this->fldbusinessname->size = 80;
     $this->fldbusinessname->pattern = ".{3,100}"; // min 3, max 100
-    $this->AssignFieldToSection('orggroup', 'businessname');
+    $this->AssignFieldToSection('orggroup', 'fldbusinessname');
     // - tagline
     $this->fldtagline->description = 'Please enter a tagline (i.e. company slogan), if you have one';
     $this->fldtagline->required = false;
     $this->fldtagline->size = 80;
     $this->fldtagline->maxlength = 100;
     $this->fldtagline->placeholder = 'a short phase here';
-    $this->AssignFieldToSection('orggroup', 'tagline');
+    $this->AssignFieldToSection('orggroup', 'fldtagline');
+    // website
     $this->fldwebsite->description = "If you have another (larger) website that you would like to link and help promote, please specify it here. <strong>Please include the prefix: &quot;http://&quot;</strong>";
-    $this->AssignFieldToSection('orggroup', 'website');
+    $this->AssignFieldToSection('orggroup', 'fldwebsite');
     // - business types
-    $this->fldbusinesscategoryid->description = 'Please choose your primary type of business';
-    $this->fldbusinesscategoryid->required = true;
-    $this->fldbusinesscategoryid->pattern = ".{6,50}";
-    $this->AssignFieldToSection('btypegroup', 'businesscategoryid');
+    $this->fldbusinesscategory1id->description = 'Please choose your primary type of business';
+    $this->fldbusinesscategory1id->required = true;
+    $this->fldbusinesscategory1id->pattern = ".{6,50}";
+    $this->AssignFieldToSection('btypegroup', 'fldbusinesscategory1id');
     $this->fldbusinesscategory2id->description = 'Please choose your secondary type of business';
     $this->fldbusinesscategory2id->required = false;
     $this->fldbusinesscategory2id->pattern = ".{6,50}";
-    $this->AssignFieldToSection('btypegroup', 'businesscategory2id');
+    $this->AssignFieldToSection('btypegroup', 'fldbusinesscategory2id');
     $this->fldbusinesscategory3id->description = 'Please choose your third type of business';
     $this->fldbusinesscategory3id->required = false;
     $this->fldbusinesscategory3id->pattern = ".{6,50}";
-    $this->AssignFieldToSection('btypegroup', 'businesscategory3id');
+    // business info
+    $this->AssignFieldToSection('btypegroup', 'fldbusinesscategory3id');
     $this->fldbusinessinfo->description = 'Provide a short description of your business';
     $this->fldbusinessinfo->required = false;
+    $this->fldbusinessinfo->enableeditor = false;
     $this->fldbusinessinfo->cols = 120;
-    $this->AssignFieldToSection('btypegroup', 'businessinfo');
+    $this->AssignFieldToSection('btypegroup', 'fldbusinessinfo');
+    // logo media
     $this->fldlogomediaid->description = 'Please select a image file to upload for your business, if you have one.';
-    $this->AssignFieldToSection('logo', 'logomediaid');
+    $this->AssignFieldToSection('logo', 'fldlogomediaid');
   }
 
 }

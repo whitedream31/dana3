@@ -51,7 +51,7 @@ class workeraccsummary extends workerform {
     $this->fldorgdetails->AddItemWithField('orgwebsite', 'Main Website', 'website', $none);
     $this->fldorgdetails->AddItemWithField('orginfo', 'Brief Description', 'businessinfo');
     $this->fldorgdetails->AddItem(
-      'orgaddress', 'Home Location', account::$instance->contact->FullAddress(), $unknown);
+      'orgaddress', 'Home Location', account::$instance->Contact()->FullAddress(), $unknown);
     $this->fldorgdetails->worker = $this;
     $this->fldorgdetails->changeidname = 'IDNAME_ACCMNT_ORGDETAILS';
     // logo
@@ -111,7 +111,7 @@ class workeraccsummary extends workerform {
     $this->fldareascovered->changecaption = 'Manage Areas Covered';
     $this->fldareascovered->changeidname = 'IDNAME_ACCMNT_AREASCOVERED';
     // hours available
-    $hours = $this->account->hours;
+    $hours = $this->account->GetHours();
     $this->fldhours = $this->AddField(
       'hourslist',
       new formbuildersummarybox('hourslist', '', 'Hours Available'),

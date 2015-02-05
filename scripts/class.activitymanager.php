@@ -300,18 +300,18 @@ class activitymanager {
       foreach($this->message as $msg) {
         $ret[] = "    <li>{$msg}</li>";
       }
-      $ret[] = "  </section>";
+      $ret[] = '  </section>';
     }
     if ($this->errorlist) {
       $ret[] = "  <section class='activityformerrors'>";
       foreach($this->errorlist as $err) {
         $ret[] = "    <li>{$err}</li>";
       }
-      $ret[] = "  </section>";
+      $ret[] = '  </section>';
     }
 
-    $ret[] = '    <section id="activityarea">';
-    $ret[] = '      <div id="activitycontent">';
+    $ret[] = "    <section id='activityarea'>";
+    $ret[] = "      <div id='activitycontent'>";
     $ret = array_merge($ret, $lines);
     $ret[] = '      </div>';
     $ret[] = '    </section>';
@@ -322,4 +322,4 @@ class activitymanager {
   }
 }
 
-$activitymanager = new activitymanager();
+//$activitymanager = new activitymanager();

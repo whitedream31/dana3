@@ -23,14 +23,15 @@ abstract class workerbase {
   protected $returncaption = 'Back';
   protected $returnidname = false;
   protected $previousidname = false;
+  protected $controlmanager = false;
 
   public $idname = false;
   public $showroot = false;
   public $redirect = false;
 
   public function __construct() {
-    global $activitymanager;
-    $this->manager = $activitymanager;
+//    global $activitymanager;
+    $this->manager = controlmanager::$activitymanager;
   }
 
   public function SetIDName($idname) {
@@ -38,6 +39,7 @@ abstract class workerbase {
       $this->idname = $idname;
       $this->DoPrepare();
     }
+    $this->controlmanager = controlmanager::$instance;
   }
 
   public function AddMessage($msg) {

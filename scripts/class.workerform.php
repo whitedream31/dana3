@@ -32,6 +32,7 @@ abstract class workerform extends workerbase { // activitybase {
   protected $formclass = 'workerform';
   public $fieldlabelclass = '';
   public $posted = false;
+  // note: $idname is in workerbase
 
   function __construct() {
     parent::__construct();
@@ -211,13 +212,14 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         $this->AddErrorList();
         if ($this->manager->HasErrors()) {
           $this->AddMessage('Sorry, there were errors. Please rectify them and try again.');
-          $this->InitForm();
-          $this->AssignFieldDisplayProperties();
+//          $this->InitForm();
+//          $this->AssignFieldDisplayProperties();
           $this->posted = false;
 $this->ProcessAction($this->action);
         } else {
           $this->AddMessage('No changes were found!');
           $this->posted = true;
+          $this->idname = 'IDNAME_ACCMGT_SUMMARY';
         }
         $this->Notify($this->posted);
       }

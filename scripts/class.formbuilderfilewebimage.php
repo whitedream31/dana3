@@ -68,7 +68,8 @@ class formbuilderfilewebimage extends formbuilderfile {
   } */
 
   protected function ProcessPost() {
-    if (!$this->usecurrentfile && !$this->errors) { //($this->file['error'] != UPLOAD_ERR_NO_FILE && !$this->errors) {
+    //$this->required
+    if (!$this->isnofile && !$this->usecurrentfile && !$this->errors) {
       parent::ProcessPost();
       if (count($this->errors) == 0) {
         $srcfilename = $this->targetpath . $this->targetfilename;
