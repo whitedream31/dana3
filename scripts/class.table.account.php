@@ -548,13 +548,15 @@ class account extends idtable {
   }
 
   protected function LoadGalleryGroups() {
-    require_once 'class.table.gallerygroup.php';
-    $this->gallerygrouplist = gallerygroup::GetList($this->ID());
+    require_once 'class.table.gallery.php';
+    $this->gallerygrouplist = gallery::GetGroupList($this->ID());
+//    require_once 'class.table.gallerygroup.php';
+//    $this->gallerygrouplist = gallerygroup::GetList($this->ID());
   }
 
   protected function LoadNewsletters() {
     require_once 'class.table.newsletter.php';
-    $this->newsletterlist = newsletter::GetList($this->ID());
+    $this->newsletterlist = newsletter::FindShowableNewslettersByAccount($this->ID());
   }
 
   protected function LoadArticles() {
@@ -811,7 +813,7 @@ class account extends idtable {
     }
     return $this->newsletterlist;
   }
-  
+
   public function ArticleList($refresh = false) {
     if ((!$this->articlelist || $refresh) && ($this->ID() > 0)) {
       $this->LoadArticles();

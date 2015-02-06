@@ -12,7 +12,7 @@ require_once 'class.formbuildersummarybox.php';
   * dana framework v.3
 */
 
-// account change org details
+// account summary
 
 class workeraccsummary extends workerform {
   protected $fldorgdetails;

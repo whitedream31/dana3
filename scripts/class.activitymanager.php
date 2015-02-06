@@ -5,7 +5,7 @@
   * dana framework v.3
 
 note:
-  the mce editor works when $showtexteditor is true 
+  the mce editor works when $showtexteditor is true
   and each formbuildertextarea has $enableeditor = true
 
 */
@@ -18,7 +18,7 @@ class activitymanager {
   const IDNAME_ACCMNT_ORGDETAILS = 'accchgorgdet'; // your business
   const IDNAME_ACCMNT_CONDETAILS = 'accchgcondet'; // your details
   const IDNAME_ACCMNT_LOGINPWD = 'accchglogin'; // password
-  
+
   const IDNAME_PAGE_MANAGE = 'pgman'; // pages
   const IDNAME_PAGE_NEW = 'newpage'; // add new page
   const IDNAME_PAGE_CHANGETHEME = 'sitechgtheme'; // change theme
@@ -246,7 +246,7 @@ class activitymanager {
   }
 
   public function AddError($err) {
-    $this->errorlist[] = $err;
+    $this->errorlist[strtoupper($err)] = $err;
   }
 
   public function HasErrors() {

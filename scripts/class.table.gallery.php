@@ -49,6 +49,18 @@ class gallery extends idtable {
     return $this->CalcGalleryHeight();
   }
 
+  static public function GetGroupList($accountid) {
+    $query = "SELECT `id` FROM `gallery` WHERE `accountid` = {$accountid} ORDER BY `title`";
+    $result = database::Query($query);
+    $list = array();
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $list[$id] = new gallery($id);
+    }
+    $result->close();
+    return $list;
+  }
+
   public function BuildSlideShowList() {
     if ($this->galleryheight === false) {
       $this->galleryheight = $this->CalcGalleryHeight();
@@ -204,7 +216,7 @@ class gallery extends idtable {
     return $ret;
   }
 */
-  private function FindGalleryLinkedPageDescription($galleryid) {
+  static public function FindGalleryLinkedPageDescription($galleryid) {
     $query = "SELECT `description` FROM `page` " .
       "WHERE (`groupid` = {$galleryid}) OR (`gengalleryid` = {$galleryid})";
     $result = database::Query($query);
@@ -226,25 +238,19 @@ class gallery extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $query =
-      'SELECT * FROM `gallery` ' .
-      "WHERE `accountid` = {$accountid} " .
-      "ORDER BY `title`";
     $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $galleries = $this->GetGroupList($accountid);
     $list = array();
-    $result = database::Query($query);
-    while ($line = $result->fetch_assoc()) {
-      $id = $line['id'];
+    foreach($galleries as $id => $gallery) {
       $count = $this->CountItems($id);
       $linkedpages = $this->FindGalleryLinkedPageDescription($id);
       $coldata = array(
-        'DESC' => $line['title'],
+        'DESC' => $gallery->GetFieldValue('title'),
         'IMGCOUNT' => $count,
         'LINKEDPAGE' => $linkedpages
       );
       $datagrid->AddRow($id, $coldata, true, $actions);
     }
-    $result->free();
     return $list;
   }
 

@@ -56,7 +56,7 @@ class newsletter extends idtable {
 
   static public function FindNewslettersByAccount($accountid) {
     $status = self::STATUS_ACTIVE;
-    $query = 
+    $query =
       "SELECT `id` FROM `newsletter` " .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
       'ORDER BY `showdate` DESC';
@@ -71,7 +71,7 @@ class newsletter extends idtable {
 
   static public function FindShowableNewslettersByAccount($accountid) {
     $status = self::STATUS_ACTIVE;
-    $query = 
+    $query =
       "SELECT `id` FROM `newsletter` " .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
       "AND `showdate` < NOW() " .

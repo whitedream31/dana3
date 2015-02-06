@@ -46,7 +46,7 @@ class workerresmangalleries extends workerform {
         break;
       default:
         $this->buttonmode = array(workerform::BTN_BACK);
-        $this->title = 'Manage Galleries'; 
+        $this->title = 'Manage Galleries';
         $this->fldgalleries = $this->AddField('gallery', $this->datagrid, $this->table);
         $this->fldaddgallery = $this->AddField(
           'addgallery', new formbuilderbutton('addgallery', 'Add New Gallery'));
