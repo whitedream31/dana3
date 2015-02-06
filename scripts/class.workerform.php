@@ -30,6 +30,7 @@ abstract class workerform extends workerbase { // activitybase {
   protected $formtarget = '_self';
   protected $formtitle = '';
   protected $formclass = 'workerform';
+  protected $skip = false; // skip saving form twice!
   public $fieldlabelclass = '';
   public $posted = false;
   // note: $idname is in workerbase
@@ -43,6 +44,7 @@ abstract class workerform extends workerbase { // activitybase {
     $this->posting = count($_POST);
     $this->formaction = $_SERVER['SCRIPT_NAME'];
     $this->sections = array();
+    $this->returnidname = 'IDNAME_ACCMGT_SUMMARY';
   }
 
   protected function AssignFormAction() {
@@ -188,21 +190,27 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         $this->CheckForBlankValues();
       }
       if (!$this->PostFields() && $this->IsValid()) {
-        switch ($this->SaveToTable()) {
-          case -1: // error - lasterror
-            $msg = 'Error: ' . $this->table->lasterror['msg'];
-            break;
-          case -2: // insert - new row
-            $msg = 'Added successfully';
-            break;
-          case 0: // no change
-            $msg = 'No changes found';
-            break;
-          default: // update - existing row updated
-            $msg = 'Changes saved successfully';
-            break;
+        if (!$this->skip) {
+          switch ($this->SaveToTable()) {
+            case -1: // error - lasterror
+              $msg = 'Error: ' . $this->table->lasterror['msg'];
+              break;
+            case -2: // insert - new row
+              $msg = 'Added successfully';
+              $this->idname = $this->returnidname;
+              break;
+            case 0: // no change
+              $msg = 'No changes found';
+              $this->idname = $this->returnidname;
+              break;
+            default: // update - existing row updated
+              $msg = 'Changes saved successfully';
+              $this->idname = $this->returnidname;
+              break;
+          }
+          $this->AddMessage($msg); //to {$this->contextdescription} Saved");
+          $this->skip = true; // don't do this section twice! (work around needs fixing)
         }
-        $this->AddMessage($msg); //to {$this->contextdescription} Saved");
         $this->posted = true;
         $this->action = false;
         // re-init form
@@ -380,20 +388,24 @@ $this->ProcessAction($this->action);
     $ret = array_merge($ret, $this->GetHiddenFields());
     // add submit / cancel
     if (is_array($this->buttonmode) && count($this->buttonmode)) {
-      $ret[] = "    <div class='activitysection'>";
+      $buttonlist = array();
       if (in_array(self::BTN_SUBMIT, $this->buttonmode)) {
-        $ret[] = $this->GetSubmitButton();
+        $buttonlist[] = $this->GetSubmitButton();
       }
       if (in_array(self::BTN_CANCEL, $this->buttonmode)) {
-        $ret[] = $this->GetCancelButton();
+        $buttonlist[] = $this->GetCancelButton();
       }
       if (in_array(self::BTN_CONFIRM, $this->buttonmode)) {
-        $ret[] = $this->GetConfirmationButton();
+        $buttonlist[] = $this->GetConfirmationButton();
       }
-      if (in_array(self::BTN_BACK, $this->buttonmode)) {
-        $ret[] = $this->GetReturnButton();
+//      if (in_array(self::BTN_BACK, $this->buttonmode)) {
+//        $buttonlist[] = $this->GetReturnButton();
+//      }
+      if (count($buttonlist)) {
+        $ret[] = "    <div class='activitysection'>";
+        $ret = array_merge($ret, $buttonlist);
+        $ret[] = "    </div>";
       }
-      $ret[] = "    </div>";
     }
     $ret[] = "  </form>";
     return $ret;

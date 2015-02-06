@@ -48,7 +48,7 @@ class workeraccareascovered extends workerform {
         break;
       case workerbase::ACT_REMOVE:
         $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
-        $this->title = 'Remove Area Cover'; 
+        $this->title = 'Remove Area Cover';
         $this->fldareadescription = $this->AddField(
           'description', new formbuilderstatictext('description', '', 'Area to be removed'));
         $this->action = workerbase::ACT_CONFIRM;

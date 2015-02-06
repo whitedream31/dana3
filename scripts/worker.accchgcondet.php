@@ -164,6 +164,7 @@ class workeraccchgcondet extends workerform {
     // address
     $this->address->description = 'Please specify the first part of your address. Include the name or number of the building and the street name. Optionally, include the district name.';
     $this->address->rows = 3;
+    $this->address->enableeditor = false;
     $this->AssignFieldToSection('addrgroup', 'address');
     // town
     $this->town->description = 'Please state your town or city';

@@ -27,50 +27,50 @@ class workerpgman extends workerform {
   protected $postalarea;
   protected $countyid;
 
-  private function GetPageTable($pgtype = PAGETYPE_GENERAL, $pageid = 0) {
+  private function GetPageTable($pgtype = page::PAGETYPE_GENERAL, $pageid = 0) {
     $ret = null;
     switch ($pgtype) {
-      case PAGETYPE_GENERAL: //gen
+      case page::PAGETYPE_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
         $ret = new pagegeneral($pageid);
         break;
-      case PAGETYPE_CONTACT: //con
+      case page::PAGETYPE_CONTACT: //con
         require_once 'class.table.pagecontact.php';
         $ret = new pagecontact($pageid);
         break;
-//      case PAGETYPE_ABOUTUS: //abt
+//      case page::PAGETYPE_ABOUTUS: //abt
 //        require_once('class.table.pageaboutus.php');
 //        $ret = new pageaboutus($pageid);
 //        break;
-      case PAGETYPE_PRODUCT: //prd
+      case page::PAGETYPE_PRODUCT: //prd
         require_once 'class.table.pageproduct.php';
         $ret = new pageproduct($pageid);
         break;
-      case PAGETYPE_GALLERY: //gal
+      case page::PAGETYPE_GALLERY: //gal
         require_once 'class.table.pagegallery.php';
         $ret = new pagegallery($pageid);
         break;
-      case PAGETYPE_ARTICLE: //art
+      case page::PAGETYPE_ARTICLE: //art
         require_once 'class.table.pagearticle.php';
         $ret = new pagearticle($pageid);
         break;
-      case PAGETYPE_GUESTBOOK: //gbk
+      case page::PAGETYPE_GUESTBOOK: //gbk
         require_once 'class.table.pageguestbook.php';
         $ret = new pageguestbook($pageid);
         break;
-      case PAGETYPE_SOCIALNETWORK: //soc
+      case page::PAGETYPE_SOCIALNETWORK: //soc
         require_once 'class.table.pagesocialnetwork.php';
         $ret = new pagesocialnetwork($pageid);
         break;
-      case PAGETYPE_BOOKING: //bk
+      case page::PAGETYPE_BOOKING: //bk
         require_once 'class.table.pagebooking.php';
         $ret = new pagebooking($pageid);
         break;
-      case PAGETYPE_CALENDAR: //cal
+      case page::PAGETYPE_CALENDAR: //cal
         require_once 'class.table.pagecalendar.php';
         $ret = new pagecalendar($pageid);
         break;
-      /*      case PAGETYPE_SURVEY: //svy
+      /*      case page::PAGETYPE_SURVEY: //svy
         require_once('class.table.pagesurvey.php');
         $ret = new pagesurvey($pageid);
         break; */
@@ -112,12 +112,12 @@ class workerpgman extends workerform {
         case workerbase::ACT_EDIT:
           $this->pagetype = ($this->itemid > 0)
             ? $this->GetPageTypeFromPageID($this->itemid)
-            : PAGETYPE_GENERAL;
+            : page::PAGETYPE_GENERAL;
           break;
         case workerbase::ACT_NEW:
           $this->pagetype = ($this->itemid > 0)
             ? $this->GetPageTypeFromPageTypeID($this->itemid)
-            : PAGETYPE_GENERAL;
+            : page::PAGETYPE_GENERAL;
           $this->itemid = 0;
       }
     }

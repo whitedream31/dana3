@@ -72,7 +72,10 @@ abstract class workerbase {
     return "<input type='button' title='{$caption}' class='fieldbutton' value='{$value}' {$click} />";
   }
 
-  protected function GetReturnButton() {
+  protected function GetReturnButton($newidname = 'IDNAME_ACCMGT_SUMMARY') {
+    if ($newidname && $newidname != $this->returnidname) {
+      $this->returnidname = $newidname;
+    }
     $caption = strtolower($this->returncaption);
     $url = $_SERVER['PHP_SELF'];
     if ($this->returnidname) {

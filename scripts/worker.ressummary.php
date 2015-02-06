@@ -2,30 +2,25 @@
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildersummarybox.php';
-//require_once 'class.formbuildereditbox.php';
-//require_once 'class.formbuilderselect.php';
-//require_once 'class.formbuildertextarea.php';
-//require_once 'class.formbuilderurl.php';
 
 /**
-  * activity worker for account summary (main home)
+  * activity worker for resource summary
   * dana framework v.3
 */
 
-// account change org details
+// resource summary
 
-class workeraccsummary extends workerform {
+class workerressummary extends workerform {
   protected $fldorgdetails;
   protected $fldlogomediaid;
   protected $fldpagesummarylist;
   protected $fldareascovered;
 
   protected function InitForm() {
-    $this->title = 'Account Summary';
-    $this->icon = 'images/cm_account.png';
+    $this->title = 'Resource Summary';
+    $this->icon = 'images/cm_resources.png';
     $this->activitydescription = 'some text here';
-    $this->contextdescription = 'account summary stuff';
-
+    $this->contextdescription = 'resource summary stuff';
     // organisation details
     $this->fldorgdetails = $this->AddField(
       'orgdetails',
@@ -182,4 +177,4 @@ class workeraccsummary extends workerform {
 
 }
 
-$worker = new workeraccsummary();
+$worker = new workerressummary();
