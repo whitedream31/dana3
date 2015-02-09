@@ -411,11 +411,9 @@ class pagewriter {
         $right = substr($line, $posend, strlen($line) - $posend);
         $sectionvalue = RemoveEmptyElements($this->ProcessSection($sectionname));
         $ret = count($sectionvalue); //true;
-//        if (count($sectionvalue)) {
         if ($ret) {
           $gap = ($ret > 1) ? "\n" : '';
           $line = $left . $gap . ArrayToString($sectionvalue) . $gap . $right;
-          //$ret = count($sectionvalue); //true;
         }
       }
     }

@@ -17,6 +17,7 @@ class workerressummary extends workerform {
   protected $fldgalleries;
   protected $fldnewsletters;
   protected $fldsubscribers;
+  protected $fldguestbooks;
 
   protected function InitForm() {
     $this->title = 'Resource Summary';
@@ -50,41 +51,63 @@ class workerressummary extends workerform {
 
     // newsletters
     $newsletters = $account->NewsletterList();
-    $this->fldnewsletters = $this->AddField(
-      'newsletters',
-      new formbuildersummarybox('newsletterslist', '', 'Active Newsletters'),
-      $this->account
-    );
-    foreach ($newsletters as $newsletterid => $newsletter) {
-      $this->fldnewsletters->AddItem(
-        'newsletter-' . $newsletterid,
-        $newsletter->GetFieldValue('title'),
-        $newsletter->showdatedescription
+    if ($newsletters) {
+      $this->fldnewsletters = $this->AddField(
+        'newsletters',
+        new formbuildersummarybox('newsletterslist', '', 'Active Newsletters'),
+        $this->account
       );
+      foreach ($newsletters as $newsletterid => $newsletter) {
+        $this->fldnewsletters->AddItem(
+          'newsletter-' . $newsletterid,
+          $newsletter->GetFieldValue('title'),
+          $newsletter->showdatedescription
+        );
+      }
+      $this->fldnewsletters->worker = $this;
+      $this->fldnewsletters->changecaption = 'Manage Newsletters';
+      $this->fldnewsletters->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
     }
-    $this->fldnewsletters->worker = $this;
-    $this->fldnewsletters->changecaption = 'Manage Newsletters';
-    $this->fldnewsletters->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
     // subscribers
-    $subscribers = $account->NewsletterSubscriberList();
-    $this->fldsubscribers = $this->AddField(
-      'subscribers',
-      new formbuildersummarybox('subscriberlist', '', 'Active Subscribers'),
-      $this->account
-    );
-    foreach ($subscribers as $subscriberid => $subscriber) {
-      $this->fldsubscribers->AddItem(
-        'subscriber-' . $subscriberid,
-        $subscriber->FullName(),
-        $subscriber->GetStatusAsString(true)
+    $subscribersactive = $account->NewsletterSubscriberList(basetable::STATUS_ACTIVE);
+    $subscriberscancelled = $account->NewsletterSubscriberList(basetable::STATUS_CANCELLED);
+    if ($subscribersactive + $subscriberscancelled) {
+      $this->fldsubscribers = $this->AddField(
+        'subscribers',
+        new formbuildersummarybox('subscriberlist', '', 'Active Subscribers'),
+        $this->account
       );
+      $this->fldsubscribers->AddItem(
+        'subscriberactivecount', 'Active Subscribers',
+        CountToString(count($subscribersactive), '')
+      );
+      $this->fldsubscribers->AddItem(
+        'subscriberdeletedcount', 'Unsubscribed Subscribers',
+        CountToString(count($subscriberscancelled), '')
+      );
+      $this->fldsubscribers->worker = $this;
+      $this->fldsubscribers->changecaption = 'Manage Subscribers';
+      $this->fldsubscribers->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
     }
-    $this->fldsubscribers->worker = $this;
-    $this->fldsubscribers->changecaption = 'Manage Subscribers';
-    $this->fldsubscribers->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
-
-// guestbooks
-
+    // guestbooks
+    $guestbooks = $account->GuestBookList();
+    if ($guestbooks) {
+      $this->fldguestbooks = $this->AddField(
+        'guestbooks',
+        new formbuildersummarybox('guestbooklist', '', 'Guestbook Comments'),
+        $this->account
+      );
+      foreach ($guestbooks as $guestbookid => $guestbook) {
+        $this->fldguestbooks->AddItem(
+          'guestbook-' . $guestbookid,
+          $guestbook->GetFieldValue(basetable::FN_DESCRIPTION),
+          CountToString($guestbook->EntryList(), 'comment')
+        );
+      }
+      $this->fldguestbooks->worker = $this;
+      $this->fldguestbooks->changecaption = 'Manage Guestbooks';
+      $this->fldguestbooks->changeidname = 'IDNAME_RESOURCES_GUESTBOOKS';
+    }
 // bookings
 // private areas
 // special dates
@@ -111,13 +134,20 @@ class workerressummary extends workerform {
       'gallerygroup', 'Image Galleries', 'Your business information.');
     $this->fldgalleries->description = 'A summary of all your galleries';
     $this->AssignFieldToSection('gallerygroup', 'galleries');
-
-    $this->NewSection(
-      'newslettergroup', 'Newsletters', 'Your newsletters.');
-    $this->fldnewsletters->description = 'A summary of all your newsletters';
-    $this->AssignFieldToSection('newslettergroup', 'newsletters');
-    $this->fldsubscribers->description = 'A summary of your current subscribers';
-    $this->AssignFieldToSection('newslettergroup', 'subscribers');
+    if ($this->fldnewsletters) {
+      $this->NewSection(
+        'newslettergroup', 'Newsletters', 'Your newsletters.');
+      $this->fldnewsletters->description = 'A summary of all your newsletters';
+      $this->AssignFieldToSection('newslettergroup', 'newsletters');
+      $this->fldsubscribers->description = 'A summary of your current subscribers';
+      $this->AssignFieldToSection('newslettergroup', 'subscribers');
+    }
+    if ($this->fldguestbooks) {
+      $this->NewSection(
+        'guestbookgroup', 'Guestbook', 'Your Guestbook Entries.');
+      $this->fldguestbooks->description = 'A summary of all your guestbooks';
+      $this->AssignFieldToSection('guestbookgroup', 'guestbooks');
+    }
   }
 
 }

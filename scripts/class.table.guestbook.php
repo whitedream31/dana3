@@ -14,7 +14,7 @@ class guestbook extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField('accountid', self::DT_FK);
+    $this->AddField(basetable::FN_ACCOUNTID, self::DT_FK);
     $this->Addfield(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
     $this->AddField('generalmessage', self::DT_TEXT);
     $this->AddField('registermessage', self::DT_TEXT);
@@ -37,7 +37,7 @@ class guestbook extends idtable {
   }
 
   public function CountItems() {
-    $id = (int) $this->GetFieldValue('accountid');
+    $id = (int) $this->GetFieldValue(basetable::FN_ACCOUNTID);
     $cnt = database::$instance->CountRows('guestbook', "`accountid` = {$id} AND `status` = 'A'");
     return $cnt;
   }
@@ -51,7 +51,7 @@ class guestbook extends idtable {
   public function LinkedPages() {
     return parent::LinkedPages('guestbookid');
   }
-  
+
   public function EntryList() {
     if (!$this->entries) {
       $this->LoadEntries();

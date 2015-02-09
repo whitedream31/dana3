@@ -1004,16 +1004,21 @@ class account extends idtable {
     return $list;
   } */
 
-  public function NewsletterSubscriberList() {
+  public function NewsletterSubscriberList($status = false) {
     require_once('class.table.newslettersubscriber.php');
     $accountid = $this->ID();
     $statusdeleted = basetable::STATUS_DELETED;
     $statuscancelled = basetable::STATUS_CANCELLED;
-    $query = 
-      "SELECT `id` FROM `newslettersubscriber` " .
-      "WHERE `accountid` = {$accountid} " .
-      "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) " .
-      'ORDER BY `status`, `datestarted` DESC';
+    $sql = array(
+      "SELECT `id` FROM `newslettersubscriber` ",
+      "WHERE `accountid` = {$accountid} ");
+    if ($status) {
+      $sql[] = "AND `status` = '{$status}' ";
+    } else {
+      $sql[] = "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) ";
+    }
+    $sql[] = 'ORDER BY `status`, `datestarted` DESC';
+    $query = ArrayToString($sql);
     $result = database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {

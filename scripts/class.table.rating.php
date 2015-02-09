@@ -297,8 +297,8 @@ class rating extends idtable {
     $statistics = self::$statistics; //$this->GetRating(true);
     $commentlist = $statistics[self::RATINGTYPE_COMMENTS];
     $count = count($commentlist);
-    if ($count) {      
-      $countmsg = $count . ' Comment' . (($count > 1) ? 's' : '');
+    if ($count) {
+      $countmsg = CountToString($count, 'Comment', ''); // . ' Comment' . (($count > 1) ? 's' : '');
       $ret = array();
       $ret[] = "  <h3 class='title'>Found {$countmsg}</h3>";
       $ret[] = "  <ol class='accordionitem'>";

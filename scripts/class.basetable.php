@@ -52,6 +52,7 @@ require_once 'class.database.php';
 abstract class basetable {
   const STATUS_ACTIVE = 'A';
   const STATUS_DELETED = 'D';
+  const STATUS_CANCELLED = 'C'; // newsletters: invited but not accepted after 30 days
   const STORERESULT_INSERT = -2;
   const STORERESULT_ERROR = -1;
 

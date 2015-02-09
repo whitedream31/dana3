@@ -254,7 +254,7 @@ abstract class formbuilderbase {
     $cnt = count($this->errors);
     $ret = array();
     if ($cnt > 0) {
-      $plural = ($cnt > 1) ? 's' : '';
+//      $plural = ($cnt > 1) ? 's' : '';
       $ret[] = "<div class='errors'>";
 //      $ret[] = "  <p class='fieldlabel'>Error{$plural} Found:</p>";
       $ret[] = " <ul>";
