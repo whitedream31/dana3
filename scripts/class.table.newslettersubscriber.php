@@ -129,24 +129,34 @@ class newslettersubscriber extends idtable {
     $datagrid->AddColumn('SHOWDATE', 'Date');
   }
 
-  public function AssignDataGridRows($datagrid) {
-    $accountid = account::$instance->ID();
+  static public function GetSubscriberList($accountid) {
+//    $accountid = account::$instance->ID();
     $query =
-      'SELECT * FROM `newsletter` ' .
+      'SELECT * FROM `newslettersubscriber` ' .
       "WHERE `accountid` = {$accountid} " .
-      "ORDER BY `showdate` DESC";
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+      "ORDER BY `datestarted` DESC";
     $list = array();
     $result = database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
+      $list[$id] = new newslettersubscriber($id);
+    }
+    $result->free();
+    return $list;
+  }
+
+  public function AssignDataGridRows($datagrid) {
+    $accountid = account::$instance->ID();
+    $subscribers = GetSubscriberList($accountid);
+    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $list = array();
+    foreach ($subscribers as $id => $subscriber) {
       $coldata = array(
-        'DESC' => $line['title'],
-        'SHOWDATE' => $this->FormatDateTime(self::DF_MEDIUMDATE, $this->GetFieldValue('startdate'), '<em>none</em>')
+        'DESC' => $subscriber->GetFieldValue('title'),
+        'SHOWDATE' => $this->FormatDateTime(self::DF_MEDIUMDATE, $subscriber->GetFieldValue('startdate'), '<em>none</em>')
       );
       $datagrid->AddRow($id, $coldata, true, $actions);
     }
-    $result->free();
     return $list;
   }
 
@@ -155,7 +165,7 @@ class newslettersubscriber extends idtable {
   public function CheckForOldSubscribers() {
     $accountid = account::$instance->ID();
     $status = self::STATUS_WAITING;
-    $cancelledstatus = newsletter::STATUS_CANCELLED;
+    $cancelledstatus = basetable::STATUS_CANCELLED;
     $query =
       'SELECT `id` FROM `newslettersubscriber` ' .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' AND " .

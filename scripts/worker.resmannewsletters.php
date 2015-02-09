@@ -69,7 +69,7 @@ class workerresmannewsletters extends workerform {
         break;
       default:
         $this->buttonmode = array(workerform::BTN_BACK);
-        $this->title = 'Manage Newsletters'; 
+        $this->title = 'Manage Newsletters';
         $this->flditems = $this->AddField('newsletters', $this->datagrid, $this->table);
         $this->fldaddnewsletter = $this->AddField(
           'addnewsletter', new formbuilderbutton('addnewsletter', 'Add New Newsletter'));
@@ -170,7 +170,7 @@ class workerresmannewsletters extends workerform {
     $this->subscribergrid->AddColumn('DESC', 'Name', false);
     $this->subscribergrid->AddColumn('EMAIL', 'E-Mail', false);
     $this->subscribergrid->AddColumn('STATUS', 'Status', false);
-    $list = $this->table->FindSubscribers();
+    $list = account::$instance->NewsletterSubscriberList();
     if ($list) {
       $actions = array(); //TBLOPT_DELETABLE, TBLOPT_MOVEUP, TBLOPT_MOVEDOWN);
       foreach($list as $itemid => $item) {

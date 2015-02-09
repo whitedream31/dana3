@@ -27,8 +27,6 @@ class newsletter extends idtable {
   public $showdatedescription;
   public $help;
 
-  const STATUS_CANCELLED = 'C'; // invited but not accepted after 30 days
-
   function __construct($id = 0) {
     parent::__construct('newsletter', $id);
   }
@@ -69,27 +67,35 @@ class newsletter extends idtable {
     return $list;
   }
 
-  static public function FindShowableNewslettersByAccount($accountid) {
-    $status = self::STATUS_ACTIVE;
-    $query =
-      "SELECT `id` FROM `newsletter` " .
-      "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
-      "AND `showdate` < NOW() " .
-      'ORDER BY `showdate` DESC';
+  static public function FindShowableNewslettersByAccount(
+    $accountid, $status = self::STATUS_ACTIVE, $showdate = 'NOW()') {
+    $sql = array('SELECT `id` FROM `newsletter` ');
+    $sql[] = "WHERE `accountid` = {$accountid} ";
+    if ($status) {
+      $sql[] = "AND `status` = '{$status}' ";
+    }
+    if ($showdate) {
+      $sql[] = "AND `showdate` > $showdate"; //(NOW() - INTERVAL 1 MONTH) " .
+    }
+    $sql[] = 'ORDER BY `showdate` DESC';
+    $query = ArrayToString($sql);
+//echo "<p>QUERY='{$query}'</p>";
     $result = database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $list[$id] = new newsletter($id);
+//echo "<p>ID={$id}</p>\n";
     }
     $result->close();
+//exit;
     return $list;
   }
 
   public function FindNewsletterItems() {
     $id = $this->ID();
 //    $status = self::STATUS_ACTIVE;
-    $query = 
+    $query =
       "SELECT `id` FROM `newsletteritem` " .
       "WHERE `newsletterid` = {$id} " .
       'ORDER BY `itemorder`';
@@ -103,24 +109,26 @@ class newsletter extends idtable {
     return $list;
   }
 
-  public function FindSubscribers() {
-    $id = account::$instance->ID();
-    $statusdeleted = self::STATUS_DELETED;
-    $statuscancelled = self::STATUS_CANCELLED;
-    $query = 
-      "SELECT `id` FROM `newslettersubscriber` " .
-      "WHERE `accountid` = {$id} " .
-      "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) " .
-      'ORDER BY `status`, `datestarted` DESC';
-    $result = database::Query($query);
-    $list = array();
-    while ($line = $result->fetch_assoc()) {
-      $subid = $line['id'];
-      $list[$subid] = new newslettersubscriber($subid);
-    }
-    $result->close();
-    return $list;
-  }
+//  public function FindSubscribers($accountid = false) {
+//    if (!$accountid) {
+//      $accountid = account::$instance->ID();
+//    }
+//    $statusdeleted = self::STATUS_DELETED;
+//    $statuscancelled = self::STATUS_CANCELLED;
+//    $query = 
+//      "SELECT `id` FROM `newslettersubscriber` " .
+//      "WHERE `accountid` = {$accountid} " .
+//      "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) " .
+//      'ORDER BY `status`, `datestarted` DESC';
+//    $result = database::Query($query);
+//    $list = array();
+//    while ($line = $result->fetch_assoc()) {
+//      $subid = $line['id'];
+//      $list[$subid] = new newslettersubscriber($subid);
+//    }
+//    $result->close();
+//    return $list;
+//  }
 
   public function AssignDataGridColumns($datagrid) {
     $datagrid->showactions = true;

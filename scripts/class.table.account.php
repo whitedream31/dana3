@@ -62,6 +62,9 @@ class account extends idtable {
   // private-areas
   public $privateareagrouplist = array();
 //  public $privateareamemberlist = array();
+  // newsletters
+  public $newsletterlist = array();
+  public $newslettersubscriberlist = array();
 
   private $ratingstatistics = false;
   private $businesscategorydescription = '';
@@ -526,6 +529,7 @@ class account extends idtable {
     $this->guestbooklist = array();
     $this->gallerygrouplist = array();
     $this->newsletterlist = array();
+    $this->newslettersubscriberlist = array();
     $this->privateareagrouplist = array();
 //    $this->privateareamemberlist = array();
 
@@ -557,6 +561,11 @@ class account extends idtable {
   protected function LoadNewsletters() {
     require_once 'class.table.newsletter.php';
     $this->newsletterlist = newsletter::FindShowableNewslettersByAccount($this->ID());
+  }
+
+  protected function LoadNewsletterSubscribers() {
+    require_once 'class.table.newslettersubscriber.php';
+    $this->newslettersubscriberlist = $this->NewsletterSubscriberList();
   }
 
   protected function LoadArticles() {
@@ -996,9 +1005,23 @@ class account extends idtable {
   } */
 
   public function NewsletterSubscriberList() {
-    require_once('class.table.guest.php');
-    $guesttypelink = new guesttypelink();
-    return $guesttypelink->FindByGroupID($this->ID());
+    require_once('class.table.newslettersubscriber.php');
+    $accountid = $this->ID();
+    $statusdeleted = basetable::STATUS_DELETED;
+    $statuscancelled = basetable::STATUS_CANCELLED;
+    $query = 
+      "SELECT `id` FROM `newslettersubscriber` " .
+      "WHERE `accountid` = {$accountid} " .
+      "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) " .
+      'ORDER BY `status`, `datestarted` DESC';
+    $result = database::Query($query);
+    $list = array();
+    while ($line = $result->fetch_assoc()) {
+      $subid = $line['id'];
+      $list[$subid] = new newslettersubscriber($subid);
+    }
+    $result->close();
+    return $list;
   }
 
   public function FindNewsletterTypes() {
