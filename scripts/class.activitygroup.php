@@ -1,7 +1,10 @@
 <?php
+namespace dana\activity;
+
 /**
   * activity group (static header)
-  * dana framework v.3
+  * a container of activity items, shown as a group with a caption and icon
+  * @version dana framework v.3
 */
 
 class activitygroup extends activitybase {

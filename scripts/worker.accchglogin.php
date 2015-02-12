@@ -1,16 +1,15 @@
 <?php
-//ctfi
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildereditbox.php';
 require_once 'class.formbuilderpassword.php';
 
 /**
-  * base activity worker
+  * worker account change login class
   * dana framework v.3
 */
-
-// account change org details
 
 class workeraccchglogin extends workerform {
   protected $contact;
@@ -22,23 +21,23 @@ class workeraccchglogin extends workerform {
 
   protected function InitForm() {
     $this->contact = $this->account->Contact();
-    $this->title = 'Change Login Credentials'; 
+    $this->title = 'Change Login Credentials';
     $this->icon = 'images/sect_account.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'login credentials';
 
     $this->username = $this->AddField(
-      'username', new formbuildereditbox('username', '', 'User Name'),
+      'username', new \dana\formbuilder\formbuildereditbox('username', '', 'User Name'),
       $this->contact);
     $this->password = $this->AddField(
-      'password', new formbuilderpassword('password', '', 'Password'), $this->contact);
+      'password', new \dana\formbuilder\formbuilderpassword('password', '', 'Password'), $this->contact);
     $this->confirm = $this->AddField(
-      'confirm', new formbuilderpassword('confirm', '', 'Confirm Password'));
+      'confirm', new \dana\formbuilder\formbuilderpassword('confirm', '', 'Confirm Password'));
     $this->securityquestion = $this->AddField(
-      'securityquestion', new formbuildereditbox('securityquestion', '', 'Security Question'),
+      'securityquestion', new \dana\formbuilder\formbuildereditbox('securityquestion', '', 'Security Question'),
       $this->contact);
     $this->securityanswer = $this->AddField(
-      'securityanswer', new formbuildereditbox('securityanswer', '', 'Security Answer'),
+      'securityanswer', new \dana\formbuilder\formbuildereditbox('securityanswer', '', 'Security Answer'),
       $this->contact);
   }
 
@@ -113,10 +112,10 @@ class workeraccchglogin extends workerform {
     $this->securityanswer->required = true;
     $this->securityanswer->size = 80;
     $this->securityanswer->maxlength = 100;
-    $this->securityanswer->placeholder = 'something memorable, relevant to the question above';
+    $this->securityanswer->placeholder = 'something memorable, simple and relevant to the question above';
     $this->AssignFieldToSection('logingroup', 'securityanswer');
   }
 
 }
 
-$worker = new workeraccchglogin();
+$worker = new \dana\worker\workeraccchglogin();

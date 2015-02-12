@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// booking duration class
+/**
+  * booking duration table
+  * @version dana framework v.3
+*/
+
 class bookingduration extends lookuptable {
 
   function __construct($id = 0) {

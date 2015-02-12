@@ -1,8 +1,9 @@
 <?php
-// page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 8 dec 2012 (originally 7 apr 2010)
-// modified: 18 feb 2013
+namespace dana\table;
+
+use dana\core;
+
+require_once 'class.basetable.php';
 
 //[ALL]
 //id  bigint
@@ -78,17 +79,19 @@
 //hascomments  tinyint
 //default  tinyint
 
-require_once 'class.database.php';
-require_once 'class.basetable.php';
-require_once 'class.table.account.php';
-//require_once('class.formbuilder.php');
+/**
+  * page class - used to create and manage pages in a accounts minisite
+  * was abstract but requied during pagewriter class
+  * created: 8 dec 2012 (originally 7 apr 2010)
+  * modified: 18 feb 2013
+  * @version dana framework v.3
+*/
 
-// page class - was abstract but requied during pagewriter class
 class page extends idtable { //implements pagetype
   const PAGETYPE_GENERAL = 'gen';
   const PAGETYPE_CONTACT = 'con';
 //define('PAGETYPE_ABOUTUS', 'abt');
-//  const PAGETYPE_PRODUCT = 'prd';
+  const PAGETYPE_PRODUCT = 'prd';
   const PAGETYPE_GALLERY = 'gal';
   const PAGETYPE_ARTICLE = 'art';
   const PAGETYPE_GUESTBOOK = 'gbk';
@@ -155,7 +158,7 @@ class page extends idtable { //implements pagetype
     $this->AddField('dateadded', self::DT_DATETIME);
     $this->AddField('dateupdated', self::DT_DATETIME);
     $this->AddField('pageorder', self::DT_INTEGER);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
 //    $this->AddField('inccontactinsidearea', DT_BOOLEAN, true);
     $this->AddField('inccontactname', self::DT_BOOLEAN, true);
     $this->AddField('incaddress', self::DT_BOOLEAN, true);
@@ -174,46 +177,46 @@ class page extends idtable { //implements pagetype
 
   protected function InitFieldsForHeading($worker) {
     $this->fldpagedescription = $worker->AddField(
-      'description', new formbuildereditbox('description', '', 'Page Description'), $this);
+      'description', new \dana\formbuilder\formbuildereditbox('description', '', 'Page Description'), $this);
     $this->fldheader = $worker->AddField(
-      'header', new formbuildereditbox('header', '', 'Page Heading'), $this);
+      'header', new \dana\formbuilder\formbuildereditbox('header', '', 'Page Heading'), $this);
   }
 
   protected function InitFieldsForMainContent($worker) {
     $this->fldinitialcontent = $worker->AddField(
-      'initialcontent', new formbuildertextarea('initialcontent', '', 'Initial Content'), $this);
+      'initialcontent', new \dana\formbuilder\formbuildertextarea('initialcontent', '', 'Initial Content'), $this);
   }
 
   protected function InitFieldsForSideContent($worker) {
     $this->fldsidecontent = $worker->AddField(
-      'sidecontent', new formbuildertextarea('sidecontent', '', 'Side Content'), $this);
+      'sidecontent', new \dana\formbuilder\formbuildertextarea('sidecontent', '', 'Side Content'), $this);
     $this->fldsidecontent->enableeditor = true;
   }
 
   protected function InitFieldForContactSidebar($worker) {
     $this->fldinccontactname = $worker->AddField(
-      'inccontactname', new formbuildercheckbox('inccontactname', '', 'Include Contact Name'), $this);
+      'inccontactname', new \dana\formbuilder\formbuildercheckbox('inccontactname', '', 'Include Contact Name'), $this);
     $this->fldincaddress = $worker->AddField(
-      'incaddress', new formbuildercheckbox('incaddress', '', 'Include Business Address'), $this);
+      'incaddress', new \dana\formbuilder\formbuildercheckbox('incaddress', '', 'Include Business Address'), $this);
     $this->fldinctelephone = $worker->AddField(
-      'inctelephone', new formbuildercheckbox('inctelephone', '', 'Include Contact Telephone Numbers'), $this);
+      'inctelephone', new \dana\formbuilder\formbuildercheckbox('inctelephone', '', 'Include Contact Telephone Numbers'), $this);
   }
 
   protected function InitFieldsForOptions($worker) {
     $this->fldshowhours = $worker->AddField(
-      'showfiles', new formbuildercheckbox('showfiles', '', 'Show Downloadable Files?'), $this);
+      'showfiles', new \dana\formbuilder\formbuildercheckbox('showfiles', '', 'Show Downloadable Files?'), $this);
 //    $this->fldincrss = $worker->AddField(
 //      'showrss', new formbuildercheckbox('showrss', '', 'Show RSS Feed?'), $this);
     $this->fldshowfiles = $worker->AddField(
-      'showfiles', new formbuildercheckbox('showfiles', '', 'Show Downloadable Files?'), $this);
+      'showfiles', new \dana\formbuilder\formbuildercheckbox('showfiles', '', 'Show Downloadable Files?'), $this);
     $this->fldincshownewsletters = $worker->AddField(
-      'incshownewsletters', new formbuildercheckbox('incshownewsletters', '', 'Show Newsletters (if any)?'), $this);
+      'incshownewsletters', new \dana\formbuilder\formbuildercheckbox('incshownewsletters', '', 'Show Newsletters (if any)?'), $this);
     $this->fldincsocialnetwork = $worker->AddField(
-      'incsocialnetwork', new formbuildercheckbox('incsocialnetwork', '', 'Show Links to Social Networks (if any)?'), $this);
+      'incsocialnetwork', new \dana\formbuilder\formbuildercheckbox('incsocialnetwork', '', 'Show Links to Social Networks (if any)?'), $this);
     $this->fldinctranslation = $worker->AddField(
-      'inctranslation', new formbuildercheckbox('inctranslation', '', 'Show the Google Translation Service'), $this);
+      'inctranslation', new \dana\formbuilder\formbuildercheckbox('inctranslation', '', 'Show the Google Translation Service'), $this);
     $this->fldvisible = $worker->AddField(
-      'visible', new formbuildercheckbox('visible', '', 'Show in website?'), $this);
+      'visible', new \dana\formbuilder\formbuildercheckbox('visible', '', 'Show in website?'), $this);
   }
 
   public function InitForm($worker, $action) {
@@ -333,7 +336,7 @@ class page extends idtable { //implements pagetype
     $query = "SELECT * FROM `pagetype` " .
       "WHERE `pgtype` = '{$pgtype}' AND " .
       "`countryid` = " . (int) account::$instance->Contact()->GetFieldValue('countryid');
-    $resource = database::Query($query);
+    $resource = \dana\core\database::Query($query);
     $line = $resource->fetch_assoc();
     $resource->close();
     $this->pagetypedetails = $line;
@@ -350,9 +353,9 @@ class page extends idtable { //implements pagetype
       $this->SetFieldValue('pagetypeid', $this->pagetypedetails['id']);
       $this->SetFieldValue('pagemgrid', $pagemgrid);
       $this->SetFieldValue('name', $name);
-      $pageorder = database::CountRows('page', '`pagemgrid` = ' . $pagemgrid);
+      $pageorder = \dana\core\database::CountRows('page', '`pagemgrid` = ' . $pagemgrid);
       $this->SetFieldValue('pageorder', $pageorder);
-      $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_ACTIVE);
+      $this->SetFieldValue(\dana\table\basetable::FN_STATUS, self::STATUS_ACTIVE);
     }
     parent::StoreChanges();
     if (!$this->exists) {
@@ -369,7 +372,7 @@ class page extends idtable { //implements pagetype
     account::$instance->GetPageList()->MovePageOrder($this->ID(), $direction);
 //    $pageorder = (int) $this->GetFieldValue('pageorder') + $direction;
 //    $query = 'UPDATE `page` SET `pageorder` = ' . $pageorder . ' WHERE `id` = ' . $this->ID();
-//    database::Query($query);
+//    \dana\core\database::Query($query);
 //    account::$instance->GetPageList()->ReorderPages();
   }
 
@@ -429,13 +432,13 @@ class page extends idtable { //implements pagetype
       $query = 'SELECT DISTINCT g.`id`, g.`title`, COUNT(gi.`id`) as cnt ' .
       'FROM `gallery` g ' .
       'LEFT OUTER JOIN `galleryitem` gi ON g.`id` = gi.`galleryid` ' .
-      'WHERE g.`accountid` = ' . $this->account->ID() . 
+      'WHERE g.`accountid` = ' . $this->account->ID() .
       ' GROUP BY g.`id`';
     } else {
       $query = 'SELECT `id`, `title` FROM `gallery` ' .
         'WHERE `accountid` = ' . $this->account->ID() . ' ORDER BY `title`';
     }
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
@@ -458,7 +461,11 @@ class page extends idtable { //implements pagetype
   }
 }
 
-// page list class
+/**
+  * page list class - container class for all pages for an account
+  * @version dana framework v.3
+*/
+
 class pagelist extends idtable {
   protected $account; // account object
   public $pages;
@@ -494,7 +501,7 @@ class pagelist extends idtable {
     $this->AddField('dateadded', self::DT_DATETIME);
     $this->AddField('dateupdated', self::DT_DATETIME);
     $this->AddField('pageorder', self::DT_INTEGER);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   public function SetAccount($account) {
@@ -507,8 +514,8 @@ class pagelist extends idtable {
 
   public function GetCounters() {
     $this->pagesavailable = 
-      database::$instance->SelectFromTableByField(
-        'pagemgr', basetable::FN_ID, $this->account->GetFieldvalue('pagemgrid'), 'pagesavailable');
+      \dana\core\database::$instance->SelectFromTableByField(
+        'pagemgr', \dana\table\basetable::FN_ID, $this->account->GetFieldvalue('pagemgrid'), 'pagesavailable');
     $this->pagecount = count($this->pages);
     $this->pagesleft = $this->pagesavailable - $this->pagecount;
   }
@@ -517,11 +524,11 @@ class pagelist extends idtable {
     switch ($pgtype) {
       case page::PAGETYPE_GENERAL:
         require_once 'class.table.pagegeneral.php';
-        $page = new pagegeneral($pageid);
+        $page = new \dana\table\pagegeneral($pageid);
         break;
       case page::PAGETYPE_CONTACT:
         require_once 'class.table.pagecontact.php';
-        $page = new pagecontact($pageid);
+        $page = new \dana\table\pagecontact($pageid);
         break;
 //      case page::PAGETYPE_ABOUTUS:
 //        require_once('class.table.pageaboutus.php');
@@ -533,27 +540,27 @@ class pagelist extends idtable {
 //        break;
       case page::PAGETYPE_GALLERY:
         require_once 'class.table.pagegallery.php';
-        $page = new pagegallery($pageid);
+        $page = new \dana\table\pagegallery($pageid);
         break;
       case page::PAGETYPE_ARTICLE:
         require_once 'class.table.pagearticle.php';
-        $page = new pagearticle($pageid);
+        $page = new \dana\table\pagearticle($pageid);
         break;
       case page::PAGETYPE_GUESTBOOK:
         require_once 'class.table.pageguestbook.php';
-        $page = new pageguestbook($pageid);
+        $page = new \dana\table\pageguestbook($pageid);
         break;
       case page::PAGETYPE_SOCIALNETWORK:
         require_once 'class.table.pagesocialnetwork.php';
-        $page = new pagesocialnetwork($pageid);
+        $page = new \dana\table\pagesocialnetwork($pageid);
         break;
       case page::PAGETYPE_BOOKING:
         require_once 'class.table.pagebooking.php';
-        $page = new pagebooking($pageid);
+        $page = new \dana\table\pagebooking($pageid);
         break;
       case page::PAGETYPE_CALENDAR:
         require_once 'class.table.pagecalendar.php';
-        $page = new pagecalendar($pageid);
+        $page = new \dana\table\pagecalendar($pageid);
         break;
 //        case PAGETYPE_SURVEY:
 //          break;
@@ -572,7 +579,7 @@ class pagelist extends idtable {
       "WHERE pa.`accountid` = {$accid} AND pa.`status` = '{$status}' " .
       "AND p.`status` = '{$status}' AND p.`visible` > 0 " .
       'ORDER BY p.`pageorder`';
-    $res = database::Query($query);
+    $res = \dana\core\database::Query($query);
     $list = array();
     while ($line = $res->fetch_assoc()) {
       $pageid = $line['pageid'];
@@ -591,7 +598,7 @@ class pagelist extends idtable {
       'INNER JOIN `pagetype` pt ON p.`pagetypeid` = pt.`id` ' .
       "WHERE (p.`pagemgrid` = {$pid}) AND (p.`status` = '{$status}') " . //AND (p.`visible` = 1)
       'ORDER BY p.`ishomepage` DESC, p.`pageorder`';
-    $res = database::Query($query);
+    $res = \dana\core\database::Query($query);
     $list = array();
     while ($line = $res->fetch_assoc()) {
       $pageid = $line['id'];
@@ -615,7 +622,7 @@ class pagelist extends idtable {
           $this->pagetypecount[$pagetype] = 1;
         }
       }
-    }    
+    }
   }
 
   public function FindPageByID($pageid) {
@@ -637,11 +644,11 @@ class pagelist extends idtable {
     switch ($pgtype) {
       case self::PAGETYPE_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
-        $ret = new pagegeneral($pageid);
+        $ret = new \dana\table\pagegeneral($pageid);
         break;
       case self::PAGETYPE_CONTACT: //con
         require_once 'class.table.pagecontact.php';
-        $ret = new pagecontact($pageid);
+        $ret = new \dana\table\pagecontact($pageid);
         break;
 //      case PAGETYPE_ABOUTUS: //abt
 //        require_once('class.table.pageaboutus.php');
@@ -649,36 +656,36 @@ class pagelist extends idtable {
 //        break;
       case self::PAGETYPE_PRODUCT: //prd
         require_once 'class.table.pageproduct.php';
-        $ret = new pageproduct($pageid);
+        $ret = new \dana\table\pageproduct($pageid);
         break;
       case self::PAGETYPE_GALLERY: //gal
         require_once 'class.table.pagegallery.php';
-        $ret = new pagegallery($pageid);
+        $ret = new \dana\table\pagegallery($pageid);
         break;
       case self::PAGETYPE_ARTICLE: //art
         require_once 'class.table.pagearticle.php';
-        $ret = new pagearticle($pageid);
+        $ret = new \dana\table\pagearticle($pageid);
         break;
       case self::PAGETYPE_GUESTBOOK: //gbk
         require_once 'class.table.pageguestbook.php';
-        $ret = new pageguestbook($pageid);
+        $ret = new \dana\table\pageguestbook($pageid);
         break;
       case self::PAGETYPE_SOCIALNETWORK: //soc
         require_once 'class.table.pagesocialnetwork.php';
-        $ret = new pagesocialnetwork($pageid);
+        $ret = new \dana\table\pagesocialnetwork($pageid);
         break;
       case self::PAGETYPE_BOOKING: //bk
         require_once 'class.table.pagebooking.php';
-        $ret = new pagebooking($pageid);
+        $ret = new \dana\table\pagebooking($pageid);
         break;
       case self::PAGETYPE_CALENDAR: //cal
         require_once 'class.table.pagecalendar.php';
-        $ret = new pagecalendar($pageid);
+        $ret = new \dana\table\pagecalendar($pageid);
         break;
 /*      case PAGETYPE_SURVEY: //svy
         require_once('class.table.pagesurvey.php');
         $ret = new pagesurvey($pageid);
-        break; */        
+        break; */
     }
     return $ret;
   }
@@ -704,25 +711,25 @@ class pagelist extends idtable {
         $swappage = false;
       }
       if ($swappage) {
-        account::$instance->GetPageList()->ReorderPages(); // ensure order is correct
+        \dana\table\account::$instance->GetPageList()->ReorderPages(); // ensure order is correct
         $query = 'UPDATE `page` SET `pageorder` = ' . $swappage->GetFieldValue('pageorder') . ' WHERE `id` = ' . $currentpage->ID();
-        database::Query($query);
+        \dana\core\database::Query($query);
         $query = 'UPDATE `page` SET `pageorder` = ' . $currentpage->GetFieldValue('pageorder') . ' WHERE `id` = ' . $swappage->ID();
-        database::Query($query);
+        \dana\core\database::Query($query);
       }
     }
   }
-  
+
   public function ReorderPages() {
-    database::RefreshTables();
+    \dana\core\database::RefreshTables();
     $pages = array();
     //$homepageid = 0;
-    $pagemgrid = account::$instance->GetFieldValue('pagemgrid');
+    $pagemgrid = \dana\table\account::$instance->GetFieldValue('pagemgrid');
     //$query = 'SELECT `id`, `pageorder`, `ishomepage` FROM `page` WHERE `pagemgrid` = ' . $pagemgrid;
     $query = 'SELECT `id`, `pageorder` FROM `page` ' .
       'WHERE `ishomepage` = 0 AND `pagemgrid` = ' . $pagemgrid .
       ' ORDER BY `pageorder`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $pageid = $line['id'];
       $pageorder = $line['pageorder'];
@@ -733,17 +740,17 @@ class pagelist extends idtable {
     foreach ($pages as $pageid => $pageorder) {
       if ($currentpageorder != $pageorder) {
         $query = 'UPDATE `page` SET `pageorder` = ' . $currentpageorder . ' WHERE `id` = ' . $pageid;
-        database::Query($query);       
+        \dana\core\database::Query($query);
       }
       $currentpageorder++;
     }
-    account::$instance->pagelist = array();
+    \dana\table\account::$instance->pagelist = array();
   }
 /*
   public function ShowPageTypes() {
     $query = 'SELECT * FROM `pagetype` ' .
       'WHERE `countryid` = 2 AND `status` = "A" ORDER BY `pgtypeorder` DESC';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       //$ref = $line['ref'];
       $pgtype = $line['pgtype'];
@@ -769,7 +776,7 @@ class pagelist extends idtable {
   }
 
   public function AssignDataGridRows($datagrid) {
-    $account = account::$instance;
+    $account = \dana\table\account::$instance;
     $pgmgrid = $account->GetFieldValue('pagemgrid');
     $statusactive = self::STATUS_ACTIVE;
     $query =
@@ -779,14 +786,16 @@ class pagelist extends idtable {
       "WHERE (p.`pagemgrid` = '{$pgmgrid}') AND (p.`status` = '{$statusactive}') " . //AND (p.`visible` = 1) ' .
       "ORDER BY p.`ishomepage` DESC, p.`pageorder`";
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $pgtype = ($line['ishomepage']) ? '<strong>HOMEPAGE</strong>' : $line['pgtype'];
       $actions = array(
-        formbuilderdatagrid::TBLOPT_TOGGLEVISIBLE, formbuilderdatagrid::TBLOPT_DELETABLE, 
-        formbuilderdatagrid::TBLOPT_IGNOREFIRSTROW, formbuilderdatagrid::TBLOPT_MOVEUP, 
-        formbuilderdatagrid::TBLOPT_MOVEDOWN
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_TOGGLEVISIBLE,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_IGNOREFIRSTROW,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_MOVEUP,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_MOVEDOWN
       );
       $coldata = array(
         'DESC' => $line['description'],
@@ -805,7 +814,7 @@ class pagelist extends idtable {
       'FROM `pagetype` ' .
       "WHERE  (`status` = '{$statusactive}') AND `countryid` = 2 " .
       'ORDER BY `pgtypeorder` DESC';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $pgtype = $line['pgtype'];
@@ -815,7 +824,7 @@ class pagelist extends idtable {
       $hint = $line['homehelp'];
       $icon = (file_exists($img)) ? "<img src='{$img}' width='32' height='32' alt='{$hint}'>" : '';
       $datalist->AddRow($id, array(
-        'icon' => $icon, 'edit' => $name, 'desc' => $desc, 'hint' => $hint, 'action' => workerbase::ACT_NEW
+        'icon' => $icon, 'edit' => $name, 'desc' => $desc, 'hint' => $hint, 'action' => \dana\worker\workerbase::ACT_NEW
       ));
     }
     $result->free();

@@ -1,12 +1,18 @@
 <?php
-// GALLERY page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 8 dec 2012
-// modified: 24 jul 2014
+namespace dana\table;
+
+//use dana\core;
 
 require_once 'class.table.page.php';
 
-// gallery page class
+/**
+  * page gallery class - GALLERY
+  * written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 8 dec 2012
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class pagegallery extends page {
   protected $galleries;
   protected $fldgallerygroup;
@@ -31,7 +37,7 @@ class pagegallery extends page {
     $this->galleries = $this->GetGalleryList(true);
     $groupid = $this->GetFieldValue('groupid');
     $this->fldgallerygroup = $worker->AddField(
-      'groupid', new formbuilderselect('groupid', '', 'Choose the gallery to show'), $this);
+      'groupid', new \dana\formbuilder\formbuilderselect('groupid', '', 'Choose the gallery to show'), $this);
     if ($this->galleries) {
       foreach ($this->galleries as $id => $title) {
         $this->fldgallerygroup->AddValue($id, $title, $id == $groupid);
@@ -49,7 +55,7 @@ class pagegallery extends page {
     );
     $ipp = $this->GetFieldValue('imagesperpage');
     $this->fldimagesperpage = $worker->AddField(
-      'imagesperpage', new formbuilderselect('imagesperpage', '', 'How many pictures per page?'), $this);
+      'imagesperpage', new \dana\formbuilder\formbuilderselect('imagesperpage', '', 'How many pictures per page?'), $this);
     foreach ($ippvalues as $id => $title) {
       $this->fldimagesperpage->AddValue($id, $title, $id == $ipp);
     }

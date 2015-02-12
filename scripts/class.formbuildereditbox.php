@@ -1,10 +1,15 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuilderbase.php';
 
 /**
- * edit box field - FLDTYPE_EDITBOX
- * part of the formbuilder class set
- */
+  * edit box field - FLDTYPE_EDITBOX
+  * part of the formbuilder class set
+  * @version dana framework v.3
+*/
 
 class formbuildereditbox extends formbuilderbase {
   public $size = false;
@@ -14,7 +19,7 @@ class formbuildereditbox extends formbuilderbase {
   public $inputtype = 'text';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_EDITBOX, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_EDITBOX, $label);
   }
 
   protected function AddAttributesAndValues() {

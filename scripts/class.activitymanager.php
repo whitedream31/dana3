@@ -1,9 +1,12 @@
 <?php
+namespace dana\activity;
 
 /**
   * activity manager - calls worker classes / shows data in activity area
-  * dana framework v.3
+  * @version dana framework v.3
+*/
 
+/*
 note:
   the mce editor works when $showtexteditor is true
   and each formbuildertextarea has $enableeditor = true
@@ -166,7 +169,7 @@ class activitymanager {
     $ret = array();
     try {
       if ($idname) { // constant('activitymanager::' . self::$activeactionname);
-        $script = 'worker.' . constant('activitymanager::' . $idname) . '.php'; //"worker.{$idname}.php";
+        $script = 'worker.' . constant('\dana\activity\activitymanager::' . $idname) . '.php'; //"worker.{$idname}.php";
         if (file_exists($script)) {
           $worker = false;
           include $script; // create worker as an object
@@ -199,7 +202,7 @@ class activitymanager {
       } else {
         $ret = $this->ProcessRoot();
       }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->AddMessage('Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ' at line ' . $e->getLine());
     }
     return $ret;

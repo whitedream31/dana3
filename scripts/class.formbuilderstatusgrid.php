@@ -1,4 +1,12 @@
 <?php
+namespace dana\formbuilder;
+
+require_once 'class.formbuilderbase.php';
+
+/**
+  * status grid field - FLDTYPE_STATUSGRID
+  * @version dana framework v.3
+*/
 
 class formbuilderstatusgrid extends formbuilderbase {
   protected $rows = array();
@@ -6,7 +14,7 @@ class formbuilderstatusgrid extends formbuilderbase {
   public $width = '400px';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_STATUSGRID, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_STATUSGRID, $label);
   }
 
   private function AddCells($list, $classname = '') {

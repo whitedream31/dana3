@@ -1,18 +1,17 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuilderdatagrid.php';
 
 /**
-  * base activity worker
-  * dana framework v.3
+  * worker resource manage files (downloadable files)
+  * @version dana framework v.3
 */
-
-// manage working managing (downloadable files)
 
 class workerresmanfiles extends workerform {
   protected $datagrid;
-//  protected $table;
   protected $filelist;
   protected $fldtitle;
   protected $fldfilename;
@@ -76,8 +75,8 @@ $this->AssignFileDetails();
     $this->fldfilename->file = $file;
     if ((!$file) || (isset($file['error']) && $file['error'] == UPLOAD_ERR_NO_FILE)) {
       if ($this->itemid) {
-        $file = database::SelectFromTableByField(
-          'fileitem', basetable::FN_ID, $this->itemid
+        $file = \dana\core\database::SelectFromTableByField(
+          'fileitem', \dana\table\basetable::FN_ID, $this->itemid
         );
         $this->fldfilename->file = array(
           'name' => $file['filename'], // $this->table->GetFieldValue('filename'),
@@ -93,9 +92,9 @@ $this->AssignFileDetails();
       // TODO: mark as deleted in status
       //$status = STATUS_DELETED;
       //$query = 'DELETE `fileitem` WHERE `id` = ' . $itemid;
-      //database::Query($query);
+      //\dana\core\database::Query($query);
       $ret= true;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->AddMessage('Cannot remove file');
       $ret = false;
     }
@@ -136,7 +135,7 @@ $this->AssignFileDetails();
         if (is_numeric($ftype)) {
           $filetypeid = $ftype;
         } else {
-          $ln = database::SelectFromTableByField('filetype', 'filetype', $ftype, 'id');
+          $ln = \dana\core\database::SelectFromTableByField('filetype', 'filetype', $ftype, 'id');
           $filetypeid = ($ln) ? $ln : 0;
         }
         $this->table->SetFieldValue('filetypeid', $filetypeid);
@@ -150,8 +149,8 @@ $this->AssignFileDetails();
         $name = $this->GetTitleFromFilename($file['name']);
         $this->table->SetFieldValue('title', $name);
       }
-      if (!$this->table->GetFieldValue(basetable::FN_STATUS)) {
-        $this->table->SetFieldValue(basetable::FN_STATUS, basetable::STATUS_ACTIVE);
+      if (!$this->table->GetFieldValue(\dana\table\basetable::FN_STATUS)) {
+        $this->table->SetFieldValue(\dana\table\basetable::FN_STATUS, \dana\table\basetable::STATUS_ACTIVE);
       }
     }
     return (int) $this->table->StoreChanges();

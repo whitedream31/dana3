@@ -1,11 +1,18 @@
 <?php
+namespace dana\formbuilder;
+
 require_once 'class.formbuilderbase.php';
+
+/**
+  * static (non edit) field - FLDTYPE_STATIC
+  * @version dana framework v.3
+*/
 
 class formbuilderstatictext extends formbuilderbase {
   public $emptyvalue = '';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_STATIC, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_STATIC, $label);
   }
 
   public function GetControl() {

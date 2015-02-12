@@ -1,21 +1,13 @@
 <?php
-require_once 'define.php';
-require_once 'class.table.account.php';
+namespace dana\webmanager;
 
-// list of types for creating and processing action queries
-//define('AQ_RID', 'rid'); // show a specific article
-//define('AQ_ARTCAT', 'cat'); // show a list of articles that match the category
-//define('AQ_LOGOUT', 'logout'); // log out (key specifies type) eg. v for visitor
-//define('AQ_NEWSLETTERID', 'nid'); // showing a specific newsletter
-//define('AQ_CALENDARDATEID', 'calid'); // show calendar entry
-//define('AQ_VISITORLOGOUT', 'vlo'); // logout for visitor
+//use dana\core;
 
-// post form handlers
-//define('PFH_GUESTBOOKVISITOR', 'visitorlogin'); // fields: username  password
-//define('PFH_PRIVATEAREA', 'privatearealogin'); // fields: username  password
-
-
-// processes the dynamic parts of the pages of the mini-websites of the account holders
+/**
+  * website manager class
+  * processes the dynamic parts of the pages of the mini-websites of the account holders
+  * @version dana framework v.3
+*/
 
 abstract class websitemanager {
 // list of types for creating and processing action queries

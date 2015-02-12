@@ -1,12 +1,18 @@
 <?php
-// ARTICLE page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 8 dec 2012
-// modified: 9 jul 2013
+namespace dana\table;
+
+use dana\core;
 
 require_once 'class.table.page.php';
 
-// article page class
+/**
+  * page article class - ARTICLE
+  * written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 8 dec 2012
+  * modified: 9 jul 2013
+  * @version dana framework v.3
+*/
+
 class pagearticle extends page {
   protected $fldcancomment;
   protected $fldregistervisitors;
@@ -25,9 +31,9 @@ class pagearticle extends page {
   protected function InitFieldsForMainContent($worker) {
     parent::InitFieldsForMainContent($worker);
     $this->fldcancomment = $worker->AddField(
-      'cancomment', new formbuildercheckbox('cancomment', '', 'Can Add Comments'), $this);
+      'cancomment', new \dana\formbuilder\formbuildercheckbox('cancomment', '', 'Can Add Comments'), $this);
     $this->fldregistervisitors = $worker->AddField(
-      'registervisitors', new formbuildercheckbox('registervisitors', '', 'Visitors Must Register'), $this);
+      'registervisitors', new \dana\formbuilder\formbuildercheckbox('registervisitors', '', 'Visitors Must Register'), $this);
   }
 
   protected function InitFieldsForSideContent($worker) {

@@ -1,26 +1,21 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuildereditbox.php';
-require_once 'class.formbuilderfilewebimage.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing newsletter subscribers
-  * dana framework v.3
+  * worker resource manage newsletter subscribers
+  * @version dana framework v.3
 */
 
-// resource manage newsletter items
-
 class workerresmannewslettersubscribers extends workerform {
-//  protected $datagrid;
-//  protected $table;
   protected $fldfirstname;
   protected $fldlastname;
   protected $fldemail;
 
   protected function InitForm() {
-    $this->table = new newslettersubscriber($this->itemid);
+    $this->table = new \dana\table\newslettersubscriber($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Invite Newsletter subscriber';
@@ -29,11 +24,11 @@ class workerresmannewslettersubscribers extends workerform {
       case workerbase::ACT_EDIT:
         $this->title = 'Send Invitation to Subscribe to Newsletters';
         $this->fldfirstname = $this->AddField(
-          'firstname', new formbuildereditbox('firstname', '', 'First Name'), $this->table);
+          'firstname', new \dana\formbuilder\formbuildereditbox('firstname', '', 'First Name'), $this->table);
         $this->fldlastname = $this->AddField(
-          'lastname', new formbuildereditbox('lastname', '', 'Last Name'), $this->table);
+          'lastname', new \dana\formbuilder\formbuildereditbox('lastname', '', 'Last Name'), $this->table);
         $this->fldemail = $this->AddField(
-          'email', new formbuildereditbox('email', '', 'E-Mail'), $this->table);
+          'email', new \dana\formbuilder\formbuildereditbox('email', '', 'E-Mail'), $this->table);
         $this->returnidname = 'IDNAME_RESOURCES_NEWSLETTERS';
         $this->showroot = false; 
         break;
@@ -59,7 +54,7 @@ class workerresmannewslettersubscribers extends workerform {
 
   protected function SaveToTable() {
     $ret = (int) $this->table->StoreChanges();
-    if (($ret == basetable::STORERESULT_INSERT) && ($this->action == workerbase::ACT_NEW)) {
+    if (($ret == \dana\table\basetable::STORERESULT_INSERT) && ($this->action == workerbase::ACT_NEW)) {
       $this->table->SendInvite();
     }
     // back to parent newsletter worker

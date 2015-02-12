@@ -1,24 +1,20 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildertime.php';
-
-//require_once 'class.formbuilderfilewebimage.php';
 require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing booking settings
-  * dana framework v.3
+  * worker resource manage booking settings class
+  * @version dana framework v.3
 */
 
 define('DEFAULTHOURS_START', '09:00');
 define('DEFAULTHOURS_END', '17:00');
 
-// resource manage booking settings
-
 class workerresmanbookingsettings extends workerform {
-//  protected $datagrid;
-//  protected $table;
   protected $flddescription;
   protected $fldbookingtypeid;
   protected $fldworkmondaystart;
@@ -148,7 +144,7 @@ class workerresmanbookingsettings extends workerform {
   protected function SaveToTable() {
     // check for blanks (and assign default values accordingly)
     if (IsBlank($this->flddescription->value)) {
-      $this->table->SetFieldValue(basetable::FN_DESCRIPTION, 'New Settings');
+      $this->table->SetFieldValue(\dana\table\basetable::FN_DESCRIPTION, 'New Settings');
     }
     if (!$this->HasHours()) {
       $this->AssignDefaultHours();
@@ -207,8 +203,9 @@ class workerresmanbookingsettings extends workerform {
     // setting type id
     $this->fldbookingtypeid->description = "Specify the type of bookings you would like to make.";
     $this->fldbookingtypeid->size = 3;
-    $bookingtypelist = database::RetrieveLookupList(
-      'bookingtype', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID);
+    $bookingtypelist = \dana\core\database::RetrieveLookupList(
+      'bookingtype', \dana\table\basetable::FN_DESCRIPTION, \dana\table\basetable::FN_REF,
+      \dana\table\basetable::FN_ID);
     if (IsBlank($this->fldbookingtypeid->value)) {
 //      reset($bookingtypelist);
       $selectedid = false; //key($bookingtypelist);

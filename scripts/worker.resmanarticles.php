@@ -1,14 +1,10 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuilderdatagrid.php';
 
-/**
-  * activity worker for managing articles
-  * dana framework v.3
-*/
-
-// manage articles
 /*
   articletypeid', DT_FK);
   heading', DT_STRING);
@@ -26,6 +22,12 @@ require_once 'class.formbuilderdatagrid.php';
   lastupdatedescription = '';
   articletypedescription = '';
 */
+
+/**
+  * worker resource manage articles class
+  * @version dana framework v.3
+*/
+
 class workerresmanarticles extends workerform {
   protected $datagrid;
 //  protected $table;
@@ -73,7 +75,7 @@ class workerresmanarticles extends workerform {
         $this->fldaddarticle->url = $url;
 
         $this->buttonmode = array(workerform::BTN_BACK);
-        $this->title = 'Manage Articles'; 
+        $this->title = 'Manage Articles';
         $this->articlelist = $this->AddField('articlelist', $this->datagrid, $this->table);
         break;
     }
@@ -81,11 +83,11 @@ class workerresmanarticles extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = basetable::STATUS_DELETED;
+      $status = \dana\table\basetable::STATUS_DELETED;
       $query = 'DELETE `articleitem` WHERE `id` = ' . $itemid;
-      database::Query($query);
+      \dana\core\database::Query($query);
       $ret= true;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->AddMessage('Cannot remove article');
       $ret = false;
     }

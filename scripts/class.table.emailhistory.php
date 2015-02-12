@@ -1,5 +1,10 @@
 <?php
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
+
 /*
 ? - not assigned
 S - system messages to accounts (eg. welcome)
@@ -11,19 +16,12 @@ N - newsletters from accounts
 T - test message (only sent to me)
 */
 
-//define('ET_NOTASSIGNED', '?'); // - not assigned
-//define('ET_SYSTEM', 'S'); // - system messages to accounts (eg. welcome)
-//define('ET_VISITOR', 'V'); // - messages to visitors
-//define('ET_ACCCONTACT', 'C'); // - contact messages from account contact pages
-//define('ET_ADMINCONTACT', 'M'); // - contact messages from mlsb.org to me
-//define('ET_SPONSOR', 'P'); // - sponsor message - just added, confirmed
-//define('ET_NEWSLETTER', 'N'); // - newsletters from accounts
-//define('ET_SUBSCRIBERINVITE', 'I'); // - newsletter subscriber invite sent
-//define('ET_BOOKINGNOTIFICATION', 'B'); // send notifications for provisional booking
-//define('ET_RATED', 'R'); // - business rated
-//define('ET_TEST', 'T'); // - test message (only sent to me)
-
 define('EMAIL_SUPPORT', 'MLSB Support<support@mylocalsmallbusiness.com>');
+
+/**
+  * email history table - keep track of all emails sent
+  * @version dana framework v.3
+*/
 
 class emailhistory extends idtable {
   const ET_NOTASSIGNED = '?'; // - not assigned

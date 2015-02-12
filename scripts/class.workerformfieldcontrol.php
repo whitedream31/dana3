@@ -1,10 +1,12 @@
 <?php
+namespace dana\worker;
 
 require_once 'class.formbuilderbase.php';
 
 /**
+  * worker form field control class
   * container class for all worker form control fields
-  * dana framework v.3
+  * @version dana framework v.3
 */
 
 class workerformfieldcontrol extends workerbase {
@@ -13,7 +15,7 @@ class workerformfieldcontrol extends workerbase {
   protected function DoPrepare() {}
 
   public function SetControl($control) {
-    if ($control instanceof formbuilderbase) {
+    if ($control instanceof \dana\formbuilder\formbuilderbase) {
       $this->control = $control;
     }
   }

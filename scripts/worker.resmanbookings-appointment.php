@@ -1,14 +1,11 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuilderdatagrid.php';
 require_once 'class.formbuilderbutton.php';
 
-/**  * activity worker for managing bookings
-  * dana framework v.3
-*/
-
-// resource manage bookings
 /*
 booking
 
@@ -19,8 +16,12 @@ bookingsetting
 bookingtype
 */
 
+/**
+  * worker resource manage bookings appointment class
+  * @version dana framework v.3
+*/
+
 class workerresmanbookingsappointment extends workerform {
-//  protected $table;
   protected $settinglist;
   protected $datagridsettings; // booking settings grid
   protected $datagridconfirmed; // current confirmed bookings
@@ -113,7 +114,7 @@ class workerresmanbookingsappointment extends workerform {
 
   protected function SaveToTable() {
     if ($this->action == workerbase::ACT_NEW) {
-      $state = database::SelectFromTableByRef('bookingstate', '3PROVISIONAL');
+      $state = \dana\core\database::SelectFromTableByRef('bookingstate', '3PROVISIONAL');
       $stateid = $state['id'];
       $this->table->SetFieldValue('bookingstateid', $stateid);
       $this->table->SetFieldValue('confirmedbycontact', 1);
@@ -268,8 +269,9 @@ class workerresmanbookingsappointment extends workerform {
       $this->fldbookingstateid->description =
         "Please select the bookings current state. The initial state is 'Provisional', " .
         "<em>meaning unconfirmed</em> and may change later.";
-      $statelist = database::RetrieveLookupList(
-        'bookingstate', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, '');
+      $statelist = \dana\core\database::RetrieveLookupList(
+        'bookingstate', \dana\table\basetable::FN_DESCRIPTION, \dana\table\basetable::FN_REF,
+        \dana\table\basetable::FN_ID, '');
       $selectedid = ($this->fldbookingstateid->value);
       if (!$selectedid) {
         $selectedid = reset($statelist);

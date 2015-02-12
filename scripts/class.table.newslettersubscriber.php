@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// newsletter subscribers
+/**
+  * newsletter subscribers
+  * @version dana framework v.3
+*/
+
 class newslettersubscriber extends idtable {
   const STATUS_WAITING = 'W'; // invited but not accepted yet
   const STATUS_UNSUBSCRIBED = 'U'; // no longer subscribed
@@ -19,7 +26,7 @@ class newslettersubscriber extends idtable {
     $this->AddField('email', self::DT_STRING);
     $this->AddField('datestarted', self::DT_DATETIME);
     $this->AddField('sessionref', self::DT_STRING);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   private function GetSessionRef($prefix) {
@@ -75,7 +82,7 @@ class newslettersubscriber extends idtable {
     );
     $this->SetFieldValue('sessionref', $sessionref);
     // mark as inite sent in table
-    $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_WAITING); // mark as invite sent - waiting
+    $this->SetFieldValue(\dana\table\basetable::FN_STATUS, self::STATUS_WAITING); // mark as invite sent - waiting
     $this->StoreChanges();
 //echo "<p>MESSAGE=\n{$message}\n\nSESSIONREF='{$sessionref}'\n";
 //exit;
@@ -136,7 +143,7 @@ class newslettersubscriber extends idtable {
       "WHERE `accountid` = {$accountid} " .
       "ORDER BY `datestarted` DESC";
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $list[$id] = new newslettersubscriber($id);
@@ -148,7 +155,7 @@ class newslettersubscriber extends idtable {
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
     $subscribers = GetSubscriberList($accountid);
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
     foreach ($subscribers as $id => $subscriber) {
       $coldata = array(
@@ -165,19 +172,19 @@ class newslettersubscriber extends idtable {
   public function CheckForOldSubscribers() {
     $accountid = account::$instance->ID();
     $status = self::STATUS_WAITING;
-    $cancelledstatus = basetable::STATUS_CANCELLED;
+    $cancelledstatus = \dana\table\basetable::STATUS_CANCELLED;
     $query =
       'SELECT `id` FROM `newslettersubscriber` ' .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' AND " .
      '`datestarted` < (DATE_SUB(CURDATE(), INTERVAL 1 MONTH))';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $query =
         'UPDATE `newslettersubscriber` ' .
         "SET `status` = '{$cancelledstatus}' " .
         "WHERE `id` = {$id}";
-      database::Query($query);
+      \dana\core\database::Query($query);
     }
     $result->free();
   }

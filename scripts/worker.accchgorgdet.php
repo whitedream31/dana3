@@ -1,4 +1,6 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildereditbox.php';
@@ -7,11 +9,9 @@ require_once 'class.formbuildertextarea.php';
 require_once 'class.formbuilderurl.php';
 
 /**
-  * base activity worker
-  * dana framework v.3
+  * worker account change org details
+  * @version dana framework v.3
 */
-
-// account change org details
 
 class workeraccchgorgdet extends workerform {
   protected $fldbusinessname;
@@ -29,30 +29,30 @@ class workeraccchgorgdet extends workerform {
     $this->contextdescription = 'account details';
     $this->fldbusinessname = $this->AddField(
       'fldbusinessname',
-      new formbuildereditbox('businessname', '', 'Organisation Name'),
+      new \dana\formbuilder\formbuildereditbox('businessname', '', 'Organisation Name'),
       $this->account);
     $this->fldtagline = $this->AddField(
       'fldtagline',
-      new formbuildereditbox('tagline', '', 'Tagline'),
+      new \dana\formbuilder\formbuildereditbox('tagline', '', 'Tagline'),
       $this->account);
     $this->fldwebsite = $this->AddField(
-      'fldwebsite', new formbuilderurl('website', '', 'Main Web Site (if any)'),
+      'fldwebsite', new \dana\formbuilder\formbuilderurl('website', '', 'Main Web Site (if any)'),
       $this->account);
     $this->fldbusinesscategory1id = $this->AddField(
       'fldbusinesscategory1id',
-      new formbuilderselect('businesscategoryid', '', 'Main type of business'),
+      new \dana\formbuilder\formbuilderselect('businesscategoryid', '', 'Main type of business'),
       $this->account);
     $this->fldbusinesscategory2id = $this->AddField(
       'fldbusinesscategory2id',
-      new formbuilderselect('businesscategory2id', '', 'Secondary type of business'),
+      new \dana\formbuilder\formbuilderselect('businesscategory2id', '', 'Secondary type of business'),
       $this->account);
     $this->fldbusinesscategory3id = $this->AddField(
       'fldbusinesscategory3id',
-      new formbuilderselect('businesscategory3id', '', 'Other type of business'),
+      new \dana\formbuilder\formbuilderselect('businesscategory3id', '', 'Other type of business'),
       $this->account);
     $this->fldbusinessinfo = $this->AddField(
       'fldbusinessinfo',
-      new formbuildertextarea('businessinfo', '', 'Brief Description'),
+      new \dana\formbuilder\formbuildertextarea('businessinfo', '', 'Brief Description'),
       $this->account);
     // populate the business types
     $categorylist = $this->GetCategoryList();
@@ -69,7 +69,7 @@ class workeraccchgorgdet extends workerform {
     // logo
     $this->fldlogomediaid = $this->AddField(
       'fldlogomediaid',
-      new formbuilderfilewebimage('logomediaid', '', 'Business Logo'),
+      new \dana\formbuilder\formbuilderfilewebimage('logomediaid', '', 'Business Logo'),
       $this->account);
     $this->fldlogomediaid->mediaid = $this->account->GetFieldValue('logomediaid');
     $media = $this->GetTargetNameFromMedia($this->fldlogomediaid->mediaid); // get the fk for media id
@@ -112,11 +112,13 @@ class workeraccchgorgdet extends workerform {
 
   protected function GetCategoryList() {
     $ret = array();
-    $categorygrouplist = database::RetrieveLookupList(
-      'businesscategorygroup', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, '');
+    $categorygrouplist = \dana\core\database::RetrieveLookupList(
+      'businesscategorygroup', \dana\table\basetable::FN_DESCRIPTION,
+      \dana\table\basetable::FN_REF, \dana\table\basetable::FN_ID, '');
     foreach($categorygrouplist as $groupid =>$groupname) {
-      $categorylist = database::RetrieveLookupList(
-        'businesscategory', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID,
+      $categorylist = \dana\core\database::RetrieveLookupList(
+        'businesscategory', \dana\table\basetable::FN_DESCRIPTION,
+        \dana\table\basetable::FN_REF, \dana\table\basetable::FN_ID,
         '`businesscategorygroupid` = ' . $groupid);
       foreach ($categorylist as $catid => $catdescription) {
         $ret[$groupname][$catid] = $catdescription;
@@ -178,4 +180,4 @@ class workeraccchgorgdet extends workerform {
 
 }
 
-$worker = new workeraccchgorgdet();
+$worker = new \dana\worker\workeraccchgorgdet();

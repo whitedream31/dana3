@@ -1,19 +1,17 @@
 <?php
-//ctfi
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
+//require_once 'class.formbuilderdatagrid.php';
 
 /**
-  * base activity worker
-  * dana framework v.3
+  * worker account manage hours available class
+  * @version dana framework v.3
 */
-
-// manage working hours
 
 class workeraccmanhoursavail extends workerform {
   protected $datagrid;
-//  protected $table;
   protected $workinghourslist;
   protected $fldhoursdescription;
   protected $fldis24hrs;
@@ -29,57 +27,57 @@ class workeraccmanhoursavail extends workerform {
   protected $fldaddhours;
 
   protected function InitForm() {
-    $this->table = new hours($this->itemid);
+    $this->table = new \dana\table\hours($this->itemid);
     $this->icon = 'images/sect_account.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'working hours';
-    $this->datagrid = new formbuilderdatagrid('areascovered', '', 'Working Hours');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('areascovered', '', 'Working Hours');
     switch ($this->action) {
       case workerbase::ACT_EDIT:
       case workerbase::ACT_NEW:
         $this->title =
-          (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
+          (($this->action == \dana\worker\workerbase::ACT_EDIT) ? 'Modify' : 'New Set of') . ' Working Hours'; 
         $this->fldhoursdescription = $this->AddField(
-          'description', new formbuildereditbox('description', '', 'Description'), $this->table);
+          'description', new \dana\formbuilder\formbuildereditbox('description', '', 'Description'), $this->table);
         $this->fldis24hrs = $this->AddField(
-          'is24hrs', new formbuildercheckbox('is24hrs', '', 'Is Open Hours?'), $this->table);
+          'is24hrs', new \dana\formbuilder\formbuildercheckbox('is24hrs', '', 'Is Open Hours?'), $this->table);
         $this->fldmonday = $this->AddField(
-          'monday', new formbuildereditbox('monday', '', 'Monday'), $this->table);
+          'monday', new \dana\formbuilder\formbuildereditbox('monday', '', 'Monday'), $this->table);
         $this->fldtuesday = $this->AddField(
-          'tuesday', new formbuildereditbox('tuesday', '', 'Tuesday'), $this->table);
+          'tuesday', new \dana\formbuilder\formbuildereditbox('tuesday', '', 'Tuesday'), $this->table);
         $this->fldwednesday = $this->AddField(
-          'wednesday', new formbuildereditbox('wednesday', '', 'Wednesday'), $this->table);
+          'wednesday', new \dana\formbuilder\formbuildereditbox('wednesday', '', 'Wednesday'), $this->table);
         $this->fldthursday = $this->AddField(
-          'thursday', new formbuildereditbox('thursday', '', 'Thursday'), $this->table);
+          'thursday', new \dana\formbuilder\formbuildereditbox('thursday', '', 'Thursday'), $this->table);
         $this->fldfriday = $this->AddField(
-          'friday', new formbuildereditbox('friday', '', 'Friday'), $this->table);
+          'friday', new \dana\formbuilder\formbuildereditbox('friday', '', 'Friday'), $this->table);
         $this->fldsaturday = $this->AddField(
-          'saturday', new formbuildereditbox('saturday', '', 'Saturday'), $this->table);
+          'saturday', new \dana\formbuilder\formbuildereditbox('saturday', '', 'Saturday'), $this->table);
         $this->fldsunday = $this->AddField(
-          'sunday', new formbuildereditbox('sunday', '', 'Sunday'), $this->table);
+          'sunday', new \dana\formbuilder\formbuildereditbox('sunday', '', 'Sunday'), $this->table);
         $this->fldcomments = $this->AddField(
-          'comments', new formbuildertextarea('comments', '', 'Comments'), $this->table);
+          'comments', new \dana\formbuilder\formbuildertextarea('comments', '', 'Comments'), $this->table);
         $this->fldactive = $this->AddField(
-          'active', new formbuildercheckbox('active', '', 'Is Active?'), $this->table);
+          'active', new \dana\formbuilder\formbuildercheckbox('active', '', 'Is Active?'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       case workerbase::ACT_REMOVE:
-        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
+        $this->buttonmode = array(\dana\worker\workerform::BTN_CONFIRM, \dana\worker\workerform::BTN_CANCEL);
         $this->title = 'Remove Working Hours';
         $this->areadescription = $this->AddField(
-          'description', new formbuilderstatictext('description', '', 'Working Hours to be removed'));
-        $this->action = workerbase::ACT_CONFIRM;
+          'description', new \dana\formbuilder\formbuilderstatictext('description', '', 'Working Hours to be removed'));
+        $this->action = \dana\worker\workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddhours = $this->AddField(
-          'addhours', new formbuilderbutton('addhours', 'Add New Set of Working Hours'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
+          'addhours', new \dana\formbuilder\formbuilderbutton('addhours', 'Add New Set of Working Hours'));
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . \dana\worker\workerbase::ACT_NEW;
         $this->fldaddhours->url = $url;
 
-        $this->buttonmode = array(workerform::BTN_BACK);
+        $this->buttonmode = array(\dana\worker\workerform::BTN_BACK);
         $this->title = 'Manage Working Hours'; 
         $this->workinghourslist = $this->AddField('workinghourslist', $this->datagrid, $this->table);
         break;
@@ -88,11 +86,11 @@ class workeraccmanhoursavail extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = basetable::STATUS_DELETED;
+      $status = \dana\table\basetable::STATUS_DELETED;
       $query = "DELETE `hours` WHERE `id` = {$itemid}";
-      database::Query($query);
+      \dana\core\database::Query($query);
       $ret= true;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->AddMessage('Cannot remove item');
       $ret = false;
     }
@@ -101,8 +99,8 @@ class workeraccmanhoursavail extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case workerbase::ACT_EDIT:
-      case workerbase::ACT_NEW:
+      case \dana\worker\workerbase::ACT_EDIT:
+      case \dana\worker\workerbase::ACT_NEW:
         $ret =
           $this->fldhoursdescription->Save() + $this->fldis24hrs->Save() +
           $this->fldmonday->Save() + $this->fldtuesday->Save() +
@@ -110,7 +108,7 @@ class workeraccmanhoursavail extends workerform {
           $this->fldsaturday->Save() + $this->fldsunday->Save() + $this->fldcomments->Save() +
           $this->fldactive->Save();
         break;
-      case workerbase::ACT_CONFIRM:
+      case \dana\worker\workerbase::ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('description');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Item '{$caption}' removed");
@@ -126,12 +124,12 @@ class workeraccmanhoursavail extends workerform {
   protected function SaveToTable() {
     if (!trim($this->fldhoursdescription->value)) {
       $desc = ($this->fldis24hrs->value) ? 'New 24hr Opening Hours' : 'New Opening Hours';
-      $this->table->SetFieldValue(basetable::FN_DESCRIPTION, $desc);
+      $this->table->SetFieldValue(\dana\table\basetable::FN_DESCRIPTION, $desc);
     }
     $ret = (int) $this->table->StoreChanges();
     $hoursid = $this->table->CheckActiveRow(); // ensure only one row is active
-    account::$instance->GetHours($hoursid); // reassign the hours id to the account table
-    $ret += account::$instance->StoreChanges();
+    \dana\table\account::$instance->GetHours($hoursid); // reassign the hours id to the account table
+    $ret += \dana\table\account::$instance->StoreChanges();
     return $ret;
   }
 
@@ -211,10 +209,11 @@ class workeraccmanhoursavail extends workerform {
     $this->NewSection(
       'confirmation', "Remove '{$caption}'",
       'This cannot be undone! Please click on the Confirm button to remove this.');
-    $desc = $this->AddField(
-      'description', new formbuilderstatictext('description', '', 'Name of the area covered'), $this->table);
+    $this->AddField(
+      'description', new \dana\formbuilder\formbuilderstatictext('description', '', 'Name of the area covered'),
+      $this->table);
     $this->AssignFieldToSection('confirmation', 'description');
   }
 }
 
-$worker = new workeraccmanhoursavail();
+$worker = new \dana\worker\workeraccmanhoursavail();

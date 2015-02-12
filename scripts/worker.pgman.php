@@ -1,23 +1,22 @@
 <?php
+namespace dana\worker;
 
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
-require_once 'class.formbuilderdatalist.php';
-require_once 'class.formbuilderstatusgrid.php';
-require_once 'class.table.page.php';
+//require_once 'class.formbuilderdatagrid.php';
+//require_once 'class.formbuilderdatalist.php';
+//require_once 'class.formbuilderstatusgrid.php';
+//require_once 'class.table.page.php';
 
 /**
- * activity worker for the page manager
- * dana framework v.3
- */
-// page manager
+  * worker page manager class
+  * @version dana framework v.3
+*/
 
 class workerpgman extends workerform {
   protected $pagedatagrid;
   protected $statusgrid;
   protected $newpagedatalist;
-//  protected $table;
   protected $fldstatusgrid;
   protected $fldpagelist;
   protected $fldnewpagelist;
@@ -27,48 +26,48 @@ class workerpgman extends workerform {
   protected $postalarea;
   protected $countyid;
 
-  private function GetPageTable($pgtype = page::PAGETYPE_GENERAL, $pageid = 0) {
+  private function GetPageTable($pgtype = \dana\table\page::PAGETYPE_GENERAL, $pageid = 0) {
     $ret = null;
     switch ($pgtype) {
-      case page::PAGETYPE_GENERAL: //gen
+      case \dana\table\page::PAGETYPE_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
-        $ret = new pagegeneral($pageid);
+        $ret = new \dana\table\pagegeneral($pageid);
         break;
-      case page::PAGETYPE_CONTACT: //con
+      case \dana\table\page::PAGETYPE_CONTACT: //con
         require_once 'class.table.pagecontact.php';
-        $ret = new pagecontact($pageid);
+        $ret = new \dana\table\pagecontact($pageid);
         break;
 //      case page::PAGETYPE_ABOUTUS: //abt
 //        require_once('class.table.pageaboutus.php');
 //        $ret = new pageaboutus($pageid);
 //        break;
-      case page::PAGETYPE_PRODUCT: //prd
+      case \dana\table\page::PAGETYPE_PRODUCT: //prd
         require_once 'class.table.pageproduct.php';
-        $ret = new pageproduct($pageid);
+        $ret = new \dana\table\pageproduct($pageid);
         break;
-      case page::PAGETYPE_GALLERY: //gal
+      case \dana\table\page::PAGETYPE_GALLERY: //gal
         require_once 'class.table.pagegallery.php';
-        $ret = new pagegallery($pageid);
+        $ret = new \dana\table\pagegallery($pageid);
         break;
-      case page::PAGETYPE_ARTICLE: //art
+      case \dana\table\page::PAGETYPE_ARTICLE: //art
         require_once 'class.table.pagearticle.php';
-        $ret = new pagearticle($pageid);
+        $ret = new \dana\table\pagearticle($pageid);
         break;
-      case page::PAGETYPE_GUESTBOOK: //gbk
+      case \dana\table\page::PAGETYPE_GUESTBOOK: //gbk
         require_once 'class.table.pageguestbook.php';
-        $ret = new pageguestbook($pageid);
+        $ret = new \dana\table\pageguestbook($pageid);
         break;
-      case page::PAGETYPE_SOCIALNETWORK: //soc
+      case \dana\table\page::PAGETYPE_SOCIALNETWORK: //soc
         require_once 'class.table.pagesocialnetwork.php';
-        $ret = new pagesocialnetwork($pageid);
+        $ret = new \dana\table\pagesocialnetwork($pageid);
         break;
-      case page::PAGETYPE_BOOKING: //bk
+      case \dana\table\page::PAGETYPE_BOOKING: //bk
         require_once 'class.table.pagebooking.php';
-        $ret = new pagebooking($pageid);
+        $ret = new \dana\table\pagebooking($pageid);
         break;
-      case page::PAGETYPE_CALENDAR: //cal
+      case \dana\table\page::PAGETYPE_CALENDAR: //cal
         require_once 'class.table.pagecalendar.php';
-        $ret = new pagecalendar($pageid);
+        $ret = new \dana\table\pagecalendar($pageid);
         break;
       /*      case page::PAGETYPE_SURVEY: //svy
         require_once('class.table.pagesurvey.php');
@@ -90,7 +89,7 @@ class workerpgman extends workerform {
     $query = "SELECT t.`pgtype` FROM `page` p " .
       "INNER JOIN `pagetype` t ON p.`pagetypeid` = t.`id` " .
       "WHERE p.`id` = {$id}";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['pgtype'];
@@ -99,7 +98,7 @@ class workerpgman extends workerform {
   private function GetPageTypeFromPageTypeID($id) {
     $query = "SELECT `pgtype` FROM `pagetype` " .
       "WHERE `id` = {$id}";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['pgtype'];
@@ -109,15 +108,15 @@ class workerpgman extends workerform {
     $this->pagetype = GetGet('pt', GetPost('pt', false));
     if (!$this->pagetype) {
       switch ($this->action) {
-        case workerbase::ACT_EDIT:
+        case \dana\worker\workerbase::ACT_EDIT:
           $this->pagetype = ($this->itemid > 0)
             ? $this->GetPageTypeFromPageID($this->itemid)
-            : page::PAGETYPE_GENERAL;
+            : \dana\table\page::PAGETYPE_GENERAL;
           break;
-        case workerbase::ACT_NEW:
+        case \dana\worker\workerbase::ACT_NEW:
           $this->pagetype = ($this->itemid > 0)
             ? $this->GetPageTypeFromPageTypeID($this->itemid)
-            : page::PAGETYPE_GENERAL;
+            : \dana\table\page::PAGETYPE_GENERAL;
           $this->itemid = 0;
       }
     }
@@ -126,9 +125,9 @@ class workerpgman extends workerform {
     $this->icon = 'images/sect_pages.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'page';
-    $this->pagedatagrid = new formbuilderdatagrid('pagemgt', '', 'Page in Account');
-    $this->statusgrid = new formbuilderstatusgrid('statusgrid', '', 'Page Status');
-    $this->newpagedatalist = new formbuilderdatalist('newpagelist', '', 'Choose a New Page Type');
+    $this->pagedatagrid = new \dana\formbuilder\formbuilderdatagrid('pagemgt', '', 'Page in Account');
+    $this->statusgrid = new \dana\formbuilder\formbuilderstatusgrid('statusgrid', '', 'Page Status');
+    $this->newpagedatalist = new \dana\formbuilder\formbuilderdatalist('newpagelist', '', 'Choose a New Page Type');
     switch ($this->action) {
       case workerbase::ACT_EDIT:
       case workerbase::ACT_NEW:
@@ -143,7 +142,7 @@ class workerpgman extends workerform {
         $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove Page';
         $this->pagedescription = $this->AddField(
-          'description', new formbuilderstatictext('description', '', 'Page to be removed'));
+          'description', new \dana\formbuilder\formbuilderstatictext('description', '', 'Page to be removed'));
         $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
@@ -155,7 +154,8 @@ class workerpgman extends workerform {
         $this->DoMoveDown();
         break;
       default: // show datagrid
-        $this->table = new pagelist();
+        require_once 'class.table.page.php';
+        $this->table = new \dana\table\pagelist();
         $this->table->SetAccount($this->account);
         $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Pages';
@@ -170,7 +170,7 @@ class workerpgman extends workerform {
         $this->statusgrid->AddRow(array('label' => 'Pages used so far', 'value' => $pagestats['count'], 'align' => 'right'));
         $this->statusgrid->AddRow(array('label' => 'Pages left', 'value' => $pagestats['left'], 'align' => 'right'));
         $this->fldstatusgrid = $this->AddField('statusgrid', $this->statusgrid);
-        
+
         $this->fldpagelist = $this->AddField('pagelist', $this->pagedatagrid, $this->table);
         $this->fldnewpagelist = $this->AddField(
           'newpagelist', $this->newpagedatalist, $this->table);
@@ -180,12 +180,12 @@ class workerpgman extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = basetable::STATUS_DELETED;
+      $status = \dana\table\basetable::STATUS_DELETED;
       $query = "UPDATE `page` SET `status` = '{$status}' " .
       "WHERE `id` = {$itemid}";
-      database::Query($query);
+      \dana\core\database::Query($query);
       $ret = true;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->AddMessage('Cannot remove page');
       $ret = false;
     }
@@ -219,7 +219,6 @@ class workerpgman extends workerform {
   }
 
   protected function AddErrorList() {
-    
   }
 
   protected function GetHiddenFields() {
@@ -233,7 +232,8 @@ class workerpgman extends workerform {
     $this->pagedatagrid->SetIDName($this->idname);
     $this->newpagedatalist->SetIDName($this->idname);
     $this->NewSection(
-      'sectpagemgt', 'Manage your pages', 'You can edit or delete your pages. You cannot delete your home page and must be at the top.');
+      'sectpagemgt', 'Manage your pages',
+      'You can edit or delete your pages. You cannot delete your home page and must be at the top.');
     $this->NewSection(
       'sectnewpage', 'New Page', 'Create a New Page');
     $this->fldpagelist->description = 'Pages that make up your mini-site';
@@ -270,8 +270,9 @@ class workerpgman extends workerform {
     $caption = $this->table->GetFieldValue('description');
     $this->NewSection(
       'confirmation', "Remove '{$caption}'", 'This cannot be undone! Please click on the Confirm button to remove this.');
-    $desc = $this->AddField(
-      'description', new formbuilderstatictext('description', '', 'Name of the area covered'), $this->table);
+    $this->AddField(
+      'description', new \dana\formbuilder\formbuilderstatictext('description', '', 'Name of the area covered'),
+      $this->table);
     $this->AssignFieldToSection('confirmation', 'description');
   }
 

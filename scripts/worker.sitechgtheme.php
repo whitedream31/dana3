@@ -1,14 +1,12 @@
 <?php
-//require_once 'class.workerform.php';
+namespace dana\worker;
+
 require_once 'class.workerbase.php';
-//require_once 'class.formbuilderdatagrid.php';
 
 /**
-  * activity worker for selecting a theme
-  * dana framework v.3
+  * worker site change theme
+  * @version dana framework v.3
 */
-
-// theme selection
 
 class workersitechgtheme extends workerbase {
   const THEMESUITABAILTYTYPE_SIMPLE = 1;
@@ -22,9 +20,9 @@ class workersitechgtheme extends workerbase {
 
   function __construct() {
     parent::__construct();
-    $this->account = account::StartInstance();
+    $this->account = \dana\table\account::StartInstance();
     $this->themeid = $this->account->GetFieldValue('themeid');
-    $this->theme = new theme($this->themeid);
+    $this->theme = new \dana\table\theme($this->themeid);
   }
 
   protected function DoPrepare() {
@@ -34,9 +32,10 @@ class workersitechgtheme extends workerbase {
       'Please choose a theme for your mini-website.',
       'A theme is the overall design - the look-and-feel of your pages. ' .
       'It describes to the visitors browser which fonts, colours, spacing etc to use.',
-      'There are many themes to choose from but some are designed for different types of content; most are for general ' .
-      'purpose but others are suited for a specific type of business.',
-      'The themes are grouped into three main areas. Click on the group name to see the themes.');
+      'There are many themes to choose from but some are designed for different types ' .
+      'of content; most are for general purpose but others are suited for a specific ' .
+      'type of business. The themes are grouped into three main areas. Click on ' .
+      'the group name to see the themes.');
   }
 
   public function Execute() {
@@ -87,13 +86,13 @@ class workersitechgtheme extends workerbase {
     $imgpath = '../themes/';
     $mainurl = $_SERVER['PHP_SELF'] . '?in=' . $this->idname . '&amp;rid=';
     foreach ($themelist as $id) {
-      $theme = new theme($id);
+      $theme = new \dana\table\theme($id);
       $imgfilename = $imgpath . $theme->url . '/' . $theme->url . '.png';
       if (file_exists($imgfilename)) {
         $currentclass = ($id == $selectedthemeid) ? ' selectedtheme' : '';
         $tagid = 'id="thm' . $id . '"';
         $img = '<img ' . $tagid . ' src="' . $imgfilename . '" alt="' . $theme->description . '" ' .
-          'width="' . theme::THEME_THUMBNAIL_WIDTH . '" height="' . theme::THEME_THUMBNAIL_HEIGHT . '">';
+          'width="' . \dana\table\theme::THEME_THUMBNAIL_WIDTH . '" height="' . \dana\table\theme::THEME_THUMBNAIL_HEIGHT . '">';
         $head = '<h3>' . $theme->description . '</h3>';
         $url = '<a href="' . $mainurl . $theme->ID() . '" title="click to choose ' . $theme->description . '">' . $head . $img . '</a>';
         $ret[] = '  <div class="themeitem' . $currentclass . '">' . $url . '</div>';
@@ -124,12 +123,12 @@ class workersitechgtheme extends workerbase {
     $ret[] = '    </div>';
 
     $ret[] = '    <div>';
-    $ret[] = $this->GetButton('btnbottom', 'Bottom', 'click to go down to the bottom of the page', '#bottom');
+    $ret[] = $this->GetButton('bottom', 'Bottom', 'click to go down to the bottom of the page', '#bottom');
 //    $ret[] = '    </div>';
     $ret = array_merge($ret, $this->ShowThemes($this->themesuitability));
     $ret[] = '    <div style="clear: both; float: none;"></div><hr>';
 //    $ret[] = '    <div>';
-    $ret[] = $this->GetButton('btntop', 'Top', 'click to go back to the top', '#top');
+    $ret[] = $this->GetButton('top', 'Top', 'click to go back to the top', '#top');
 //    $ret[] = '    </div>';
     $ret[] = '    <a id="bottom" name="bottom"></a>';
 

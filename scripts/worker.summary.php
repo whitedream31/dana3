@@ -1,4 +1,8 @@
 <?php
+namespace dana\worker;
+
+use dana\formbuilder;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildersummarybox.php';
@@ -8,8 +12,8 @@ require_once 'class.formbuildersummarybox.php';
 //require_once 'class.formbuilderurl.php';
 
 /**
-  * activity worker for account summary (main home)
-  * dana framework v.3
+  * worker account summary
+  * @version dana framework v.3
 */
 
 // account summary
@@ -29,7 +33,7 @@ class workeraccsummary extends workerform {
     // organisation details
     $this->fldorgdetails = $this->AddField(
       'orgdetails',
-      new formbuildersummarybox('orgdetails', '', 'Your Business Summary'),
+      new \dana\formbuilder\formbuildersummarybox('orgdetails', '', 'Your Business Summary'),
       $this->account
     );
     $none = '<em>(none)</em>';
@@ -38,26 +42,25 @@ class workeraccsummary extends workerform {
     $this->fldorgdetails->AddItemWithField('orgnickname', 'MLSB Nickname', 'nickname');
     $this->fldorgdetails->AddItemLookup(
       'orgtheme', 'Current Theme', 'theme',
-      'themeid', basetable::FN_DESCRIPTION, $unknown);
-
+      'themeid', \dana\table\basetable::FN_DESCRIPTION, $unknown);
     $this->fldorgdetails->AddItemLookup(
       'orgbusinesscategoryid1', 'Business Type #1', 'businesscategory',
-      'businesscategoryid', basetable::FN_DESCRIPTION, $none);
+      'businesscategoryid', \dana\table\basetable::FN_DESCRIPTION, $none);
     $this->fldorgdetails->AddItemLookup(
       'orgbusinesscategoryid2', 'Business Type #2', 'businesscategory',
-      'businesscategoryid2', basetable::FN_DESCRIPTION, $none);
+      'businesscategoryid2', \dana\table\basetable::FN_DESCRIPTION, $none);
     $this->fldorgdetails->AddItemLookup(
       'orgbusinesscategoryid3', 'Business Type #3', 'businesscategory',
-      'businesscategoryid3', basetable::FN_DESCRIPTION, $none);
+      'businesscategoryid3', \dana\table\basetable::FN_DESCRIPTION, $none);
     $this->fldorgdetails->AddItemWithField('orgwebsite', 'Main Website', 'website', $none);
     $this->fldorgdetails->AddItemWithField('orginfo', 'Brief Description', 'businessinfo');
     $this->fldorgdetails->AddItem(
-      'orgaddress', 'Home Location', account::$instance->Contact()->FullAddress(), $unknown);
+      'orgaddress', 'Home Location', \dana\table\account::$instance->Contact()->FullAddress(), $unknown);
     $this->fldorgdetails->worker = $this;
     $this->fldorgdetails->changeidname = 'IDNAME_ACCMNT_ORGDETAILS';
     // logo
     $this->fldlogomediaid = $this->AddField(
-      'logomediaid', new formbuilderfilewebimage('logomediaid', '', 'Business Logo'), $this->account);
+      'logomediaid', new \dana\formbuilder\formbuilderfilewebimage('logomediaid', '', 'Business Logo'), $this->account);
     $this->fldlogomediaid->mediaid = $this->account->GetFieldValue('logomediaid');
     $media = $this->GetTargetNameFromMedia($this->fldlogomediaid->mediaid); // get the fk for media id
     if ($media) {
@@ -70,14 +73,13 @@ class workeraccsummary extends workerform {
       ($media) ? $media['thumbnail'] : 'none',
       ($media) ? $media['filename'] : false
     );
-
     // pages
     $pagelist = $this->account->GetPageList();
     $pagestats = $pagelist->GetPrettyPageStats();
     $this->fldpagesummarylist = $this->AddField(
       'pagesummarylist',
-      new formbuildersummarybox('pagesummarylist', '', 'Your Page Summary'),
-      $this->account
+      new \dana\formbuilder\formbuildersummarybox('pagesummarylist', '', 'Your Page Summary'),
+      false //$this->account
     );
     $this->fldpagesummarylist->AddItem(
       'total', 'Total pages you have available',
@@ -98,14 +100,14 @@ class workeraccsummary extends workerform {
     $areascovered = $this->account->AreaCoveredList();
     $this->fldareascovered = $this->AddField(
       'areascoveredlist',
-      new formbuildersummarybox('areascoveredlist', '', 'Areas Covered'),
+      new \dana\formbuilder\formbuildersummarybox('areascoveredlist', '', 'Areas Covered'),
       $this->account
     );
     foreach ($areascovered as $areaid => $areascovered) {
       $this->fldareascovered->AddItem(
         'areacovered-' . $areaid,
         '',
-        $areascovered->GetFieldValue(basetable::FN_DESCRIPTION)
+        $areascovered->GetFieldValue(\dana\table\basetable::FN_DESCRIPTION)
       );
     }
     $this->fldareascovered->worker = $this;
@@ -115,10 +117,10 @@ class workeraccsummary extends workerform {
     $hours = $this->account->GetHours();
     $this->fldhours = $this->AddField(
       'hourslist',
-      new formbuildersummarybox('hourslist', '', 'Hours Available'),
+      new \dana\formbuilder\formbuildersummarybox('hourslist', '', 'Hours Available'),
       $hours
     );
-    $this->fldhours->AddItemWithField('hoursdesc', 'Description', basetable::FN_DESCRIPTION);
+    $this->fldhours->AddItemWithField('hoursdesc', 'Description', \dana\table\basetable::FN_DESCRIPTION);
     if ($hours) {
       if ($hours->GetFieldValue('is24hrs')) {
         $this->fldhours->AddItem('hours24hrs', 'Open', '24 hours / online only');
@@ -138,7 +140,6 @@ class workeraccsummary extends workerform {
     $this->fldhours->worker = $this;
     $this->fldhours->changecaption = 'Manage Hours Availability';
     $this->fldhours->changeidname = 'IDNAME_ACCMNT_HOURSAVAILABLE';
-
     // hide buttons (summary only)
     $this->buttonmode = array();
   }

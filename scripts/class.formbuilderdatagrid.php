@@ -1,21 +1,12 @@
 <?php
+namespace dana\formbuilder;
 
-//define('TBLOPT_IGNOREFIRSTROW', 'if');
-//define('TBLOPT_TOGGLEVISIBLE', 'tv');
-//define('TBLOPT_EDITABLE', ACT_EDIT);
-//define('TBLOPT_DELETABLE', ACT_REMOVE);
-//define('TBLOPT_MOVEDOWN', 'md');
-//define('TBLOPT_MOVEUP', 'mu');
-//define('TBLOPT_NEWITEM', ACT_NEW);
-//define('TBLOPT_SENDNL', 'sn');
-//define('TBLOPT_AUTHORISE', 'au'); // guestbook entry
+use dana\table;
 
-//define('ROWSTATE_ISTOP', 1);
-//define('ROWSTATE_ISBOTTOM', 2);
-//define('ROWSTATE_IGNORE', 4);
-//define('ROWSTATE_VISHIDE', 8);
-//define('ROWSTATE_VISSHOW', 16);
-
+/**
+  * datagrid field - FLDTYPE_DATAGRID - custom control showing a list (grid) of values
+  * @version dana framework v.3
+ */
 class formbuilderdatagrid extends formbuilderbase {
   const ROWSTATE_ISTOP = 1;
   const ROWSTATE_ISBOTTOM = 2;
@@ -25,11 +16,11 @@ class formbuilderdatagrid extends formbuilderbase {
 
   const TBLOPT_IGNOREFIRSTROW = 'if';
   const TBLOPT_TOGGLEVISIBLE = 'tv';
-  const TBLOPT_EDITABLE = workerbase::ACT_EDIT;
-  const TBLOPT_DELETABLE = workerbase::ACT_REMOVE;
+  const TBLOPT_EDITABLE = \dana\worker\workerbase::ACT_EDIT;
+  const TBLOPT_DELETABLE = \dana\worker\workerbase::ACT_REMOVE;
   const TBLOPT_MOVEDOWN = 'md';
   const TBLOPT_MOVEUP = 'mu';
-  const TBLOPT_NEWITEM = workerbase::ACT_NEW;
+  const TBLOPT_NEWITEM = \dana\worker\workerbase::ACT_NEW;
   const TBLOPT_SENDNL = 'sn';
   const TBLOPT_AUTHORISE = 'au'; // guestbook entry
 
@@ -44,7 +35,7 @@ class formbuilderdatagrid extends formbuilderbase {
   protected $rowcount;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_DATAGRID, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_DATAGRID, $label);
   }
 
   public function SetIDName($idname) {
@@ -108,14 +99,14 @@ class formbuilderdatagrid extends formbuilderbase {
           if (!($state & self::ROWSTATE_ISBOTTOM)) {
             $icon = 'act_movedn.png';
             $title = 'click to move down the list';
-            $action = workerbase::ACT_MOVEDOWN;
+            $action = \dana\worker\workerbase::ACT_MOVEDOWN;
           }
           break;
         case self::TBLOPT_MOVEUP:
           if (!($state & self::ROWSTATE_ISTOP)) {
             $icon = 'act_moveup.png';
             $title = 'click to move up the list';
-            $action = workerbase::ACT_MOVEUP;
+            $action = \dana\worker\workerbase::ACT_MOVEUP;
           }
           break;
       }
@@ -124,20 +115,20 @@ class formbuilderdatagrid extends formbuilderbase {
       case self::TBLOPT_EDITABLE:
         $icon = 'act_edit.png';
         $title = 'click to edit';
-        $action = workerbase::ACT_EDIT;
+        $action = \dana\worker\workerbase::ACT_EDIT;
         break;
       case self::TBLOPT_NEWITEM:
         $icon = 'act_additem.png';
         $title = 'click to add';
-        $action = workerbase::ACT_NEW;
+        $action = \dana\worker\workerbase::ACT_NEW;
         break;
       case self::TBLOPT_DELETABLE:
-        $action = workerbase::ACT_REMOVE;
+        $action = \dana\worker\workerbase::ACT_REMOVE;
         break;
       case self::TBLOPT_SENDNL:
         $icon = 'act_nlsend.png';
         $title = 'click to send the newsletter to subscribers';
-        $action = workerbase::ACT_NLSEND;
+        $action = \dana\worker\workerbase::ACT_NLSEND;
         break;
     }
     if ($icon) {

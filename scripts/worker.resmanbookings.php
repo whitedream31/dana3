@@ -1,14 +1,9 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
-require_once 'class.formbuilderbutton.php';
 
-/**  * activity worker for managing bookings
-  * dana framework v.3
-*/
-
-// resource manage bookings
 /*
 booking
 
@@ -17,6 +12,11 @@ notes
 bookingduration
 bookingsetting
 bookingtype
+*/
+
+/**
+  * worker resource manage bookings class
+  * @version dana framework v.3
 */
 
 class workerresmanbookings extends workerform {
@@ -43,38 +43,47 @@ class workerresmanbookings extends workerform {
   protected $fldnotes;
 
   protected function InitForm() {
-    $this->table = new booking($this->itemid);
+    $this->table = new \dana\table\booking($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here' . ' - ' . $this->idname;
     $this->contextdescription = 'booking management';
-
     switch ($this->action) {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
 //        $this->title = 'Modify Bookng Entry';
         $this->fldtitle = $this->AddField(
-          'title', new formbuildereditbox('title', '', 'Booking Title'), $this->table);
+          'title',
+          new \dana\formbuilder\formbuildereditbox('title', '', 'Booking Title'), $this->table);
         $this->fldstartdate = $this->AddField(
-          'startdate', new formbuilderdate('startdate', '', 'Start Date'), $this->table);
+          'startdate',
+          new \dana\formbuilder\formbuilderdate('startdate', '', 'Start Date'), $this->table);
         $this->fldtimetext = $this->AddField(
-          'timetext', new formbuildertime('timetext', '', 'Start Time'), $this->table);
+          'timetext',
+          new \dana\formbuilder\formbuildertime('timetext', '', 'Start Time'), $this->table);
         $this->fldclientname = $this->AddField(
-          'clientname', new formbuildereditbox('clientname', '', 'Client Name'), $this->table);
+          'clientname',
+          new \dana\formbuilder\formbuildereditbox('clientname', '', 'Client Name'), $this->table);
         $this->fldaddress = $this->AddField(
-          'address', new formbuildertextarea('address', '', 'Client Address'), $this->table);
+          'address',
+          new \dana\formbuilder\formbuildertextarea('address', '', 'Client Address'), $this->table);
         $this->fldpostcode = $this->AddField(
-          'postcode', new formbuildereditbox('postcode', '', 'Post Code'), $this->table);
+          'postcode',
+          new \dana\formbuilder\formbuildereditbox('postcode', '', 'Post Code'), $this->table);
         $this->fldtelephone = $this->AddField(
-          'telephone', new formbuildertelephone('telephone', '', 'Contact Telephone'), $this->table);
+          'telephone',
+          new \dana\formbuilder\formbuildertelephone('telephone', '', 'Contact Telephone'), $this->table);
         $this->fldemail = $this->AddField(
-          'email', new formbuilderemail('email', '', 'Contact E-Mail'), $this->table);
+          'email',
+          new \dana\formbuilder\formbuilderemail('email', '', 'Contact E-Mail'), $this->table);
         $this->fldemail->required = true;
         if ($this->action == workerbase::ACT_EDIT) {
           $this->fldbookingstateid = $this->AddField(
-            'bookingstateid', new formbuilderselect('bookingstateid', '', 'Current Booking State'), $this->table);
+            'bookingstateid',
+            new \dana\formbuilder\formbuilderselect('bookingstateid', '', 'Current Booking State'), $this->table);
         }
         $this->fldnotes = $this->AddField(
-          'notes', new formbuildertextarea('notes', '', 'Notes / Comments'), $this->table);
+          'notes',
+          new \dana\formbuilder\formbuildertextarea('notes', '', 'Notes / Comments'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
@@ -84,7 +93,8 @@ class workerresmanbookings extends workerform {
         $this->buttonmode = array(workerform::BTN_BACK);
         $this->title = 'Manage Bookings';
         // settings
-        $this->datagridsettings = new formbuilderdatagrid('datagridsettings', '', 'Booking Settings');
+        $this->datagridsettings =
+          new \dana\formbuilder\formbuilderdatagrid('datagridsettings', '', 'Booking Settings');
         $this->fldsettings = $this->AddField('datagridsettings', $this->datagridsettings);
 //        $this->fldunconfirmedbookings = $this->AddField('unconfirmedbookings', $this->datagridunconfirmed);
 //        $this->fldaddbooking = $this->AddField(
@@ -113,7 +123,7 @@ class workerresmanbookings extends workerform {
 
   protected function SaveToTable() {
     if ($this->action == workerbase::ACT_NEW) {
-      $state = database::SelectFromTableByRef('bookingstate', '3PROVISIONAL');
+      $state = \dana\core\database::SelectFromTableByRef('bookingstate', '3PROVISIONAL');
       $stateid = $state['id'];
       $this->table->SetFieldValue('bookingstateid', $stateid);
       $this->table->SetFieldValue('confirmedbycontact', 1);
@@ -123,12 +133,13 @@ class workerresmanbookings extends workerform {
     if (IsBlank($this->fldtitle->value)) {
       $date = strtotime($this->fldstartdate->value);
       $time = (IsBlank($this->fldtimetext->value)) ? '' : ' ' . $this->fldtimetext->value;
+      $datedesc = \dana\table\basetable::FormatDateTime(\dana\table\basetable::DF_LONGDATE, $date);
       $title =
-        'Booking for ' . $this->fldclientname->value . ' on ' . date('l, j F Y', $date) . $time;
+        'Booking for ' . $this->fldclientname->value . ' on ' . $datedesc . $time;
       $this->table->SetFieldValue('title', $title);
     }
     $ret = (int) $this->table->StoreChanges();
-    if (($ret != basetable::STORERESULT_ERROR)) {
+    if (($ret != \dana\table\basetable::STORERESULT_ERROR)) {
       $this->table->SendBookingDetails($this->action == workerbase::ACT_NEW);
     }
     // back to parent newsletter worker
@@ -150,7 +161,8 @@ class workerresmanbookings extends workerform {
     $this->AssignFieldToSection('settings', 'datagridsettings');
     // add setting button
     $this->fldaddsetting = $this->AddField(
-      'addsetting', new formbuilderbutton('addsetting', 'Add Setting'));
+      'addsetting',
+      new \dana\formbuilder\formbuilderbutton('addsetting', 'Add Setting'));
     $url = $_SERVER['PHP_SELF'] . '?in=' . 'IDNAME_RESOURCES_BOOKINGSETTINGS&act=' . workerbase::ACT_NEW;
     $this->fldaddsetting->url = $url;
     $this->AssignFieldToSection('settings', 'addsetting');
@@ -168,20 +180,24 @@ class workerresmanbookings extends workerform {
         'or you can add an entry using the button below the list.<br>New bookings will appear in the UNCONFIRMED bookings list. ' .
         'Both you AND the client must confirm the booking for it to appear in the CONFIRM booking list.');
       // confirmed datagrid
-      $datagridconfirmed = new formbuilderdatagrid('datagridconfirmed-' . $settingid, '', 'Confirmed Bookings');
+      $datagridconfirmed =
+        new \dana\formbuilder\formbuilderdatagrid('datagridconfirmed-' . $settingid, '', 'Confirmed Bookings');
       $fldconfirmedbookings = $this->AddField('datagridconfirmed-' . $settingid, $datagridconfirmed);
       $fldconfirmedbookings->description = 'Your CONFIRMED bookings.';
       $this->AssignFieldToSection($sectionname, 'datagridconfirmed-' . $settingid);
       $datagridconfirmed->SetIDName($idname);
       // unconfirmed datagrid
-      $datagridunconfirmed = new formbuilderdatagrid('datagridunconfirmed-' . $settingid, '', 'Unconfirmed (new) Bookings');
+      $datagridunconfirmed =
+        new \dana\formbuilder\formbuilderdatagrid(
+          'datagridunconfirmed-' . $settingid, '', 'Unconfirmed (new) Bookings');
       $fldunconfirmedbookings = $this->AddField('datagridunconfirmed-' . $settingid, $datagridunconfirmed);
       $fldunconfirmedbookings->description = 'Your UNCONFIRMED bookings.';
       $this->AssignFieldToSection($sectionname, 'datagridunconfirmed-' . $settingid);
       $datagridunconfirmed->SetIDName($idname);
       // add booking button
       $this->fldaddbooking = $this->AddField(
-        'addbooking', new formbuilderbutton('addbooking', 'Add Booking Entry'));
+        'addbooking',
+        new \dana\formbuilder\formbuilderbutton('addbooking', 'Add Booking Entry'));
         $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&pid={$settingid}&act=" . workerbase::ACT_NEW;
         $this->fldaddbooking->url = $url;
         $this->AssignFieldToSection($sectionname, 'addbooking');
@@ -226,7 +242,7 @@ class workerresmanbookings extends workerform {
       foreach($list as $itemid => $item) {
         $clientname = IfBlank($item['clientname'], '<em>Not specified</em>');
         $entrydate = $this->table->FormatDateTime(
-          self::DF_MEDIUMDATE, $item['startdate'], '<em>none</em>') . ' ' . $item['timetext'];
+          \dana\table\basetable::DF_MEDIUMDATE, $item['startdate'], '<em>none</em>') . ' ' . $item['timetext'];
         $title = IfBlank($item['title'], $entrydate);
         $statedesc = IfBlank($item['statedesc'], '<em>none</em>');
         $statecolour = $item['statecolour'];
@@ -274,8 +290,9 @@ class workerresmanbookings extends workerform {
     if ($this->action == workerbase::ACT_EDIT) {
       $this->fldbookingstateid->description =
         "Please select the bookings current state. The initial state is 'Provisional', " .      "meaning unconfirmed and may change later.";
-      $statelist = database::RetrieveLookupList(
-        'bookingstate', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID); //, "`mode` = 1");
+      $statelist = \dana\core\database::RetrieveLookupList(
+        'bookingstate', \dana\table\basetable::FN_DESCRIPTION, \dana\table\basetable::FN_REF,
+        \dana\table\basetable::FN_ID); //, "`mode` = 1");
       $selectedid = ($this->fldbookingstateid->value);
       if (!$selectedid) {
         $selectedid = reset($statelist);
@@ -333,7 +350,7 @@ class workerresmanbookings extends workerform {
       $this->fldtitle,
         $this->fldclientname . ' at ' .
         $this->table->FormatDateTime(
-          self::DF_MEDIUMDATE, $this->fldstartdate->value, '<em>none</em>')
+          \dana\table\basetable::DF_MEDIUMDATE, $this->fldstartdate->value, '<em>none</em>')
     );
   }
 }

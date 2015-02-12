@@ -1,20 +1,18 @@
 <?php
-//ctfi
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
-require_once 'class.formbuilderbutton.php';
+//require_once 'class.formbuilderdatagrid.php';
+//require_once 'class.formbuilderbutton.php';
 
 /**
-  * base activity worker
-  * dana framework v.3
+  * worker account areas covered class
+  * @version dana framework v.3
 */
-
-// account change org details
 
 class workeraccareascovered extends workerform {
   protected $datagrid;
-//  protected $table;
   protected $areadescription;
   protected $fldareascovered;
   protected $fldareadescription;
@@ -23,46 +21,47 @@ class workeraccareascovered extends workerform {
   protected $fldaddarea;
 
   protected function InitForm() {
-    $this->table = new areacovered($this->itemid);
+    $this->table = new \dana\table\areacovered($this->itemid);
     $this->icon = 'images/sect_account.png';
     $this->areadescription = 'some text here';
     $this->contextdescription = 'areas covered';
-    $this->datagrid = new formbuilderdatagrid('areascovered', '', 'Areas Covered');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('areascovered', '', 'Areas Covered');
     switch ($this->action) {
-      case workerbase::ACT_EDIT:
-      case workerbase::ACT_NEW:
-        $this->title = (($this->action == workerbase::ACT_NEW) ? 'New' : 'Modify') . ' Area';
+      case \dana\worker\workerbase::ACT_EDIT:
+      case \dana\worker\workerbase::ACT_NEW:
+        $this->title = (($this->action == \dana\worker\workerbase::ACT_NEW) ? 'New' : 'Modify') . ' Area';
         $this->fldareadescription = $this->AddField(
-          'description', new formbuildereditbox('description', '', 'Description'), $this->table);
+          'description', new \dana\formbuilder\formbuildereditbox('description', '', 'Description'), $this->table);
         $this->fldpostalarea = $this->AddField(
-          'postalarea', new formbuildereditbox('postalarea', '', 'Postal Area'), $this->table);
+          'postalarea', new \dana\formbuilder\formbuildereditbox('postalarea', '', 'Postal Area'), $this->table);
         $this->fldcountyid = $this->AddField(
-          'countyid', new formbuilderselect('countyid', '', 'Name of the County'), $this->table);
-        $countylist = database::RetrieveLookupList(
-          'county', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, "`countryid` = 2");
+          'countyid', new \dana\formbuilder\formbuilderselect('countyid', '', 'Name of the County'), $this->table);
+        $countylist = \dana\core\database::RetrieveLookupList(
+          'county', \dana\table\basetable::FN_DESCRIPTION, \dana\table\basetable::FN_REF,
+          \dana\table\basetable::FN_ID, "`countryid` = 2");
         foreach($countylist as $countyid => $countydescription) {
           $this->fldcountyid->AddValue($countyid, $countydescription);
         }
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
-      case workerbase::ACT_REMOVE:
-        $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
+      case \dana\worker\workerbase::ACT_REMOVE:
+        $this->buttonmode = array(\dana\worker\workerform::BTN_CONFIRM, \dana\worker\workerform::BTN_CANCEL);
         $this->title = 'Remove Area Cover';
         $this->fldareadescription = $this->AddField(
-          'description', new formbuilderstatictext('description', '', 'Area to be removed'));
-        $this->action = workerbase::ACT_CONFIRM;
+          'description', new \dana\formbuilder\formbuilderstatictext('description', '', 'Area to be removed'));
+        $this->action = \dana\worker\workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddarea = $this->AddField(
-          'addarea', new formbuilderbutton('addarea', 'Add Area'));
-        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
+          'addarea', new \dana\formbuilder\formbuilderbutton('addarea', 'Add Area'));
+        $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . \dana\worker\workerbase::ACT_NEW;
         $this->fldaddarea->url = $url;
 
-        $this->buttonmode = array(workerform::BTN_BACK);
-        $this->title = 'Manage Areas Covered'; 
+        $this->buttonmode = array(\dana\worker\workerform::BTN_BACK);
+        $this->title = 'Manage Areas Covered';
         $this->fldareascovered = $this->AddField('areascovered', $this->datagrid, $this->table);
         break;
     }
@@ -70,13 +69,13 @@ class workeraccareascovered extends workerform {
 
   protected function DeleteItem($itemid) {
     try {
-      $status = basetable::STATUS_DELETED;
+      $status = \dana\table\basetable::STATUS_DELETED;
       $query =
         "UPDATE `areacovered` SET `status` = '{$status}' " .
         "WHERE `id` = {$itemid}";
-      database::Query($query);
+      \dana\core\database::Query($query);
       $ret= true;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $this->AddMessage('Cannot remove item');
       $ret = false;
     }
@@ -85,14 +84,14 @@ class workeraccareascovered extends workerform {
 
   protected function PostFields() {
     switch ($this->action) {
-      case workerbase::ACT_EDIT:
-      case workerbase::ACT_NEW:
+      case \dana\worker\workerbase::ACT_EDIT:
+      case \dana\worker\workerbase::ACT_NEW:
         $ret =
           $this->fldareadescription->Save() +
           $this->fldpostalarea->Save() +
           $this->fldcountyid->Save();
         break;
-      case workerbase::ACT_CONFIRM:
+      case \dana\worker\workerbase::ACT_CONFIRM:
         $caption = $this->table->GetFieldValue('description');
         if ($this->DeleteItem($this->itemid)) {
           $this->AddMessage("Item '{$caption}' removed");
@@ -110,7 +109,7 @@ class workeraccareascovered extends workerform {
       $pcode = (trim($this->fldpostalarea->value))
         ? $this->fldpostalarea->value : false;
       $county = ($this->fldcountyid->value > 0)
-        ? database::SelectDescriptionFromLookup('county', $this->fldcountyid->value) : false;
+        ? \dana\core\database::SelectDescriptionFromLookup('county', $this->fldcountyid->value) : false;
       if ($pcode) {
         if ($county) {
           $desc = "{$county} ($pcode)";
@@ -120,7 +119,7 @@ class workeraccareascovered extends workerform {
       } else {
         $desc = 'All areas';
       }
-      $this->table->SetFieldValue(basetable::FN_DESCRIPTION, $desc);
+      $this->table->SetFieldValue(\dana\table\basetable::FN_DESCRIPTION, $desc);
     }
     return (int) $this->table->StoreChanges();
   }
@@ -168,10 +167,10 @@ class workeraccareascovered extends workerform {
     $this->NewSection(
       'confirmation', "Remove '{$caption}'",
       'This cannot be undone! Please click on the Confirm button to remove this.');
-    $desc = $this->AddField(
-      'description', new formbuilderstatictext('description', '', 'Name of the area covered'), $this->table);
+    $this->AddField(
+      'description', new \dana\formbuilder\formbuilderstatictext('description', '', 'Name of the area covered'), $this->table);
     $this->AssignFieldToSection('confirmation', 'description');
   }
 }
 
-$worker = new workeraccareascovered();
+$worker = new \dana\worker\workeraccareascovered();

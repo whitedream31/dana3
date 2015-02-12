@@ -1,21 +1,14 @@
 <?php
+namespace dana\table;
 
-// account table
+use dana\core;
 
-require_once 'class.database.php';
 require_once 'class.basetable.php';
-require_once 'class.table.page.php';
-//require_once 'class.table.hours.php';
-//require_once('scripts/class.image.php');
 
-//define('SEARCH_MAX', 500); // max number of results found
-
-//define('SEARCH_WHAT', 16);
-//define('SEARCH_WHERE', 8);
-//define('SEARCH_TAG', 2);
-//define('SEARCH_SPONSOR', 128);
-
-// account table
+/**
+  * account table - core account functionality
+  * @version dana framework v.3
+*/
 
 class account extends idtable {
   const ACCSTATUS_UNCONFIRMED = 'uncon';
@@ -144,7 +137,7 @@ class account extends idtable {
       'AND (`datestarted` >= date_sub(curdate(), interval 1 month)) ' .
       'ORDER BY `datestarted` desc, `dateupdated` desc';
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $list[] = $line['id'];
     }
@@ -171,7 +164,7 @@ class account extends idtable {
         "(a.`businesscategorylist` LIKE ('%{$termwhat}%')) OR " .
         "(t.`tag` LIKE ('%{$termwhat}%')))" .
         "ORDER BY a.`dateupdated` DESC";
-      $result = database::$instance->Query($query);
+      $result = \dana\core\database::$instance->Query($query);
       while (($line = $result->fetch_assoc())) {
         $id = $line['id'];
         $list[$id] = $this->AssignResultItem('what', $line, $list, $id, self::SEARCH_WHAT);
@@ -196,7 +189,7 @@ class account extends idtable {
           "(c.`postcode` LIKE ('{$termwhere}%'))";
       }
       $query .= ' ORDER BY a.`dateupdated` DESC';
-      $result = database::$instance->Query($query);
+      $result = \dana\core\database::$instance->Query($query);
       while (($line = $result->fetch_assoc())) { // && ($cnt < SEARCH_MAX)) {
         $id = $line['id'];
         $list[$id] = $this->AssignResultItem('where', $line, $list, $id, self::SEARCH_WHERE);
@@ -213,7 +206,7 @@ class account extends idtable {
         "WHERE (t.`tag` LIKE ('%{$tag}%')) " .
         "AND (a.`authorised` > 0) AND (a.`published` > 0) AND (a.`deleted` = 0) " .
         "ORDER BY a.`id`";
-      $result = database::$instance->Query($query);
+      $result = \dana\core\database::$instance->Query($query);
       while ($line = $result->fetch_assoc()) {
         $id = $line['id'];
         $tag = $line['tag'];
@@ -233,7 +226,7 @@ class account extends idtable {
         "(CURRENT_DATE BETWEEN s.`startdate` AND s.`enddate`) " .
         "AND (a.`authorised` > 0) AND (a.`published` > 0) AND (a.`deleted` = 0) " .
         "ORDER BY s.`startdate`, s.`enddate`";
-      $result = database::$instance->Query($query);
+      $result = \dana\core\database::$instance->Query($query);
       while ($line = $result->fetch_assoc()) {
         $id = $line['accountid'];
         $list[$id] = $this->AssignResultItem('sponsor', $line, $list, $id, self::SEARCH_SPONSOR);
@@ -414,7 +407,7 @@ class account extends idtable {
       require_once('class.table.media.php');
       $query = 'SELECT * FROM `media` ' .
         'WHERE `id` = ' . (int) $mediaid;
-      $result = database::$instance->Query($query);
+      $result = \dana\core\database::$instance->Query($query);
       $line = $result->fetch_assoc();
       if ($line) {
         $return = array();
@@ -437,11 +430,13 @@ class account extends idtable {
     // - build business categories
     $businesscategory = $formeditor->AddDataField(
       $this, 'businesscategoryid', 'Main Business Category', self::FLDTYPE_SELECT, true);
-    $categorygrouplist = database::RetrieveLookupList(
-      'businesscategorygroup', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, '');
+    $categorygrouplist = \dana\core\database::RetrieveLookupList(
+      'businesscategorygroup', \dana\table\basetable::FN_DESCRIPTION,
+      \dana\table\basetable::FN_REF, \dana\table\basetable::FN_ID, '');
     foreach($categorygrouplist as $groupid =>$groupname) {
-      $categorylist = database::RetrieveLookupList(
-        'businesscategory', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID,
+      $categorylist = \dana\core\database::RetrieveLookupList(
+        'businesscategory', \dana\table\basetable::FN_DESCRIPTION,
+        \dana\table\basetable::FN_REF, \dana\table\basetable::FN_ID,
         '`businesscategorygroupid` = ' . $groupid);
       foreach ($categorylist as $catid => $catdescription) {
         $businesscategory->AddToGroup($groupname, $catid, $catdescription);
@@ -535,7 +530,7 @@ class account extends idtable {
 
     $this->businesscategorydescription = false;
     $this->rootpath = false;
-    $enddate = $this->showenddate[basetable::FA_VALUE];
+    $enddate = $this->showenddate[\dana\table\basetable::FA_VALUE];
     if ($enddate != '') {
       $this->expired = date('Y-m-d') > $enddate;
     } else {
@@ -616,7 +611,7 @@ class account extends idtable {
       'INNER JOIN `privatearea` pa ON pm.`privateareaid` = pa.`id` ' .
       'WHERE pa.`accountid` = ' . $this->ID() .
       ' ORDER BY v.`displayname`';
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new visitor($id);
@@ -639,7 +634,8 @@ class account extends idtable {
   // retrieve an existing page from its id
   public function FindPage($id) {
     $ret = null;
-    $pgtype = database::SelectFromTableByField('pagetype', basetable::FN_ID, $id, 'pgtype');
+    $pgtype = \dana\core\database::SelectFromTableByField(
+      'pagetype', \dana\table\basetable::FN_ID, $id, 'pgtype');
     switch ($pgtype) {
       case PAGECREATION_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
@@ -691,6 +687,7 @@ class account extends idtable {
 
   public function GetPageList($refresh = false) {
     if (!$this->pagelist || $refresh) {
+      require_once 'class.table.page.php';
       $this->pagelist = new pagelist();
       $this->pagelist->SetAccount($this);
     }
@@ -891,7 +888,7 @@ class account extends idtable {
       'FROM `guestbookentry` e ' .
       'INNER JOIN `guestbook` g ON g.`id` = e.`guestbookid` ' .
       'WHERE g.`accountid` = ' . $this->ID() . ' AND e.`status` = \'N\' AND g.`status` = \'A\'';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['cnt'];
@@ -901,7 +898,7 @@ class account extends idtable {
     $query = 'SELECT COUNT(*) AS cnt ' .
       'FROM `booking` ' .
       'WHERE `accountid` = ' . $this->ID() . " AND `status` = 'A'";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['cnt'];
@@ -911,7 +908,7 @@ class account extends idtable {
     $query = 'SELECT COUNT(*) AS cnt ' .
       'FROM `newslettersubscriber` ' .
       'WHERE `accountid` = ' . $this->ID() . " AND `status` = 'A'";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['cnt'];
@@ -920,7 +917,7 @@ class account extends idtable {
   public function CountPrivateAreaGroups() {
     $query = 'SELECT COUNT(*) AS cnt FROM `privatearea` ' .
       'WHERE `accountid` = ' . $this->ID();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['cnt'];
@@ -933,7 +930,7 @@ class account extends idtable {
       'WHERE pa.`accountid` = ' . $this->ID(); */
     $query = 'SELECT COUNT(*) AS cnt FROM `privateareamember` ' .
       'WHERE `accountid` = ' . $this->ID();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $result->free();
     return $line['cnt'];
@@ -951,8 +948,8 @@ class account extends idtable {
     if (!$this->businesscategorydescription) {
       $bcid = $this->GetFieldValue('businesscategoryid');
       $this->businesscategorydescription =
-        database::SelectFromTableByField(
-          'businesscategory', basetable::FN_ID, $bcid, 'description');
+        \dana\core\database::SelectFromTableByField(
+          'businesscategory', \dana\table\basetable::FN_ID, $bcid, 'description');
     }
     return $this->businesscategorydescription;
   }
@@ -961,7 +958,8 @@ class account extends idtable {
     //$mediaid = $this->GetFieldValue('logomediaid');
     if ($mediaid > 0) {
       $field = ($thumbnail) ? 'thumbnail' : 'imgname';
-      $filename = database::SelectFromTableByField('media', basetable::FN_ID, $mediaid, $field);
+      $filename = \dana\core\database::SelectFromTableByField(
+        'media', \dana\table\basetable::FN_ID, $mediaid, $field);
     } else {
       $filename = false;
     }
@@ -992,7 +990,7 @@ class account extends idtable {
       'WHERE `accountid` = ' . $this->ID() . ' AND (NOT `status` = \'D\') ' .
       'ORDER BY `showdate` DESC';
     $list = array();
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new newsletter($id);
@@ -1007,8 +1005,8 @@ class account extends idtable {
   public function NewsletterSubscriberList($status = false) {
     require_once('class.table.newslettersubscriber.php');
     $accountid = $this->ID();
-    $statusdeleted = basetable::STATUS_DELETED;
-    $statuscancelled = basetable::STATUS_CANCELLED;
+    $statusdeleted = \dana\table\basetable::STATUS_DELETED;
+    $statuscancelled = \dana\table\basetable::STATUS_CANCELLED;
     $sql = array(
       "SELECT `id` FROM `newslettersubscriber` ",
       "WHERE `accountid` = {$accountid} ");
@@ -1019,7 +1017,7 @@ class account extends idtable {
     }
     $sql[] = 'ORDER BY `status`, `datestarted` DESC';
     $query = ArrayToString($sql);
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $subid = $line['id'];
@@ -1033,7 +1031,7 @@ class account extends idtable {
     $list = array();
     $query = 'SELECT `id` FROM `newsletteritemtype` ' .
       "WHERE `status` = 'A' ORDER BY `ref`";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $list[] = $id;
@@ -1076,11 +1074,11 @@ class account extends idtable {
   static public function GetSponsorRows() {
     $ret = array();
     $query =
-      "SELECT * FROM `sponsor` " . 
+      "SELECT * FROM `sponsor` " .
       "WHERE `status` = 'A' AND " .
       "CURRENT_DATE BETWEEN `startdate` AND `enddate` " .
       "ORDER BY `startdate`, `enddate`";
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $ret[] = $line;
     }

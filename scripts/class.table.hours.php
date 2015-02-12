@@ -1,5 +1,14 @@
 <?php
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
+
+/**
+  * hours table - opening hours
+  * @version dana framework v.3
+*/
 
 class hours extends idtable {
   public $accountid;
@@ -21,7 +30,7 @@ class hours extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->accountid = $this->AddField(basetable::FN_ACCOUNTID, self::DT_FK);
+    $this->accountid = $this->AddField(\dana\table\basetable::FN_ACCOUNTID, self::DT_FK);
     $this->is24hrs = $this->AddField('is24hrs', self::DT_BOOLEAN);
     $this->monday = $this->AddField('monday', self::DT_STRING);
     $this->tuesday = $this->AddField('tuesday', self::DT_STRING);
@@ -87,11 +96,11 @@ class hours extends idtable {
       "WHERE (`accountid` = {$accountid}) " .
       'ORDER BY `active` DESC, `description`';
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $isactive = $line['active'];
-      $actions = ($isactive) ? array() : array(formbuilderdatagrid::TBLOPT_DELETABLE);
+      $actions = ($isactive) ? array() : array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
       $coldata = array(
         'DESC' => $line['description'],
         'ACTIVE' => ($isactive) ? 'YES' : 'no'
@@ -116,8 +125,8 @@ class hours extends idtable {
 
   public function MakeDefaultRow() {
     $hour = new hours();
-    $hour->SetFieldValue(basetable::FN_ACCOUNTID, account::$instance->ID());
-    $hour->SetFieldValue(basetable::FN_DESCRIPTION, 'New Opening Hours');
+    $hour->SetFieldValue(\dana\table\basetable::FN_ACCOUNTID, account::$instance->ID());
+    $hour->SetFieldValue(\dana\table\basetable::FN_DESCRIPTION, 'New Opening Hours');
     $hour->SetFieldValue('active', 1);
     $hour->StoreChanges();
     return $hour->ID();
@@ -130,7 +139,7 @@ class hours extends idtable {
     $query = "SELECT `id`, `active` FROM `hours` WHERE `accountid` = {$accountid} ORDER BY `id`";
     $found = false;
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $isactive = $line['active'];
@@ -145,7 +154,7 @@ class hours extends idtable {
     if (count($list)) {
       foreach($list as $id => $value) {
         $query = "UPDATE `hours` SET `active` = {$value} WHERE `id` = {$id}";
-        database::Query($query);
+        \dana\core\database::Query($query);
       }
     }
     // if no active row found then make one

@@ -1,7 +1,14 @@
 <?php
+namespace dana\table;
 
-require_once('class.basetable.php');
-require_once('class.table.account.php');
+//use dana\core;
+
+require_once 'class.basetable.php';
+
+/**
+  * rating table
+  * @version dana framework v.3
+*/
 
 class rating extends idtable {
   const RATE_EXCELLENT = 5;
@@ -94,7 +101,7 @@ class rating extends idtable {
   }
 
   protected function AssignDefaultFieldValues() {
-    $this->AssignFieldDefaultValue(basetable::FN_STATUS, self::STATUS_ACTIVE, true);
+    $this->AssignFieldDefaultValue(\dana\table\basetable::FN_STATUS, self::STATUS_ACTIVE, true);
   }
 
   public function ValidateFormFields($formeditor, $idref) {
@@ -199,7 +206,7 @@ class rating extends idtable {
     $query = 'SELECT * FROM `rating` ' .
       "WHERE `status` = '" . self::STATUS_ACTIVE . "' AND `accountid` = " . (int) $accountid .
       " ORDER BY `commentstamp` DESC";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       self::AddToCommentList(
         $commentlist,
@@ -715,7 +722,7 @@ class rating extends idtable {
       "(`status` = '{$status}') " .
       'ORDER BY `commentstamp` DESC';
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $overall = $this->CalcOverall(

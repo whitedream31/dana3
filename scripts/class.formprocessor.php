@@ -1,9 +1,13 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
 
 require_once 'class.formbuilderbase.php';
 
 /**
   * form processor - used for creating forms in mini-sites
+  * @version dana framework v.3
 */
 
 class formprocessor {

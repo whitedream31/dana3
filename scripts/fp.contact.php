@@ -1,11 +1,14 @@
 <?php
+namespace dana\formprocessor;
+
 require_once 'class.formprocessor.php';
 
 /**
- * form processor for dealing with contact pages
- *
- * @author Ian Stewart
- */
+  * form processor contact
+  * form processor for dealing with contact pages
+  * @version dana framework v.3
+*/
+
 class fpcontact extends formprocessor {
 
   private $page;

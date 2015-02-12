@@ -1,29 +1,16 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing newsletters
-  * dana framework v.3
+  * worker resource manage newsletters
+  * @version dana framework v.3
 */
 
-// resource manage newsletters
-/*
-  title, DT_STRING
-  showdate, DT_DATE
-  datelastsent, DT_DATE
-  showaddress, DT_BOOLEAN
-  showtelephone, DT_BOOLEAN
-  showwebsite, DT_BOOLEAN
-  footertext, DT_STRING
-  style, DT_STRING
-  newsletterformatid, DT_FK
-*/
 class workerresmannewsletters extends workerform {
   protected $datagrid;
-//  protected $table;
   protected $tableitems;
 //  protected $areadescription;
   protected $fldtitle; // title of the newsletter
@@ -39,28 +26,28 @@ class workerresmannewsletters extends workerform {
   protected $subscribergrid;
 
   protected function InitForm() {
-    $this->table = new newsletter($this->itemid);
+    $this->table = new \dana\table\newsletter($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here' . ' - ' . $this->idname;
     $this->contextdescription = 'newsletter management';
-    $this->datagrid = new formbuilderdatagrid('newsletter', '', 'Newsletters Available');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('newsletter', '', 'Newsletters Available');
     switch ($this->action) {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
         $this->title = 'Modify Newsletter';
         $this->fldtitle = $this->AddField(
-          'title', new formbuildereditbox('title', '', 'Newsletter Title'), $this->table);
+          'title', new \dana\formbuilder\formbuildereditbox('title', '', 'Newsletter Title'), $this->table);
         $this->fldshowdate = $this->AddField(
-          'showdate', new formbuilderdate('showdate', '', 'Publish Date'), $this->table);
+          'showdate', new \dana\formbuilder\formbuilderdate('showdate', '', 'Publish Date'), $this->table);
         $this->fldshowaddress = $this->AddField(
-          'showaddress', new formbuildercheckbox('showaddress', '', 'Include Address?'), $this->table);
+          'showaddress', new \dana\formbuilder\formbuildercheckbox('showaddress', '', 'Include Address?'), $this->table);
         $this->fldshowtelephone = $this->AddField(
-          'showtelephone', new formbuildercheckbox('showtelephone', '', 'Include telephone numbers?'), $this->table);
+          'showtelephone', new \dana\formbuilder\formbuildercheckbox('showtelephone', '', 'Include telephone numbers?'), $this->table);
         $this->fldshowwebsite = $this->AddField(
-          'showwebsite', new formbuildercheckbox('showwebsite', '', 'include your main website?'), $this->table);
+          'showwebsite', new \dana\formbuilder\formbuildercheckbox('showwebsite', '', 'include your main website?'), $this->table);
         if ($this->action == workerbase::ACT_EDIT) {
           $this->itemgrid = $this->AddField(
-            'itemgrid', new formbuilderdatagrid('itemgrid', '', 'Newsletter Items'));
+            'itemgrid', new \dana\formbuilder\formbuilderdatagrid('itemgrid', '', 'Newsletter Items'));
         }
         $this->returnidname = $this->idname;
         $this->showroot = false;
@@ -72,7 +59,7 @@ class workerresmannewsletters extends workerform {
         $this->title = 'Manage Newsletters';
         $this->flditems = $this->AddField('newsletters', $this->datagrid, $this->table);
         $this->fldaddnewsletter = $this->AddField(
-          'addnewsletter', new formbuilderbutton('addnewsletter', 'Add New Newsletter'));
+          'addnewsletter', new \dana\formbuilder\formbuilderbutton('addnewsletter', 'Add New Newsletter'));
         $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddnewsletter->url = $url;
         break;
@@ -99,7 +86,7 @@ class workerresmannewsletters extends workerform {
       $desc = date('F Y', $date) . ' Newsletter';
       $this->table->SetFieldValue('title', $desc);
     }
-    return (int) $this->table->StoreChanges(); //parent::StoreChanges(); //$this->table->StoreChanges();
+    return (int) $this->table->StoreChanges();
   }
 
   protected function AddErrorList() {}
@@ -115,11 +102,11 @@ class workerresmannewsletters extends workerform {
       $this->fldaddnewsletter->description = "Click this button to create a new newsletter";
       $this->AssignFieldToSection('newsletters', 'addnewsletter');
       // newsletter subscribers
-      $item = new newslettersubscriber();
+      $item = new \dana\table\newslettersubscriber();
       $item->CheckForOldSubscribers();
-      $statusactive = $item->GetStatusAsString(true, basetable::STATUS_ACTIVE);
-      $statuspending = $item->GetStatusAsString(true, newslettersubscriber::STATUS_WAITING);
-      $statussunsub = $item->GetStatusAsString(true, newslettersubscriber::STATUS_UNSUBSCRIBED);
+      $statusactive = $item->GetStatusAsString(true, \dana\table\basetable::STATUS_ACTIVE);
+      $statuspending = $item->GetStatusAsString(true, \dana\table\newslettersubscriber::STATUS_WAITING);
+      $statussunsub = $item->GetStatusAsString(true, \dana\table\newslettersubscriber::STATUS_UNSUBSCRIBED);
       $this->NewSection(
         'subscribers', 'Managing newsletter subscribers',
         "Below are the visitors who have expressed interest in your newsletters and want to " .
@@ -130,14 +117,14 @@ class workerresmannewsletters extends workerform {
           '<strong>NOTE: Any visitors who have not confirmed after 1 month of being invited are ' .
           'automatically removed.</strong>');
       $this->subscribergrid = $this->AddField(
-        'subscribergrid', new formbuilderdatagrid('subscribergrid', '', 'Newsletter Subscribers'));
+        'subscribergrid', new \dana\formbuilder\formbuilderdatagrid('subscribergrid', '', 'Newsletter Subscribers'));
       $this->subscribergrid->SetIDName('IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS');
       $this->PopulateSubscribers();
       $this->subscribergrid->description = 'Below are the list of subscribers to your newsletter, and their status.';
       $this->AssignFieldToSection('subscribers', 'subscribergrid');
       // add subscribe button
       $this->fldaddsubscriber = $this->AddField(
-        'addsubscriber', new formbuilderbutton('addsubscriber', 'Invite Subscriber'));
+        'addsubscriber', new \dana\formbuilder\formbuilderbutton('addsubscriber', 'Invite Subscriber'));
       $url = $_SERVER['PHP_SELF'] . "?in=IDNAME_RESOURCES_NEWSLETTERSUBSCRIBERS&act=" . workerbase::ACT_NEW;
       $this->fldaddsubscriber->url = $url;
       $this->AssignFieldToSection('subscribers', 'addsubscriber');
@@ -151,9 +138,9 @@ class workerresmannewsletters extends workerform {
     $list = $this->table->FindNewsletterItems();
     if ($list) {
       $actions = array(
-        formbuilderdatagrid::TBLOPT_DELETABLE,
-        formbuilderdatagrid::TBLOPT_MOVEUP,
-        formbuilderdatagrid::TBLOPT_MOVEDOWN
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_MOVEUP,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_MOVEDOWN
       );
       $options = array('parentid' => $this->itemid); // newsletter id
       foreach($list as $itemid => $item) {
@@ -170,7 +157,7 @@ class workerresmannewsletters extends workerform {
     $this->subscribergrid->AddColumn('DESC', 'Name', false);
     $this->subscribergrid->AddColumn('EMAIL', 'E-Mail', false);
     $this->subscribergrid->AddColumn('STATUS', 'Status', false);
-    $list = account::$instance->NewsletterSubscriberList();
+    $list = \dana\table\account::$instance->NewsletterSubscriberList();
     if ($list) {
       $actions = array(); //TBLOPT_DELETABLE, TBLOPT_MOVEUP, TBLOPT_MOVEDOWN);
       foreach($list as $itemid => $item) {
@@ -221,7 +208,7 @@ class workerresmannewsletters extends workerform {
       $this->AssignFieldToSection('items', 'itemgrid');
       // add item button
       $this->fldadditem = $this->AddField(
-        'additem', new formbuilderbutton('additem', 'Add Item'));
+        'additem', new \dana\formbuilder\formbuilderbutton('additem', 'Add Item'));
       $url = $_SERVER['PHP_SELF'] . "?in=IDNAME_RESOURCES_NEWSLETTERITEMS&amp;pid={$this->itemid}&amp;act=" . workerbase::ACT_NEW;
       $this->fldadditem->url = $url;
       $this->AssignFieldToSection('items', 'additem');

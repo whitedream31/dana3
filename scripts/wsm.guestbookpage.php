@@ -1,5 +1,8 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
+
 /*
 guestbook page
   main content: guestbook viewer
@@ -13,12 +16,17 @@ guestbook page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager guestbook page class
+  * @version dana framework v.3
+*/
+
 class wsm_guestbookpage extends websitemanager {
 
   protected function GetPageType() {
     require_once $this->sourcepath . DIRECTORY_SEPARATOR . 'class.table.pageguestbook.php';
     $this->page = new pageguestbook($this->pageid);
-    return PAGETYPE_GUESTBOOK;
+    return page::PAGETYPE_GUESTBOOK;
   }
 
   private function DoGuestBookMainContent($groupid) {
@@ -26,7 +34,7 @@ class wsm_guestbookpage extends websitemanager {
     $guestbook = new guestbook($groupid);
     if ($guestbook->exists) {
       $entrylist = guestbookentry::GetList($groupid);
-      $guestbookheading = $guestbook->GetFieldValue(basetable::FN_DESCRIPTION);
+      $guestbookheading = $guestbook->GetFieldValue(\dana\table\basetable::FN_DESCRIPTION);
       if (!$guestbookheading) {
         $guestbookheading = 'Guest Book';
       }

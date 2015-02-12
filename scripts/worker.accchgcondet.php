@@ -1,5 +1,6 @@
 <?php
-//ctfi
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildereditbox.php';
@@ -10,11 +11,9 @@ require_once 'class.formbuildercheckbox.php';
 require_once 'class.formbuilderemail.php';
 
 /**
-  * base activity worker
-  * dana framework v.3
+  * worker account change contact details class
+  * @version dana framework v.3
 */
-
-// account change org details
 
 class workeraccchgcondet extends workerform {
   protected $contact;
@@ -45,49 +44,50 @@ class workeraccchgcondet extends workerform {
 
     // contact name
     $this->contacttitle = $this->AddField(
-      'contacttitle', new formbuildereditbox('title', '', 'Title <small>(Mr/Mrs/Miss/Ms etc)</small>'),
+      'contacttitle', new \dana\formbuilder\formbuildereditbox('title', '', 'Title <small>(Mr/Mrs/Miss/Ms etc)</small>'),
       $this->contact);
     $this->contactfirstname = $this->AddField(
-      'contactfirstname', new formbuildereditbox('firstname', '', 'Your first name'), $this->contact);
+      'contactfirstname', new \dana\formbuilder\formbuildereditbox('firstname', '', 'Your first name'), $this->contact);
     $this->contactlastname = $this->AddField(
-      'contactlastname', new formbuildereditbox('lastname', '', 'Your last name'), $this->contact);
+      'contactlastname', new \dana\formbuilder\formbuildereditbox('lastname', '', 'Your last name'), $this->contact);
     $this->displayname = $this->AddField(
-      'displayname', new formbuildereditbox('displayname', '', 'Friendly name'), $this->contact);
+      'displayname', new \dana\formbuilder\formbuildereditbox('displayname', '', 'Friendly name'), $this->contact);
     $this->position = $this->AddField(
-      'position', new formbuildereditbox('position', '', 'Your job title'), $this->contact);
+      'position', new \dana\formbuilder\formbuildereditbox('position', '', 'Your job title'), $this->contact);
     // main address
     $this->address = $this->AddField(
-      'address', new formbuildertextarea('address', '', 'Name/Number and street name'), $this->contact);
+      'address', new \dana\formbuilder\formbuildertextarea('address', '', 'Name/Number and street name'), $this->contact);
     $this->town = $this->AddField(
-      'town', new formbuildereditbox('town', '', 'Name of your town or city'), $this->contact);
+      'town', new \dana\formbuilder\formbuildereditbox('town', '', 'Name of your town or city'), $this->contact);
     $this->countyid = $this->AddField(
-      'countyid', new formbuilderselect('countyid', '', 'Name of your county'), $this->contact);
-    $countylist = database::RetrieveLookupList(
-      'county', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID, "`countryid` = 2");
+      'countyid', new \dana\formbuilder\formbuilderselect('countyid', '', 'Name of your county'), $this->contact);
+    $countylist = \dana\core\database::RetrieveLookupList(
+      'county', \dana\table\basetable::FN_DESCRIPTION, \dana\table\basetable::FN_REF,
+      \dana\table\basetable::FN_ID, "`countryid` = 2");
     foreach($countylist as $countyid => $countydescription) {
       $this->countyid->AddValue($countyid, $countydescription);
     }
     $this->postcode = $this->AddField(
-      'postcode', new formbuildereditbox('postcode', '', 'Post code'), $this->contact);
+      'postcode', new \dana\formbuilder\formbuildereditbox('postcode', '', 'Post code'), $this->contact);
 
     // contact telephones & email
     $this->telephone = $this->AddField(
-      'telephone', new formbuildertelephone('telephone', '', 'Main telephone number'), $this->contact);
+      'telephone', new \dana\formbuilder\formbuildertelephone('telephone', '', 'Main telephone number'), $this->contact);
     $this->telephone2 = $this->AddField(
-      'telephone2', new formbuildertelephone('telephone2', '', 'Second-line telephone'), $this->contact);
+      'telephone2', new \dana\formbuilder\formbuildertelephone('telephone2', '', 'Second-line telephone'), $this->contact);
     $this->telephone3 = $this->AddField(
-      'telephone3', new formbuildertelephone('telephone3', '', 'Third-line telephone'), $this->contact);
+      'telephone3', new \dana\formbuilder\formbuildertelephone('telephone3', '', 'Third-line telephone'), $this->contact);
     $this->mobile = $this->AddField(
-      'mobile', new formbuildertelephone('mobile', '', 'Mobile number'), $this->contact);
+      'mobile', new \dana\formbuilder\formbuildertelephone('mobile', '', 'Mobile number'), $this->contact);
     $this->fax = $this->AddField(
-      'fax', new formbuildertelephone('fax', '', 'Fax number'), $this->contact);
+      'fax', new \dana\formbuilder\formbuildertelephone('fax', '', 'Fax number'), $this->contact);
     $this->email = $this->AddField(
-      'email', new formbuilderemail('email', '', 'Primary e-mail address'), $this->contact);
+      'email', new \dana\formbuilder\formbuilderemail('email', '', 'Primary e-mail address'), $this->contact);
     // misc
     $this->onlineonly = $this->AddField(
-      'onlineonly', new formbuildercheckbox('onlineonly', '', 'Online only?'), $this->contact);
+      'onlineonly', new \dana\formbuilder\formbuildercheckbox('onlineonly', '', 'Online only?'), $this->contact);
     $this->newsletter = $this->AddField(
-      'newsletter', new formbuildercheckbox('newsletter', '', 'Subscribe to newsletter?'), $this->contact);
+      'newsletter', new \dana\formbuilder\formbuildercheckbox('newsletter', '', 'Subscribe to newsletter?'), $this->contact);
   }
 
   protected function PostFields() {
@@ -210,4 +210,4 @@ class workeraccchgcondet extends workerform {
 
 }
 
-$worker = new workeraccchgcondet();
+$worker = new \dana\worker\workeraccchgcondet();

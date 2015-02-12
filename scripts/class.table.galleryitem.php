@@ -1,9 +1,16 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 //require_once('class.table.gallerycomment.php');
 
-// gallery item table
+/**
+  * gallery item table
+  * @version dana framework v.3
+*/
+
 class galleryitem extends idtable {
   public $commentsloaded;
   public $comments;
@@ -29,7 +36,7 @@ class galleryitem extends idtable {
   public function PopulateComments() {
     $this->comments = array();
     $query = 'SELECT `id` FROM `gallerycomments` ORDER BY `datestamp`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new gallerycomment($id);
@@ -56,7 +63,7 @@ class galleryitem extends idtable {
         "<img src='{$smallurl}' alt='{$title}' />" .
       "</a>";
     $ret['desc'] = ($incdesc) ? $this->GetFieldValue('description') : false;
-    return $ret;    
+    return $ret;
   }
 
   public function BuildItem($incdesc) {

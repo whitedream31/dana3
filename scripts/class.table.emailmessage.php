@@ -1,6 +1,15 @@
 <?php
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 require_once 'class.table.placeholder.php';
+
+/**
+  * email message table
+  * @version dana framework v.3
+*/
 
 class emailmessage extends lookuptable {
   const PLACEHOLDER_START = '[%';

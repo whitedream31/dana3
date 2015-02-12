@@ -1,10 +1,14 @@
 <?php
-// history management class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2010 Whitedream Software
-// created: 15 dec 2010
-// modified: 6 may 2014
+namespace dana\table;
+
+use dana\core;
 
 require_once 'class.basetable.php';
+
+/**
+  * history table - keep track of major events the account holder does
+  * @version dana framework v.3
+*/
 
 class history extends idtable {
 //  const HIST_CONTACTMSG = 'cont';
@@ -28,7 +32,7 @@ class history extends idtable {
 
   private function CountHistory($accountid) {
     $query = "SELECT COUNT(*) AS cnt FROM `history` WHERE `accountid` = '{$accountid}'";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $cnt = $line['cnt'];
     $result->free();
@@ -41,7 +45,7 @@ class history extends idtable {
     $query =
       "SELECT `id` FROM `history` WHERE `accountid` = '{$accountid}' " .
       "ORDER BY `datestamp` ASC";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $list[] = $id;

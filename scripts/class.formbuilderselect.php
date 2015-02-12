@@ -1,17 +1,20 @@
 <?php
+namespace dana\formbuilder;
+
 require_once 'class.formbuildermultivalue.php';
 
 /**
- * select field - FLDTYPE_SELECT
- * part of the formbuilder class set
- */
+  * select field - FLDTYPE_SELECT
+  * @version dana framework v.3
+*/
+
 class formbuilderselect extends formbuildermultivalue {
   public $size;
   public $includenone = false;
   public $nonecaption = 'None';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_SELECT, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_SELECT, $label);
   }
 
   public function SetNoneCaption($value) {

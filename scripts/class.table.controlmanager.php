@@ -1,46 +1,26 @@
 <?php
+namespace dana\activity;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//use dana\core, dana\table;
 
-require_once 'class.table.controlitem.php';
+require_once 'class.basetable.php';
 
 /**
- * Description of class
- *
- * @author ians
- */
-class controlmanager extends idtable {
-  const SESSION_ACTIVEITEMID = 'in';
+  * control manager for the control page - uses the activity manager class
+  * @version dana framework v.3
+*/
 
-//  const CM_ACCMGT_SUMMARY = 'CM_ACCMGT_SUMMARY';
-//  const CM_ACCMGT_BUSINESS = 'CM_ACCMGT_BUSINESS';
-//  const CM_ACCMGT_CONTACT = 'CM_ACCMGT_CONTACT';
-//  const CM_ACCMGT_AREASCOVERED = 'CM_ACCMGT_AREASCOVERED';
-//  const CM_ACCMGT_HOURS = 'CM_ACCMGT_HOURS';
-//  const CM_ACCMGT_PASSWORD = 'CM_ACCMGT_PASSWORD';
-//  const CM_PAGES_SUMMARY = 'CM_PAGES_SUMMARY';
-//  const CM_PAGES_NEWPAGE = 'CM_PAGES_NEWPAGE';
-//  const CM_PAGES_CHANGETHEME = 'CM_PAGES_CHANGETHEME';
-//  const CM_RESOURCES_SUMMARY = 'CM_RESOURCES_SUMMARY';
-//  const CM_RESOURCES_GALLERIES = 'CM_RESOURCES_GALLERIES';
-//  const CM_RESOURCES_NEWSLETTERS = 'CM_RESOURCES_NEWSLETTERS';
-//  const CM_RESOURCES_GUESTBOOKS = 'CM_RESOURCES_GUESTBOOKS';
-//  const CM_RESOURCES_BOOKINGS = 'CM_RESOURCES_BOOKINGS';
-//  const CM_RESOURCES_PRIVATEAREAS = 'CM_RESOURCES_PRIVATEAREAS';
-//  const CM_RESOURCES_CALENDAR = 'CM_RESOURCES_CALENDAR';
-//  const CM_RESOURCES_ARTICLES = 'CM_RESOURCES_ARTICLES';
-//  const CM_RESOURCES_RATINGS = 'CM_RESOURCES_RATINGS';
+//require_once 'class.table.controlitem.php';
+
+class controlmanager extends \dana\table\idtable {
+  const SESSION_ACTIVEITEMID = 'in';
 
   static public $instance;
   static public $list = array();
   static public $activeactionname;
   static public $currentidname;
   static public $activitymanager;
-  
+
   function __construct($id = 0) {
     parent::__construct('controlmanager', $id);
     if (isset($_GET[self::SESSION_ACTIVEITEMID])) {
@@ -78,10 +58,10 @@ class controlmanager extends idtable {
 
   static public function PopulateItems() {
     self::$list = array();
-    $status = basetable::STATUS_ACTIVE;
+    $status = \dana\table\basetable::STATUS_ACTIVE;
     $query = "SELECT * FROM `controlitem` " .
       "WHERE `status` = '{$status}' ORDER BY `position`";
-    $resource = database::Query($query);
+    $resource = \dana\core\database::Query($query);
     while ($line = $resource->fetch_assoc()) {
       $id = $line['id'];
       $title = $line['title'];
@@ -101,7 +81,7 @@ class controlmanager extends idtable {
   }
 
   static public function ShowUserStatus() {
-    $account = account::$instance;
+    $account = \dana\table\account::$instance;
     if ($account->exists) {
       $username = $account->Contact()->GetFieldValue('username');
       $displayname = $account->Contact()->displayname;

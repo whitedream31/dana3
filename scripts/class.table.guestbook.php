@@ -1,8 +1,16 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
+require_once 'class.basetable.php';
 require_once 'class.table.page.php';
 
-// guestbook
+/**
+  * guestbook table
+  * @version dana framework v.3
+*/
+
 class guestbook extends idtable {
 
   protected $entries;
@@ -14,20 +22,20 @@ class guestbook extends idtable {
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField(basetable::FN_ACCOUNTID, self::DT_FK);
-    $this->Addfield(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
+    $this->AddField(\dana\table\basetable::FN_ACCOUNTID, self::DT_FK);
+    $this->Addfield(\dana\table\basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
     $this->AddField('generalmessage', self::DT_TEXT);
     $this->AddField('registermessage', self::DT_TEXT);
     $this->AddField('thankyoumessage', self::DT_TEXT);
     $this->AddField('canregister', self::DT_BOOLEAN);
     $this->AddField('registeredonly', self::DT_BOOLEAN);
     $this->AddField('authorise', self::DT_BOOLEAN);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AssignDefaultFieldValues() {
-    $this->SetFieldValue(basetable::FN_DESCRIPTION, 'Guest Book');
-    $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_ACTIVE);
+    $this->SetFieldValue(\dana\table\basetable::FN_DESCRIPTION, 'Guest Book');
+    $this->SetFieldValue(\dana\table\basetable::FN_STATUS, self::STATUS_ACTIVE);
   }
 
   protected function LoadEntries() {
@@ -37,14 +45,14 @@ class guestbook extends idtable {
   }
 
   public function CountItems() {
-    $id = (int) $this->GetFieldValue(basetable::FN_ACCOUNTID);
-    $cnt = database::$instance->CountRows('guestbook', "`accountid` = {$id} AND `status` = 'A'");
+    $id = (int) $this->GetFieldValue(\dana\table\basetable::FN_ACCOUNTID);
+    $cnt = \dana\core\database::$instance->CountRows('guestbook', "`accountid` = {$id} AND `status` = 'A'");
     return $cnt;
   }
 
   public function CountEntries() {
     $id = $this->ID();
-    $cnt = database::$instance->CountRows('guestbookentry', "`guestbookid` = {$id} AND `status` = 'A'");
+    $cnt = \dana\core\database::$instance->CountRows('guestbookentry', "`guestbookid` = {$id} AND `status` = 'A'");
     return $cnt;
   }
 
@@ -63,7 +71,7 @@ class guestbook extends idtable {
     $ret = array();
     $query = 'SELECT `id` FROM `guestbook` ' .
       "WHERE `accountid` = {$accountid} AND `status` = 'A' ORDER BY `id`";
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new guestbook($id);
@@ -89,15 +97,16 @@ class guestbook extends idtable {
       'FROM `guestbook` g ' .
       "WHERE g.`accountid` = {$accountid} AND `status` = '{$status}' " .
       'ORDER BY g.`description`';
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
-      $description = ($line[basetable::FN_DESCRIPTION]) ? $line[basetable::FN_DESCRIPTION] : '<em>none</em>';
+      $description = ($line[\dana\table\basetable::FN_DESCRIPTION])
+        ? $line[\dana\table\basetable::FN_DESCRIPTION] : '<em>none</em>';
       $coldata = array(
         'DESC' => $description,
-        'COUNT' => $line['entrycount']
+        'COUNT' => CountToString($line['entrycount'], 'comment', '<em>no comments</em>')
       );
       $datagrid->AddRow($id, $coldata, true, $actions);
     }

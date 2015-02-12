@@ -1,11 +1,15 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuildereditbox.php';
 
-//define('DATEFMT_DMY', 'dmy');
-//define('DATEFMT_MDY', 'mdy');
-//define('DATEFMT_YMD', 'ymd');
+/**
+  * date field - FLDTYPE_DATE - detrieved from edit box
+  * @version dana framework v.3
+*/
 
-// date field - FLDTYPE_DATE - detrieved from edit box
 class formbuilderdate extends formbuildereditbox {
   const DATEFMT_DMY = 'dmy';
   const DATEFMT_MDY = 'mdy';
@@ -17,7 +21,7 @@ class formbuilderdate extends formbuildereditbox {
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = basetable::FLDTYPE_DATE;
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_DATE;
     $this->size = 10;
     $this->maxlength = 10;
     $this->classname = 'datepicker';
@@ -45,7 +49,7 @@ class formbuilderdate extends formbuildereditbox {
         $date = time();
       }
     }
-    catch (Exception $e) {
+    catch (\Exception $e) {
       $date = time();
     }
     return date($this->DateTypeToDateFormat($this->outputformat), $date);

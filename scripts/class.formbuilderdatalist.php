@@ -1,4 +1,12 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
+/**
+  * datalist field - FLDTYPE_DATALIST - custom control showing a table of values
+  * @version dana framework v.3
+*/
 
 class formbuilderdatalist extends formbuilderbase {
   protected $idname;
@@ -9,7 +17,7 @@ class formbuilderdatalist extends formbuilderbase {
   protected $rowcount;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_DATALIST, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_DATALIST, $label);
   }
 
   public function SetIDName($idname) {

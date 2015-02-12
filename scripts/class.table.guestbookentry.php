@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// guestbook visitor entry
+/**
+  * guestbook entry table - visitor comments linked to a guestbook
+  * @version dana framework v.3
+*/
+
 class guestbookentry extends idtable {
   public $list;
   public $datedescription;
@@ -28,7 +35,7 @@ class guestbookentry extends idtable {
     $this->AddField('content', self::DT_TEXT);
     $this->AddField('sendername', self::DT_STRING);
     $this->AddField('datestamp', self::DT_DATETIME);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {
@@ -47,7 +54,7 @@ class guestbookentry extends idtable {
   public function StatusAsString($status = false) {
     $ret = '';
 //    $status = $this->GetFieldValue(FN_STATUS);
-    $status = ($status) ? $status : $this->GetFieldValue(basetable::FN_STATUS);
+    $status = ($status) ? $status : $this->GetFieldValue(\dana\table\basetable::FN_STATUS);
     if ($status) {
       switch ($status) {
         case self::STATUS_ACTIVE:
@@ -70,7 +77,7 @@ class guestbookentry extends idtable {
   static public function GetList($groupid) {
     $ret = array();
     $status = self::STATUS_ACTIVE;
-    $result = database::$instance->Query(
+    $result = \dana\core\database::$instance->Query(
       'SELECT `id` FROM guestbookentry ' .
       "WHERE `guestbookid` = {$groupid} AND `status` = '{$status}' " .
       'ORDER BY `datestamp` DESC');

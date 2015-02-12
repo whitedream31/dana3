@@ -1,7 +1,10 @@
 <?php
+namespace dana\worker;
+
 /**
+  * worker form class
   * abstract class for encapsulating all activity form fields
-  * dana framework v.3
+  * @version dana framework v.3
 */
 
 abstract class workerform extends workerbase { // activitybase {
@@ -37,7 +40,7 @@ abstract class workerform extends workerbase { // activitybase {
 
   function __construct() {
     parent::__construct();
-    $this->account = account::$instance;
+    $this->account = \dana\table\account::$instance;
     $this->itemid = GetGet('rid', GetPost('rid'));
     $this->groupid = GetGet('pid', GetPost('pid'));
     $this->action = GetGet('act', GetPost('act'));
@@ -68,7 +71,7 @@ abstract class workerform extends workerbase { // activitybase {
   }
 
   protected function AssignIfBlank($fld, $value) {
-    if ($fld instanceof formbuilderbase && $this->table instanceof basetable) {
+    if ($fld instanceof \dana\formbuilder\formbuilderbase && $this->table instanceof \dana\table\basetable) {
       if (!trim($fld->value)) {
         $this->table->SetFieldValue($fld->name, $value);
       }
@@ -84,7 +87,7 @@ abstract class workerform extends workerbase { // activitybase {
         "GROUPID: {$this->groupid}<br>" .
         "SHOWROOT: {$this->showroot}<br>" .
         "RETURNIDNAME: {$this->returnidname}<br>" .
-      "</pre>\n";      
+      "</pre>\n";
   }
 
   protected function DoEditor() {
@@ -124,28 +127,28 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
       $this->AssignFieldDisplayProperties();
     } else {
       switch ($action) {
-        case workerbase::ACT_EDIT:
+        case \dana\worker\workerbase::ACT_EDIT:
           $this->DoEditor();
           break;
-        case workerbase::ACT_NEW:
+        case \dana\worker\workerbase::ACT_NEW:
           $this->DoNewItem();
           break;
-        case workerbase::ACT_REMOVE:
+        case \dana\worker\workerbase::ACT_REMOVE:
           $this->DoRemoveItem();
           break;
-        case workerbase::ACT_CONFIRM:
+        case \dana\worker\workerbase::ACT_CONFIRM:
           $this->DoConfirm();
           break;
-        case workerbase::ACT_VISTOGGLE:
+        case \dana\worker\workerbase::ACT_VISTOGGLE:
           $this->DoToggleVisibility();
           break;
-        case workerbase::ACT_MOVEDOWN:
+        case \dana\worker\workerbase::ACT_MOVEDOWN:
           $this->DoMoveItemDown();
           break;
-        case workerbase::ACT_MOVEUP:
+        case \dana\worker\workerbase::ACT_MOVEUP:
           $this->DoMoveItemup();
           break;
-        case workerbase::ACT_NLSEND:
+        case \dana\worker\workerbase::ACT_NLSEND:
           $this->DoNewsletterSend();
           break;
       }
@@ -155,7 +158,7 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
   protected function Notify($postsucceeded) {}
 
   protected function AssignBlankFieldvalue($fld, $value) {
-    if ($fld && ($fld instanceof formbuilderbase) && (!$fld->value)) {
+    if ($fld && ($fld instanceof \dana\formbuilder\formbuilderbase) && (!$fld->value)) {
       $fld->SetValue($value);
     }
   }
@@ -174,7 +177,7 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
         unset($_GET[$gkey]);
       }
     }
-    $ret = ($table instanceof basetable) ? (int) $table->StoreChanges() : 0;
+    $ret = ($table instanceof \dana\table\basetable) ? (int) $table->StoreChanges() : 0;
     $this->itemid = $this->groupid;
     $this->groupid = false;
     $this->action = false;
@@ -186,7 +189,7 @@ echo "<p>NLSEND: {$this->itemid}</p>\n"; exit;
   public function Execute() {
 //$this->ShowDebugInfo();
     if ($this->posting) {
-      if (($this->action == workerbase::ACT_EDIT) || ($this->action == workerbase::ACT_NEW)) {
+      if (($this->action == \dana\worker\workerbase::ACT_EDIT) || ($this->action == \dana\worker\workerbase::ACT_NEW)) {
         $this->CheckForBlankValues();
       }
       if (!$this->PostFields() && $this->IsValid()) {
@@ -283,15 +286,15 @@ $this->ProcessAction($this->action);
   }
 
   public function AddField($fieldkey, $item, $table = false) {
-    if ($item instanceof formbuilderbase) {
-      $control = new workerformfieldcontrol();
+    if ($item instanceof \dana\formbuilder\formbuilderbase) {
+      $control = new \dana\worker\workerformfieldcontrol();
       $control->SetControl($item);
       $this->fieldlist[$fieldkey] = $control;
       if ($table) {
         $control->BindControl($table);
       }
     } else {
-      throw new Exception("Item {$fieldkey} is not a worker form field");
+      throw new \Exception("Item {$fieldkey} is not a worker form field");
     }
     return $item;
   }
@@ -301,12 +304,12 @@ $this->ProcessAction($this->action);
       $item = $this->fieldlist[$fieldkey];
       $this->sections[$sectionkey]['list'][] = $item;
     } else {
-      throw new Exception("Form field not found: {$fieldkey}");
+      throw new \Exception("Form field not found: {$fieldkey}");
     }
   }
 
   protected function GetTargetNameFromMedia($mediaid) {
-    $media = new media($mediaid);
+    $media = new \dana\table\media($mediaid);
     if ($media->exists) {
       $ret = array(
         'imgname' => $media->GetFieldValue('imgname'),
@@ -344,7 +347,7 @@ $this->ProcessAction($this->action);
     $this->AddHiddenField('accountid', $this->account->ID());
     $ret = array();
     foreach($this->hiddenfields as $fieldkey => $fieldvalue) {
-      $fld = new formbuilderhidden($fieldkey, $fieldvalue);
+      $fld = new \dana\formbuilder\formbuilderhidden($fieldkey, $fieldvalue);
       $ret[] = $fld->Show();
     }
     return $ret;
@@ -357,12 +360,12 @@ $this->ProcessAction($this->action);
     $ret[] = "  <h2 class='activitygroup'>{$img}{$this->title}</h2>";
     $ret[] =
       "  <form name=\"frm-{$this->idname}\" id=\"{$this->idname}\"" .
-        formbuilderbase::IncludeAttribute('action', $this->formaction) .
-        formbuilderbase::IncludeAttribute('method', $this->formmethod) .
-        formbuilderbase::IncludeAttribute('enctype', $this->formenctype) .
-        formbuilderbase::IncludeAttribute('target', $this->formtarget) .
-        formbuilderbase::IncludeAttribute('title', $this->formtitle) .
-        formbuilderbase::IncludeAttribute('class', $this->formclass) .
+      \dana\formbuilder\formbuilderbase::IncludeAttribute('action', $this->formaction) .
+      \dana\formbuilder\formbuilderbase::IncludeAttribute('method', $this->formmethod) .
+      \dana\formbuilder\formbuilderbase::IncludeAttribute('enctype', $this->formenctype) .
+      \dana\formbuilder\formbuilderbase::IncludeAttribute('target', $this->formtarget) .
+      \dana\formbuilder\formbuilderbase::IncludeAttribute('title', $this->formtitle) .
+      \dana\formbuilder\formbuilderbase::IncludeAttribute('class', $this->formclass) .
       ">\n";
     $ret[] = "    <p class='activitygroupdescription'>{$this->activitydescription}<p>";
     foreach($this->sections as $section) {
@@ -413,5 +416,9 @@ $this->ProcessAction($this->action);
 
   public function Show() {
     echo ArrayToString($this->AsArray());
+  }
+
+  protected function AccountID() {
+    return $this->account->ID();
   }
 }

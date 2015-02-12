@@ -1,4 +1,6 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
 
 // website manage for GENERAL PAGE
@@ -17,13 +19,18 @@ general page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager general page class
+  * @version dana framework v.3
+*/
+
 class wsm_generalpage extends websitemanager {
   private $gengalleryid;
 
   protected function GetPageType() {
     require_once $this->sourcepath . DIRECTORY_SEPARATOR . 'class.table.pagegeneral.php';
     $this->page = new pagegeneral($this->pageid);
-    return PAGETYPE_GENERAL;
+    return page::PAGETYPE_GENERAL;
   }
 
   protected function DoGallerySlideShow() {

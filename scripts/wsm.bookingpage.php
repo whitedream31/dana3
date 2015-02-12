@@ -1,4 +1,6 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
 /*
 booking page
@@ -13,10 +15,15 @@ booking page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager booking page class
+  * @version dana framework v.3
+*/
+
 class wms_bookingpage extends websitemanager {
 
   protected function GetPageType() {
-    return PAGETYPE_BOOKING;
+    return page::PAGETYPE_BOOKING;
   }
 
   private function DoBookings() {

@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
-require_once 'class.table.page.php';
+namespace dana\table;
 
-// private area member class
+//use dana\core;
+
+require_once 'class.basetable.php';
+
+/**
+  * private area member table
+  * @version dana framework v.3
+*/
+
 class privateareamember extends idtable {
 
   public $startdatedescription;
@@ -44,7 +51,7 @@ class privateareamember extends idtable {
       'SELECT pam.`id` FROM `privateareamember` pam ' .
       'INNER JOIN `privatemember` pm ON pm.`privateareamemberid` = pam.`id` ' .
       "WHERE pm.`privateareaid` = {$groupid} AND pam.`status` = '{$status}' AND pm.`status` = '{$status}' ORDER BY pam.`username`";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new privateareamember($id);

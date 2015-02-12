@@ -1,14 +1,17 @@
 <?php
-// theme container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 3 dec 2012
-// modified: 29 jul 2014
+namespace dana\table;
+
+//use dana\core;
 
 require_once 'class.basetable.php';
 
-//require_once('library.php');
+/**
+  * theme table
+  * created: 3 dec 2012
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
 
-// theme table class
 class theme extends idtable {
 //  const THEME_SIMPLE = 1;
 //  const THEME_COMMON = 2;
@@ -22,16 +25,14 @@ class theme extends idtable {
   public $url;
   public $suitability;
 
-//  public $exists;
-
   function __construct($id = 0) {
     parent::__construct('theme', $id);
   }
 
   protected function AssignFields() {
     parent::AssignFields();
-    $this->AddField(basetable::FN_REF, self::DT_REF);
-    $this->AddField(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
+    $this->AddField(\dana\table\basetable::FN_REF, self::DT_REF);
+    $this->AddField(\dana\table\basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
     $this->AddField('url', self::DT_STRING);
     $this->AddField('suitability', self::DT_INTEGER);
     $this->AddField('pagewidth', self::DT_INTEGER);
@@ -40,15 +41,15 @@ class theme extends idtable {
   }
 
   protected function AfterPopulateFields() {
-    $this->ref = $this->GetFieldValue(basetable::FN_REF);
-    $this->description = $this->GetFieldValue(basetable::FN_DESCRIPTION);
+    $this->ref = $this->GetFieldValue(\dana\table\basetable::FN_REF);
+    $this->description = $this->GetFieldValue(\dana\table\basetable::FN_DESCRIPTION);
     $this->url = $this->GetFieldValue('url');
     $this->suitability = $this->GetFieldValue('suitability');
   }
 
   public function FindThemes($suitability) {
     $query = "SELECT `id` FROM `theme` WHERE `suitability` = '{$suitability}' ORDER BY `ref`";
-    $ret = database::PopulateList($query);
+    $ret = \dana\core\database::PopulateList($query);
     return $ret;
   }
 

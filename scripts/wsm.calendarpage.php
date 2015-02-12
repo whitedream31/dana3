@@ -1,4 +1,6 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
 /*
 calendar page
@@ -13,10 +15,15 @@ calendar page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager calendar page class
+  * @version dana framework v.3
+*/
+
 class wms_calendarpage extends websitemanager {
 
   protected function GetPageType() {
-    return PAGETYPE_CALENDAR;
+    return page::PAGETYPE_CALENDAR;
   }
 
   protected function GetMainContent($pgtype, $groupid) {

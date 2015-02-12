@@ -1,49 +1,16 @@
 <?php
+namespace dana\table;
+
 /**
   * base table classes for all tables used by dana framework
   * modified: 10 jun 2014
   * @version  2.0 for dana3
 */
 
-/*
-function __autoload($classname) {
-  $file = "class.{$classname}.php";
-  if (file_exists($file)) {
-    include $file;
-  } else {
-    $file = "class.table.{$classname}.php";
-    if (file_exists($file)) {
-      include $file;
-    } else {
-      throw new Exception("Class '{$classname}' not found");
-    }
-  }
-} */
+//use dana\core;
 
 require_once 'define.php';
 require_once 'class.database.php';
-
-//define('FA_VALUE', 'value');
-//define('FA_NAME', 'name');
-//define('FA_DATATYPE', 'dt');
-//define('FA_MODIFIED', 'md');
-//define('FA_FORMDETAILS', 'fd'); // true - form details assigned (appears in form for editing)
-//define('FA_FIELDTYPE', 'ft');
-//define('FA_LABEL', 'lbl');
-//define('FA_DESCRIPTION', 'desc');
-//define('FA_REQUIRED', 'required');
-//define('FA_DEFAULT', 'default');*/
-
-//define('FN_ID', 'id');
-//define('FN_REF', 'ref');
-//define('FN_DESCRIPTION', 'description');
-//define('FN_TAG', 'tag');
-//define('FN_STATUS', 'status');
-//define('FN_VISIBLE', 'visible');
-//define('FN_ACCOUNTID', 'accountid');
-
-//define('STORERESULT_INSERT', -2);
-//define('STORERESULT_ERROR', -1);
 
 /**
   * base class for all table related classes
@@ -82,6 +49,7 @@ abstract class basetable {
 
   const DF_SHORTDATE = 'sd';
   const DF_SHORTDATETIME = 'sdt';
+  const DF_LONGDATE = 'ld';
   const DF_LONGDATETIME = 'ldt';
   const DF_MEDIUMDATETIME = 'mdt';
   const DF_MEDIUMDATE = 'md';
@@ -460,12 +428,12 @@ abstract class basetable {
         $cnt = self::STORERESULT_INSERT; //-2;
       }
       try {
-        database::Query($query);
+        \dana\core\database::Query($query);
         if (!$this->exists) {
           $this->lastinsertid = $this->UpdateKey();
           $this->exists = true; // exists now
         }
-      } catch (Exception $e) {
+      } catch (\Exception $e) {
         $this->lasterror = array(
           'code' => $e->getCode(),
           'msg' => $e->getMessage()
@@ -553,6 +521,9 @@ abstract class basetable {
     if ($value) {
       $time = (is_string($value)) ? strtotime($value) : $value;
       switch ($formattype) {
+        case self::DF_LONGDATE:
+          $ret = date('l, j F Y', $time);
+          break;
         case self::DF_LONGDATETIME:
           $ret = date('D, jS F Y h:i a', $time);
           break;
@@ -657,7 +628,7 @@ abstract class basetable {
    * @return bool
      */
   public function FindByField($fieldname, $value, $exists = true) {
-    $line = database::SelectFromTableByField($this->tablename, $fieldname, $value);
+    $line = \dana\core\database::SelectFromTableByField($this->tablename, $fieldname, $value);
     if ($exists) {
       $this->exists = !($line === false);
       $ret = $this->exists;
@@ -786,7 +757,7 @@ abstract class idtable extends basetable {
   }
 
   protected function UpdateKey() {
-    $ret = database::LastInsertID();
+    $ret = \dana\core\database::LastInsertID();
     $this->SetFieldValue(self::FN_ID, $ret);
     return $ret;
   }
@@ -827,7 +798,7 @@ abstract class linktable extends basetable {
 
   protected function FindByKey($value1, $value2) {
     $sql = 'SELECT * FROM `' . $this->tablename . '` WHERE `' . $this->id1name . '` = "' . $value1 . '" AND `' . $this->id2name . '` = "' . $value2 . '"';
-    $result = database::Query($sql);
+    $result = \dana\core\database::Query($sql);
     $line = $result->fetch_assoc();
     $result->free();
     $this->exists = ($line !== false);
@@ -871,7 +842,7 @@ abstract class tagtable extends basetable {
   }
 
   public function FindByTag($value) {
-    $line = database::SelectFromTableByField($this->tablename, $this->idname, $value);
+    $line = \dana\core\database::SelectFromTableByField($this->tablename, $this->idname, $value);
     $this->exists = ($line !== false);
     if ($this->exists) {
       $this->exists = true;
@@ -901,7 +872,7 @@ abstract class tagtable extends basetable {
 
   protected function BuildTagList() {
     $this->taglist = array();
-    $result = database::Query("SELECT COUNT(`tag`) AS cnt, `tag` FROM `{$this->tablename}` GROUP BY `tag`");
+    $result = \dana\core\database::Query("SELECT COUNT(`tag`) AS cnt, `tag` FROM `{$this->tablename}` GROUP BY `tag`");
     while ($line = $result->fetch_assoc()) {
       $cnt = $line['cnt'];
       $tag = $line['tag'];

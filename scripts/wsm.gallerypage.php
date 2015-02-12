@@ -1,4 +1,6 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
 /*
 gallery page
@@ -13,12 +15,17 @@ gallery page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager gallery page class
+  * @version dana framework v.3
+*/
+
 class wsm_gallerypage extends websitemanager {
 
   protected function GetPageType() {
     require_once $this->sourcepath . DIRECTORY_SEPARATOR . 'class.table.pagegallery.php';
     $this->page = new pagegallery($this->pageid);
-    return PAGETYPE_GALLERY;
+    return page::PAGETYPE_GALLERY;
   }
 
   private function WriteGalleryPrepareCode() {

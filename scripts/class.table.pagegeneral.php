@@ -1,12 +1,18 @@
 <?php
-// GENERAL page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 8 dec 2012 (originally 7 apr 2010)
-// modified: 23 jul 2014
+namespace dana\table;
+
+//use dana\core;
 
 require_once 'class.table.page.php';
 
-// general page class
+/**
+  * page general class - GENERAL
+  * written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 8 dec 2012 (originally 7 apr 2010)
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class pagegeneral extends page {
   protected $fldgallerygroup;
   protected $fldmaincontent;
@@ -26,11 +32,11 @@ class pagegeneral extends page {
   protected function InitFieldsForMainContent($worker) {
     parent::InitFieldsForMainContent($worker);
     $this->fldmaincontent = $worker->AddField(
-      'maincontent', new formbuildertextarea('maincontent', '', 'Main Content'), $this);
+      'maincontent', new \dana\formbuilder\formbuildertextarea('maincontent', '', 'Main Content'), $this);
     // gallery
     $gallerylist = $this->GetGalleryList(true);
     $this->fldgallerygroup = $worker->AddField(
-      'gengalleryid', new formbuilderselect('gengalleryid', '', 'Include a gallery?'), $this);
+      'gengalleryid', new \dana\formbuilder\formbuilderselect('gengalleryid', '', 'Include a gallery?'), $this);
     $groupid = $this->GetFieldValue('gengalleryid');
     $this->fldgallerygroup->AddValue(0, '(no gallery)', $groupid == 0);
     foreach ($gallerylist as $id => $title) {

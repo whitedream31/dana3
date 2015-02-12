@@ -1,7 +1,9 @@
 <?php
+namespace dana\activity;
+
 /**
-  * activity menu item (clickable - add to group)
-  * dana framework v.3
+  * activity menu item (clickable - add to activity group)
+  * @version dana framework v.3
 */
 
 class activitymenuitem extends activitybase {

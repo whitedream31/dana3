@@ -1,8 +1,17 @@
 <?php
-require_once 'class.database.php';
-require_once 'class.table.page.php';
+namespace dana\table;
 
-// private area visitor class
+//use dana\core;
+
+require_once 'class.basetable.php';
+
+/**
+  * private area visitor table
+  * created: 3 dec 2012
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class visitor extends idtable {
 
   public $startdatedescription;
@@ -41,7 +50,7 @@ class visitor extends idtable {
     $ret = array();
     $query = 'SELECT `visitorid` FROM `privatemember` ' .
       "WHERE `privateareaid` = {$groupid} ORDER BY `visitorid`";
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['visitorid'];
       $itm = new visitor($id);
@@ -56,7 +65,7 @@ class visitor extends idtable {
   static public function FindBySession($session) {
     $query = 'SELECT `id` FROM `visitor` ' .
       "WHERE `session` = '{$session}'";
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     $line = $result->fetch_assoc();
     $result->close();
     $id = ($line) ? $line['id'] : 0;

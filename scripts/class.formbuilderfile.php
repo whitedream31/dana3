@@ -1,32 +1,39 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuildereditbox.php';
 
 global $MIME_WEBIMAGES, $MIME_WEBSITE;
 
 // MIME types for uploading
 $MIME_DOCUMENTS = array(
-  'application/msword' => 'doc', 'application/pdf' => 'pdf', 'application/rtf' => 'rtf', 'text/plain' => 'txt',
-  'application/vnd.ms-excel' => 'xls', 'application/vnd.ms-excel' => 'xlw', 'application/vnd.ms-powerpoint' => 'ppt',
-  'application/vnd.ms-project' => 'mpp', 'application/vnd.ms-works' => 'wcm', 'application/vnd.ms-works' => 'wdb',
-  'application/vnd.ms-works' => 'wks', 'application/vnd.ms-works' => 'wps', 'application/x-msmetafile' => 'wmf',
-  'application/x-mswrite' => 'wri'
+  'application/msword' => 'doc', 'application/pdf' => 'pdf', 'application/rtf' => 'rtf',
+  'text/plain' => 'txt', 'application/vnd.ms-excel' => 'xls', 'application/vnd.ms-excel' => 'xlw',
+  'application/vnd.ms-powerpoint' => 'ppt', 'application/vnd.ms-project' => 'mpp',
+  'application/vnd.ms-works' => 'wcm', 'application/vnd.ms-works' => 'wdb',
+  'application/vnd.ms-works' => 'wks', 'application/vnd.ms-works' => 'wps',
+  'application/x-msmetafile' => 'wmf', 'application/x-mswrite' => 'wri'
 );
 $MIME_AUDIO = array(
   'audio/mpeg' => 'mp3', 'audio/x-wav' => 'wav'
 );
 $MIME_IMAGES = array(
-  'image/bmp' => 'bmp', 'image/gif' => 'gif', 'image/jpeg' => 'jpe', 'image/jpeg' => 'jpeg', 'image/jpeg' => 'jpg',
-  'image/pipeg' => 'jfif', 'image/svg+xml' => 'svg', 'image/tiff' => 'tif', 'image/tiff tiff',
-  'image/x-portable-anymap' => 'pnm', 'image/x-portable-bitmap' => 'pbm', 'image/x-portable-graymap' => 'pgm',
-  'image/x-portable-pixmap' => 'ppm', 'image/x-xbitmap' => 'xbm', 'image/x-xpixmap' => 'xpm', 'image/png' => 'png'
+  'image/bmp' => 'bmp', 'image/gif' => 'gif', 'image/jpeg' => 'jpe', 'image/jpeg' => 'jpeg',
+  'image/jpeg' => 'jpg', 'image/pipeg' => 'jfif', 'image/svg+xml' => 'svg', 'image/tiff' => 'tif',
+  'image/tiff tiff', 'image/x-portable-anymap' => 'pnm', 'image/x-portable-bitmap' => 'pbm',
+  'image/x-portable-graymap' => 'pgm', 'image/x-portable-pixmap' => 'ppm',
+  'image/x-xbitmap' => 'xbm', 'image/x-xpixmap' => 'xpm', 'image/png' => 'png'
 );
 $MIME_TEXT = array(
-  'text/css' => 'css', 'text/html' => 'htm', 'text/html' => 'html', 'text/plain' => 'txt', 'text/richtext' => 'rtx',
-  'text/tab-separated-values' => 'tsv'
+  'text/css' => 'css', 'text/html' => 'htm', 'text/html' => 'html', 'text/plain' => 'txt',
+  'text/richtext' => 'rtx', 'text/tab-separated-values' => 'tsv'
 );
 $MIME_VIDEO = array(
-  'video/mpeg' => 'mp2', 'video/mpeg' => 'mpa', 'video/mpeg' => 'mpe', 'video/mpeg' => 'mpeg', 'video/mpeg' => 'mpg',
-  'video/mpeg' => 'mpv2', 'video/quicktime' => 'mov', 'video/quicktime' => 'qt', 'video/x-msvideo' => 'avi'
+  'video/mpeg' => 'mp2', 'video/mpeg' => 'mpa', 'video/mpeg' => 'mpe', 'video/mpeg' => 'mpeg',
+  'video/mpeg' => 'mpg', 'video/mpeg' => 'mpv2', 'video/quicktime' => 'mov',
+  'video/quicktime' => 'qt', 'video/x-msvideo' => 'avi'
 );
 $MIME_WEBIMAGES = array(
   'image/gif' => 'gif', 'image/jpeg' => 'jpe', 'image/jpeg' => 'jpeg', 'image/jpeg' => 'jpg',
@@ -34,9 +41,14 @@ $MIME_WEBIMAGES = array(
 );
 $MIME_WEBSITE = $MIME_WEBIMAGES + $MIME_DOCUMENTS;
 
-class fileexception extends Exception {}
+class fileexception extends \Exception {}
 
-// file field (non specific upload file) - FLDTYPE_FILE - derived from edit box so it gets size and maxlength
+/**
+  * file field (non specific upload file) - FLDTYPE_FILE
+  * derived from edit box so it gets size and maxlength
+  * @version dana framework v.3
+*/
+
 class formbuilderfile extends formbuildereditbox {
   // file process error list
   const FILEERROR_CANNOTMOVE = 1;
@@ -57,7 +69,7 @@ class formbuilderfile extends formbuildereditbox {
     ini_set('post_max_size', '64M');
     ini_set('upload_max_filesize', '64M');
     $this->targetfilename = $targetname;
-    $this->fieldtype = basetable::FLDTYPE_FILE;
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_FILE;
     $this->acceptedfiletypes = array();
     $this->keyid = 0;
     $this->mediaid = -1; // no id

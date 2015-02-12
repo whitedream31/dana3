@@ -1,7 +1,15 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuilderfile.php';
 
-// file upload for general (safe) files field - FLDTYPE_FILEWEBSITE
+/**
+  * file upload for general (safe) files field - FLDTYPE_FILEWEBSITE
+  * @version dana framework v.3
+*/
+
 class formbuilderfilewebsite extends formbuilderfile {
 
   function __construct($name, $value, $label, $targetname = '') {
@@ -10,7 +18,7 @@ class formbuilderfilewebsite extends formbuilderfile {
 
   protected function Init() {
     global $MIME_WEBSITE;
-    $this->fieldtype = FLDTYPE_FILEWEBSITE;
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_FILEWEBSITE;
     $this->acceptedfiletypes = $MIME_WEBSITE;
   }
 

@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// newsletter item type (types of newsletters)
+/**
+  * newsletter item type (types of newsletters)
+  * @version dana framework v.3
+*/
+
 class newsletteritemtype extends lookuptable {
   public $help;
 
@@ -21,6 +28,11 @@ class newsletteritemtype extends lookuptable {
   }
 }
 
+/**
+  * newsletter table
+  * @version dana framework v.3
+*/
+
 // newsletter
 class newsletter extends idtable {
   public $showdate;
@@ -34,7 +46,7 @@ class newsletter extends idtable {
   protected function AfterPopulateFields() {
     $this->showdate = $this->GetFieldValue('showdate');
 //    $date = strtotime($this->showdate);
-    $this->showdatedescription = basetable::FormatDateTime(self::DF_MEDIUMDATE, $this->showdate);
+    $this->showdatedescription = \dana\table\basetable::FormatDateTime(self::DF_MEDIUMDATE, $this->showdate);
   }
 
   protected function AssignFields() {
@@ -49,7 +61,7 @@ class newsletter extends idtable {
     $this->AddField('footertext', self::DT_STRING);
     $this->AddField('style', self::DT_STRING);
     $this->AddField('newsletterformatid', self::DT_FK);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   static public function FindNewslettersByAccount($accountid) {
@@ -58,7 +70,7 @@ class newsletter extends idtable {
       "SELECT `id` FROM `newsletter` " .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
       'ORDER BY `showdate` DESC';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $list[] = $line['id'];
@@ -80,7 +92,7 @@ class newsletter extends idtable {
     $sql[] = 'ORDER BY `showdate` DESC';
     $query = ArrayToString($sql);
 //echo "<p>QUERY='{$query}'</p>";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
@@ -99,7 +111,7 @@ class newsletter extends idtable {
       "SELECT `id` FROM `newsletteritem` " .
       "WHERE `newsletterid` = {$id} " .
       'ORDER BY `itemorder`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $itemid = $line['id'];
@@ -120,7 +132,7 @@ class newsletter extends idtable {
 //      "WHERE `accountid` = {$accountid} " .
 //      "AND NOT (`status` IN ('{$statusdeleted}', '{$statuscancelled}')) " .
 //      'ORDER BY `status`, `datestarted` DESC';
-//    $result = database::Query($query);
+//    $result = \dana\core\database::Query($query);
 //    $list = array();
 //    while ($line = $result->fetch_assoc()) {
 //      $subid = $line['id'];
@@ -142,9 +154,9 @@ class newsletter extends idtable {
       'SELECT * FROM `newsletter` ' .
       "WHERE `accountid` = {$accountid} " .
       "ORDER BY `showdate` DESC";
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $coldata = array(

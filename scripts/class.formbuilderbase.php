@@ -1,29 +1,16 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'define.php';
 require_once 'class.basetable.php';
 
 /**
- * base form field
- * part of the formbuilder class set
+  * base class for form fields
+  * @version dana framework v.3
+  * @abstract
  */
-
-//// error list - codes
-//define('ERRKEY_PHPERROR', 'phperr'); // error from php ($php_errormsg)
-//define('ERRKEY_VALUEREQUIRED', 'vreq');
-//define('ERRKEY_IMAGETOOBIG', 'toobig');
-//define('ERRKEY_INVALIDFILE', 'invfile');
-//define('ERRKEY_PASSWORDMISMATCH', 'pwdmis');
-//define('ERRKEY_OLDPASSWORD', 'oldpwd');
-//define('ERRKEY_TOOSHORT', 'short');
-//define('ERRKEY_NOFILE', 'nofile');
-//// error list - messages
-//define('ERRVAL_VALUEREQUIRED', 'Field required');
-//define('ERRVAL_IMAGETOOBIG', 'Uploaded image is too big (please resize)');
-//define('ERRVAL_INVALIDFILE', 'Invalid file type');
-//define('ERRVAL_OLDPASSWORD', 'Your old password is incorrect');
-//define('ERRVAL_PASSWORDMISMATCH', 'Your new password does not match the confirmation');
-//define('ERRVAL_TOOSHORT', 'Too few characters');
-//define('ERRVAL_NOFILE', 'No file selected');
 
 abstract class formbuilderbase {
   // error list - codes
@@ -175,7 +162,7 @@ abstract class formbuilderbase {
   protected function GetPostValue() {
     if (isset($_POST[$this->name])) {
       $postvalue = addslashes($_POST[$this->name]);
-      $removetags = ($this->fieldtype != basetable::FLDTYPE_TEXTAREA);
+      $removetags = ($this->fieldtype != \dana\table\basetable::FLDTYPE_TEXTAREA);
       $value = $this->SafeStringEscape($postvalue);
       if ($removetags) {
         $value = strip_tags($value);
@@ -244,7 +231,7 @@ abstract class formbuilderbase {
   }
 
   public function BindToTable($table) {
-    if ($table instanceof basetable) {
+    if ($table instanceof \dana\table\basetable) {
       $this->table = $table;
       $this->SetValue($table->GetFieldValue($this->name));
     }
@@ -290,13 +277,13 @@ abstract class formbuilderbase {
 
   public function GetFieldAsArray() {
     $ret = array();
-    if ($this->fieldtype == basetable::FLDTYPE_HIDDEN) {
+    if ($this->fieldtype == \dana\table\basetable::FLDTYPE_HIDDEN) {
       $ret[] = '<div>';
       $ret = array_merge($ret, $this->GetControl());
       $ret[] = '</div>';
     } else {
       $ret[] = "<div class='fsfielditem'>";
-      if ($this->fieldtype == basetable::FLDTYPE_CHECKBOX) {
+      if ($this->fieldtype == \dana\table\basetable::FLDTYPE_CHECKBOX) {
         $ret = array_merge($ret, $this->GetDescription());
         $ret[] = '<div>';
         $ret = array_merge($ret, $this->GetControl());

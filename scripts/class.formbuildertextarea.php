@@ -1,7 +1,13 @@
 <?php
-require_once('class.formbuilderbase.php');
+namespace dana\formbuilder;
 
-// text area field - FLDTYPE_TEXTAREA
+require_once 'class.formbuilderbase.php';
+
+/**
+  * text area field - FLDTYPE_TEXTAREA
+  * @version dana framework v.3
+*/
+
 class formbuildertextarea extends formbuilderbase {
   public $rows;
   public $cols;
@@ -9,7 +15,7 @@ class formbuildertextarea extends formbuilderbase {
   public $enableeditor = true; //false;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_TEXTAREA, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_TEXTAREA, $label);
     $this->rows = 20;
     $this->cols = 60;
   }

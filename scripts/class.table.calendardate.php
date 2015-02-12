@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
-require_once 'class.table.page.php';
+namespace dana\table;
 
-// calendar
+use dana\core;
+
+require_once 'class.basetable.php';
+
+/**
+  * calendar date table
+  * @version dana framework v.3
+*/
+
 class calendardate extends idtable {
 
   public $calendartype; // object to calendartype table
@@ -18,7 +25,7 @@ class calendardate extends idtable {
     parent::AssignFields();
     $this->AddField('accountid', self::DT_FK);
     $this->AddField('calendartypeid', self::DT_FK);
-    $this->Addfield(basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
+    $this->Addfield(\dana\table\basetable::FN_DESCRIPTION, self::DT_DESCRIPTION);
     $this->AddField('startdate', self::DT_DATE);
     $this->AddField('enddate', self::DT_DATE);
     $this->AddField('starttime', self::DT_STRING);
@@ -26,7 +33,7 @@ class calendardate extends idtable {
     $this->AddField('expirydate', self::DT_DATE);
     $this->AddField('url', self::DT_STRING);
     $this->AddField('content', self::DT_TEXT);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
     $this->calendartype = false;
     $this->calendartypedescription = '';
     $this->startdatedescription = '';
@@ -35,7 +42,7 @@ class calendardate extends idtable {
 
   protected function AfterPopulateFields() {
     $this->calendartypedescription =
-      database::SelectDescriptionFromLookup('calendartype', $this->GetFieldValue('calendartypeid'));
+      \dana\core\database::SelectDescriptionFromLookup('calendartype', $this->GetFieldValue('calendartypeid'));
     $this->startdatedescription =
       $this->FormatDateTime(self::DF_MEDIUMDATE, $this->GetFieldValue('startdate') . $this->GetFieldValue('starttime'));
     $this->enddatedescription =
@@ -74,7 +81,6 @@ class calendardate extends idtable {
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
     $status = self::STATUS_ACTIVE;
-
     $query =
       'SELECT c.`id`, c.`description`, t.`description` AS entrytypedesc, ' .
       'c.`startdate`, c.`enddate`, c.`starttime`, c.`endtime` ' . //c.`expirydate` ' .
@@ -82,16 +88,15 @@ class calendardate extends idtable {
       'INNER JOIN `calendartype` t ON t.`id` = c.`calendartypeid` ' .
       "WHERE c.`accountid` = {$accountid} and c.`status` = '{$status}' " .
       'ORDER BY c.`startdate` DESC, c.`enddate` DESC, c.`expirydate` DESC';
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $description = ($line['description']) ? $line['description'] : '<em>none</em>';
       $entrytypedesc = $line['entrytypedesc'];
       $startdate = $this->GetDateTime($line['startdate'], $line['starttime']);
       $enddate = $this->GetDateTime($line['enddate'], $line['endtime']);
-
       if ($startdate) {
         $date = $startdate;
         if ($enddate) {
@@ -132,10 +137,11 @@ class calendardate extends idtable {
 
   static public function GetList($accountid) {
     $ret = array();
+    $status = \dana\table\basetable::STATUS_ACTIVE;
     $query = 'SELECT `id` FROM `calendardate` ' .
-      "WHERE `accountid` = {$accountid} AND `status` = 'A' " .
+      "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
       'ORDER BY `startdate` DESC, `starttime` DESC';
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new calendardate($id);

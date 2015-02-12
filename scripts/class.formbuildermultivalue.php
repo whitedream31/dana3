@@ -1,12 +1,15 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once('class.formbuilderbase.php');
 
 /**
- * abstract class for multi-value field
- * part of the formbuilder class set
- */
+  * abstract class for multi-value field
+  * @version dana framework v.3
+*/
 
-// abstract field type for multi values
 abstract class formbuildermultivalue extends formbuilderbase {
   public $list;
   public $ismultiple;

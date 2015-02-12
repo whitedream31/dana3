@@ -1,14 +1,13 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuildersummarybox.php';
 
 /**
-  * activity worker for resource summary
-  * dana framework v.3
+  * worker resource summary
+  * @version dana framework v.3
 */
-
-// resource summary
 
 class workerressummary extends workerform {
   protected $fldorgdetails;
@@ -24,16 +23,16 @@ class workerressummary extends workerform {
     $this->icon = 'images/cm_resources.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'resource summary stuff';
-    $account = account::$instance;
+    $account = \dana\table\account::$instance;
     // galleries
-    $galleries = gallery::GetGroupList(account::$instance->ID());
+    $galleries = \dana\table\gallery::GetGroupList($this->AccountID());
     $this->fldgalleries = $this->AddField(
       'galleries',
-      new formbuildersummarybox('gallerieslist', '', 'Gallery List'),
+      new \dana\formbuilder\formbuildersummarybox('gallerieslist', '', 'Gallery List'),
       $this->account
     );
     foreach ($galleries as $galleryid => $gallery) {
-      $linkedpage = gallery::FindGalleryLinkedPageDescription($galleryid);
+      $linkedpage = \dana\table\gallery::FindGalleryLinkedPageDescription($galleryid);
       $imagecount = $gallery->CountItems();
       $cntdesc = ($imagecount)
         ? ($imagecount == 1) ? '1 image' : $imagecount . ' images'
@@ -54,7 +53,7 @@ class workerressummary extends workerform {
     if ($newsletters) {
       $this->fldnewsletters = $this->AddField(
         'newsletters',
-        new formbuildersummarybox('newsletterslist', '', 'Active Newsletters'),
+        new \dana\formbuilder\formbuildersummarybox('newsletterslist', '', 'Active Newsletters'),
         $this->account
       );
       foreach ($newsletters as $newsletterid => $newsletter) {
@@ -69,12 +68,12 @@ class workerressummary extends workerform {
       $this->fldnewsletters->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
     }
     // subscribers
-    $subscribersactive = $account->NewsletterSubscriberList(basetable::STATUS_ACTIVE);
-    $subscriberscancelled = $account->NewsletterSubscriberList(basetable::STATUS_CANCELLED);
+    $subscribersactive = $account->NewsletterSubscriberList(\dana\table\basetable::STATUS_ACTIVE);
+    $subscriberscancelled = $account->NewsletterSubscriberList(\dana\table\basetable::STATUS_CANCELLED);
     if ($subscribersactive + $subscriberscancelled) {
       $this->fldsubscribers = $this->AddField(
         'subscribers',
-        new formbuildersummarybox('subscriberlist', '', 'Active Subscribers'),
+        new \dana\formbuilder\formbuildersummarybox('subscriberlist', '', 'Active Subscribers'),
         $this->account
       );
       $this->fldsubscribers->AddItem(
@@ -94,14 +93,14 @@ class workerressummary extends workerform {
     if ($guestbooks) {
       $this->fldguestbooks = $this->AddField(
         'guestbooks',
-        new formbuildersummarybox('guestbooklist', '', 'Guestbook Comments'),
+        new \dana\formbuilder\formbuildersummarybox('guestbooklist', '', 'Guestbook Comments'),
         $this->account
       );
       foreach ($guestbooks as $guestbookid => $guestbook) {
         $this->fldguestbooks->AddItem(
           'guestbook-' . $guestbookid,
-          $guestbook->GetFieldValue(basetable::FN_DESCRIPTION),
-          CountToString($guestbook->EntryList(), 'comment')
+          $guestbook->GetFieldValue(\dana\table\basetable::FN_DESCRIPTION),
+          CountToString($guestbook->EntryList(), 'comment', '<em>no comments</em>')
         );
       }
       $this->fldguestbooks->worker = $this;

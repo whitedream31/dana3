@@ -1,10 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
 /**
- * @name gallery group
- */
+  * gallery table
+  * @version dana framework v.3
+*/
+
 class gallery extends idtable {
   public $itemsloaded; // true if the two item arrays are populated with current details
   public $allitems; // all gallery items for this gallery group
@@ -20,7 +25,7 @@ class gallery extends idtable {
   protected function AssignFields() {
     parent::AssignFields();
     $this->AddField('title', self::DT_STRING);
-    $this->AddField(basetable::FN_ACCOUNTID, self::DT_FK);
+    $this->AddField(\dana\table\basetable::FN_ACCOUNTID, self::DT_FK);
   }
 
   protected function AfterPopulateFields() {
@@ -35,7 +40,7 @@ class gallery extends idtable {
       "SELECT MAX(`height`) AS maxht FROM `media` m " .
       "INNER JOIN `galleryitem` gi ON m.`id` = gi.`largemediaid` " .
       "WHERE gi.`galleryid` = {$id} AND gi.`enabled` > 0";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc();
     $max = $line['maxht'] + 30;
     $result->close();
@@ -51,7 +56,7 @@ class gallery extends idtable {
 
   static public function GetGroupList($accountid) {
     $query = "SELECT `id` FROM `gallery` WHERE `accountid` = {$accountid} ORDER BY `title`";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $list = array();
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
@@ -108,7 +113,7 @@ class gallery extends idtable {
     if (!$id) {
       $id = $this->ID();
     }
-    $cnt = database::CountRows('galleryitem', "`galleryid` = {$id} AND `enabled` = 1");
+    $cnt = \dana\core\database::CountRows('galleryitem', "`galleryid` = {$id} AND `enabled` = 1");
     return $cnt;
   }
 
@@ -117,7 +122,7 @@ class gallery extends idtable {
 /*      'INNER JOIN `pagetype` pt ON p.`pagetypeid` = pt.`id` ' .
       'WHERE (p.`gengalleryid` = ' . $id . ' AND pt.`pgtype` = "' . PGTY_GEN . '") ' .
       'OR (p.`groupid` = ' . $id . ' AND pt.`pgtype` IN ("' . PGTY_GAL . '"))'; */
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $lst = array();
     while ($line = $result->fetch_assoc()) {
       $lst[] = $line['description'];
@@ -139,7 +144,7 @@ class gallery extends idtable {
       "WHERE `galleryid` = {$id} AND `enabled` > 0 " .
       "ORDER BY `title` LIMIT {$start}, {$pagecount}";
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new galleryitem($id);
@@ -162,7 +167,7 @@ class gallery extends idtable {
       if ($pagecount) {
         $query .= " LIMIT {$start}, {$pagecount}";
       }
-      $result = database::Query($query);
+      $result = \dana\core\database::Query($query);
       while ($line = $result->fetch_assoc()) {
         $id = $line['id'];
         $itm = new galleryitem($id);
@@ -186,7 +191,7 @@ class gallery extends idtable {
       'FROM `page` p INNER JOIN `pagetype` t ON p.`pagetypeid` = t.`id` ' .
       'WHERE p.`pagemgrid` = {$pagemgrid} AND ' .
       "(t.`pgtype` IN ('" . PAGETYPE_GALLERY . "', '" . PAGETYPE_GENERAL . "'))";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       switch ($line['pgtype']) {
         case PAGETYPE_GALLERY:
@@ -219,7 +224,7 @@ class gallery extends idtable {
   static public function FindGalleryLinkedPageDescription($galleryid) {
     $query = "SELECT `description` FROM `page` " .
       "WHERE (`groupid` = {$galleryid}) OR (`gengalleryid` = {$galleryid})";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $lst = array();
     while ($line = $result->fetch_assoc()) {
       $lst[] = $line['description'];
@@ -238,7 +243,7 @@ class gallery extends idtable {
 
   public function AssignDataGridRows($datagrid) {
     $accountid = account::$instance->ID();
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $galleries = $this->GetGroupList($accountid);
     $list = array();
     foreach($galleries as $id => $gallery) {
@@ -261,7 +266,7 @@ class gallery extends idtable {
       'FROM `pagetype` ' .
       "WHERE  (`status` = '{$statusactive}') AND `countryid` = 2 " .
       'ORDER BY `pgtypeorder` DESC';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $pgtype = $line['pgtype'];

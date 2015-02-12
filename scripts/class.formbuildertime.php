@@ -1,12 +1,20 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuildereditbox.php';
 
-// date field - FLDTYPE_TIME - detrieved from edit box
+/**
+  * time field - FLDTYPE_TIME - detrieved from edit box
+  * @version dana framework v.3
+*/
+
 class formbuildertime extends formbuildereditbox {
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = basetable::FLDTYPE_TIME;
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_TIME;
     $this->size = 5;
     $this->maxlength = 5;
   }

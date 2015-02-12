@@ -1,5 +1,8 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
+
 /*
 articles page
   main content: article viewer
@@ -13,12 +16,17 @@ articles page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager article page class
+  * @version dana framework v.3
+*/
+
 class wsm_articlepage extends websitemanager {
 
   protected function GetPageType() {
     require_once $this->sourcepath . DIRECTORY_SEPARATOR . 'class.table.pagearticle.php';
     $this->page = new pagearticle($this->pageid);
-    return PAGETYPE_ARTICLE;
+    return page::PAGETYPE_ARTICLE;
   }
 
 /*  private function DoArticleContent() {

@@ -1,12 +1,18 @@
 <?php
-// CONTACT page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 8 dec 2012 (originally 7 apr 2010)
-// modified: 23 jul 2014
+namespace dana\table;
+
+use dana\core;
 
 require_once 'class.table.page.php';
 
-// contact page class
+/**
+  * page contact class - CONTACT
+  * written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 8 dec 2012 (originally 7 apr 2010)
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class pagecontact extends page {
   protected $fldshowmap;
   protected $fldmapaddress;
@@ -37,11 +43,11 @@ class pagecontact extends page {
   protected function InitFieldsForMainContent($worker) {
     parent::InitFieldsForMainContent($worker);
     $this->fldgallerygroup = $worker->AddField(
-      'gengalleryid', new formbuilderselect('gengalleryid', '', 'Include a gallery?'), $this);
+      'gengalleryid', new \dana\formbuilder\formbuilderselect('gengalleryid', '', 'Include a gallery?'), $this);
     $this->fldshowmap = $worker->AddField(
-      'showmap', new formbuildercheckbox('showmap', '', 'Show map'), $this);
+      'showmap', new \dana\formbuilder\formbuildercheckbox('showmap', '', 'Show map'), $this);
     $this->fldmapaddress = $worker->AddField(
-      'mapaddress', new formbuildereditbox('mapaddress', '', 'Map Address'), $this);
+      'mapaddress', new \dana\formbuilder\formbuildereditbox('mapaddress', '', 'Map Address'), $this);
     $this->fldmapaddress->size = 80;
   }
 
@@ -59,14 +65,16 @@ class pagecontact extends page {
     }
     // show map field
     $this->fldshowmap->description =
-      'Please check the box if you want a map showing where your business is situated. If you have a showroom or shop if is highly ' .
-      'recommended. If you are based at home or telephone/online based it is not recommended and should be unticked.';
+      'Please check the box if you want a map showing where your business is situated. ' .
+      'If you have a showroom or shop if is highly recommended. If you are based at ' .
+      'home or telephone/online based it is not recommended and should be unticked.';
     $worker->AssignFieldToSection('sectmaincontent', 'showmap');
     // map address field
     $this->fldmapaddress->description =
-      'Please enter your <strong>full</strong> business address, including your post code. Please check for spelling mistakes. This ' .
-      'is used to find you on the map. <strong>If your address is not correct it will not be shown in the map.</strong> It is ' .
-      'highly recommended to register free in ' .
+      'Please enter your <strong>full</strong> business address, including your post ' .
+      'code. Please check for spelling mistakes. This is used to find you on the map. ' .
+      '<strong>If your address is not correct it will not be shown in the map.</strong> ' .
+      'It is highly recommended to register free in ' .
       '<a href="http://google.co.uk/local/add" title="register for google places">Google Places</a>.';
     $worker->AssignFieldToSection('sectmaincontent', 'mapaddress');
   }

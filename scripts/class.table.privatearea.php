@@ -1,9 +1,15 @@
 <?php
-require_once 'class.database.php';
-require_once 'class.table.page.php';
-//require_once 'class.table.privatemember.php';
+namespace dana\table;
 
-// private area group
+//use dana\core;
+
+require_once 'class.basetable.php';
+
+/**
+  * private area group table - container for linked pages and private members
+  * @version dana framework v.3
+*/
+
 class privatearea extends idtable {
 
   public $linkedpages;
@@ -17,7 +23,7 @@ class privatearea extends idtable {
     parent::AssignFields();
     $this->AddField('accountid', self::DT_FK);
     $this->AddField('title', self::DT_DESCRIPTION);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {
@@ -44,9 +50,9 @@ class privatearea extends idtable {
       'FROM `privatearea` pa ' .
       "WHERE pa.`accountid` = {$accountid} AND pa.`status` = '{$status}' " .
       'ORDER BY pa.`title`';
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $description = ($line['title']) ? $line['title'] : '<em>none</em>';
@@ -69,7 +75,7 @@ class privatearea extends idtable {
       'INNER JOIN `page` p ON p.`id` = pp.`pageid` ' .
       'INNER JOIN `pagetype` pt ON pt.`id` = p.`pagetypeid` ' .
       "WHERE pp.`privateareaid` = {$groupid} ORDER BY p.`pageorder`";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $pageid = $line['pageid'];
       $pgtype = $line['pgtype'];

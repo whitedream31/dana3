@@ -1,15 +1,12 @@
 <?php
-//require_once 'class.workerform.php';
+namespace dana\worker;
+
 require_once 'class.workerbase.php';
-//require_once 'class.formbuilderdatagrid.php';
-//require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for site update
-  * dana framework v.3
+  * worker site update class
+  * @version dana framework v.3
 */
-
-// site update
 
 class workersiteupdate extends workerbase {
   protected $account = false;

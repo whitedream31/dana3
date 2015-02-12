@@ -1,39 +1,34 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuildereditbox.php';
-require_once 'class.formbuilderfilewebimage.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing newsletter items
-  * dana framework v.3
+  * worker resource manage newsletter items
+  * @version dana framework v.3
 */
 
-// resource manage newsletter items
-
 class workerresmannewsletteritems extends workerform {
-//  protected $datagrid;
-//  protected $table;
   protected $fldheading;
   protected $fldcontent;
   protected $fldnewsletterid;
 
   protected function InitForm() {
-    $this->table = new newsletteritem($this->itemid);
+    $this->table = new \dana\table\newsletteritem($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Newsletter items';
-    $this->fldnewsletterid = new formbuilderhidden('newsletterid', $this->groupid);
+    $this->fldnewsletterid = new \dana\formbuilder\formbuilderhidden('newsletterid', $this->groupid);
     switch ($this->action) {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
         $this->title = 'Modify Newsletter Item';
         $this->fldheading = $this->AddField(
-          'heading', new formbuildereditbox('heading', '', 'Item Heading'), $this->table);
+          'heading', new \dana\formbuilder\formbuildereditbox('heading', '', 'Item Heading'), $this->table);
         $this->fldcontent = $this->AddField(
-          'content', new formbuildertextarea('content', '', 'Content'), $this->table);
-        $this->returnidname = 'IDNAME_MANAGENEWSLETTERS';
+          'content', new \dana\formbuilder\formbuildertextarea('content', '', 'Content'), $this->table);
+        $this->returnidname = 'IDNAME_RESOURCES_NEWSLETTERS';
         $this->showroot = false; 
         break;
       case workerbase::ACT_REMOVE:
@@ -69,7 +64,7 @@ class workerresmannewsletteritems extends workerform {
       $this->table->SetFieldValue('heading', 'New Heading');
     }
     // back to parent worker
-    $ret = $this->SaveAndReset($this->table, 'IDNAME_MANAGENEWSLETTERS');
+    $ret = $this->SaveAndReset($this->table, 'IDNAME_RESOURCES_NEWSLETTERS');
     $_GET['rid'] = $this->groupid;
     $_GET['action'] = workerbase::ACT_EDIT;
     return $ret;

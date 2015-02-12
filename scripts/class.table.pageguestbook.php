@@ -1,12 +1,18 @@
 <?php
-// GUEST BOOK page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 8 dec 2012
-// modified: 25 jul 2014
+namespace dana\table;
+
+//use dana\core;
 
 require_once 'class.table.page.php';
 
-// guest book page class
+/**
+  * page guestbook class - GUESTBOOK
+  * written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 8 dec 2012
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class pageguestbook extends page {
   protected $fldcancomment;
   protected $fldregistervisitors;
@@ -26,9 +32,9 @@ class pageguestbook extends page {
   protected function InitFieldsForMainContent($worker) {
     parent::InitFieldsForMainContent($worker);
     $this->fldcancomment = $worker->AddField(
-      'cancomment', new formbuildercheckbox('cancomment', '', 'Can Add Comments'), $this);
+      'cancomment', new \dana\formbuilder\formbuildercheckbox('cancomment', '', 'Can Add Comments'), $this);
     $this->fldregistervisitors = $worker->AddField(
-      'registervisitors', new formbuildercheckbox('registervisitors', '', 'Visitors Must Register'), $this);
+      'registervisitors', new \dana\formbuilder\formbuildercheckbox('registervisitors', '', 'Visitors Must Register'), $this);
   }
 
   public function AssignFieldProperties($worker, $isnew) {

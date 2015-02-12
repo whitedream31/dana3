@@ -1,9 +1,12 @@
 <?php
+namespace dana\webmanager;
+
 require_once 'class.websitemanager.php';
 require_once 'class.formprocessor.php';
 require_once 'class.formbuildereditbox.php';
 require_once 'class.formbuilderemail.php';
 require_once 'class.formbuildertextarea.php';
+
 /*
 general page
   main content: main text
@@ -17,12 +20,17 @@ general page
   sidebar - downloadablefiles: list of files
 */
 
+/**
+  * website manager contact page class
+  * @version dana framework v.3
+*/
+
 class wsm_contactpage extends websitemanager {
 
   protected function GetPageType() {
     require_once $this->sourcepath . DIRECTORY_SEPARATOR . 'class.table.pagecontact.php';
     $this->page = new pagecontact($this->pageid);
-    return PAGETYPE_CONTACT;
+    return page::PAGETYPE_CONTACT;
   }
 
   protected function DoContactForm() {

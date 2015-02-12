@@ -1,13 +1,21 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuilderbase.php';
 
-// checkbox field - FLDTYPE_CHECKBOX
+/**
+  * checkbox field - FLDTYPE_CHECKBOX
+  * @version dana framework v.3
+*/
+
 class formbuildercheckbox extends formbuilderbase {
   public $checked;
   public $tickedvalue = 'yes';
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_CHECKBOX, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_CHECKBOX, $label);
   }
 
   protected function AddChecked() {

@@ -1,16 +1,15 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing calendar dates
-  * dana framework v.3
+  * worker resource manage calendar dates class
+  * @version dana framework v.3
 */
-// resource manage calendar dates
+
 class workerresmancalendardates extends workerform {
-//  protected $table;
   protected $fldcalendartypeid;
   protected $flddescription;
   protected $fldstartdate;
@@ -25,42 +24,42 @@ class workerresmancalendardates extends workerform {
   protected $fldaddentry;
 
   protected function InitForm() {
-    $this->table = new calendardate($this->itemid);
+    $this->table = new \dana\table\calendardate($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here' . ' - ' . $this->idname;
     $this->contextdescription = 'Calendar Date management';
-    $this->datagrid = new formbuilderdatagrid('calendardates', '', 'Calendar Datess');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('calendardates', '', 'Calendar Datess');
     switch ($this->action) {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
         $this->title = (($this->action == workerbase::ACT_NEW) ? 'Create a New' : 'postaction a') . ' Calendar Date';
         // description
         $this->flddescription = $this->AddField(
-          'description', new formbuildereditbox('description', '', 'Title of Calendar Date'), $this->table);
+          'description', new \dana\formbuilder\formbuildereditbox('description', '', 'Title of Calendar Date'), $this->table);
         // calendar type id
         $this->fldcalendartypeid = $this->AddField(
-          'calendartypeid', new formbuilderselect('calendartypeid', '', 'Calendar Type'), $this->table);
+          'calendartypeid', new \dana\formbuilder\formbuilderselect('calendartypeid', '', 'Calendar Type'), $this->table);
         // start date
         $this->fldstartdate = $this->AddField(
-          'startdate', new formbuilderdate('startdate', '', 'Event Start Date'), $this->table);
+          'startdate', new \dana\formbuilder\formbuilderdate('startdate', '', 'Event Start Date'), $this->table);
         // start time
         $this->fldstarttime = $this->AddField(
-          'starttime', new formbuildertime('starttime', '', 'Event Start Time'), $this->table);
+          'starttime', new \dana\formbuilder\formbuildertime('starttime', '', 'Event Start Time'), $this->table);
         // end date
         $this->fldenddate = $this->AddField(
-          'enddate', new formbuilderdate('enddate', '', 'Event End Date'), $this->table);
+          'enddate', new \dana\formbuilder\formbuilderdate('enddate', '', 'Event End Date'), $this->table);
         // end time
         $this->fldendtime = $this->AddField(
-          'endtime', new formbuildertime('endtime', '', 'Event End Time'), $this->table);
+          'endtime', new \dana\formbuilder\formbuildertime('endtime', '', 'Event End Time'), $this->table);
         // expiry date
         $this->fldexpirydate = $this->AddField(
-          'expirydate', new formbuilderdate('expirydate', '', 'Expiry Date'), $this->table);
+          'expirydate', new \dana\formbuilder\formbuilderdate('expirydate', '', 'Expiry Date'), $this->table);
         // url
         $this->fldurl = $this->AddField(
-          'url', new formbuilderurl('url', '', 'Web Address'), $this->table);
+          'url', new \dana\formbuilder\formbuilderurl('url', '', 'Web Address'), $this->table);
         // content
         $this->fldcontent = $this->AddField(
-          'content', new formbuildertextarea('content', '', 'Event Details'), $this->table);
+          'content', new \dana\formbuilder\formbuildertextarea('content', '', 'Event Details'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
@@ -71,7 +70,7 @@ class workerresmancalendardates extends workerform {
         $this->title = 'Manage Calendar Dates';
         $this->flddatagrid = $this->AddField('datagrid', $this->datagrid, $this->table);
         $this->fldaddentry = $this->AddField(
-          'addentry', new formbuilderbutton('addentry', 'Add New Calendar Date'));
+          'addentry', new \dana\formbuilder\formbuilderbutton('addentry', 'Add New Calendar Date'));
         $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddentry->url = $url;
       break;
@@ -114,7 +113,7 @@ class workerresmancalendardates extends workerform {
     $this->flddatagrid->description = 'Private Areas';
     $this->AssignFieldToSection('calendardate', 'datagrid');
     if ($this->fldaddentry) {
-      $this->fldaddentry->description = "Click this button to add a new calendar entry";
+      $this->fldaddentry->description = 'Click this button to add a new calendar entry';
       $this->AssignFieldToSection('calendardate', 'addentry');
     }
   }
@@ -123,13 +122,12 @@ class workerresmancalendardates extends workerform {
     $this->datagrid->showactions = true;
     $this->datagrid->AddColumn('DESC', 'Title', true);
     $this->datagrid->AddColumn('ENTRYTYPE', 'Entry Type', false);
-    $list = $this->table->linkedpages;
+    $list = $this->table->GetList($this->AccountID());
     if ($list) {
-      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+      $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
       foreach($list as $entry) {
-        //$status = $this->table->StatusAsString();
         $coldata = array(
-          'DESC' => $entry->GetFieldValue('description'),
+          'DESC' => $entry->GetFieldValue(\dana\table\basetable::FN_DESCRIPTION),
           'ENTRYTYPE' => $entry->pagetypedescription
         );
         $this->datagrid->AddRow($entry->ID(), $coldata, true, $actions);
@@ -149,8 +147,9 @@ class workerresmancalendardates extends workerform {
     $this->AssignFieldToSection('calendardate', 'description');
     // calendar type id
     $this->fldcalendartypeid->description = 'Please choose the type of calendar entry';
-    $calendartypelist = database::RetrieveLookupList(
-      'calendartype', basetable::FN_DESCRIPTION, basetable::FN_REF, basetable::FN_ID);
+    $calendartypelist = \dana\core\database::RetrieveLookupList(
+      'calendartype', \dana\table\basetable::FN_DESCRIPTION, \dana\table\basetable::FN_REF,
+      \dana\table\basetable::FN_ID);
     foreach($calendartypelist as $typeid => $typedescription) {
       $this->fldcalendartypeid->AddValue($typeid, '&nbsp;' . $typedescription . '&nbsp;');
     }

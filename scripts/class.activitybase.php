@@ -1,7 +1,9 @@
 <?php
+namespace dana\activity;
+
 /**
   * abstract class for all activity classes
-  * dana framework v.3
+  * @version dana framework v.3
 */
 
 abstract class activitybase {

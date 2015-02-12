@@ -1,4 +1,6 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuildereditbox.php';
@@ -6,15 +8,11 @@ require_once 'class.formbuildereditbox.php';
 require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing guest book entries
-  * dana framework v.3
+  * worker resource manage guest book entries
+  * @version dana framework v.3
 */
 
-// resource manage guest book entries
-
 class workerresmanguestbookentry extends workerform {
-//  protected $datagrid;
-//  protected $table;
   protected $fldheading;
   protected $fldshowonpage;
 
@@ -32,7 +30,7 @@ class workerresmanguestbookentry extends workerform {
         $this->fldshowonpage = $this->AddField(
           'showonpage', new formbuildercheckbox('showonpage', '', 'Show On Guest-Book Page?'));
         $this->fldshowonpage->value =
-          ($this->table->GetFieldValue(basetable::FN_STATUS) == basetable::STATUS_ACTIVE);
+          ($this->table->GetFieldValue(\dana\table\basetable::FN_STATUS) == \dana\table\basetable::STATUS_ACTIVE);
         $this->returnidname = 'IDNAME_RESOURCES_GUESTBOOKS';
         $this->showroot = false; 
         break;

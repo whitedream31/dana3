@@ -1,23 +1,21 @@
 <?php
-//ctfi
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
 require_once 'class.formbuilderdatagrid.php';
 require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for rating management
-  * dana framework v.3
+  * worker site manage ratings
+  * @version dana framework v.3
 */
-
-// account change org details
 
 class workersitemanratings extends workerform {
   protected $datagrid;
 //  protected $table;
   protected $areadescription;
   protected $fldratings;
-  
   protected $fldcomment;
   protected $fldreply;
 

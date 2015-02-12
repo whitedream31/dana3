@@ -1,8 +1,9 @@
 <?php
+namespace dana\worker;
 
 /**
   * base activity worker
-  * dana framework v.3
+  * @version dana framework v.3
 */
 
 abstract class workerbase {
@@ -31,7 +32,7 @@ abstract class workerbase {
 
   public function __construct() {
 //    global $activitymanager;
-    $this->manager = controlmanager::$activitymanager;
+    $this->manager = \dana\activity\controlmanager::$activitymanager;
   }
 
   public function SetIDName($idname) {
@@ -39,7 +40,7 @@ abstract class workerbase {
       $this->idname = $idname;
       $this->DoPrepare();
     }
-    $this->controlmanager = controlmanager::$instance;
+    $this->controlmanager = \dana\activity\controlmanager::$instance;
   }
 
   public function AddMessage($msg) {

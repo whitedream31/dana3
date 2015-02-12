@@ -1,16 +1,13 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuildereditbox.php';
-require_once 'class.formbuilderfilewebimage.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing private area pages
-  * dana framework v.3
+  * worker resource manage private area pages
+  * @version dana framework v.3
 */
-
-// resource manage private area pages
 
 class workerresmanprivateareapages extends workerform {
 //  protected $datagrid;
@@ -19,7 +16,7 @@ class workerresmanprivateareapages extends workerform {
   protected $fldpageid;
 
   protected function InitForm() {
-    $this->table = new privateareapage($this->itemid);
+    $this->table = new \dana\table\privateareapage($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'Manage private area pages';
@@ -28,7 +25,7 @@ class workerresmanprivateareapages extends workerform {
       case workerbase::ACT_EDIT:
         $this->title = 'Link pages with the private area';
         $this->returnidname = 'IDNAME_RESOURCES_PRIVATEAREAS';
-        $this->showroot = false; 
+        $this->showroot = false;
         break;
       case workerbase::ACT_REMOVE:
         break;
@@ -62,24 +59,32 @@ class workerresmanprivateareapages extends workerform {
 
   private function GetPageList() {
     $ret = array();
-    $account = account::$instance;
+    $pagelist = $this->account->GetPageList();
+    foreach($pagelist as $pageid => $page) {
+      if ($page->exists && !$page->GetFieldValue('ishomepage')) {
+        $ret[$pageid] = $page;
+      }
+    }
+/*
+    $account = \dana\table\account::$instance;
     $pagemgrid = $account->GetFieldValue('pagemgrid');
-    $status = basetable::STATUS_ACTIVE;
+    $status = \dana\table\basetable::STATUS_ACTIVE;
     $query =
       'SELECT p.`id`, pt.`pgtype` FROM `page` p ' .
       'INNER JOIN `pagetype` pt ON pt.`id` = p.`pagetypeid` ' .
       "WHERE p.`pagemgrid` = {$pagemgrid} AND (p.`ishomepage` = 0) AND p.`status` = '{$status}' " .
       'ORDER BY p.`pageorder`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $pageid = $line['id'];
       $pgtype = $line['pgtype'];
-      $page = pagelist::NewPage($pgtype, $pageid);
+      $page = \dana\table\pagelist::NewPage($pgtype, $pageid);
       if ($page->exists) {
         $ret[$pageid] = $page;
       }
     }
     $result->close();
+*/
     return $ret;
   }
 
@@ -89,8 +94,10 @@ class workerresmanprivateareapages extends workerform {
       'Please select a page that will be linked to .');
     // page id
     $this->fldpageid = $this->AddField(
-      'pageid', new formbuilderselect('pageid', '', 'Page to assign to private area'), $this->pageid);
-    $this->fldpageid->size = 
+      'pageid',
+      new \dana\formbuilder\formbuilderselect('pageid', '', 'Page to assign to private area'),
+      $this->pageid);
+//    $this->fldpageid->size =
     $pagelist = $this->GetPageList();
     $this->fldpageid->size = count($pagelist);
     foreach($pagelist as $pageid => $page) {

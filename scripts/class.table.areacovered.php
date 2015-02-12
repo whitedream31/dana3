@@ -1,5 +1,14 @@
 <?php
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
+
+/**
+  * areas covered table
+  * @version dana framework v.3
+*/
 
 class areacovered extends idtable {
   public $accountid;
@@ -23,7 +32,7 @@ class areacovered extends idtable {
     if ($name == 'description') {
       $postalarea = $this->GetFieldValue('postalarea');
       $countyid = $this->GetFieldValue('countyid');
-      $desc = ($postalarea) ? $postalarea . ' Area' : database::SelectFromTableByField('county', 'id', $countyid, 'description');
+      $desc = ($postalarea) ? $postalarea . ' Area' : \dana\core\database::SelectFromTableByField('county', 'id', $countyid, 'description');
       $this->SetFieldValue($name, $desc);
     } else {
       parent::AssignDefaultFieldValue($name, $fld);
@@ -38,7 +47,7 @@ class areacovered extends idtable {
       "WHERE (`accountid` = {$accountid}) AND " .
       "(`status` = '{$status}') " .
       'ORDER BY `description`';
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new areacovered($id);
@@ -61,7 +70,7 @@ class areacovered extends idtable {
       $coldata = array(
         'DESC' => $item->GetFieldValue('description')
       );
-      $datagrid->AddRow($id, $coldata, true, array(formbuilderdatagrid::TBLOPT_DELETABLE));
+      $datagrid->AddRow($id, $coldata, true, array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE));
     }
     return $list;
   }

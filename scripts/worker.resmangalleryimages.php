@@ -1,47 +1,42 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuildereditbox.php';
-require_once 'class.formbuilderfilewebimage.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing gallery images
-  * dana framework v.3
+  * worker resource manage gallery images
+  * @version dana framework v.3
 */
 
-// resource manage gallery images
-
 class workerresmangalleryimages extends workerform {
-//  protected $datagrid;
-//  protected $table;
   protected $fldtitle;
   protected $fldimage;
   protected $flddescription;
   protected $fldgalleryid;
 
   protected function InitForm() {
-    $this->table = new galleryitem($this->itemid);
+    $this->table = new \dana\table\galleryitem($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'gallery picture management';
 //    $this->datagrid = new formbuilderdatagrid('galleryimage', '', 'Gallery Picture');
-    $this->fldgalleryid = new formbuilderhidden('galleryid', $this->groupid); // //$table->GetFieldValue('galleryid'));
+    $this->fldgalleryid = new \dana\formbuilder\formbuilderhidden('galleryid', $this->groupid); // //$table->GetFieldValue('galleryid'));
     switch ($this->action) {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
         $this->title = 'Gallery Picture';
         $this->fldtitle = $this->AddField(
-          'title', new formbuildereditbox('title', '', 'Picture Title'), $this->table);
+          'title', new \dana\formbuilder\formbuildereditbox('title', '', 'Picture Title'), $this->table);
         $this->fldimage = $this->AddField(
-          'image', new formbuilderfilewebimage('largemediaid', '', 'Picture'), $this->table);
+          'image', new \dana\formbuilder\formbuilderfilewebimage('largemediaid', '', 'Picture'), $this->table);
 
         $this->fldimage->mediaid = $this->table->GetFieldValue('largemediaid');
 
         $media = $this->GetTargetNameFromMedia($this->fldimage->mediaid); // get the fk for media id
         if ($this->posting) {
-          $this->fldimage->targetfilename = account::$instance->GetMediaFilename($this->fldimage->mediaid); // get the filename based on the media/account tables
-        } else {       
+          $this->fldimage->targetfilename = \dana\table\account::$instance->GetMediaFilename($this->fldimage->mediaid); // get the filename based on the media/account tables
+        } else {
           if ($media) {
             $this->fldimage->previewthumbnail = $media['thumbnail'];
           } else {
@@ -55,8 +50,8 @@ class workerresmangalleryimages extends workerform {
         );
 
         $this->flddescription = $this->AddField(
-          'description', new formbuildertextarea('description', '', 'Description of Picture'), $this->table);
-        $this->returnidname = 'IDNAME_MANAGEGALLERIES';
+          'description', new \dana\formbuilder\formbuildertextarea('description', '', 'Description of Picture'), $this->table);
+        $this->returnidname = 'IDNAME_RESOURCES_GALLERIES';
         $this->showroot = false;
 
         break;
@@ -103,7 +98,7 @@ class workerresmangalleryimages extends workerform {
       $media = $this->account->media;
       if ($media) {
         $media->AssignFromWebImage($this->fldimage);
-        $nextimgnumber = account::$instance->nextimgnumber;
+        $nextimgnumber = \dana\table\account::$instance->nextimgnumber;
         $media->SetFieldValue('imgid', $nextimgnumber);
 
         if ($media->StoreChanges()) {

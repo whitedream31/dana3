@@ -1,8 +1,15 @@
 <?php
-//require_once('class.database.php');
-//require_once('class.basetable.php');
+namespace dana\table;
 
-// downable files
+use dana\core;
+
+require_once 'class.basetable.php';
+
+/**
+  * file item table - downloadable file container
+  * @version dana framework v.3
+*/
+
 class fileitem extends idtable {
   public $filetypedescription;
   public $filesizedescription;
@@ -22,15 +29,15 @@ class fileitem extends idtable {
     $this->AddField('filename', self::DT_STRING);
     $this->AddField('filetypeid', self::DT_FK);
     $this->AddField('filesize', self::DT_INTEGER);
-    $this->AddField(basetable::FN_DESCRIPTION, self::DT_STRING);
+    $this->AddField(\dana\table\basetable::FN_DESCRIPTION, self::DT_STRING);
     $this->AddField('stampadded', self::DT_DATETIME);
     $this->AddField('stampupdated', self::DT_DATETIME);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function GetFileTypeDescription() {
     $filetypeid = $this->GetFieldValue('filetypeid');
-    return database::SelectDescriptionFromLookup('filetype', $filetypeid);
+    return \dana\core\database::SelectDescriptionFromLookup('filetype', $filetypeid);
   }
 
   protected function GetFileSizeAsString($size = false) {
@@ -126,7 +133,7 @@ class fileitem extends idtable {
       "(i.`status` = '{$status}') ORDER BY i.`stampadded`";
     $img = '';
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
 //      $value = $line['iconurl'];

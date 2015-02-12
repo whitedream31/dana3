@@ -1,14 +1,17 @@
 <?php
-// contact container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2011 Whitedream Software
-// created: 4 dec 2012 (originally 28 apr 2010)
-// modified: 7 apr 2014
+namespace dana\table;
 
-require_once 'class.database.php';
+use dana\core;
+
 require_once 'class.basetable.php';
-//require_once 'class.account.php';
 
-// contact field class
+/**
+  * contact table class for MyLocalSmallBusiness
+  * created: 4 dec 2012 (originally 28 apr 2010)
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class contact extends idtable {
   static public $instance;
 
@@ -63,7 +66,7 @@ class contact extends idtable {
   }
 
   public function FindContactIDByUsername($uname) {
-    $line = database::$instance->SelectFromTableByField('contact', 'username', $uname);
+    $line = \dana\core\database::$instance->SelectFromTableByField('contact', 'username', $uname);
     if ($line) {
       $id = $line['id'];
       $this->FindByID($id);
@@ -87,7 +90,7 @@ class contact extends idtable {
   public function GetCountyName() {
     $id = $this->GetFieldValue('countyid');
     if ($id && !$this->countyname) {
-      $this->countyname = database::SelectDescriptionFromLookup('county', $id);
+      $this->countyname = \dana\core\database::SelectDescriptionFromLookup('county', $id);
     } else {
       $this->countyname = false;
     }
@@ -224,7 +227,7 @@ class contact extends idtable {
     $query =
       "UPDATE `contact` SET `changepassword` = {$changepassword}, `password` = '{$password}' " .
       'WHERE `id` = ' . $this->ID();
-    database::$instance->Query($query) or die('Failed whilst updating password in contact table: ' . mysql_error());
+    \dana\core\database::$instance->Query($query) or die('Failed whilst updating password in contact table: ' . mysql_error());
     /*    if (account::$instance->FindByContactID($this->id->value))
      {
      DoHistoryItem($account->id, HISTORY_NEWPWD, 'account :' .
@@ -255,7 +258,7 @@ class contact extends idtable {
      array('username', 'password')
      ) .
      ' WHERE `id` = ' . {$this->ID()};
-     database::$instance->Query($query) or die('Failed whilst updating login
+     \dana\core\database::$instance->Query($query) or die('Failed whilst updating login
     details in contact table: ' . mysql_error()); */
     //    DoHistoryItem($account->id, HISTORY_LOGINCHANGED, 'contactid=' .
     // $this->id);
@@ -270,7 +273,7 @@ class contact extends idtable {
       '`authorised`, `published`, `modified`, `confirmed`, `deleted` FROM `contact` c ' .
       'INNER JOIN `account` a ON a.`contactid` = c.`id` ' .
       "WHERE UPPER(c.`username`) = '{$uusername}' OR UPPER(c.`email`) = '{$uusername}'";
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ((!$ret) && ($line = $result->fetch_assoc())) {
       if ($line['password'] == $password) {
         $accountid = $line['id'];

@@ -1,5 +1,14 @@
 <?php
+namespace dana\formbuilder;
+
+//use dana\table;
+
 require_once 'class.formbuilderbase.php';
+
+/**
+  * summary box field - FLDTYPE_SUMMARYBOX
+  * @version dana framework v.3
+*/
 
 class formbuildersummarybox extends formbuilderbase {
   public $list = array();
@@ -8,7 +17,7 @@ class formbuildersummarybox extends formbuilderbase {
   public $worker = false;
 
   function __construct($name, $value, $label = '') {
-    parent::__construct($name, $value, basetable::FLDTYPE_SUMMARYBOX, $label);
+    parent::__construct($name, $value, \dana\table\basetable::FLDTYPE_SUMMARYBOX, $label);
   }
 
   public function AddItem($key, $caption, $value, $default = '') {
@@ -22,16 +31,19 @@ class formbuildersummarybox extends formbuilderbase {
   }
 
   public function AddItemWithField($key, $caption, $fieldname, $default = '') {
-    $this->AddItem($key, $caption, $this->table->GetFieldValue($fieldname), $default);
+    if ($this->table && $this->table instanceof \dana\table\basetable) {
+      $this->AddItem($key, $caption, $this->table->GetFieldValue($fieldname), $default);
+    }
   }
 
   public function AddItemLookup(
-    $key, $caption, $lookuptablename, $lookupid, $lookupdescfieldname = basetable::FN_DESCRIPTION, $default = '') {
+    $key, $caption, $lookuptablename, $lookupid,
+    $lookupdescfieldname = \dana\table\basetable::FN_DESCRIPTION, $default = '') {
     $lookupidvalue = (is_string($lookupid))
       ? $this->table->GetFieldValue($lookupid)
       : $lookupid;
     $value =
-      database::$instance->SelectDescriptionFromLookup($lookuptablename, $lookupidvalue);
+      \dana\core\database::$instance->SelectDescriptionFromLookup($lookuptablename, $lookupidvalue);
     $this->AddItem($key, $caption, $value, $default);
   }
 
@@ -56,7 +68,7 @@ class formbuildersummarybox extends formbuilderbase {
       $ret[] = '  </tr>';
     }
     $ret[] = '  </table>';
-    if ($this->worker && $this->worker instanceof workerbase && $this->changeidname && $this->changecaption) {
+    if ($this->worker && $this->worker instanceof \dana\worker\workerbase && $this->changeidname && $this->changecaption) {
       $ret[] = $this->worker->GetControlButton($this->changeidname, $this->changecaption);
     }
     $ret[] = '</div>';

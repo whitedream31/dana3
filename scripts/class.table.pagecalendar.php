@@ -1,12 +1,18 @@
 <?php
-// CALENDAR page container class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2013 Whitedream Software
-// created: 8 dec 2012
-// modified: 27 jul 2014
+namespace dana\table;
+
+use dana\core;
 
 require_once 'class.table.page.php';
 
-// calendar page class
+/**
+  * page calendar class - CALENDAR
+  * written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 8 dec 2012
+  * modified: 10 feb 2015
+  * @version dana framework v.3
+*/
+
 class pagecalendar extends page {
   protected $fldgroupid;
 
@@ -26,7 +32,7 @@ class pagecalendar extends page {
       "WHERE  (`status` = '{$statusactive}') " .
       'ORDER BY `ref`';
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $list[$id] = $line['description'];
@@ -39,7 +45,7 @@ class pagecalendar extends page {
     parent::InitFieldsForMainContent($worker);
     $displaytypelist = $this->GetDisplayTypeList();
     $this->fldgroupid = $worker->AddField(
-      'groupid', new formbuilderselect('groupid', '', 'Calendar Display Type'), $this);
+      'groupid', new \dana\formbuilder\formbuilderselect('groupid', '', 'Calendar Display Type'), $this);
     $groupid = $this->GetFieldValue('groupid');
 //    $this->fldgroupid->AddValue(0, '(no gallery)', $groupid == 0);
     foreach ($displaytypelist as $id => $title) {

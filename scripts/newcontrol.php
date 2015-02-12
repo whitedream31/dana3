@@ -1,4 +1,6 @@
 <?php
+namespace dana\activity;
+
 session_start();
 //$mem = ini_get('memory_limit'); // '128M' // handle large images
 //$max = ini_get('post_max_size'); // '8M'
@@ -11,11 +13,12 @@ define('CONTROLMANAGER_ID', 1);
   * dana framework v.3
 */
 
+//use dana\core\, dana\table;
+
 //require_once 'class.status.php';
 //require_once 'class.activitymanager.php';
 require_once 'class.table.account.php';
 require_once 'class.table.controlmanager.php';
-
 require_once 'class.activitymanager.php';
 
 $controlmanager = controlmanager::StartInstance(CONTROLMANAGER_ID);
@@ -28,7 +31,7 @@ usr  lorem
 pwd  ipsum
 */
 
-$account = account::StartInstance(322); //542); //322);
+$account = \dana\table\account::StartInstance(542); //542); //322);
 
 //$_SESSION[SESS_IDGROUP] = 3;
 
@@ -55,7 +58,7 @@ $account = account::StartInstance(322); //542); //322);
 </head>
 <body lang="en">
   <div id="controlcontent">
-    <div id="msg"></div>  
+    <div id="msg"></div>
     <header id="mainheading">
       <div id="mainlogo">
         <h1 id="headertitle"><?php controlmanager::ShowTitle(); ?></h1>

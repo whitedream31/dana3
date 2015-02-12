@@ -1,7 +1,13 @@
 <?php
+namespace dana\formbuilder;
+
 require_once 'class.formbuildereditbox.php';
 
-// button field - FLDTYPE_BUTTON
+/**
+  * button field - FLDTYPE_BUTTON
+  * @version dana framework v.3
+*/
+
 class formbuilderbutton extends formbuildereditbox {
   public $caption;
   public $url;
@@ -9,7 +15,7 @@ class formbuilderbutton extends formbuildereditbox {
 
   function __construct($name, $value, $label = '') {
     parent::__construct($name, $value, $label);
-    $this->fieldtype = basetable::FLDTYPE_BUTTON;
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_BUTTON;
     $this->inputtype = 'button';
     $this->size = 50;
     $this->classname = 'fieldbutton';

@@ -1,13 +1,17 @@
 <?php
-// socialnetwork contact management class for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 22 feb 2012
-// modified: 3 aug 2014
+namespace dana\table;
 
-//require_once 'mediaclass.php';
-//require_once 'pageclass.php';
+//use dana\core;
 
-// socialnetwork contact (item) class
+require_once 'class.basetable.php';
+
+/**
+  * socialnetwork contact (item) table
+  * created: 22 feb 2012
+  * modified: 3 aug 2014
+  * @version dana framework v.3
+*/
+
 class socialnetworkcontact extends idtable {
   public $socialnetworktypeid;
   public $ref;
@@ -31,7 +35,7 @@ class socialnetworkcontact extends idtable {
 
   public function PopulateEmpty($id) {
     $query = 'SELECT * FROM `socialnetworktype` WHERE `id` = ' . $id;
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     $line = $result->fetch_assoc($result);
     $result->close();
     if ($line) {
@@ -45,13 +49,13 @@ class socialnetworkcontact extends idtable {
       $this->icon = ValueFromLine($line['icon']);
     }
   }
-  
+
   static public function FindSocialNetworksForAccount($accountid) {
     $lst = array();
     $query = 'SELECT c.`id`, t.`icon`, t.`description` FROM `socialnetworkcontact` c ' .
       'INNER JOIN `socialnetworktype` t ON c.`socialnetworktypeid` = t.`id` ' .
       "WHERE c.`accountid` = {$accountid} ORDER BY t.`ref`";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $lst[$id] = array('desc' => $line['description'], 'icon' => $line['icon']); //, 'url' => $line['url']);
@@ -63,7 +67,7 @@ class socialnetworkcontact extends idtable {
   public function FindAllSocialNetworkTypes() {
     $lst = array();
     $query = 'SELECT * FROM `socialnetworktype` ORDER BY `ref`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $lst[$id] = $id;
@@ -128,7 +132,7 @@ class socialnetworkcontactgroup {
   public function FindAllSocialNetworkTypes() {
     $lst = array();
     $query = 'SELECT `id` FROM `socialnetworktype` ORDER BY `ref`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $lst[$id] = $id;

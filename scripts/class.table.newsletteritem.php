@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// newsletter article
+/**
+  * newsletter item table - story for newsletter
+  * @version dana framework v.3
+*/
+
 class newsletteritem extends idtable {
 
   function __construct($id = 0) {

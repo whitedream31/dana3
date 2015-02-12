@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// articles
+/**
+  * article item table
+  * @version dana framework v.3
+*/
+
 class articleitem extends idtable {
   public $articletypedescription;
   public $lastupdatedescription;
@@ -32,7 +39,7 @@ class articleitem extends idtable {
 
   protected function AfterPopulateFields() {
     $this->articletypedescription =
-      database::$instance->SelectDescriptionFromLookup('articletype', $this->GetFieldValue('articletypeid'));
+      \dana\core\database::$instance->SelectDescriptionFromLookup('articletype', $this->GetFieldValue('articletypeid'));
     $this->lastupdatedescription = $this->GetLastUpdateAsString();
   }
 
@@ -47,7 +54,7 @@ class articleitem extends idtable {
 
   public function CountItems() {
     $id = (int) $this->GetFieldValue('accountid');
-    $cnt = database::$instance->CountRows('articleitem', "`accountid` = {$id} AND `visible` = 1");
+    $cnt = \dana\core\database::$instance->CountRows('articleitem', "`accountid` = {$id} AND `visible` = 1");
     return $cnt;
   }
 
@@ -85,7 +92,7 @@ class articleitem extends idtable {
       'INNER JOIN `articletype` t ON t.`id` = i.`articletypeid` ' .
       'INNER JOIN `account` a ON a.`id` = i.`accountid` ' .
       "WHERE i.`id` = {$id} ";
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     $line = $result->fetch_assoc();
     $category = $line['category'];
     $heading = $line['heading'];
@@ -121,7 +128,7 @@ class articleitem extends idtable {
       "WHERE (i.`status` = '{$status}') " . $acc .
       'AND ((i.`expirydate` IS NULL) OR (NOW() > i.`expirydate`)) ' .
       'ORDER BY t.`ref`, i.`stampupdated` DESC ';
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $category = $line['category'];
       if ($category == $cat || $cat === false) {
@@ -154,7 +161,7 @@ class articleitem extends idtable {
     $query = 'SELECT `id` FROM `articleitem` ' .
       "WHERE `accountid` = {$accountid} " .
       ' ORDER BY `stampupdated` DESC, `expirydate`';
-    $result = database::$instance->Query($query);
+    $result = \dana\core\database::$instance->Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new articleitem($id);
@@ -180,9 +187,9 @@ class articleitem extends idtable {
       "WHERE (`accountid` = {$accountid}) AND " .
       "(`status` = '{$status}') " .
       'ORDER BY `stampadded` DESC';
-    $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE);
+    $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
     $list = array();
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $cat = $line['category'];

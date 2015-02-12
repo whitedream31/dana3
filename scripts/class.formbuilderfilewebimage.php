@@ -1,7 +1,15 @@
 <?php
+namespace dana\formbuilder;
+
+use dana\table;
+
 require_once 'class.formbuilderfile.php';
 
-// file upload field for image files suitable for the web - FLDTYPE_FILEWEBSITE
+/**
+  * file upload field for image files suitable for the web - FLDTYPE_FILEWEBSITE
+  * @version dana framework v.3
+*/
+
 class formbuilderfilewebimage extends formbuilderfile {
   public $uploaded;
   public $imgtype;
@@ -31,7 +39,7 @@ class formbuilderfilewebimage extends formbuilderfile {
 
   protected function Init() {
     global $MIME_WEBIMAGES;
-    $this->fieldtype = basetable::FLDTYPE_FILEWEBIMAGES;
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_FILEWEBIMAGES;
     $this->acceptedfiletypes = $MIME_WEBIMAGES;
 //    $this->mediaid = -1; // no id
     $this->previewthumbnail = 'none';

@@ -1,19 +1,16 @@
 <?php
+namespace dana\worker;
+
 require_once 'class.workerform.php';
 require_once 'class.workerbase.php';
-require_once 'class.formbuilderdatagrid.php';
-require_once 'class.formbuilderbutton.php';
 
 /**
-  * activity worker for managing galleries
-  * dana framework v.3
+  * worker resource manage guestbooks
+  * @version dana framework v.3
 */
-
-// resource manage galleries
 
 class workerresmanguestbooks extends workerform {
   protected $datagrid;
-//  protected $table;
   protected $tableitems;
   protected $flddescription;
   protected $fldgeneralmessage;
@@ -25,22 +22,25 @@ class workerresmanguestbooks extends workerform {
   protected $entrygrid;
 
   protected function InitForm() {
-    $this->table = new guestbook($this->itemid);
+    $this->table = new \dana\table\guestbook($this->itemid);
     $this->icon = 'images/sect_resource.png';
     $this->activitydescription = 'some text here' . ' - ' . $this->idname;
     $this->contextdescription = 'guest-book management';
-    $this->datagrid = new formbuilderdatagrid('guestbook', '', 'Guest Books');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('guestbook', '', 'Guest Books');
     switch ($this->action) {
       case workerbase::ACT_NEW:
       case workerbase::ACT_EDIT:
         //$this->tableitems = new galleryitems
         $this->title = 'Modify Guest-book';
         $this->flddescription = $this->AddField(
-          'description', new formbuildereditbox('description', '', 'Guest-book Title'), $this->table);
+          'description',
+          new \dana\formbuilder\formbuildereditbox('description', '', 'Guest-book Title'), $this->table);
         $this->fldgeneralmessage = $this->AddField(
-          'generalmessage', new formbuildertextarea('generalmessage', '', 'General Message'), $this->table);
+          'generalmessage',
+          new \dana\formbuilder\formbuildertextarea('generalmessage', '', 'General Message'), $this->table);
         $this->fldthankyoumessage = $this->AddField(
-          'thankyoumessage', new formbuildertextarea('thankyoumessage', '', 'Thank you Message'), $this->table);
+          'thankyoumessage',
+          new \dana\formbuilder\formbuildertextarea('thankyoumessage', '', 'Thank you Message'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
@@ -51,7 +51,7 @@ class workerresmanguestbooks extends workerform {
         $this->title = 'Manage Guest-books'; 
         $this->fldguestbooks = $this->AddField('guestbook', $this->datagrid, $this->table);
         $this->fldaddguestbook = $this->AddField(
-          'addguestbook', new formbuilderbutton('addguestbook', 'Add New Guest-book'));
+          'addguestbook', new \dana\formbuilder\formbuilderbutton('addguestbook', 'Add New Guest-book'));
         $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddguestbook->url = $url;
         break;
@@ -108,7 +108,9 @@ class workerresmanguestbooks extends workerform {
     $this->entrygrid->AddColumn('STATUS', 'Status', false);
     $list = $this->table->EntryList();
     if ($list) {
-      $actions = array(formbuilderdatagrid::TBLOPT_DELETABLE, formbuilderdatagrid::TBLOPT_AUTHORISE);
+      $actions = array(
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE,
+        \dana\formbuilder\formbuilderdatagrid::TBLOPT_AUTHORISE);
       foreach($list as $entry) {
         $status = $this->table->StatusAsString();
         $coldata = array(
@@ -158,7 +160,7 @@ class workerresmanguestbooks extends workerform {
       'in the guest-book page shortly.';
     $this->AssignFieldToSection('guestbook', 'thankyoumessage');
     // entrygrid
-    $this->entrygrid = new formbuilderdatagrid('entrygrid', '', 'Guest-book Entries');
+    $this->entrygrid = new \dana\formbuilder\formbuilderdatagrid('entrygrid', '', 'Guest-book Entries');
     $this->fldentries = $this->AddField('entrygrid', $this->entrygrid);
     $this->entrygrid->SetIDName('IDNAME_RESOURCES_GUESTBOOKSENTRIES');
     $this->PopulateEntryGrid();
@@ -166,7 +168,7 @@ class workerresmanguestbooks extends workerform {
     $this->AssignFieldToSection('entrygrid', 'entrygrid');
     // add image button
     $this->fldaddimage = $this->AddField(
-      'addimage', new formbuilderbutton('addimage', 'Add Picture'));
+      'addimage', new \dana\formbuilder\formbuilderbutton('addimage', 'Add Picture'));
     $url = $_SERVER['PHP_SELF'] . "?in=IDNAME_RESOURCES_GUESTBOOKSENTRIES&act=" . workerbase::ACT_NEW;
     $this->fldaddimage->url = $url;
 //    $this->AssignFieldToSection('imagegrid', 'addimage');

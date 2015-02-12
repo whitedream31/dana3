@@ -1,9 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
+/**
+  * booking table
+  * @version dana framework v.3
+*/
 
-// booking class
 class booking extends idtable {
   const STATUS_WAITING = 'w';
   const DEFAULT_STATE_REF = 'PROVISIONAL';
@@ -36,7 +42,7 @@ class booking extends idtable {
     $this->AddField('confirmedbycontact', self::DT_BOOLEAN);
     $this->AddField('confirmedbyclient', self::DT_BOOLEAN);
     $this->AddField('bookingstateid', self::DT_FK);
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
     $this->bookingdatedescription = '';
   }
 
@@ -46,11 +52,11 @@ class booking extends idtable {
   }
 
   protected function AssignDefaultFieldValues() {
-    $staterow = database::SelectFromTableByRef('bookingstate', self::DEFAULT_STATE_REF);
+    $staterow = \dana\core\database::SelectFromTableByRef('bookingstate', self::DEFAULT_STATE_REF);
     $stateid = (int) $staterow['id'];
     $this->SetFieldValue('bookingstateid', $stateid);
   }
-  
+
   public function GetActiveSettingsList() {
     $ret = array();
     $accountid = account::$instance->ID();
@@ -61,7 +67,7 @@ class booking extends idtable {
       'INNER JOIN `bookingtype` bt ON bs.`bookingtypeid` = bt.`id` ' .
       "WHERE bs.`accountid` = {$accountid} AND bs.`STATUS` = '{$status}' " .
       'ORDER BY bs.`description`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $ret[$id] = array(
@@ -126,7 +132,7 @@ class booking extends idtable {
     );
     $this->SetFieldValue('notificationref', $sessionref);
     // mark as inite sent in table
-    $this->SetFieldValue(basetable::FN_STATUS, self::STATUS_WAITING); // mark as invite sent - waiting
+    $this->SetFieldValue(\dana\table\basetable::FN_STATUS, self::STATUS_WAITING); // mark as invite sent - waiting
     $this->StoreChanges();
   }
 
@@ -148,7 +154,7 @@ class booking extends idtable {
       'FROM `booking` b ' .
       'INNER JOIN `bookingstate` bs ON b.`bookingstateid` = bs.`id` ' .
       "WHERE b.`bookingsettingsid` = {$settingid} AND {$search} ORDER BY b.`startdate` DESC, b.`timetext`";
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['bookingid'];
       $ret[$id] = array(
@@ -171,7 +177,7 @@ class booking extends idtable {
     $query = 'SELECT `id` FROM `booking` ' .
       "WHERE `accountid` = {$accountid} AND `status` = '{$status}'" .
       ' ORDER BY `datestamp` DESC';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new booking($id);

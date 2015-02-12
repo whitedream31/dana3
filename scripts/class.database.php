@@ -1,12 +1,17 @@
 <?php
-// database library for MyLocalSmallBusiness
-// written by Ian Stewart (c) 2012 Whitedream Software
-// created: 30 nov 2012
-// modified: 9 feb 2013
+namespace dana\core;
 
-require_once('user.settings.php');
+/** database library for MyLocalSmallBusiness (dana project)
+  * @author written by Ian Stewart (c) 2012 Whitedream Software
+  * created: 30 nov 2012
+  * modified: 10 feb 2015
+*/
 
-class databaseexception extends Exception{};
+use dana\table;
+
+require_once 'user.settings.php';
+
+class databaseexception extends \Exception{};
 
 class database {
   static public $instance;
@@ -32,7 +37,7 @@ class database {
   }
 
   private function OpenConnection() {
-    $this->connection = new mysqli(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
+    $this->connection = new \mysqli(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
     if ($this->connection->connect_errno) {
       throw new databaseexception(
         'Failed to connect to MySQL: (' . $this->connection->connect_errno . ') ' . $this->connection->connect_error);
@@ -88,18 +93,18 @@ class database {
   }
 
   static public function RetrieveLookupList(
-    $tablename, $descriptionfield = 
-      basetable::FN_DESCRIPTION, $orderfield = basetable::FN_REF, $keyfield = basetable::FN_ID,
+    $tablename, $descriptionfield =
+      \dana\table\basetable::FN_DESCRIPTION, $orderfield = \dana\table\basetable::FN_REF, $keyfield = \dana\table\basetable::FN_ID,
     $whereclause = "`status` = 'A'"
   ) {
     $query = 'SELECT `' . $keyfield . '`, `' . $descriptionfield . '` FROM `' . $tablename . '`' .
-      (($whereclause == '') ? '' : ' WHERE ' . $whereclause) . 
+      (($whereclause == '') ? '' : ' WHERE ' . $whereclause) .
       (($orderfield == '') ? '' : ' ORDER BY ' . $orderfield);
     return self::RetrieveLookupListByQuery($query, $keyfield, $descriptionfield);
   }
 
   static public function RetrieveLookupListByQuery(
-    $query, $keyfield = basetable::FN_ID, $descriptionfield = basetable::FN_DESCRIPTION) {
+    $query, $keyfield = \dana\table\basetable::FN_ID, $descriptionfield = \dana\table\basetable::FN_DESCRIPTION) {
     $list = array();
     $result = self::Query($query);
     while ($line = $result->fetch_assoc()) {
@@ -162,7 +167,8 @@ class database {
   }
 
   static public function SelectDescriptionFromLookup($tablename, $id) {
-    return self::SelectFromTableByField($tablename, basetable::FN_ID, $id, basetable::FN_DESCRIPTION);
+    return self::SelectFromTableByField(
+      $tablename, \dana\table\basetable::FN_ID, $id, \dana\table\basetable::FN_DESCRIPTION);
   }
 
 /*  static public function UpdateRows($table, $columns, $where) {
@@ -174,8 +180,6 @@ class database {
       foreach ($columns as $key => $value) {
         $list[] = '`' . $key . '` = "' . $value . '"';
       }
-      
-      
     }
     if ($where) {
       $ret .= ' WHERE ' . $where;
@@ -190,7 +194,7 @@ class database {
         $query = 'DELETE FROM `' . $table . '` WHERE ' . $criteria;
         $result = self::$instance->Query($query);
         $ret = $result->affected_rows();
-      } catch (Exception $e) {
+      } catch (\Exception $e) {
         throw new databaseexception('Could not delete from ' . $table . '. ' . $e->getMessage());
       }
     }

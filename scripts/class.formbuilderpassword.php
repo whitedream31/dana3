@@ -1,14 +1,19 @@
 <?php
-  require_once 'class.formbuildereditbox.php';
+namespace dana\formbuilder;
 
-  // password field - FLDTYPE_PASSWORD
-  class formbuilderpassword extends formbuildereditbox {
+require_once 'class.formbuildereditbox.php';
 
-    function __construct($name, $value, $label = '') {
-      parent::__construct($name, $value, $label);
-      $this->fieldtype = basetable::FLDTYPE_PASSWORD;
-      $this->required = true;
-      $this->inputtype = 'password';
-    }
+/**
+  * password field - FLDTYPE_PASSWORD
+  * @version dana framework v.3
+*/
+
+class formbuilderpassword extends formbuildereditbox {
+
+  function __construct($name, $value, $label = '') {
+    parent::__construct($name, $value, $label);
+    $this->fieldtype = \dana\table\basetable::FLDTYPE_PASSWORD;
+    $this->required = true;
+    $this->inputtype = 'password';
   }
-?>
+}

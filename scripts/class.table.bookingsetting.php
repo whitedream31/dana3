@@ -1,8 +1,15 @@
 <?php
-require_once 'class.database.php';
+namespace dana\table;
+
+use dana\core;
+
 require_once 'class.basetable.php';
 
-// booking settings class
+/**
+  * booking settings table
+  * @version dana framework v.3
+*/
+
 class bookingsetting extends idtable {
 
   public $bookingdatedescription;
@@ -45,7 +52,7 @@ class bookingsetting extends idtable {
     $this->AddField('cancelledmessage', self::DT_STRING); // ?????
     // addressrequired
     // typicaldurationid
-    $this->AddField(basetable::FN_STATUS, self::DT_STATUS);
+    $this->AddField(\dana\table\basetable::FN_STATUS, self::DT_STATUS);
   }
 
   protected function AfterPopulateFields() {
@@ -55,7 +62,7 @@ class bookingsetting extends idtable {
     $ret = array();
     $query = 'SELECT `id` FROM `bookingsetting` ' .
       'WHERE `accountid` = {$accountid} ORDER BY `description`';
-    $result = database::Query($query);
+    $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
       $itm = new bookingsetting($id);
