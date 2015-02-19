@@ -685,10 +685,11 @@ class account extends idtable {
     return $ret;
   }
 
-  public function GetPageList($refresh = false) {
+  public function GetPageList($refresh = false) { //, $ignoreprivatepages = true) {
     if (!$this->pagelist || $refresh) {
       require_once 'class.table.page.php';
       $this->pagelist = new pagelist();
+//      $this->pagelist->ignoreprivatepages = $ignoreprivatepages;
       $this->pagelist->SetAccount($this);
     }
     return $this->pagelist;

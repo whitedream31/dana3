@@ -31,6 +31,25 @@ class privatearea extends idtable {
     $this->linkedmembers = $this->FindLinkedMembers($this->ID());
   }
 
+  static public function GetList() {
+    $accountid = account::$instance->ID();
+    $status = self::STATUS_ACTIVE;
+    $query =
+      'SELECT `id` ' .
+      'FROM `privatearea` ' .
+      "WHERE `accountid` = {$accountid} AND `status` = '{$status}' " .
+      'ORDER BY `title`';
+    $list = array();
+    $result = \dana\core\database::Query($query);
+    while ($line = $result->fetch_assoc()) {
+      $id = $line['id'];
+      $privatearea = new privatearea($id);
+      $list[$id] = $privatearea;
+    }
+    $result->free();
+    return $list;
+  }
+
   public function AssignDataGridColumns($datagrid) {
     $datagrid->showactions = true;
     $datagrid->AddColumn('DESC', 'Title', true);
@@ -69,7 +88,7 @@ class privatearea extends idtable {
 
   static public function FindLinkedPages($groupid) {
     $ret = array();
-//    $pagelist = account::$instance->GetPageList();
+    $pagelist = account::$instance->GetPageList();
     $query =
       'SELECT pp.`pageid`, pt.`pgtype` FROM `privatepage` pp ' .
       'INNER JOIN `page` p ON p.`id` = pp.`pageid` ' .
@@ -79,7 +98,7 @@ class privatearea extends idtable {
     while ($line = $result->fetch_assoc()) {
       $pageid = $line['pageid'];
       $pgtype = $line['pgtype'];
-      $page = pagelist::NewPage($pgtype, $pageid);
+      $page = $pagelist->NewPage($pgtype, $pageid);
       if ($page->exists) {
         $ret[$pageid] = $page;
       }

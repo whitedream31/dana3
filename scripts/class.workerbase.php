@@ -10,6 +10,7 @@ abstract class workerbase {
   const ACT_NEW = 'n';
   const ACT_EDIT = 'e';
   const ACT_REMOVE = 'r';
+  const ACT_LIST = 'l'; // not new/edit/remove
   const ACT_CONFIRM = 'cf'; // booking
   const ACT_CANCEL = 'cn';  // booking
   const ACT_VISTOGGLE = 'v';
@@ -23,6 +24,7 @@ abstract class workerbase {
   protected $manager = false;
   protected $returncaption = 'Back';
   protected $returnidname = false;
+  protected $returnaction = false;
   protected $previousidname = false;
   protected $controlmanager = false;
 
@@ -81,6 +83,9 @@ abstract class workerbase {
     $url = $_SERVER['PHP_SELF'];
     if ($this->returnidname) {
       $url .= '?in=' . $this->returnidname;
+      if ($this->returnaction) {
+        $url .= '&amp;act=' . $this->returnaction;
+      }
     }
     return $this->GetCustomButton($caption, $this->returncaption, $url);
   }

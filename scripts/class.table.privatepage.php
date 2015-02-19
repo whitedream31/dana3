@@ -11,36 +11,35 @@ require_once 'class.basetable.php';
 */
 
 class privatepage extends linktable {
-
+  public $privatearea;
   public $page;
 
-  function __construct($id = 0) {
-    parent::__construct('privatepage', $id);
-  }
-
-  protected function AssignFields() {
-//    parent::AssignFields();
-    $this->AddField('privateareaid', self::DT_FK);
-    $this->AddField('pageid', self::DT_FK);
+  function __construct() {
+    parent::__construct('privatepage', 'privateareaid', 'pageid');
   }
 
   protected function AfterPopulateFields() {
     $pageid = $this->GetFieldValue('pageid');
+    $privateareaid = $this->GetFieldValue('privateareaid');
     $this->page = new page($pageid);
+    $this->privatearea = new privatearea($privateareaid);
   }
 
-  static public function GetList($groupid) {
-    $accountid = account::$instance->ID();
+  static public function GetList($privateareaid) {
+//    $accountid = account::$instance->ID();
     $status = self::STATUS_ACTIVE;
     $ret = array();
     $query =
-      'SELECT pam.`id` FROM `privateareamember` pam ' .
-      'INNER JOIN `privatemember` pm ON pm.`privateareamemberid` = pam.`id` ' .
-      "WHERE pm.`privateareaid` = {$groupid} AND pam.`status` = '{$status}' AND pm.`status` = '{$status}' ORDER BY pam.`username`";
+      'SELECT p.`id` FROM `privatepage` pp' .
+      'INNER JOIN `page` p ON pp.`pageid` = p.`id`' .
+      "WHERE pp.`privateareaid` = {$privateareaid}" .
+      "AND p.`status` = '{$status}'" .
+      'ORDER BY p.`pageorder`';
     $result = \dana\core\database::Query($query);
     while ($line = $result->fetch_assoc()) {
       $id = $line['id'];
-      $itm = new privateareamember($id);
+      $itm = new privatepage($id);
+      $itm->FindByKey($privateareaid, $id);
       if ($itm->exists) {
         $ret[$id] = $itm;
       }

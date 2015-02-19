@@ -468,11 +468,14 @@ class page extends idtable { //implements pagetype
 
 class pagelist extends idtable {
   protected $account; // account object
+  public $allpages;
   public $pages;
+  public $homepage;
   public $pagecount;
   public $pagesavailable;
   public $pagesleft;
   public $pagetypecount = array();
+//  public $ignoreprivatepages;
 
   function __construct($id = 0) {
     parent::__construct('page', $id);
@@ -514,7 +517,7 @@ class pagelist extends idtable {
 
   public function GetCounters() {
     $this->pagesavailable = 
-      \dana\core\database::$instance->SelectFromTableByField(
+      \dana\core\database::SelectFromTableByField(
         'pagemgr', \dana\table\basetable::FN_ID, $this->account->GetFieldvalue('pagemgrid'), 'pagesavailable');
     $this->pagecount = count($this->pages);
     $this->pagesleft = $this->pagesavailable - $this->pagecount;
@@ -570,7 +573,7 @@ class pagelist extends idtable {
     return $page;
   }
 
-  protected function GetPrivatePages() {
+  public function GetPrivatePages($privateareaid = false) {
     $status = self::STATUS_ACTIVE;
     $accid = $this->account->ID();
     $query = 'SELECT pp.* FROM `privatepage` pp ' .
@@ -583,39 +586,45 @@ class pagelist extends idtable {
     $list = array();
     while ($line = $res->fetch_assoc()) {
       $pageid = $line['pageid'];
-      $privateareaid = $line['privateareaid'];
-      $list[$pageid] = $privateareaid;
+      $paid = $line['privateareaid'];
+      if (!$privateareaid || ($privateareaid == $paid)) {
+        $list[$pageid] = $paid;
+      }
     }
     $res->close();
     return $list;
   }
 
   protected function PopulateList($pgmgrid) {
-    $privatepages = $this->GetPrivatePages();
+//    if ($this->ignoreprivatepages) {
+      $privatepages = $this->GetPrivatePages(); // get pages that are linked to private areas
+//    } else {
+//      $privatepages = array();
+//    }
     $status = self::STATUS_ACTIVE;
     $pid = (int) $pgmgrid;
     $query = 'SELECT p.`id`, pt.`pgtype` FROM `page` p ' .
       'INNER JOIN `pagetype` pt ON p.`pagetypeid` = pt.`id` ' .
-      "WHERE (p.`pagemgrid` = {$pid}) AND (p.`status` = '{$status}') " . //AND (p.`visible` = 1)
+      "WHERE (p.`pagemgrid` = {$pid}) AND (p.`status` = '{$status}') " .
       'ORDER BY p.`ishomepage` DESC, p.`pageorder`';
     $res = \dana\core\database::Query($query);
-    $list = array();
+    $this->pages = array();
+    $this->allpages = array();
+    $this->homepage = false;
+//    $list = array();
     while ($line = $res->fetch_assoc()) {
       $pageid = $line['id'];
-      if (!array_key_exists($pageid, $privatepages)) {
-        $pagetype = $line['pgtype'];
-        $list[$pageid] = $pagetype;
-      }
-    }
-    $this->pages = array();
-    $res->close();
-    // populate pages array into objects
-//    $this->pages = array();
-    foreach($list as $pageid => $pagetype) {
+      $pagetype = $line['pgtype'];
       $page = $this->GetPageObject($pagetype, $pageid);
-      if ($page) {
+      $page->account = $this->account;
+      $this->allpages[$pageid] = $page;
+      if ($page->GetFieldValue('ishomepage')) {
+        $this->homepage = $page;
+      }
+      if (!array_key_exists($pageid, $privatepages)) {
+//        $list[$pageid] = $pagetype;
+//        $pagetype = $page->pgtype;
         $this->pages[$pageid] = $page;
-        $page->account = $this->account;
         if (isset($this->pagetypecount[$pagetype])) {
           $this->pagetypecount[$pagetype]++;
         } else {
@@ -623,6 +632,24 @@ class pagelist extends idtable {
         }
       }
     }
+    $res->close();
+    // populate pages array into objects
+//    $this->pages = array();
+//    foreach($list as $pageid => $pagetype) {
+/*
+    foreach($this->allpages as $pageid => $page) {
+//      $page = $this->GetPageObject($pagetype, $pageid);
+//      if ($page) {
+        $this->pages[$pageid] = $page;
+        $page->account = $this->account;
+        $pagetype = $page->pgtype;
+        if (isset($this->pagetypecount[$pagetype])) {
+          $this->pagetypecount[$pagetype]++;
+        } else {
+          $this->pagetypecount[$pagetype] = 1;
+        }
+//      }
+    } */
   }
 
   public function FindPageByID($pageid) {
@@ -637,16 +664,38 @@ class pagelist extends idtable {
     }
     return $ret;
   }
-
+/*
+  public function GetPagesNotUsedByPrivateArea($pgmgrid, $privatearea) {
+    $privatepages = $this->GetPrivatePages($privatearea);
+    $status = self::STATUS_ACTIVE;
+    $pid = (int) $pgmgrid;
+    $query = 'SELECT p.`id` FROM `page` p ' .
+      "WHERE (p.`pagemgrid` = {$pid}) AND (p.`status` = '{$status}') AND (p.`ishomepage` = 0)" .
+      'ORDER BY p.`pageorder`';
+    $res = \dana\core\database::Query($query);
+    $list = array();
+    while ($line = $res->fetch_assoc()) {
+      $pageid = $line['id'];
+      if (!array_key_exists($pageid, $privatepages)) {
+        $page = new page($pageid);
+        if ($page->exists) {
+          $list[$pageid] = $page;
+        }
+      }
+    }
+    $res->close();
+    return $list;
+  }
+*/
   // create a new page based on its type
   static public function NewPage($pgtype = self::PAGETYPE_GENERAL, $pageid = 0) {
     $ret = null;
     switch ($pgtype) {
-      case self::PAGETYPE_GENERAL: //gen
+      case page::PAGETYPE_GENERAL: //gen
         require_once 'class.table.pagegeneral.php';
         $ret = new \dana\table\pagegeneral($pageid);
         break;
-      case self::PAGETYPE_CONTACT: //con
+      case page::PAGETYPE_CONTACT: //con
         require_once 'class.table.pagecontact.php';
         $ret = new \dana\table\pagecontact($pageid);
         break;
@@ -654,31 +703,31 @@ class pagelist extends idtable {
 //        require_once('class.table.pageaboutus.php');
 //        $ret = new pageaboutus($pageid);
 //        break;
-      case self::PAGETYPE_PRODUCT: //prd
+      case page::PAGETYPE_PRODUCT: //prd
         require_once 'class.table.pageproduct.php';
         $ret = new \dana\table\pageproduct($pageid);
         break;
-      case self::PAGETYPE_GALLERY: //gal
+      case page::PAGETYPE_GALLERY: //gal
         require_once 'class.table.pagegallery.php';
         $ret = new \dana\table\pagegallery($pageid);
         break;
-      case self::PAGETYPE_ARTICLE: //art
+      case page::PAGETYPE_ARTICLE: //art
         require_once 'class.table.pagearticle.php';
         $ret = new \dana\table\pagearticle($pageid);
         break;
-      case self::PAGETYPE_GUESTBOOK: //gbk
+      case page::PAGETYPE_GUESTBOOK: //gbk
         require_once 'class.table.pageguestbook.php';
         $ret = new \dana\table\pageguestbook($pageid);
         break;
-      case self::PAGETYPE_SOCIALNETWORK: //soc
+      case page::PAGETYPE_SOCIALNETWORK: //soc
         require_once 'class.table.pagesocialnetwork.php';
         $ret = new \dana\table\pagesocialnetwork($pageid);
         break;
-      case self::PAGETYPE_BOOKING: //bk
+      case page::PAGETYPE_BOOKING: //bk
         require_once 'class.table.pagebooking.php';
         $ret = new \dana\table\pagebooking($pageid);
         break;
-      case self::PAGETYPE_CALENDAR: //cal
+      case page::PAGETYPE_CALENDAR: //cal
         require_once 'class.table.pagecalendar.php';
         $ret = new \dana\table\pagecalendar($pageid);
         break;

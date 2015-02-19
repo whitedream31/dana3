@@ -54,7 +54,7 @@ abstract class workerform extends workerbase { // activitybase {
     $list = array(
       'rid' => $this->itemid,
       'pid' => $this->groupid,
-      'act' => $this->action
+      'act' => ($this->returnaction) ? $this->returnaction : $this->action
     );
     $ret = '';
     foreach($list as $key => $value) {
@@ -66,8 +66,8 @@ abstract class workerform extends workerbase { // activitybase {
   }
 
   protected function DoPrepare() {
-    $this->AssignFormAction();
     $this->InitForm();
+    $this->AssignFormAction();
   }
 
   protected function AssignIfBlank($fld, $value) {
