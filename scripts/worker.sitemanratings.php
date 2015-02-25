@@ -20,18 +20,18 @@ class workersitemanratings extends workerform {
   protected $fldreply;
 
   protected function InitForm() {
-    $this->table = new rating($this->itemid);
+    $this->table = new \dana\table\rating($this->itemid);
     $this->icon = 'images/sect_site.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'rating management';
-    $this->datagrid = new formbuilderdatagrid('ratings', '', 'Ratings');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('ratings', '', 'Ratings');
     switch ($this->action) {
       case workerbase::ACT_EDIT:
         $this->title = 'Modify Reply';
         $this->fldcomment = $this->AddField(
-          'comment', new formbuilderstatictext('comment', '', 'Comment'));
+          'comment', new \dana\formbuilder\formbuilderstatictext('comment', '', 'Comment'));
         $this->fldreply = $this->AddField(
-          'reply', new formbuildertextarea('reply', '', 'Your Reply'), $this->table);
+          'reply', new \dana\formbuilder\formbuildertextarea('reply', '', 'Your Reply'), $this->table);
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;

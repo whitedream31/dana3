@@ -39,22 +39,22 @@ class workerresmanarticles extends workerform {
   protected $fldaddarticle;
 
   protected function InitForm() {
-    $this->table = new articleitem($this->itemid);
+    $this->table = new \dana\table\articleitem($this->itemid);
     $this->icon = 'images/sect_resources.png';
     $this->activitydescription = 'some text here';
     $this->contextdescription = 'managing articles';
-    $this->datagrid = new formbuilderdatagrid('articles', '', 'Articles Available');
+    $this->datagrid = new \dana\formbuilder\formbuilderdatagrid('articles', '', 'Articles Available');
     switch ($this->action) {
       case workerbase::ACT_EDIT:
       case workerbase::ACT_NEW:
         $this->title = (($this->action == workerbase::ACT_EDIT) ? 'Modify' : 'New') . ' Article';
         $this->fldheading = $this->AddField(
-          'heading', new formbuildereditbox('heading', '', 'Heading'), $this->table);
+          'heading', new \dana\formbuilder\formbuildereditbox('heading', '', 'Heading'), $this->table);
         $this->fldheading->required = true;
         $this->fldcategory = $this->AddField(
-          'category', new formbuildereditbox('category', '', 'Category'), $this->table);
+          'category', new \dana\formbuilder\formbuildereditbox('category', '', 'Category'), $this->table);
         $this->fldcontent = $this->AddField(
-          'content', new formbuildertextarea('content', '', 'Article Text'), $this->table);
+          'content', new \dana\formbuilder\formbuildertextarea('content', '', 'Article Text'), $this->table);
         $this->fldcontent->required = true;
         $this->returnidname = $this->idname;
         $this->showroot = false;
@@ -63,14 +63,14 @@ class workerresmanarticles extends workerform {
         $this->buttonmode = array(workerform::BTN_CONFIRM, workerform::BTN_CANCEL);
         $this->title = 'Remove Article';
         $this->fldheading = $this->AddField(
-          'heading', new formbuilderstatictext('heading', '', 'Article to be removed'));
+          'heading', new \dana\formbuilder\formbuilderstatictext('heading', '', 'Article to be removed'));
         $this->action = workerbase::ACT_CONFIRM;
         $this->returnidname = $this->idname;
         $this->showroot = false;
         break;
       default:
         $this->fldaddarticle = $this->AddField(
-          'addarticle', new formbuilderbutton('addarticle', 'Add Article'));
+          'addarticle', new \dana\formbuilder\formbuilderbutton('addarticle', 'Add Article'));
         $url = $_SERVER['PHP_SELF'] . "?in={$this->idname}&act=" . workerbase::ACT_NEW;
         $this->fldaddarticle->url = $url;
 
@@ -163,7 +163,7 @@ class workerresmanarticles extends workerform {
     $this->NewSection(
       'confirmation', "Remove '{$caption}'",
       'This cannot be undone! Please click on the Confirm button to remove this article.');
-    $desc = $this->AddField(
+    $this->AddField(
       'heading', new formbuilderstatictext('heading', '', 'Name of the article'), $this->table);
     $this->AssignFieldToSection('confirmation', 'heading');
   }

@@ -87,17 +87,18 @@ class workerresmanprivateareas extends workerform {
 
   private function PopulatePrivatePagesGrid() {
     $this->pagegrid->showactions = true;
-    $this->pagegrid->AddColumn('DESC', 'Title', true);
+    $this->pagegrid->AddColumn('DESC', 'Title', false);
     $this->pagegrid->AddColumn('PAGETYPE', 'Page Type', false);
     $list = $this->table->linkedpages;
     if ($list) {
       $actions = array(\dana\formbuilder\formbuilderdatagrid::TBLOPT_DELETABLE);
+      $options = array('parentid' => $this->itemid); // parent of the link page is the private area (item id)
       foreach($list as $page) {
         $coldata = array(
           'DESC' => $page->GetFieldValue('description'),
           'PAGETYPE' => $page->pagetypedescription
         );
-        $this->pagegrid->AddRow($page->ID(), $coldata, true, $actions);
+        $this->pagegrid->AddRow($page->ID(), $coldata, true, $actions, $options);
       }
     }
   }
@@ -142,12 +143,12 @@ class workerresmanprivateareas extends workerform {
     if ($isnew) {
       // linked pages
       $fldpagehelp = new \dana\formbuilder\formbuilderstatictext(
-        'How To Linked Pages', 'Cannot link pages when creating private areas. Please type in a title and save it');
+        'How To Linked Pages', 'Cannot link pages when creating private areas. Please type in a title and click on <strong>Save Changes</strong>');
       $this->AddField('pagehelp', $fldpagehelp);
       $this->AssignFieldToSection('pagegrid', 'pagehelp');
       // linked members
       $fldmemberhelp = new \dana\formbuilder\formbuilderstatictext(
-        'How To Assign Memebers', 'Cannot assign members when creating private areas. Please type in a title and save it');
+        'How To Assign Memebers', 'Cannot assign members when creating private areas. Please type in a title and click on <strong>Save Changes</strong>');
       $this->AddField('memberhelp', $fldmemberhelp);
       $this->AssignFieldToSection('membergrid', 'memberhelp');
     } else {
@@ -161,7 +162,8 @@ class workerresmanprivateareas extends workerform {
       // add page
       $this->fldaddpage = $this->AddField(
         'addpage', new \dana\formbuilder\formbuilderbutton('addpage', 'Assign Page To Private Area'));
-      $url = $_SERVER['PHP_SELF'] . '?in=IDNAME_RESOURCES_PRIVATEAREAPAGES&act=' . workerbase::ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . '?in=IDNAME_RESOURCES_PRIVATEAREAPAGES' .
+        '&pid=' . $this->itemid . '&act=' . workerbase::ACT_NEW;
       $this->fldaddpage->url = $url;
       $this->AssignFieldToSection('pagegrid', 'addpage');
       // member grid
@@ -174,7 +176,8 @@ class workerresmanprivateareas extends workerform {
       // add member
       $this->fldaddmember = $this->AddField(
         'addmember', new \dana\formbuilder\formbuilderbutton('addmember', 'Add New Member'));
-      $url = $_SERVER['PHP_SELF'] . '?in=IDNAME_RESOURCES_PRIVATEAREAMEMBERS&act=' . workerbase::ACT_NEW;
+      $url = $_SERVER['PHP_SELF'] . '?in=IDNAME_RESOURCES_PRIVATEAREAMEMBERS' .
+        '&pid=' . $this->itemid . '&act=' . workerbase::ACT_NEW;
       $this->fldaddmember->url = $url;
       $this->AssignFieldToSection('membergrid', 'addmember');
     }

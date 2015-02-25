@@ -18,13 +18,7 @@ class workerressummary extends workerform {
   protected $fldsubscribers;
   protected $fldguestbooks;
 
-  protected function InitForm() {
-    $this->title = 'Resource Summary';
-    $this->icon = 'images/cm_resources.png';
-    $this->activitydescription = 'some text here';
-    $this->contextdescription = 'resource summary stuff';
-    $account = \dana\table\account::$instance;
-    // galleries
+  private function DoGallerySummaryBox() {
     $galleries = \dana\table\gallery::GetGroupList($this->AccountID());
     $this->fldgalleries = $this->AddField(
       'galleries',
@@ -47,9 +41,10 @@ class workerressummary extends workerform {
     $this->fldgalleries->worker = $this;
     $this->fldgalleries->changecaption = 'Manage Galleries';
     $this->fldgalleries->changeidname = 'IDNAME_RESOURCES_GALLERIES';
+  }
 
-    // newsletters
-    $newsletters = $account->NewsletterList();
+  private function DoNewsletterSummaryBox() {
+    $newsletters = $this->account->NewsletterList();
     if ($newsletters) {
       $this->fldnewsletters = $this->AddField(
         'newsletters',
@@ -67,9 +62,11 @@ class workerressummary extends workerform {
       $this->fldnewsletters->changecaption = 'Manage Newsletters';
       $this->fldnewsletters->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
     }
-    // subscribers
-    $subscribersactive = $account->NewsletterSubscriberList(\dana\table\basetable::STATUS_ACTIVE);
-    $subscriberscancelled = $account->NewsletterSubscriberList(\dana\table\basetable::STATUS_CANCELLED);
+  }
+
+  private function DoNewsletterSubscriberSummaryBox() {
+    $subscribersactive = $this->account->NewsletterSubscriberList(\dana\table\basetable::STATUS_ACTIVE);
+    $subscriberscancelled = $this->account->NewsletterSubscriberList(\dana\table\basetable::STATUS_CANCELLED);
     if ($subscribersactive + $subscriberscancelled) {
       $this->fldsubscribers = $this->AddField(
         'subscribers',
@@ -88,8 +85,10 @@ class workerressummary extends workerform {
       $this->fldsubscribers->changecaption = 'Manage Subscribers';
       $this->fldsubscribers->changeidname = 'IDNAME_RESOURCES_NEWSLETTERS';
     }
-    // guestbooks
-    $guestbooks = $account->GuestBookList();
+  }
+
+  private function DoGuestBookSummaryBox() {
+    $guestbooks = $this->account->GuestBookList();
     if ($guestbooks) {
       $this->fldguestbooks = $this->AddField(
         'guestbooks',
@@ -107,6 +106,19 @@ class workerressummary extends workerform {
       $this->fldguestbooks->changecaption = 'Manage Guestbooks';
       $this->fldguestbooks->changeidname = 'IDNAME_RESOURCES_GUESTBOOKS';
     }
+  }
+
+  protected function InitForm() {
+    $this->title = 'Resource Summary';
+    $this->icon = 'images/cm_resources.png';
+    $this->activitydescription = 'some text here';
+    $this->contextdescription = 'resource summary stuff';
+    // show summary boxes
+    $this->DoGallerySummaryBox();
+    $this->DoNewsletterSummaryBox();
+    $this->DoNewsletterSubscriberSummaryBox();
+    $this->DoGuestBookSummaryBox();
+
 // bookings
 // private areas
 // special dates

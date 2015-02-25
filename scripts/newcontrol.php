@@ -31,7 +31,7 @@ usr  lorem
 pwd  ipsum
 */
 
-$account = \dana\table\account::StartInstance(542); //542); //322);
+$account = \dana\table\account::StartInstance(1); //542); //322);
 
 //$_SESSION[SESS_IDGROUP] = 3;
 
